@@ -55,7 +55,7 @@ add_section_leave_proc do |date, index|
    r = '<div class="tags">'
 
    unless @conf.mobile_agent? then
-      # ¥«¥Æ¥´¥ê¥¿¥°¤ÎÄÉ²Ã
+      # ã‚«ãƒ†ã‚´ãƒªã‚¿ã‚°ã®è¿½åŠ 
       if @category_to_tag_list and not @category_to_tag_list.empty? then
          r << "Tags: "
          @category_to_tag_list.each do |tag, blog|
@@ -67,22 +67,25 @@ add_section_leave_proc do |date, index|
          end
       end
       
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us(json)¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us(json)ã€
       r << add_delicious_json(date, index)
 
-		# ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us(²èÁüAPI)¡×
+		# ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us(ç”»åƒAPI)ã€
 		# r << add_delicious(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¡¼¥¯¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒ¼ã‚¯ã€
       r << add_hatenabm(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à livedoor ¥¯¥ê¥Ã¥×¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ livedoor ã‚¯ãƒªãƒƒãƒ—ã€
       r << add_ldclip(date, index)
       
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Buzzurl¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Buzzurlã€
       r << add_buzzurl(date, index)
 
-      # Permalink¤ÎÄÉ²Ã
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Yahoo!ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã€
+      r << add_yahoobm(date, index)
+		
+      # Permalinkã®è¿½åŠ 
       r << add_permalink(date, index)
    end
 
@@ -97,19 +100,19 @@ end
 
 def add_hatenabm(date, index)
    r = " | "
-   r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯" alt="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
+   r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
    return r
 end
 
 def add_ldclip(date, index)
    r = " | "
-   r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à livedoor ¥¯¥ê¥Ã¥×" title="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à livedoor ¥¯¥ê¥Ã¥×"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+   r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ livedoor ã‚¯ãƒªãƒƒãƒ—" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ livedoor ã‚¯ãƒªãƒƒãƒ—"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
    return r
 end
 
 def add_buzzurl(date, index)
    r = " | "
-   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Buzzurl" alt="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Buzzurl" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Buzzurl" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Buzzurl" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
    return r
 end
 
@@ -117,7 +120,7 @@ def add_delicious(date, index)
    url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 
 	r = " | "
-   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us" title="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
+   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
    return r
 end
 
@@ -132,7 +135,7 @@ def add_delicious_json(date, index)
    count = 0
 
    r = " | "
-   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us" title="¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us">|
+   r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us">|
 
    begin
       Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
@@ -181,3 +184,8 @@ def add_delicious_json(date, index)
    return r
 end
 
+def add_yahoobm(date, index)
+   r = " | "
+	r << %Q|<a href="http://bookmarks.yahoo.co.jp/url?url=#{permalink(date, index)}&opener=bm&ei=UTF-8"><img src="http://i.yimg.jp/images/sicons/ybm16.gif" style="border: none;vertical-align: middle;" title="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Yahoo!ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯" alt="ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Yahoo!ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯" width="16" height="16" class="icon" /></a>|
+	return r
+end
