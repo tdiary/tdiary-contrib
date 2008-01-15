@@ -1,0 +1,86 @@
+#
+# AntiRefererSpam Plugin
+#
+# version 1.0.0G  (2005/08/01)
+#
+# Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
+# You can redistribute it and/or modify it under GPL2.
+# Please use version 1.0.0 (not 1.0.0G) if GPL doesn't want to be forced on me.
+#
+
+・これはなにをするもの？
+	tDiary の「本日のリンク元」に、主に海外のアダルトサイトからの大量の
+	アクセス履歴（リファラスパム）が残ってしまうのを防ぐためのプラグイン
+	（厳密にはフィルター）です。
+
+	リンク元URLが指すページのHTMLに、日記のアドレスが含まれていなければ
+	不正なリンク元であるとみなします。
+	（今のところはこれだけの対処で99%近くをブロックできているみたいです)
+
+	また、コメントスパムに対処するために、コメントに対して制限をかける
+	機能もついています。
+
+
+・インストール
+	tDiary はバージョン 2.0.0 以降が必要です。2.1 系での動作は未確認。
+
+	tDiary をインストールしたディレクトリを $(tdiary_home) としたとき、
+	plugin/antirefspam.rb を $(tdiary_home)/plugin に、
+	plugin/ja/antirefspam.rb を $(tdiary_home)/plugin/ja に、
+	tdiary/filter/antirefspam.rb を $(tdiary_home)/tdiary/filter に、
+	それぞれコピーしてください。
+
+	本プラグインの古いバージョンがある場合は上書きしてかまいません。
+	古いバージョンで問題なく動作していた場合は、設定を変更する必要も
+	ありません。
+
+
+・最低限必要な設定
+	tDiary の設定画面で、"Anti Referer Spam" の "許容するリンク先の指定"
+	を確認してください。
+	設定画面に、"トップページURL" と "日記のURL" がカッコつきで書かれて
+	いるはずです。これら以外にリンク先のURLとして許容したいものがあれば、
+	それを http〜で始まる絶対パス指定で書いてください。
+
+	また、tDiary をインストールしてあるサーバーが外部の HTTP サーバーに
+	アクセスする際に HTTP プロキシを経由する必要がある場合は、その設定
+	も行ってください。
+
+
+・さらに細かい設定
+	[最低限必要な設定]のみでも効果があるはずですが、tDiary の設定画面で
+	 "Anti Referer Spam" の「信頼するリンク元の指定」を設定することで、
+	 負荷が軽くなるはずです。
+
+	信頼するリンク元には、いくつかのサーチエンジンやアンテナを書いておく
+	とよいでしょう。
+	詳細な書式については、設定画面に表示されるヒントを参照してください。
+
+
+・プラグインが生成するファイル
+	このプラグインは、日記データが存在するディレクトリにAntiRefSpamFilter
+	というディレクトリを作って、その下にいくつかのファイルを作成します。
+		safeurls     問題ないリンク元とみなした URL の一覧
+		spamurls     不正なリンク元とみなした URL の一覧
+		spamips      不正なリンク元とみなした IP の一覧
+		spamcomments 不正なコメントとみなしたコメントの一覧
+
+	safeurls に入るべき URL が、spamurls に登録されてしまった場合は、
+	その URL を、「信頼するリンク元の指定」で設定してください。
+
+	spamurls に入るべき URL が、safeurls に登録されてしまった場合は、
+	このプラグインを強化する必要があります。
+	・このプラグインのバージョン
+	・日記の URL
+	・誤判定されてしまった URL
+	を作者に教えてもらえれば対応するかもしれません。
+
+
+・FAQ
+	以下のページにある FAQ を適宜更新します。
+	http://www.netlife.gr.jp/redbug/diary/?date=20041018#p02
+
+
+・連絡先
+	T.Shimomura <redbug@netlife.gr.jp>
+
