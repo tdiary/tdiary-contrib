@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="<%= @conf.encoding %>"?>
+<rss xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" version="2.0">
+  <channel>
+    <title><%= _( @conf.html_title ) %> [Á´Ê¸¸¡º÷]: <%= _(@query) %></title>
+    <link><%= @conf.base_url.sub(%r|/[^/]*$|, '/') %><%= _(@cgi.script_name ? File.basename(@cgi.script_name) : "") %><%= format_anchor(@start, @num) %></link>
+    <description>Rast ¸¡º÷: <%= _(@query) %></description>
+    <language>ja-JP</language>
+    <openSearch:totalResults><%= @result.hit_count %></openSearch:totalResults>
+    <openSearch:startIndex><%= @start + 1 %></openSearch:startIndex>
+    <openSearch:itemsPerPage><%= @num %></openSearch:itemsPerPage>
+    <% for item in @result.items %>
+    <% format_result_item(item) %>
+    <item>
+      <title><%= _(@conf.to_native(@title)) %></title>
+      <link><%= @conf.base_url %><%= @plugin.anchor(@date) %></link>
+      <pubDate><%= _(CGI.rfc1123_date(Time.parse(@last_modified))) %></pubDate>
+      <description><%= @conf.to_native(@summary) %></description>
+    </item>
+    <% end %>
+  </channel>
+</rss>

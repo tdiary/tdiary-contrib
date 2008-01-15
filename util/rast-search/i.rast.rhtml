@@ -1,0 +1,33 @@
+<%# i.rast.rhtml $Revision: 1.7 $ %>
+<h1><%= CGI::escapeHTML( @conf.html_title ) %> [全文検索]</h1>
+<form action="<%= _(@cgi.script_name) %>">
+<p>
+<input type="text" name="query" value="<%= _(@conf.to_native(@query)) %>">
+<input type="submit" value="検索">
+<a href="http://projects.netlab.jp/rast/query.html.ja">検索方法</a>
+</p>
+<p>
+並べ替え:
+<select name="sort">
+<%= @sort_options %>
+</select>
+<select name="order">
+<%= @order_options %>
+</select>
+表示件数:
+<select name="num">
+<%= @num_options %>
+</select>
+</p>
+</form>
+<% if @msg %>
+<p><%= @msg %></p>
+<% else %>
+<p><%= @result.hit_count %>件中<%= @start + 1 %>-<%= @start + @result.items.length %>件目</p>
+<% for item in @result.items %><% format_result_item(item) %>
+<h2><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@conf.to_native(@title)) %></a>(スコア:<%= item.score %>)</h2>
+<% end %>
+<% if @result.hit_count > @num %>
+<%= format_links(@result) %>
+<% end %>
+<% end %>

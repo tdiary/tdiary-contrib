@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+#
+# Copyright (C) 2004 Satoru Takabayashi <satoru@namazu.org>
+# You can redistribute it and/or modify it under GPL2.
+#
+puts "Usage: tdiary-referer-clean PATTERN FILE..." if ARGV.length == 0
+pattern = Regexp.new(ARGV.shift)
+file_names = ARGV
+
+deleted_referers = []
+file_names.each {|file_name|
+  tmp_name = "tmp.#{Process.pid}"
+  i = File.open(file_name)
+  o = File.open(tmp_name, "w")
+
+  first_line = i.gets
+  o.print first_line
+
+  while true
+    date_line = i.gets
+    break if date_line.nil?
+    raise unless /^Date: /.match(date_line)
+    blank_line = i.gets
+    raise unless blank_line == "\n"
+
+    o.print date_line
+    o.print blank_line
+    while line = i.gets
+      if line == ".\n"
+        o.print line
+        next
+      end
+      if pattern.match(line)
+        deleted_referers.push(line)
+      else
+        o.print line
+      end
+    end
+  end
+  i.close
+  o.close
+
+  File.rename(file_name, file_name + ".bak")
+  File.rename(tmp_name, file_name)
+}
+deleted_referers.each {|referer| print referer }

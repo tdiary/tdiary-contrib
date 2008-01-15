@@ -1,0 +1,52 @@
+2005-12-10  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: set 'diaries' for the 'my-ex' plugin.
+
+	* rast-register.rb: revise attributes of the 'date' property.
+	rebuilding indices is necessary.
+	* rast-search.rb: revise for mod_ruby.
+
+2005-12-06  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast.rhtml: remove a dummy link.
+
+2005-12-05  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: revise attributes of the 'date' property.
+	remove indices before rebuilding.
+
+2005-12-04  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: support tDiary-2.0.x.
+	* en/rast-register.rb, ja/rast-register.rb: add resources.
+
+2005-11-24  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: fix a bug in command-line mode (reported by
+	YAA). set 'cache_path' for the 'tlink' plugin (reported by YAA).
+
+	* rast-register.rb: support rebuilding index by conf mode. abolish
+	'CGI' mode.
+
+2005-11-23  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: use 'require' instead of 'autoload'.
+
+2005-11-21  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb: add a plugin file.
+	* rast-search.rb, rast.rxml: support opensearch rss.
+	* rast.rhtml: revise for more valid HTML output.
+
+2005-05-11  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast.rhtml, i.rast.rhtml: use @num instead of 10.
+
+2005-05-11 TADA Tadashi <sho@spc.gr.jp>
+	* rast.rhtml, i.rast.rhtml: set title to h2 element, and copy format_links
+	plugin on top of results.
+
+2005-05-10 TADA Tadashi <sho@spc.gr.jp>
+	* README.ja: fix typo.
+
+2005-04-16  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast.rhtml: convert the encoding of @query.
+
+2005-04-15  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-search.rb: never use Rast::LocalDB. fix a bug in running
+	from a shell.
+
+2005-04-14  Kazuhiko  <kazuhiko@fdiary.net>
+	* initial release of rast-search.

@@ -1,0 +1,40 @@
+2007-02-23 SHIBATA Hiroshi <h-sbt@nifty.com>
+
+	* estraier-search.rb: add override whatsnew plugin.
+	
+2007-02-19 SHIBATA Hiroshi <h-sbt@nifty.com>
+
+	* merge from Test_UTF8.
+
+2007-02-18  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* estraier-search.rb: add 'require "date"'.
+
+2007-02-16  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* estraier-register.rb, estraier-search.rb: rename
+	@last_modified attribute to @mdate. 
+
+	* estraier-register.rb: register all visible comments (ie. not
+	limit to 100).
+
+2007-02-15  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* estraier-search.rb, estraier.rhtml: support similarity search.
+
+	* estraier-register.rb, estraier-search.rb: support
+	"estraier.with_user_name" option.
+	* estraier-search.rb, estraier.rhtml: support changing a phrase
+	format.
+
+2007-02-14  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* estraier.rxml: add guid elements and escape contents of
+	description elements.
+	* estraier-register.rb, estraier-search.rb: add the
+	'estraier.path' variable.
+	* estraier.rhtml: revise for more tdiary-like outputs.
+
+2007-02-13  Kazuhiko  <kazuhiko@fdiary.net>
+
+	* initial release: ported from rast-search.

@@ -1,0 +1,31 @@
+<h1><%= _(@conf.html_title) %> [全文検索]</h1>
+<form action="<%= _(@cgi.script_name) %>">
+<p>
+<input type="text" name="query" value="<%= _(@conf.to_native(@query)) %>">
+<input type="submit" value="検索">
+</p>
+<p>
+並べ替え:
+<select name="sort">
+<%= @sort_options %>
+</select>
+<select name="order">
+<%= @order_options %>
+</select>
+表示件数:
+<select name="num">
+<%= @num_options %>
+</select>
+</p>
+</form>
+<% if @msg %>
+<p><%= @msg %></p>
+<% else %>
+<p><%= @result.doc_num %>件中<%= @start + 1 %>-<%= [@result.doc_num, @start + @num].min %>件目</p>
+<% for i in @start...@start+@num %><% item = @result.get_doc(i) || next %><% format_result_item(item) %>
+<h2><a href="<%= @conf.index %><%= @plugin.anchor(@date) %>"><%= _(@date.sub(/^(\d{4})(\d{2})(\d{2}).*/, "\\1-\\2-\\3")) %></a><%= @conf.to_native(@title) %>(スコア:<%= item.attr("#nodescore") %>)</h2>
+<% end %>
+<% if @result.doc_num > @num %>
+<%= format_links(@result) %>
+<% end %>
+<% end %>

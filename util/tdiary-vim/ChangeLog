@@ -1,0 +1,25 @@
+2005-07-29 Fri UECHI Yasumasa <uechi@potaway.net>
+	* echo site name and url when select a diary site.
+	* allow to set update script each diary.
+	* use CSRF protection key if exits.
+
+2005-07-28 Thu UECHI Yasumasa <uechi@potaway.net>
+	* send referer when update a diary.
+
+2004-11-08 Mon UECHI Yasumasa <uechi@potaway.net>
+	* change substitution order of character entity in TdiaryReplace(). thanx やえもん.
+
+2004-02-25 Wed UECHI Yasumasa <uechi@potaway.net>
+	* support TrackBack
+
+2004-02-19 Thu UECHI Yasumasa <uechi@potaway.net>
+	* quote argument of curl's -u option.
+
+2004-02-17 Tue UECHI Yasumasa <uechi@potaway.net>
+	* use .netrc when g:tdiary_use_netrc = 1
+
+2004-02-16 Mon UECHI Yasumasa <uechi@potaway.net>
+	* change editing mode, date, title in diary buffer.
+
+2004-02-13 Fri UECHI Yasumasa <uechi@potaway.net>
+	* commit to CVS repository

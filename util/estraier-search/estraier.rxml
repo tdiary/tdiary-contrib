@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="<%= @conf.encoding %>"?>
+<rss xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" version="2.0">
+  <channel>
+    <title><%= _( @conf.html_title ) %> [Á´Ê¸¸¡º÷]: <%= _(@query) %></title>
+    <link><%= @conf.base_url.sub(%r|/[^/]*$|, '/') %><%= _(@cgi.script_name ? File.basename(@cgi.script_name) : "") %><%= format_anchor(@start, @num) %></link>
+    <description>HyperEstraier ¸¡º÷: <%= _(@query) %></description>
+    <language>ja-JP</language>
+    <openSearch:totalResults><%= @result.doc_num %></openSearch:totalResults>
+    <openSearch:startIndex><%= @start + 1 %></openSearch:startIndex>
+    <openSearch:itemsPerPage><%= @num %></openSearch:itemsPerPage>
+    <% for i in @start...@start+@num %>
+    <% item = @result.get_doc(i) || next %>
+    <% format_result_item(item) %>
+    <item>
+      <title><%= _(@date.sub(/^(\d{4})(\d{2})(\d{2}).*/, "\\1-\\2-\\3")) %> <%= _(@conf.to_native(@title)) %></title>
+      <link><%= @conf.base_url %><%= @plugin.anchor(@date) %></link>
+      <pubDate><%= _(CGI.rfc1123_date(Time.parse(@last_modified))) %></pubDate>
+      <description><%= _(@conf.to_native(@summary, "utf-8")) %></description>
+      <guid><%= @conf.base_url %><%= @plugin.anchor(@date) %></guid>
+    </item>
+    <% end %>
+  </channel>
+</rss>

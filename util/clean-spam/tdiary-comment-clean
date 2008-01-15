@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+#
+# Copyright (C) 2004 Satoru Takabayashi <satoru@namazu.org>
+# You can redistribute it and/or modify it under GPL2.
+#
+puts "Usage: tdiary-comment-clean PATTERN FILE..." if ARGV.length == 0
+pattern = Regexp.new(ARGV.shift)
+file_names = ARGV
+
+deleted_comments = []
+file_names.each {|file_name|
+  i = File.open(file_name)
+  first_line = i.gets
+
+  comments = []
+  comment = ""
+  while line = i.gets
+    if line == ".\n"
+      comments.push(comment)
+      comment = ""
+    else
+      comment << line
+    end
+  end
+  i.close
+
+  tmp_name = "tmp.#{Process.pid}"
+  File.open(tmp_name, "w") {|o|
+    o.print first_line
+    comments.each {|comment|
+      if pattern.match(comment)
+        deleted_comments.push(comment)
+      else
+        o.print comment
+        o.puts "."
+      end
+    }
+  }
+  File.rename(file_name, file_name + ".bak")
+  File.rename(tmp_name, file_name)
+}
+
+deleted_comments.each {|comment|
+  print comment
+  puts "."
+}

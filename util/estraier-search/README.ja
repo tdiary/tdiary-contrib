@@ -1,0 +1,114 @@
+estraier-search README
+===================
+
+  Hyper Estraier <http://hyperestraier.sourceforge.net/> を用いた tDiary
+  検索環境です。
+
+
+特徴
+----------
+
+  日記の更新と連動して自動的にインデックスを更新するので、いつでも最新の
+  情報で検索することができます。日記を HTML 化した後に必要な部分だけを取
+  り出してインデックスを作成するので、ヘッダやフッタなどによる検索ノイズ
+  がなく、また、プラグインの出力が検索対象になるという特徴があります。
+
+
+必要なもの
+----------
+
+  * tDiary 1.5 以降
+  * Ruby 1.8.2 以降
+  * Hyper Estraier 1.4 以降
+    （ピュアRubyインターフェイス estraierpure.rb も必要です）
+
+
+セットアップ
+------------
+
+  1. estraier-register.rb を tDiary の プラグインディレクトリにコピーします。
+
+  2. estraier-search.rb を tDiary の index.rb があるディレクトリにコピー
+     します。必要なら index.rb と同じようにシンボリックリンクを張ったり
+     名前を変えたりしてください。
+
+  3. CGI として実行可能にします。
+
+     $ chmod a+x estraier-search.rb
+
+  4. 必要なら #! のパスを変更します。
+
+  5. estraier.rhtml と estraier.rxml と i.estraier.rhtml を tDiary の
+     skel/ ディレクトリにコピーします。
+
+  6. Hyper Estraier のノードマスタをセットアップします。その際、設定ファ
+     イル（ノードマスタのrootdirの下の_conf）に、以下を追加してください。
+
+       attrindex: @uri{{!}}str
+
+     この設定がないと、登録エントリが増えた際に、著しくパフォーマンスが
+     低下します。
+
+  7. ノードマスタから、tDiary用のノードサーバを作成し、その接続情報を
+     tdiary.conf に記述します。デフォルトでは、以下のように記述したのと
+     同じ設定です。
+
+       @options["estraier.host"] = "localhost"
+       @options["estraier.port"] = 1978
+       @options["estraier.path"] = "/node/"
+       @options["estraier.node"] = "tdiary"
+       @options["estraier.name"] = "admin"
+       @options["estraier.password"] = "admin"
+
+  8. estraier-register.rb プラグインを有効にします。(tDiary の plugin/
+     ディレクトリにコピーするか、プラグイン選択のディレクトリにコピーし
+     てブラウザから有効に設定します。言語リソースファイルの
+     en/estraier-register.rb と ja/estraier-register.rb も、プラグインディ
+     レクトリの en/ 以下およびja/ 以下にコピーしてください。)
+
+  9. 既存の日記コンテンツに対して検索インデックスを作成します。tDiary の
+     設定画面から「Estraier検索」を選び、「Estraier検索のインデックスを
+     再構築する場合は、チェックボックスをチェックしてOKを押してください」
+     というメッセージに従ってチェックしてOKを押すと、
+
+     インデックスの作成は、tDiary の CGI の実行権限で以下のように実行する
+     ことでも可能です。
+
+     ruby estraier-register.rb [-p tdiary.rbのあるディレクトリ] [-c tdiary.confのあるディレクトリ]
+
+ 10. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
+     えてください。
+
+     <form method="get" action="estraier-search.rb" class="search">
+     <input type="text" name="query" size="20" value="">
+     <input type="submit" value="Search">
+     </form>
+
+     search-form.rb プラグインを有効にしている場合は、以下のように書くこ
+     ともできます。
+
+     <%= search_form("estraier-search.rb", "query") %>
+
+  以上です。
+
+
+検索のしかた
+------------
+
+  estraier-search の検索対象は、日記本文、ツッコミ、TrackBack です。
+
+  検索方法については、
+  http://hyperestraier.sourceforge.net/uguide-ja.html#searchcond をご覧
+  ください。検索条件の書式を指定していない場合は、「簡便書式」で検索を行
+  います。
+
+
+連絡先
+------
+
+  かずひこ <kazuhiko@fdiary.net>
+  http://www.fdiary.net/
+
+  バグ報告は以下のどこかにお願いします。
+    * tdiary-devel ML
+    * 直接メール

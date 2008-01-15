@@ -1,0 +1,48 @@
+tdiarysearch README
+===================
+
+This is tdiarysearch, simple tDiary search interface.
+
+
+Installation and setup
+----------------------
+
+  1. Copy search.rb aside of tDiary's index.rb.
+
+    $ ls
+    index.rb*
+    search.rb*
+    tdiary.conf
+    update.rb*
+
+  2. Make search.rb executable.
+
+    $ chmod a+x search.rb
+  
+  3. (Optional) Adjust shebang (#!) line of search.rb.
+
+  4. (Optional) If you'd like, edit embedded paramter in
+     search.rb and turn on query logging.
+  
+  5. Add following HTML form in your tDiary header:
+
+    <form method="post" action="search.rb" class="searchform">
+    <input type="text" name="q" size="20" value="">
+    <input type="submit" value="Search">
+    </form>
+
+  6. Done.
+
+
+License
+-------
+
+  GNU GPL, General Public License version 2.
+
+
+Contact
+-------
+
+  Minero Aoki <aamine@loveruby.net>
+  http://i.loveruby.net/en/
+

@@ -1,0 +1,99 @@
+rast-search README
+===================
+
+  Rast <http://projects.netlab.jp/rast/> を用いた tDiary 検索環境です。
+
+
+特徴
+----------
+
+  日記の更新と連動して自動的にインデックスを更新するので、いつでも最新の
+  情報で検索することができます。日記を HTML 化した後に必要な部分だけを取
+  り出してインデックスを作成するので、ヘッダやフッタなどによる検索ノイズ
+  がなく、また、プラグインの出力が検索対象になるという特徴があります。
+
+
+必要なもの
+----------
+
+  * tDiary 1.5 以降
+  * Ruby 1.8.2 以降
+  * Rast 0.3.1 以降
+
+
+セットアップ
+------------
+
+  1. rast-register.rb を tDiary の プラグインディレクトリにコピーします。
+
+  2. rast-search.rb を tDiary の index.rb があるディレクトリにコピーしま
+     す。必要なら index.rb と同じようにシンボリックリンクを張ったり名前を
+     変えたりしてください。
+
+  3. CGI として実行可能にします。
+
+     $ chmod a+x rast-search.rb
+
+  4. 必要なら #! のパスを変更します。
+
+  5. rast.rhtml と rast.rxml と i.rast.rhtml を tDiary の skel/ ディレク
+     トリにコピーします。
+
+  6. rast-register.rb プラグインを有効にします。(tDiary の plugin/ ディレ
+     クトリにコピーするか、プラグイン選択のディレクトリにコピーしてブラウ
+     ザから有効に設定します。言語リソースファイルの en/rast-register.rb
+     と ja/rast-register.rb も、プラグインディレクトリの en/ 以下および
+     ja/ 以下にコピーしてください。)
+
+  7. (オプション) tdiary.conf で以下のように encoding の設定をできます。
+     Rast の encoding module の名前で設定してください。デフォルトは
+     'euc_jp' です。encoding の設定を変更する場合は、Rast のインデックス
+     があるディレクトリ (cache ディレクトリの下の /rast) を消して、再度イ
+     ンデックスを作りなおしてください。
+
+     @options['rast.index'] = 'utf8'
+
+  8. 既存の日記コンテンツに対して検索インデックスを作成します。tDiary の
+     設定画面から「Rast検索」を選び、「Rast検索のインデックスを再構築する
+     場合は、チェックボックスをチェックしてOKを押してください」というメッ
+     セージに従ってチェックしてOKを押すと、
+
+     インデックスの作成は、tDiary の CGI の実行権限で以下のように実行する
+     ことでも可能です。
+
+     ruby rast-register.rb [-p tdiary.rbのあるディレクトリ] [-c tdiary.confのあるディレクトリ]
+
+  9. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
+     えてください。
+
+     <form method="get" action="rast-search.rb" class="search">
+     <input type="text" name="query" size="20" value="">
+     <input type="submit" value="Search">
+     </form>
+
+     search-form.rb プラグインを有効にしている場合は、以下のように書くこ
+     ともできます。
+
+     <%= search_form('rast-search.rb', 'query') %>
+
+  以上です。
+
+
+検索のしかた
+------------
+
+  rast-search の検索対象は、日記本文、ツッコミ、TrackBack です。
+
+  検索方法については、 http://projects.netlab.jp/rast/query.html.ja をご覧くだ
+  さい。
+
+
+連絡先
+------
+
+  かずひこ <kazuhiko@fdiary.net>
+  http://www.fdiary.net/
+
+  バグ報告は以下のどこかにお願いします。
+    * tdiary-devel ML
+    * 直接メール

@@ -1,0 +1,60 @@
+= tdiary.vim
+tdiary.vim は vim から日記を更新するための vimスクリプトです。
+
+== 必要なもの
+tdiary.vim を使用するには以下のものが必要です。
+
+* cURL - コマンドラインから http や ftp で通信するためのツール
+* iconv ライブラリ
+* vim (+iconv でコンパイルしたもの)
+
+cURL は ((<URL:http://curl.haxx.se/>)) から入手できます。
+
+== インストール
+tdiary.vim を $HOME/.vim/plugin ディレクトリにコピーするだけです。
+
+== 設定
+$HOME/.vimrc で次のように tDiary サイトの URL を設定します。
+
+ let tdiary_site1_url = "http://www.example.com/tdiary/"
+
+最低限必要な設定はこれだけですが、複数の日記を更新するなら以下のような設定を追加してください。
+
+ let tdiary_site1_name = "ほげほげ日記"
+ let tdiary_site2_url = "http://www.example.net/tdiary/"
+ let tdiary_site2_name = "foobar日記"
+
+tDiary を設置するときに update.rb を update.cgi 等に変更している場合は以下も追加してください。
+
+ let tdiary_site1_updatescript = "update.cgi"
+ let tdiary_site2_updatescript = "update.cgi"
+
+== パスワードの保存
+cURL は $HOME/.netrc を読めるので、パスワードの保存にその機能を使います。ユーザ名とパスワードを .netrc に保存し、$HOME/.vimrc に
+
+ let tdiary_use_netrc = 1
+
+と設定すると有効になります。
+
+== 使い方
+tdiary.vim では次のコマンドが使えます。
+
+* :TDiaryNew - 日記を書くための空のバッファを開きます
+* :TDiaryReplace - 指定した日付の日記を読み込んだバッファを開きます
+* :TDiaryUpdate - 日記を更新します
+* :TDiarySelect - 更新する tDiary サイトを選択するためのバッファを開きます
+* :TDiaryTrackbak - TrackBack の excerpt を編修するためのバッファを開きます
+
+=== 日記に追記
+:TDiaryNew すると日付が YYYYMMDD 形式で表示されますので、適宜修正してリターンキーを押してください。日記を書いたら :TDiaryUpdate で更新してください。
+
+=== 日記を修正
+:TDiaryReplace すると日付が YYYYMMDD 形式で表示されますので、修正したい日付に直してリターンキーを押してください。指定した日の日記が読み込まれます。修正後に :TDiaryUpdate で更新してください。
+
+=== tDiary サイトの選択
+:TDiarySelect すると日記の一覧が表示されます。日記にカーソルを合わせてリターンキーを押すことで書き込み先が切り替わります。
+
+=== TrackBack
+日記の編修バッファに表示されている TrackBackURL: に TrackBack 先の URL を記
+入することで TrackBack が送られます。excerpt を編修する場合は :TDiaryTrackback
+することで編修用のバッファが開きます。
