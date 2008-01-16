@@ -31,7 +31,7 @@ elsif respond_to?( :category_anchor ) # diary
 		if subtitle then
 			s = subtitle.sub( /^(\[([^\[]+?)\])+/ ) do
 				$&.scan( /\[(.*?)\]/ ) do |tag|
-					@category_to_tag_list[tag] = false # false when diary
+					@category_to_tag_list[CGI::unescapeHTML(tag)] = false # false when diary
 				end
 				''
 			end
