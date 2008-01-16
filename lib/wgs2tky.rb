@@ -2,8 +2,8 @@
 # wgs2tky.rb
 #  -- GPS data converter
 #
-# kp<k-nomura@s6.dion.ne.jp>
-#
+# kp<kp@mmho.no-ip.org>
+# Destributed under the GPL
 
 class Wgs2Tky
 
@@ -82,12 +82,11 @@ class Wgs2Tky
   end
 
   def Wgs2Tky._deg2gdms(deg)
-    sf = (deg*36000+0.5).to_i
-    s = (sf/10).to_i%60
-    m = (sf/600).to_i%60
-    d = (sf/36000).to_i
-    sf%=10
-    s = "#{s}.#{sf}".to_f	
+    sf = deg*3600
+    s = sf.to_i%60
+    m = (sf/60).to_i%60
+    d = (sf/3600).to_i
+    s += sf - sf.to_i	
     return d,m,s
   end
 end
