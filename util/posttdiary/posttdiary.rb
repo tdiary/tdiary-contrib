@@ -159,7 +159,7 @@ begin
 	elsif head =~ /^Content-Type:\s*text\/plain/i 
 		@body = body
 	else
-		raise "can not read this mail"
+		raise "cannot read this mail"
 	end
 
 	if @image_name then
