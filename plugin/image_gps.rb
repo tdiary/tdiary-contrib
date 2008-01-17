@@ -1,4 +1,4 @@
-# image_gps.rb $Revision: 1.5 $
+# image_gps.rb $Revision: 1.6 $
 # 
 # 概要:
 # 画像にGPSによる位置情報が含まれている場合は、対応する地図へのリンクを生成する。
@@ -11,6 +11,12 @@
 #
 
 =begin ChangeLog
+2008-01-17 kp
+  * いろいろ変更
+2006-03-28 kp
+  * cooperation with ALPSLAB clip
+2006-03-27 kp
+  * use exifparser
 2005-07-25 kp
   * correct link url when access with mobile.
 2005-07-19 kp
@@ -24,6 +30,7 @@
 =end
 
 require 'wgs2tky'
+require 'exifparser'
 
 def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   if @conf.secure then
@@ -35,9 +42,10 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   end
   if size then
     if size.kind_of?(Array)
-      size = %Q| width="#{size[0].to_i}" height="#{size[1].to_i}"|
+      size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
+      
     else
-      size = %Q| width="#{size.to_i}"|
+      size = " width=\"#{size.to_i}\""
     end
   else
     size = ""
@@ -46,44 +54,64 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   eznavi = 'http://walk.eznavi.jp'
   mapion = 'http://www.mapion.co.jp'
 
-  ( datum,nl,el ) = gps_info("#{@image_dir}/#{image}")
+  exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
   
-  if thumbnail then
-    %Q[<a href="#{h @image_url}/#{h image}"><img class="#{h place}" src="#{h @image_url}/#{h image_t}" alt="#{h alt}" title="#{h alt}"#{size}></a>]
-  elsif el.nil?
-    %Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}"#{size}>]
-  else
-  	if @conf.mobile_agent?
+  el = nil
+  nl = nil
+  datum = nil
+
+  if exif
+    if @conf['image_gps.add_info']
+      alt += ' '+exif['Model'].to_s if exif.tag?('Model')
+      alt += ' '+exif['FocalLength'].to_s if exif.tag?('FocalLength')
+      alt += ' '+exif['ExposureTime'].to_s if exif.tag?('ExposureTime')
+      alt += ' '+exif['FNumber'].to_s if exif.tag?('FNumber')
+    end
+    begin
+      if(exif['GPSLatitudeRef'].value == 'N' && exif['GPSLongitudeRef'].value == 'E' && exif['GPSMapDatum'].value =~ /(WGS-?84|TOKYO)/)
+        nl = exif['GPSLatitude'].value if exif.tag?('GPSLatitude')
+        el = exif['GPSLongitude'].value if exif.tag?('GPSLongitude')
+        datum = exif['GPSMapDatum'].value if exif.tag?('GPSMapDatum')
+      end
+    rescue
+    end
+  end
+
+  unless el.nil?
+    if @conf.mobile_agent?
       lat = "#{sprintf("%d.%d.%.2f",*nl)}"
       lon = "#{sprintf("%d.%d.%.2f",*el)}"
-      href = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
     else
       Wgs2Tky.conv!(nl,el) if datum =~ /WGS-?84/
       lat ="#{sprintf("%d/%d/%.3f",*nl)}"
       lon ="#{sprintf("%d/%d/%.3f",*el)}"
-      href = %Q[<a href="#{mapion}/c/f?el=#{lon}&amp;nl=#{lat}&amp;scl=10000&amp;pnf=1&amp;uc=1&amp;grp=all&amp;size=500,500">]
     end
-    
-    href + %Q[<img class="#{h place}" src="#{h @image_url}/#{h image}" alt="#{h alt}" title="#{h alt}" #{size}></a>]
-    
   end
+
+  if thumbnail
+    url = %Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
+  elsif el.nil?
+    url = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
+  else
+    if @conf.mobile_agent?
+      url = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
+    else
+      url = %Q[<a href="#{mapion}/c/f?el=#{lon}&amp;nl=#{lat}&amp;uc=1&amp;grp=all">]
+    end
+    url += %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
+  end
+  url
 end
 
-require 'rexif_gps'
-
-Jpeg.use_class_for(Jpeg::Segment::APP1,Exif)
-
-def gps_info(fname)
-  fname.untaint
-  exif = Jpeg::open(fname,Jpeg::PARSE_HEADER_ONLY).app1
-  
-  return nil unless exif.is_exif?
-  return nil unless exif.ifd0.gpsifd
-  
-  gps = exif.ifd0.gpsifd
-  
-  if( gps.latitude_ref.value=="N" && gps.longitude_ref.value=="E" && gps.map_datum.value =~ /(TOKYO|WGS-?84)/)
-    return gps.map_datum.value,gps.latitude.value,gps.longitude.value
+add_conf_proc ('image_gps','image_gpsの設定','etc') do
+  if @mode == 'saveconf' then
+    @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
   end
-rescue
+  
+  <<-HTML
+    <p>
+    <h3>撮影条件の表示</h3>
+    <input type="checkbox" name="image_gps.add_info" value="true" #{if @conf['image_gps.add_info'] then " checked" end}>タイトルに撮影条件を追加する</p>
+  HTML
+
 end

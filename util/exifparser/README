@@ -1,0 +1,15 @@
+Ruby Exif parser - Exif tag parser written in pure Ruby
+
+= Install
+
+$ ruby install.rb config
+$ ruby install.rb setup
+# ruby install.rb install
+
+= License
+
+Ruby's
+
+= Author
+
+Ryuichi Tamura (r-tam@fsinet.or.jp)
