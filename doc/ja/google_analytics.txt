@@ -1,0 +1,7 @@
+google_analytics.rb - Googe Analyticsの解析用コードを挿入する
+
+
+
+プラグイン選択で選択し、設定画面でProfile IDを指定すれば使えます。
+Profile IDは、Analyticsのページでサイトを登録すると表示されるJavaScript中にある、
+「UA-xxxxx-x」のうち、「xxxxx-x」の部分のことです。

@@ -1,0 +1,25 @@
+google_adsense.rb - Googe AdSenseのバナー広告を挿入するプラグイン
+
+
+
+プラグイン選択で選択し、日記のヘッダやフッタなど、任意の場所に以下の
+ように指定するだけで使えます。
+
+   <%= google_adsense %> 
+
+バナーのサイズや色は、設定画面から変更可能です。
+
+なお、配布されているgoogle_adsense.rbには、tDiary.Net <http://www.tdiary.net/>
+用のAdSense IDが書かれているので、このまま使うとtDiary.Netの広告収入
+になってしまいます。自分のAdSense IDを使いたい場合には、ファイルの最
+初の方にある以下の部分を、自分のIDに合わせて書き換えてください。
+
+   google_ad_client = "pub-3317603667498586" 
+                       ~~~~~~~~~~~~~~~~~~~~この部分がID 
+
+
+2005-10-12追記
+  セクションターゲット(※)に対応しました。タグは日記の各日付の最初と最後に挿入
+  されます。
+
+  ※https://www.google.com/support/adsense/bin/answer.py?answer=23168&topic=371

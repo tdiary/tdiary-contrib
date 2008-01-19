@@ -1,0 +1,31 @@
+! 名前
+coCommentプラグイン
+
+! 概要
+tDiaryをcoComment(http://www.cocomment.com/)に対応させるプラグイン
+
+!使い方
+プラグインフォルダに入れるだけで動作します。
+
+!ライセンス
+GPL2
+
+!更新履歴
+!!20070309
+* mobile_agent? の使用方法を修正
+
+!!20070213
+* ケータイ端末からのアクセスは無視するようにした
+
+!!20070212
+* IE7でのスクリプトエラーに対処(埋め込む Javascript を微調整)
+
+!!20070118
+* postURLとpostTitleを取得するときにjavascriptを使わないようにした。
+
+!!20070117
+* tDiary-contrib 追加に伴って name 属性 comment-form を core に追加
+* cocomment-fetchlet を追加
+
+!!20060527
+* 初版公開

@@ -1,0 +1,16 @@
+! 名前
+OpenSearch Auto-Discovery プラグイン
+
+! 概要
+tDiaryをOpenSearch Auto-Discoveryに対応させるプラグイン
+
+!使い方
+利用するには OpenSearch description XML をあらかじめ作成する必要があります。
+サンプルファイルは http://www.opensearch.org/Specifications/OpenSearch/1.1 にあります。
+
+!ライセンス
+GPL2
+
+!更新履歴
+!!20070117
+* tDiary-contrib に追加
