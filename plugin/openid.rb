@@ -5,27 +5,45 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
+@openid_config = (Struct.const_defined?("OpenIdConfig") ? Struct::OpenIdConfig :
+	Struct.new("OpenIdConfig", :openid, :openid2, :x_xrds_location))
+
 if /^(latest|conf|saveconf)$/ =~ @mode then
 	@openid_list = {
-		# service => [openid.server, openid.delegate(replace #ID# as account name), X-XRDS-Location(replace #ID# as account name)]
-		'Hatena' => ['https://www.hatena.ne.jp/openid/server', 'http://www.hatena.ne.jp/#ID#/', nil],
-		'livedoor' => ['http://auth.livedoor.com/openid/server', 'http://profile.livedoor.com/#ID#', nil],
-		'LiveJournal' => ['http://www.livejournal.com/openid/server.bml', 'http://#ID#.livejournal.com/', nil],
-		'OpenID.ne.jp' => ['http://www.openid.ne.jp/user/auth', 'http://#ID#.openid.ne.jp', 'http://#ID#.openid.ne.jp/user/xrds'],
-		'TypeKey' => ['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/#ID#/', nil],
-		'Videntiry.org' => ['http://videntity.org/serverlogin?action=openid', 'http://#ID#.videntity.org/', nil],
-		'Vox' => ['http://www.vox.com/services/openid/server', 'http://#ID#.vox.com/', nil],
-		'myopenid.com' => ['http://www.myopenid.com/server', 'http://#ID#.myopenid.com', "http://www.myopenid.com/xrds?username=#ID#"],
+		# service => @openid_config.new(
+		#    [openid.server, openid.delegate(replace #ID# as account name)],   # openid
+		#    [openid2.provider, openid2.local_id(replace #ID# as account name)], # openid2
+		#    'X-XRDS-Location(replace #ID# as account name)'),
+		'Hatena' => @openid_config.new(['https://www.hatena.ne.jp/openid/server', 'http://www.hatena.ne.jp/#ID#/']),
+		'livedoor' => @openid_config.new(['http://auth.livedoor.com/openid/server', 'http://profile.livedoor.com/#ID#']),
+		'LiveJournal' => @openid_config.new(['http://www.livejournal.com/openid/server.bml', 'http://#ID#.livejournal.com/']),
+		'OpenID.ne.jp' => @openid_config.new(
+			['http://www.openid.ne.jp/user/auth', 'http://#ID#.openid.ne.jp'],
+			nil,
+			'http://#ID#.openid.ne.jp/user/xrds'),
+		'TypeKey' => @openid_config.new(['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/#ID#/']),
+		'Videntity.org' => @openid_config.new(['http://videntity.org/serverlogin?action=openid', 'http://#ID#.videntity.org/']),
+		'Vox' => @openid_config.new(['http://www.vox.com/services/openid/server', 'http://#ID#.vox.com/']),
+		'myopenid.com' => @openid_config.new(
+			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid
+			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid2
+			"http://www.myopenid.com/xrds?username=#ID#"),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
+		openid_service = @openid_list[@conf['openid.service']]
+		openid_id = @conf['openid.id']
 		add_header_proc do
 			result = <<-HTML
-			<link rel="openid.server" href="#{h @openid_list[@conf['openid.service']][0]}">
-			<link rel="openid.delegate" href="#{h @openid_list[@conf['openid.service']][1].sub( /#ID#/, @conf['openid.id'] )}">
+			<link rel="openid.server" href="#{h openid_service.openid[0]}">
+			<link rel="openid.delegate" href="#{h openid_service.openid[1].sub( /#ID#/, openid_id )}">
 			HTML
-			result << <<-HTML if @openid_list[@conf['openid.service']][2]
-			<meta http-equiv="X-XRDS-Location" content="#{h @openid_list[@conf['openid.service']][2].sub( /#ID#/, @conf['openid.id'] )}">
+			result << <<-HTML if openid_service.openid2
+			<link rel="openid2.provider" href="#{h openid_service.openid2[0]}">
+			<link rel="openid2.local_id" href="#{h openid_service.openid2[1].sub( /#ID#/, openid_id )}">
+			HTML
+			result << <<-HTML if openid_service.x_xrds_location
+			<meta http-equiv="X-XRDS-Location" content="#{h openid_service.x_xrds_location.sub( /#ID#/, openid_id )}">
 			HTML
 			result.gsub( /^\t\t/, '' )
 		end
