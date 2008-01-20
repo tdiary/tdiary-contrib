@@ -1,23 +1,22 @@
 # Rakefile for building tdiary-conrib package
-require 'rake/clean'
+require 'rake/packagetask'
 
-package_name = 'tdiary-contrib.tar.gz'
-excludes = [".svn", "Rakefile", package_name]
+package = {
+  :name => 'tdiary-contrib',
+  :include_dir => %w[doc filter lib misc pkg plugin spec test util].map{|d| "#{d}/**/*" },
+  :binary_ext => %w[.swf]
+}
 
-CLOBBER.include(package_name)
-
-desc 'Same for package'
-task :default => :package
-
-desc 'Make tDiary-contrib package'
-task :package => [:update, package_name]
+desc 'update source and packaging'
+task :default => [:update, :package]
 
 desc 'Update files from Subversion Repository'
 task :update do |t|
   sh "svn update"
 end
 
-desc 'Packaged tDiary-contrib files'
-file package_name => FileList["./**/*"] do |t|
-  sh "tar zcf #{package_name} . " + excludes.map{|f| "--exclude #{f}"}.join(' ')
+pkg = Rake::PackageTask.new(package[:name], :noversion) do |p|
+  p.package_dir = "./package"
+  p.package_files.include(package[:include_dir])
+  p.need_tar_gz = true
 end
