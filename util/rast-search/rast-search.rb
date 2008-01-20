@@ -23,13 +23,13 @@ module TDiary
 	class TDiaryRast < ::TDiary::TDiaryBase
 		MAX_PAGES = 20
 		SORT_OPTIONS = [
-			["score", "•π•≥•¢ΩÁ"],
-			["date", "∆¸…’ΩÁ"],
+			["score", "„Çπ„Ç≥„Ç¢È†Ü"],
+			["date", "Êó•‰ªòÈ†Ü"],
 		]
 		SORT_PROPERTIES = ["date"]
 		ORDER_OPTIONS = [
-			["asc", "æ∫ΩÁ"],
-			["desc", "πﬂΩÁ"],
+			["asc", "ÊòáÈ†Ü"],
+			["desc", "ÈôçÈ†Ü"],
 		]
 		NUM_OPTIONS = [10, 20, 30, 50, 100]
 
@@ -41,7 +41,7 @@ module TDiary
 			parse_args
 			format_form
 			if @query.empty?
-				@msg = '∏°∫˜æÚ∑Ô§Ú∆˛Œœ§∑§∆°¢°÷∏°∫˜°◊•‹•ø•Û§Ú≤°§∑§∆§Ø§¿§µ§§'
+				@msg = 'Ê§úÁ¥¢Êù°‰ª∂„ÇíÂÖ•Âäõ„Åó„Å¶„ÄÅ„ÄåÊ§úÁ¥¢„Äç„Éú„Çø„É≥„ÇíÊäº„Åó„Å¶„Åè„Å†„Åï„ÅÑ'
 			else
 				search
 			end
@@ -87,7 +87,7 @@ module TDiary
 				@result = db.search(convert(@query), options)
 				@secs = Time.now - t
 			rescue
-				@msg = "•®•È°º: #{_($!.to_s)}</p>"
+				@msg = "„Ç®„É©„Éº: #{_($!.to_s)}</p>"
 			ensure
 				db.close
 			end
@@ -118,7 +118,7 @@ module TDiary
 			end
 			buf = "<p class=\"infobar\">\n"
 			if current_page > 1
-				buf.concat(format_link("¡∞§ÿ", @start - @num, @num))
+				buf.concat(format_link("Ââç„Å∏", @start - @num, @num))
 			end
 			if first_page > 1
 				buf.concat("... ")
@@ -134,7 +134,7 @@ module TDiary
 				buf.concat("... ")
 			end
 			if current_page < page_count
-				buf.concat(format_link("º°§ÿ", @start + @num, @num))
+				buf.concat(format_link("Ê¨°„Å∏", @start + @num, @num))
 			end
 			buf.concat("</p>\n")
 			return buf
@@ -184,9 +184,9 @@ module TDiary
 		def format_form
 			@num_options = NUM_OPTIONS.collect { |n|
 				if n == @num
-					"<option value=\"#{n}\" selected>#{n}∑Ô§∫§ƒ</option>"
+					"<option value=\"#{n}\" selected>#{n}‰ª∂„Åö„Å§</option>"
 				else
-					"<option value=\"#{n}\">#{n}∑Ô§∫§ƒ</option>"
+					"<option value=\"#{n}\">#{n}‰ª∂„Åö„Å§</option>"
 				end
 			}.join("\n")
 			@sort_options = format_options(SORT_OPTIONS, @sort)

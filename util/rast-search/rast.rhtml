@@ -1,16 +1,16 @@
 <%# rast.rhtml $Revision: 1.9 $ %>
 <div class="adminmenu"><%%=navi_user%></div>
 
-<h1><%= CGI::escapeHTML( @conf.html_title ) %> [Á´Ê¸¸¡º÷]</h1>
+<h1><%= CGI::escapeHTML( @conf.html_title ) %> [å…¨æ–‡æ¤œç´¢]</h1>
 
 <form action="<%= @cgi.script_name ? _(@cgi.script_name) : '' %>">
 <p>
 <input type="text" name="query" value="<%= _(@conf.to_native(@query)) %>" size="60">
-<input type="submit" value="¸¡º÷">
-<a href="http://projects.netlab.jp/rast/query.html.ja">¸¡º÷ÊýË¡</a>
+<input type="submit" value="æ¤œç´¢">
+<a href="http://projects.netlab.jp/rast/query.html.ja">æ¤œç´¢æ–¹æ³•</a>
 </p>
 <p>
-ÊÂ¤ÙÂØ¤¨:
+ä¸¦ã¹æ›¿ãˆ:
 <select name="sort">
 <%= @sort_options %>
 </select>
@@ -18,7 +18,7 @@
 <%= @order_options %>
 </select>
 
-É½¼¨·ï¿ô:
+è¡¨ç¤ºä»¶æ•°:
 <select name="num">
 <%= @num_options %>
 </select>
@@ -29,9 +29,9 @@
   <p><%= @msg %></p>
 <% else %>
   <p>
-    <%= _(@conf.to_native(@query)) %> ¤Î¸¡º÷·ë²Ì
-    <%= @result.hit_count %> ·ïÃæ <%= @start + 1 %> - <%= @start + @result.items.length %> ·ïÌÜ
-    (<%= @secs %> ÉÃ)
+    <%= _(@conf.to_native(@query)) %> ã®æ¤œç´¢çµæžœ
+    <%= @result.hit_count %> ä»¶ä¸­ <%= @start + 1 %> - <%= @start + @result.items.length %> ä»¶ç›®
+    (<%= @secs %> ç§’)
   </p>
   <% if @result.hit_count > @num %>
     <%= format_links(@result) %>
@@ -50,7 +50,7 @@
 <div class="comment">
 <div class="commentshort">
 <p><%= @conf.comment_anchor %>
-<span class="commentator"></span>&nbsp;(¥¹¥³¥¢:<%= item.score %>)</p>
+<span class="commentator"></span>&nbsp;(ã‚¹ã‚³ã‚¢:<%= item.score %>)</p>
 </div>
 </div>
 <div class="referer">

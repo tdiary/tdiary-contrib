@@ -1,57 +1,57 @@
 estraier-search README
 ===================
 
-  Hyper Estraier <http://hyperestraier.sourceforge.net/> ���Ѥ��� tDiary
-  �����Ķ��Ǥ���
+  Hyper Estraier <http://hyperestraier.sourceforge.net/> を用いた tDiary
+  検索環境です。
 
 
-��ħ
+特徴
 ----------
 
-  �����ι�����Ϣư���Ƽ�ưŪ�˥���ǥå����򹹿�����Τǡ����ĤǤ�ǿ���
-  ����Ǹ������뤳�Ȥ��Ǥ��ޤ��������� HTML ���������ɬ�פ���ʬ�������
-  ��Ф��ƥ���ǥå������������Τǡ��إå���եå��ʤɤˤ�븡���Υ���
-  ���ʤ����ޤ����ץ饰����ν��Ϥ������оݤˤʤ�Ȥ�����ħ������ޤ���
+  日記の更新と連動して自動的にインデックスを更新するので、いつでも最新の
+  情報で検索することができます。日記を HTML 化した後に必要な部分だけを取
+  り出してインデックスを作成するので、ヘッダやフッタなどによる検索ノイズ
+  がなく、また、プラグインの出力が検索対象になるという特徴があります。
 
 
-ɬ�פʤ��
+必要なもの
 ----------
 
-  * tDiary 1.5 �ʹ�
-  * Ruby 1.8.2 �ʹ�
-  * Hyper Estraier 1.4 �ʹ�
-    �ʥԥ奢Ruby���󥿡��ե����� estraierpure.rb ��ɬ�פǤ���
+  * tDiary 1.5 以降
+  * Ruby 1.8.2 以降
+  * Hyper Estraier 1.4 以降
+    （ピュアRubyインターフェイス estraierpure.rb も必要です）
 
 
-���åȥ��å�
+セットアップ
 ------------
 
-  1. estraier-register.rb �� tDiary �� �ץ饰����ǥ��쥯�ȥ�˥��ԡ����ޤ���
+  1. estraier-register.rb を tDiary の プラグインディレクトリにコピーします。
 
-  2. estraier-search.rb �� tDiary �� index.rb ������ǥ��쥯�ȥ�˥��ԡ�
-     ���ޤ���ɬ�פʤ� index.rb ��Ʊ���褦�˥���ܥ�å���󥯤�ĥ�ä���
-     ̾�����Ѥ����ꤷ�Ƥ���������
+  2. estraier-search.rb を tDiary の index.rb があるディレクトリにコピー
+     します。必要なら index.rb と同じようにシンボリックリンクを張ったり
+     名前を変えたりしてください。
 
-  3. CGI �Ȥ��Ƽ¹Բ�ǽ�ˤ��ޤ���
+  3. CGI として実行可能にします。
 
      $ chmod a+x estraier-search.rb
 
-  4. ɬ�פʤ� #! �Υѥ����ѹ����ޤ���
+  4. 必要なら #! のパスを変更します。
 
-  5. estraier.rhtml �� estraier.rxml �� i.estraier.rhtml �� tDiary ��
-     skel/ �ǥ��쥯�ȥ�˥��ԡ����ޤ���
+  5. estraier.rhtml と estraier.rxml と i.estraier.rhtml を tDiary の
+     skel/ ディレクトリにコピーします。
 
-  6. Hyper Estraier �ΥΡ��ɥޥ����򥻥åȥ��åפ��ޤ������κݡ�����ե�
-     ����ʥΡ��ɥޥ�����rootdir�β���_conf�ˤˡ��ʲ����ɲä��Ƥ���������
+  6. Hyper Estraier のノードマスタをセットアップします。その際、設定ファ
+     イル（ノードマスタのrootdirの下の_conf）に、以下を追加してください。
 
        attrindex: @uri{{!}}str
 
-     �������꤬�ʤ��ȡ���Ͽ����ȥ꤬�������ݤˡ��������ѥե����ޥ󥹤�
-     �㲼���ޤ���
+     この設定がないと、登録エントリが増えた際に、著しくパフォーマンスが
+     低下します。
 
-  7. �Ρ��ɥޥ������顢tDiary�ѤΥΡ��ɥ����Ф��������������³�����
-     tdiary.conf �˵��Ҥ��ޤ����ǥե���ȤǤϡ��ʲ��Τ褦�˵��Ҥ����Τ�
-     Ʊ������Ǥ���
+  7. ノードマスタから、tDiary用のノードサーバを作成し、その接続情報を
+     tdiary.conf に記述します。デフォルトでは、以下のように記述したのと
+     同じ設定です。
 
        @options["estraier.host"] = "localhost"
        @options["estraier.port"] = 1978
@@ -60,55 +60,55 @@ estraier-search README
        @options["estraier.name"] = "admin"
        @options["estraier.password"] = "admin"
 
-  8. estraier-register.rb �ץ饰�����ͭ���ˤ��ޤ���(tDiary �� plugin/
-     �ǥ��쥯�ȥ�˥��ԡ����뤫���ץ饰��������Υǥ��쥯�ȥ�˥��ԡ���
-     �ƥ֥饦������ͭ�������ꤷ�ޤ�������꥽�����ե������
-     en/estraier-register.rb �� ja/estraier-register.rb �⡢�ץ饰����ǥ�
-     �쥯�ȥ�� en/ �ʲ������ja/ �ʲ��˥��ԡ����Ƥ���������)
+  8. estraier-register.rb プラグインを有効にします。(tDiary の plugin/
+     ディレクトリにコピーするか、プラグイン選択のディレクトリにコピーし
+     てブラウザから有効に設定します。言語リソースファイルの
+     en/estraier-register.rb と ja/estraier-register.rb も、プラグインディ
+     レクトリの en/ 以下およびja/ 以下にコピーしてください。)
 
-  9. ��¸����������ƥ�Ĥ��Ф��Ƹ�������ǥå�����������ޤ���tDiary ��
-     ������̤����Estraier�����פ����ӡ���Estraier�����Υ���ǥå�����
-     �ƹ��ۤ�����ϡ������å��ܥå���������å�����OK�򲡤��Ƥ���������
-     �Ȥ�����å������˽��äƥ����å�����OK�򲡤��ȡ�
+  9. 既存の日記コンテンツに対して検索インデックスを作成します。tDiary の
+     設定画面から「Estraier検索」を選び、「Estraier検索のインデックスを
+     再構築する場合は、チェックボックスをチェックしてOKを押してください」
+     というメッセージに従ってチェックしてOKを押すと、
 
-     ����ǥå����κ����ϡ�tDiary �� CGI �μ¹Ը��¤ǰʲ��Τ褦�˼¹Ԥ���
-     ���ȤǤ��ǽ�Ǥ���
+     インデックスの作成は、tDiary の CGI の実行権限で以下のように実行する
+     ことでも可能です。
 
-     ruby estraier-register.rb [-p tdiary.rb�Τ���ǥ��쥯�ȥ�] [-c tdiary.conf�Τ���ǥ��쥯�ȥ�]
+     ruby estraier-register.rb [-p tdiary.rbのあるディレクトリ] [-c tdiary.confのあるディレクトリ]
 
- 10. ��ʬ�� tDiary �ι����ʾ�� (�㤨�Хإå�) �˰ʲ��Τ褦�ʥե�������
-     ���Ƥ���������
+ 10. 自分の tDiary の好きな場所 (例えばヘッダ) に以下のようなフォームを加
+     えてください。
 
      <form method="get" action="estraier-search.rb" class="search">
      <input type="text" name="query" size="20" value="">
      <input type="submit" value="Search">
      </form>
 
-     search-form.rb �ץ饰�����ͭ���ˤ��Ƥ�����ϡ��ʲ��Τ褦�˽񤯤�
-     �Ȥ�Ǥ��ޤ���
+     search-form.rb プラグインを有効にしている場合は、以下のように書くこ
+     ともできます。
 
      <%= search_form("estraier-search.rb", "query") %>
 
-  �ʾ�Ǥ���
+  以上です。
 
 
-�����Τ�����
+検索のしかた
 ------------
 
-  estraier-search �θ����оݤϡ�������ʸ���ĥå��ߡ�TrackBack �Ǥ���
+  estraier-search の検索対象は、日記本文、ツッコミ、TrackBack です。
 
-  ������ˡ�ˤĤ��Ƥϡ�
-  http://hyperestraier.sourceforge.net/uguide-ja.html#searchcond ����
-  �����������������ν񼰤���ꤷ�Ƥ��ʤ����ϡ��ִ��ؽ񼰡פǸ������
-  ���ޤ���
+  検索方法については、
+  http://hyperestraier.sourceforge.net/uguide-ja.html#searchcond をご覧
+  ください。検索条件の書式を指定していない場合は、「簡便書式」で検索を行
+  います。
 
 
-Ϣ����
+連絡先
 ------
 
-  �����Ҥ� <kazuhiko@fdiary.net>
+  かずひこ <kazuhiko@fdiary.net>
   http://www.fdiary.net/
 
-  �Х����ϰʲ��Τɤ����ˤ��ꤤ���ޤ���
+  バグ報告は以下のどこかにお願いします。
     * tdiary-devel ML
-    * ľ�ܥ᡼��
+    * 直接メール

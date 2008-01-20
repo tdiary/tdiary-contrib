@@ -1,3 +1,3 @@
-@estraier_register_conf_label = 'Estraier¸¡º÷'
-@estraier_register_conf_header = 'Estraier¸¡º÷¥¤¥ó¥Ç¥Ã¥¯¥¹¤ÎºÆ¹½ÃÛ'
-@estraier_register_conf_description = 'Estraier¸¡º÷¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤òºÆ¹½ÃÛ¤¹¤ë¾ì¹ç¤Ï¡¢¥Á¥§¥Ã¥¯¥Ü¥Ã¥¯¥¹¤ò¥Á¥§¥Ã¥¯¤·¤ÆOK¤ò²¡¤·¤Æ¤¯¤À¤µ¤¤¡£'
+@estraier_register_conf_label = 'Estraieræ¤œç´¢'
+@estraier_register_conf_header = 'Estraieræ¤œç´¢ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å†æ§‹ç¯‰'
+@estraier_register_conf_description = 'Estraieræ¤œç´¢ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å†æ§‹ç¯‰ã™ã‚‹å ´åˆã¯ã€ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦OKã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚'

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="<%= @conf.encoding %>"?>
 <rss xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" version="2.0">
   <channel>
-    <title><%= _( @conf.html_title ) %> [Á´Ê¸¸¡º÷]: <%= _(@query) %></title>
+    <title><%= _( @conf.html_title ) %> [å…¨æ–‡æ¤œç´¢]: <%= _(@query) %></title>
     <link><%= @conf.base_url.sub(%r|/[^/]*$|, '/') %><%= _(@cgi.script_name ? File.basename(@cgi.script_name) : "") %><%= format_anchor(@start, @num) %></link>
-    <description>HyperEstraier ¸¡º÷: <%= _(@query) %></description>
+    <description>HyperEstraier æ¤œç´¢: <%= _(@query) %></description>
     <language>ja-JP</language>
     <openSearch:totalResults><%= @result.doc_num %></openSearch:totalResults>
     <openSearch:startIndex><%= @start + 1 %></openSearch:startIndex>

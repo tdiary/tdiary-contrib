@@ -1,92 +1,92 @@
 tdiarysearch README
 ===================
 
-  tDiary��ñ����CGI�Ǥ���
-  ���餫���ᥤ��ǥå�������ɬ�פ��ʤ��Τǡ�
-  ����Ū�ʸ������󥸥����٤ƥ��󥹥ȡ��뤬
-  ����Ū�˴�ñ�Ǥ����ޤ����񤤤�ľ���������
-  �����оݤˤʤ�Ȥ���Ĺ�꤬����ޤ���
+  tDiary簡単検索CGIです。
+  あらかじめインデックスを作る必要がないので、
+  一般的な検索エンジンに比べてインストールが
+  圧倒的に簡単です。また、書いた直後の日記も
+  検索対象になるという長所があります。
 
 
-ɬ�״Ķ�
+必要環境
 --------
 
-  * �ƥ����ȷ����Υǡ����١�����ȤäƤ��뤳�� (tDiary 1.5 �ʹ�)
-  * tDiary ��ư���Ƥ��륵���Ф��ȼ��� CGI ���ɲä��븢�¤����뤳��
+  * テキスト形式のデータベースを使っていること (tDiary 1.5 以降)
+  * tDiary が動いているサーバに独自の CGI を追加する権限があること
 
 
-���åȥ��å�
+セットアップ
 ------------
 
-  1. search.rb �� tDiary �� index.rb ���٤˥��ԡ����ޤ���
-     ɬ�פʤ� index.rb ��Ʊ���褦�˥���ܥ�å���󥯤�
-     ĥ�ä���̾�����Ѥ����ꤷ�Ƥ���������
+  1. search.rb を tDiary の index.rb の隣にコピーします。
+     必要なら index.rb と同じようにシンボリックリンクを
+     張ったり名前を変えたりしてください。
 
-  2. CGI �Ȥ��Ƽ¹Բ�ǽ�ˤ��ޤ���
+  2. CGI として実行可能にします。
 
      $ chmod a+x search.rb
 
-  3. ɬ�פʤ� #! �Υѥ����碌�ޤ���
+  3. 必要なら #! のパスを合わせます。
 
-  4. (���ץ����) search.rb ��Ƭ�Υѥ�᡼�����ѹ�����
-     �����꡼������ͭ���ˤ��Ƥ���������
-     �� �����꡼�����ξܺ٤ˤĤ��Ƥϸ��
+  4. (オプション) search.rb 先頭のパラメータを変更して
+     クエリーログを有効にしてください。
+     ※ クエリーログの詳細については後述
 
-  5. ��ʬ�� tDiary �ι����ʾ�� (�㤨�Хإå�) �˰ʲ���
-     �ե������ä��Ƥ���������
+  5. 自分の tDiary の好きな場所 (例えばヘッダ) に以下の
+     フォームを加えてください。
 
   <form method="post" action="search.rb" class="searchform">
   <input type="text" name="q" size="20" value="">
   <input type="submit" value="Search">
   </form>
 
-  �ʾ�Ǥ���
+  以上です。
 
 
-�����Τ�����
+検索のしかた
 ------------
 
-  tdiarysearch �ϥȥԥå����Ȥ� AND ������Ԥ��ޤ���
-  ���ꤷ����϶����ʬ�䤵�졢��ñ�줬�ȥԥå���Υƥ����Ȥ�
-  ���ƴޤޤ����ˤ��Υȥԥå��򸡺���̤˥ꥹ�Ȥ��ޤ���
+  tdiarysearch はトピックごとに AND 検索を行います。
+  指定した語は空白で分割され、全単語がトピック内のテキストに
+  全て含まれる場合にそのトピックを検索結果にリストします。
 
-  AND �ʳ��α黻�ϥ��ݡ��Ȥ��ޤ���
+  AND 以外の演算はサポートしません。
 
-  �ޤ� rev 1.8 ���ʳ��ǤϤޤ��ĥå��ߤ������Ǥ��ޤ���
-  �ᤤ�������ɲä��ޤ���
+  また rev 1.8 の段階ではまだツッコミが検索できません。
+  近いうちに追加します。
 
 
-�����꡼����
+クエリーログ
 ------------
 
-  �����꡼���� (query log) �Ȥ����Τϡ�������Υ�����
-  ���ȤǤ������Υ�����¸�ߤ����¾�οͤ����򸡺������Τ�
-  ������褦�ˤʤ�ޤ��������꡼������ͭ���ˤ���ˤϡ�
-  search.rb ������ LOGGING �� true �ˤ��Ƥ���������
+  クエリーログ (query log) というのは、検索語のログの
+  ことです。このログが存在すると他の人が何を検索したのか
+  見られるようになります。クエリーログを有効にするには、
+  search.rb 内の定数 LOGGING を true にしてください。
 
-  CGI ��������򸫤���褦�ˤ���ˤϡ�search.rb ��
-  �ѥ�᡼�� history=on ���դ��ƸƤӤޤ����㤨��
-  ���Υ�󥯤�����������Ƥ����ȡ���󥯤򤿤ɤ������
-  ��������Ƕ�θ��������������ޤ���
+  CGI からログを見られるようにするには、search.rb に
+  パラメータ history=on を付けて呼びます。例えば
+  次のリンクを日記に入れておくと、リンクをたどるだけで
+  日記から最近の検索ログが見られます。
 
-    <a href="search.rb?history=on">[��������]</a>
+    <a href="search.rb?history=on">[検索ログ]</a>
 
-  �ʤ��������꡼������ tDiary �Υǡ����ǥ��쥯�ȥ�� search.log
-  �Ȥ���̾���Ǻ�������ޤ����ä˥����ơ����������Ϥ��Ƥ��ʤ��Τǡ�
-  Ŭ���ʴֳ֤ǥ����ơ��Ȥ��Ƥ���������
+  なお、クエリーログは tDiary のデータディレクトリに search.log
+  という名前で作成されます。特にローテーション処理はしていないので、
+  適当な間隔でローテートしてください。
 
 
-Ϣ����
+連絡先
 ------
 
-  ������Ϻ (���������ߤͤ���)
+  青木峰郎 (あおき・みねろう)
   Minero Aoki <aamine@loveruby.net>
   http://i.loveruby.net/w/tdiarysearch.html
 
-  �Х����ϰʲ��Τɤ����ˤ��ꤤ���ޤ���
+  バグ報告は以下のどこかにお願いします。
 
-    * Wiki ��ΥХ����ڡ���
+    * Wiki 上のバグ報告ページ
       http://i.loveruby.net/w/tdiarysearchBugs.html
     * tdiary-devel ML
-    * ľ�ܥ᡼��
+    * 直接メール
 
