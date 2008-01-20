@@ -10,7 +10,7 @@ end
 
 class MyHotEntryTest < Test::Unit::TestCase
   def setup
-    # @cache_path ¤Ï¡Ö¥Õ¥¡¥¤¥ëÌ¾-¥×¥í¥»¥¹ÈÖ¹æ¡×
+    # @cache_path ã¯ã€Œãƒ•ã‚¡ã‚¤ãƒ«å-ãƒ—ãƒ­ã‚»ã‚¹ç•ªå·ã€
     @cache_path = File.join(Dir.tmpdir, "#{__FILE__}-#{$$}")
     Dir.mkdir(@cache_path)
     @dbfile = "#{@cache_path}/my_hotentry.dat"
@@ -21,22 +21,22 @@ class MyHotEntryTest < Test::Unit::TestCase
   end
 
   def test_update
-    # ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¼èÆÀ¤¹¤ë
+    # äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’å–å¾—ã™ã‚‹
     base_url = 'http://d.hatena.ne.jp/'
     hotentry = MyHotEntry.new(@dbfile)
     hotentry.update(base_url)
-    # ¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤¬À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È
+    # ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«ãŒç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨
     assert(File.file?(@dbfile))
-    # ¿Íµ¤¤ÎÆüµ­¤¬¼èÆÀ¤Ç¤­¤Æ¤¤¤ë¤³¤È
+    # äººæ°—ã®æ—¥è¨˜ãŒå–å¾—ã§ãã¦ã„ã‚‹ã“ã¨
     entries = hotentry.entries
     assert(entries.size > 0)
     entries.each do |entry|
-      assert(entry[:url].include?(base_url), 'base_url ¤Ç»ØÄê¤·¤¿URL¤¬´Ş¤Ş¤ì¤Æ¤¤¤ë¤³¤È')
+      assert(entry[:url].include?(base_url), 'base_url ã§æŒ‡å®šã—ãŸURLãŒå«ã¾ã‚Œã¦ã„ã‚‹ã“ã¨')
       assert(entry[:title].size > 0)
     end
   end
 
-  # ²¿ÅÙ¤â¼èÆÀ¤·¤Æ¤â¥­¥ã¥Ã¥·¥å¥µ¥¤¥º¤¬Âç¤­¤¯¤Ê¤é¤Ê¤¤¤³¤È
+  # ä½•åº¦ã‚‚å–å¾—ã—ã¦ã‚‚ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚µã‚¤ã‚ºãŒå¤§ãããªã‚‰ãªã„ã“ã¨
   def test_double_update
     base_url = 'http://d.hatena.ne.jp/'
     hotentry = MyHotEntry.new(@dbfile)
@@ -49,7 +49,7 @@ class MyHotEntryTest < Test::Unit::TestCase
     assert_equal(size, hotentry.entries.size)
   end
 
-  # ¼èÆÀ·ë²Ì¤¬¶õ¤Î¾ì¹ç¤Ï¥­¥ã¥Ã¥·¥å¤ò¥¯¥ê¥¢¤·¤Ê¤¤
+  # å–å¾—çµæœãŒç©ºã®å ´åˆã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ã‚¯ãƒªã‚¢ã—ãªã„
   def test_update_noentry
     exist_url = 'http://d.hatena.ne.jp/'
     empty_url = 'http://empty-url-123456'
