@@ -1,7 +1,9 @@
 #
 # hb_footer.rb
 #
-# 彫マ彫ニ彫ハ徴ヨ徴テ徴ッ徴゛庁シ徴ッ (http://b.hatena.ne.jp/) 彫ホ徴ウ徴癇・賴・ネ彫峵ウコ椎・サ徴ッ徴キ徴迺・賴、ヒ椎ス彫齟ノユ彫ア彫︾Diary徴ラ徴髓・ー徴、徴誾# 調ツ、鎚ヌrss_recent Version 0.0.5i2彫ネ銚ヲ彫ヒ捗ネ掴ム彫ケ彫#
+# はてなブックマーク (http://b.hatena.ne.jp/) のコメントを該当セクションに貼り付けるtDiaryプラグイン
+# 改造版rss_recent Version 0.0.5i2と共に使用する
+#
 # Licence: GPL
 # Author: ishinao <ishinao@ishinao.net>
 #
@@ -11,8 +13,8 @@ add_section_leave_proc do |date, index|
   hb_url = "http://b.hatena.ne.jp/entry/#{td_url}"
   rss_url = "http://b.hatena.ne.jp/entry/rss/#{td_url}"
 
-  template_head = %Q[<div class="section">\n<h4>彫ウ彫ホ徴サ徴ッ徴キ徴迺・賴、ヒ陳ミ彫ケ彫a href="#{CGI.escapeHTML(hb_url)}">彫マ彫ニ徴ヨ</a></h4>\n<ul class="hb_footer">\n]
-  template_list = '<li><span class="date">#{time.strftime("%Y追ッ%m長d槌)}</span> <span class="hatenaid"><a href="#{CGI.escapeHTML(url)}">#{CGI.escapeHTML(title)}</a></span> <span class="comment">#{CGI.escapeHTML(description.to_s)}</span></li>'
+  template_head = %Q[<div class="section">\n<h4>このセクションに対する<a href="#{CGI.escapeHTML(hb_url)}">はてブ</a></h4>\n<ul class="hb_footer">\n]
+  template_list = '<li><span class="date">#{time.strftime("%Y年%m月%d日")}</span> <span class="hatenaid"><a href="#{CGI.escapeHTML(url)}">#{CGI.escapeHTML(title)}</a></span> <span class="comment">#{CGI.escapeHTML(description.to_s)}</span></li>'
   template_foot = "</ul>\n</div>\n"
 
   cache_time = 3600;
