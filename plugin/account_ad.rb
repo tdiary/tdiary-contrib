@@ -1,23 +1,28 @@
 # account_ad.rb $Revision: 1.3 $
 #
-# Copyright (c) 2005 SHIBATA  Hiroshi <h-sbt@nifty.com>
+# Copyright (c) 2008 SHIBATA  Hiroshi <h-sbt@nifty.com>
 # Distributed under the GPL
 #
 
-add_header_proc do
-   account_ad_init
-
-   account_name = @conf['account.name']
-   account_service = @conf['account.service']
-
-   if @mode == "day"
-      permalink=@conf.base_url+anchor(@date.strftime('%Y%m%d'))
-   else
-      permalink=@conf.base_url
-   end
-
-	if account_name.length > 0 then
-   	<<-HTML
+if /^(latest|day|conf|saveconf)$/ =~ @mode then
+	
+	@account_ad_list = {
+		# Service => ServiceHomepage
+		'Hatena' => 'https://www.hatena.ne.jp/',
+	}
+	
+	if @conf['account.service'] and @conf['account.name'] then
+		if @mode == "day"
+			permalink=@conf.base_url+anchor(@date.strftime('%Y%m%d'))
+		else
+			permalink=@conf.base_url
+		end
+		
+		account_service = @account_ad_list[@conf['account.service']]
+		account_name = @conf['account.name']
+		
+		add_header_proc do	
+			result = <<-HTML
 			<!--
 			<rdf:RDF
 			   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -33,20 +38,30 @@ add_header_proc do
 			</rdf:Description>
 			</rdf:RDF>
 			-->
-   	HTML
-	else
-		''
+   	   HTML
+			result.gsub( /^\t\t/, '' )
+		end
 	end
 end
 
-def account_ad_init
-   @conf['account.name'] ||= ""
-   @conf['account.service'] ||= "http://www.hatena.ne.jp/"
-end
+add_conf_proc( 'account_ad', 'Account Auto-Discovery' ) do
 
-if @mode == 'saveconf'
-   def saveconf_account_ad
+	if @mode == 'saveconf' then
       @conf['account.name'] = @cgi.params['account.name'][0]
       @conf['account.service'] = @cgi.params['account.service'][0]
-   end
+	end
+
+	options = ''
+	@account_ad_list.each_key do |key|
+		options << %Q|<option value="#{h key}"#{" selected" if @conf['account.service'] == key}>#{h key}</option>\n|
+	end
+		
+	<<-HTML
+   <h3 class="subtitle">Account Service</h3>
+	<p><select name="account.service">
+		#{options}
+	</select></p>
+   <h3 class="subtitle">Account Name</h3>
+   <p><input name="account.name" value="#{h @conf['account.name']}" /></p>
+   HTML
 end
