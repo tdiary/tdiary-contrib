@@ -11,31 +11,31 @@
 if /^(?:latest|conf|saveconf)$/ =~ @mode then
 	@openid_list = {
 		# service => @openid_config.new(
-		#    [openid.server, openid.delegate(replace #ID# as account name)],   # openid
-		#    [openid2.provider, openid2.local_id(replace #ID# as account name)], # openid2
-		#    'X-XRDS-Location(replace #ID# as account name)'),
-		'Hatena' => @openid_config.new(['https://www.hatena.ne.jp/openid/server', 'http://www.hatena.ne.jp/#ID#/']),
-		'livedoor' => @openid_config.new(['http://auth.livedoor.com/openid/server', 'http://profile.livedoor.com/#ID#']),
-		'LiveJournal' => @openid_config.new(['http://www.livejournal.com/openid/server.bml', 'http://#ID#.livejournal.com/']),
+		#    [openid.server, openid.delegate(replace <ID> as account name)],   # openid
+		#    [openid2.provider, openid2.local_id(replace <ID> as account name)], # openid2
+		#    'X-XRDS-Location(replace <ID> as account name)'),
+		'Hatena' => @openid_config.new(['https://www.hatena.ne.jp/openid/server', 'http://www.hatena.ne.jp/<ID>/']),
+		'livedoor' => @openid_config.new(['http://auth.livedoor.com/openid/server', 'http://profile.livedoor.com/<ID>']),
+		'LiveJournal' => @openid_config.new(['http://www.livejournal.com/openid/server.bml', 'http://<ID>.livejournal.com/']),
 		'OpenID.ne.jp' => @openid_config.new(
-			['http://www.openid.ne.jp/user/auth', 'http://#ID#.openid.ne.jp'],
+			['http://www.openid.ne.jp/user/auth', 'http://<ID>.openid.ne.jp'],
 			nil,
-			'http://#ID#.openid.ne.jp/user/xrds'),
-		'TypeKey' => @openid_config.new(['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/#ID#/']),
-		'Videntity.org' => @openid_config.new(['http://videntity.org/serverlogin?action=openid', 'http://#ID#.videntity.org/']),
-		'Vox' => @openid_config.new(['http://www.vox.com/services/openid/server', 'http://#ID#.vox.com/']),
+			'http://<ID>.openid.ne.jp/user/xrds'),
+		'TypeKey' => @openid_config.new(['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/<ID>/']),
+		'Videntity.org' => @openid_config.new(['http://videntity.org/serverlogin?action=openid', 'http://<ID>.videntity.org/']),
+		'Vox' => @openid_config.new(['http://www.vox.com/services/openid/server', 'http://<ID>.vox.com/']),
 		'myopenid.com' => @openid_config.new(
-			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid
-			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid2
-			"http://www.myopenid.com/xrds?username=#ID#"),
+			['http://www.myopenid.com/server', 'http://<ID>.myopenid.com'], # openid
+			['http://www.myopenid.com/server', 'http://<ID>.myopenid.com'], # openid2
+			"http://www.myopenid.com/xrds?username=<ID>"),
 		'claimID.com' => @openid_config.new(
-			['http://openid.claimid.com/server', 'http://openid.claimid.com/#ID#'],
-			nil, #['http://openid.claimid.com/server', 'http://openid.claimid.com/#ID#'],
-			'http://claimid.com/#ID#/xrds'),
+			['http://openid.claimid.com/server', 'http://openid.claimid.com/<ID>'],
+			nil, #['http://openid.claimid.com/server', 'http://openid.claimid.com/<ID>'],
+			'http://claimid.com/<ID>/xrds'),
 		'Personal Identity Provider (PIP)' => @openid_config.new(
-			['http://pip.verisignlabs.com/server', 'http://#ID#.pip.verisignlabs.com/'],
-			['http://pip.verisignlabs.com/server', 'http://#ID#.pip.verisignlabs.com/'],
-			'http://pip.verisignlabs.com/user/#ID#/yadisxrds'),
+			['http://pip.verisignlabs.com/server', 'http://<ID>.pip.verisignlabs.com/'],
+			['http://pip.verisignlabs.com/server', 'http://<ID>.pip.verisignlabs.com/'],
+			'http://pip.verisignlabs.com/user/<ID>/yadisxrds'),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
@@ -44,14 +44,14 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 		add_header_proc do
 			result = <<-HTML
 			<link rel="openid.server" href="#{h openid_service.openid[0]}">
-			<link rel="openid.delegate" href="#{h openid_service.openid[1].sub( /#ID#/, openid_id )}">
+			<link rel="openid.delegate" href="#{h openid_service.openid[1].sub( /<ID>/, openid_id )}">
 			HTML
 			result << <<-HTML if openid_service.openid2
 			<link rel="openid2.provider" href="#{h openid_service.openid2[0]}">
-			<link rel="openid2.local_id" href="#{h openid_service.openid2[1].sub( /#ID#/, openid_id )}">
+			<link rel="openid2.local_id" href="#{h openid_service.openid2[1].sub( /<ID>/, openid_id )}">
 			HTML
 			result << <<-HTML if openid_service.x_xrds_location
-			<meta http-equiv="X-XRDS-Location" content="#{h openid_service.x_xrds_location.sub( /#ID#/, openid_id )}">
+			<meta http-equiv="X-XRDS-Location" content="#{h openid_service.x_xrds_location.sub( /<ID>/, openid_id )}">
 			HTML
 			result.gsub( /^\t{2}/, '' )
 		end
