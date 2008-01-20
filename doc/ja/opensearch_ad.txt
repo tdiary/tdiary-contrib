@@ -1,16 +1,16 @@
-! Ì¾Á°
-OpenSearch Auto-Discovery ¥×¥é¥°¥¤¥ó
+! åå‰
+OpenSearch Auto-Discovery ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
 
-! ³µÍ×
-tDiary¤òOpenSearch Auto-Discovery¤ËÂĞ±ş¤µ¤»¤ë¥×¥é¥°¥¤¥ó
+! æ¦‚è¦
+tDiaryã‚’OpenSearch Auto-Discoveryã«å¯¾å¿œã•ã›ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
 
-!»È¤¤Êı
-ÍøÍÑ¤¹¤ë¤Ë¤Ï OpenSearch description XML ¤ò¤¢¤é¤«¤¸¤áºîÀ®¤¹¤ëÉ¬Í×¤¬¤¢¤ê¤Ş¤¹¡£
-¥µ¥ó¥×¥ë¥Õ¥¡¥¤¥ë¤Ï http://www.opensearch.org/Specifications/OpenSearch/1.1 ¤Ë¤¢¤ê¤Ş¤¹¡£
+!ä½¿ã„æ–¹
+åˆ©ç”¨ã™ã‚‹ã«ã¯ OpenSearch description XML ã‚’ã‚ã‚‰ã‹ã˜ã‚ä½œæˆã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+ã‚µãƒ³ãƒ—ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã¯ http://www.opensearch.org/Specifications/OpenSearch/1.1 ã«ã‚ã‚Šã¾ã™ã€‚
 
-!¥é¥¤¥»¥ó¥¹
+!ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
 GPL2
 
-!¹¹¿·ÍúÎò
+!æ›´æ–°å±¥æ­´
 !!20070117
-* tDiary-contrib ¤ËÄÉ²Ã
+* tDiary-contrib ã«è¿½åŠ 
