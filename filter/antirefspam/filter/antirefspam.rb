@@ -13,7 +13,7 @@ module TDiary
   module Filter
 
     class AntirefspamFilter < Filter
-      # Í­¸ú¤Ë¤¹¤ë¤È»ØÄê¤·¤¿¥Õ¥¡¥¤¥ë¤Ë¥Ç¥Ð¥Ã¥°¾ðÊóÊ¸»úÎó¤òÄÉµ­¤¹¤ë
+      # æœ‰åŠ¹ã«ã™ã‚‹ã¨æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ‡ãƒãƒƒã‚°æƒ…å ±æ–‡å­—åˆ—ã‚’è¿½è¨˜ã™ã‚‹
       def debug_out(filename, str)
         if $debug
           filename = File.join(@conf.data_path,"AntiRefSpamFilter",filename)
@@ -23,9 +23,9 @@ module TDiary
         end
       end
 
-      # str ¤Ë»ØÄê¤µ¤ì¤¿Ê¸»úÎó¤¬Å¬ÀÚ¤Ê¥ê¥ó¥¯Àè¤ò´Þ¤ó¤Ç¤¤¤ë¤«¤ò¥Á¥§¥Ã¥¯
+      # str ã«æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ãŒé©åˆ‡ãªãƒªãƒ³ã‚¯å…ˆã‚’å«ã‚“ã§ã„ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
       def isIncludeMyUrl(str)
-        # str ¤ËÆüµ­¤ÎURL¤¬´Þ¤Þ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«
+        # str ã«æ—¥è¨˜ã®URLãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
         base_url = @conf.base_url
         unless base_url.empty?
           if str.include? base_url
@@ -33,7 +33,7 @@ module TDiary
           end
         end
 
-        # str ¤Ë¥È¥Ã¥×¥Ú¡¼¥¸URL¤¬´Þ¤Þ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«
+        # str ã«ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸URLãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
         unless @conf.index_page.empty?
           if /\Ahttps?:\/\// =~ @conf.index_page
             if str.include? @conf.index_page
@@ -42,7 +42,7 @@ module TDiary
           end
         end
 
-        # str ¤ËµöÍÆ¤¹¤ë¥ê¥ó¥¯Àè¤¬´Þ¤Þ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«
+        # str ã«è¨±å®¹ã™ã‚‹ãƒªãƒ³ã‚¯å…ˆãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
         if (myurl = @conf['antirefspam.myurl']) && !myurl.empty?
           if str.include? myurl
             return true
@@ -65,26 +65,26 @@ module TDiary
         conf_proxy_server = @conf['antirefspam.proxy_server'] != nil && @conf['antirefspam.proxy_server'].size > 0 ? @conf['antirefspam.proxy_server'].to_s : nil
         conf_proxy_port = @conf['antirefspam.proxy_port'] != nil && @conf['antirefspam.proxy_port'].size > 0 ? @conf['antirefspam.proxy_port'].to_s : nil
 
-        if conf_disable == 'true'  or    # ¥ê¥ó¥¯¸µ¥Á¥§¥Ã¥¯¤¬Í­¸ú¤Ç¤Ï¤Ê¤¤¾ì¹ç¤Ï¥¹¥ë¡¼¤¹¤ë
-           referer == nil          or    # ¥ê¥ó¥¯¸µ¤¬Ìµ¤¤
-           referer.size <= 1       or    # °ìÉô¤Î¥¢¥ó¥Æ¥Ê¤Ç¹¹¿·»þ¹ï¤¬¼è¤ì¤Ê¤¯¤Ê¤ëÌäÂê¤ËÂÐ±þ¤¹¤ë¤¿¤á¡¢¥ê¥ó¥¯¸µ¤¬£±Ê¸»ú°ÊÆâ¤Î¾ì¹ç¤ÏµöÍÆ
-           isIncludeMyUrl(referer)       # ¼«Ê¬¤ÎÆüµ­Æâ¤«¤é¤Î¥ê¥ó¥¯¤Ï¿®Íê¤¹¤ë
+        if conf_disable == 'true'  or    # ãƒªãƒ³ã‚¯å…ƒãƒã‚§ãƒƒã‚¯ãŒæœ‰åŠ¹ã§ã¯ãªã„å ´åˆã¯ã‚¹ãƒ«ãƒ¼ã™ã‚‹
+           referer == nil          or    # ãƒªãƒ³ã‚¯å…ƒãŒç„¡ã„
+           referer.size <= 1       or    # ä¸€éƒ¨ã®ã‚¢ãƒ³ãƒ†ãƒŠã§æ›´æ–°æ™‚åˆ»ãŒå–ã‚Œãªããªã‚‹å•é¡Œã«å¯¾å¿œã™ã‚‹ãŸã‚ã€ãƒªãƒ³ã‚¯å…ƒãŒï¼‘æ–‡å­—ä»¥å†…ã®å ´åˆã¯è¨±å®¹
+           isIncludeMyUrl(referer)       # è‡ªåˆ†ã®æ—¥è¨˜å†…ã‹ã‚‰ã®ãƒªãƒ³ã‚¯ã¯ä¿¡é ¼ã™ã‚‹
         then
           return true
         end
 
-        # "¿®Íê¤Ç¤­¤ëURL" ¤ò£±¤Ä¤º¤Ä¼è¤ê½Ð¤·¤Æreferer¤È¹çÃ×¤¹¤ë¤«¥Á¥§¥Ã¥¯¤¹¤ë
+        # "ä¿¡é ¼ã§ãã‚‹URL" ã‚’ï¼‘ã¤ãšã¤å–ã‚Šå‡ºã—ã¦refererã¨åˆè‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
         conf_trustedurl.each_line do |trusted|
           trusted.sub!(/\r?\n/,'')
-          next if trusted =~ /\A(\#|\s*)\z/  # #¤Þ¤¿¤Ï¶õÇò¤Ç»Ï¤Þ¤ë¹Ô¤ÏÆÉ¤ßÈô¤Ð¤¹
+          next if trusted =~ /\A(\#|\s*)\z/  # #ã¾ãŸã¯ç©ºç™½ã§å§‹ã¾ã‚‹è¡Œã¯èª­ã¿é£›ã°ã™
           
-          # ¤Þ¤º¤Ï "¿®Íê¤Ç¤­¤ë URL" ¤¬ referer ¤Ë´Þ¤Þ¤ì¤ë¤«¤É¤¦¤«
+          # ã¾ãšã¯ "ä¿¡é ¼ã§ãã‚‹ URL" ãŒ referer ã«å«ã¾ã‚Œã‚‹ã‹ã©ã†ã‹
           if referer.include? trusted
             debug_out("trusted", trusted+" (include?) "+referer)
             return true
           end
           
-          # ´Þ¤Þ¤ì¤Ê¤«¤Ã¤¿¾ì¹ç¤Ï "¿®Íê¤Ç¤­¤ë URL" ¤òÀµµ¬É½¸½¤È¤ß¤Ê¤·¤ÆºÆ¥Á¥§¥Ã¥¯
+          # å«ã¾ã‚Œãªã‹ã£ãŸå ´åˆã¯ "ä¿¡é ¼ã§ãã‚‹ URL" ã‚’æ­£è¦è¡¨ç¾ã¨ã¿ãªã—ã¦å†ãƒã‚§ãƒƒã‚¯
           begin
             if referer =~ Regexp.new( trusted.gsub("/", "\\/").gsub(":", "\\:") )
               debug_out("trusted", trusted+" (=~) "+referer)
@@ -95,9 +95,9 @@ module TDiary
           end
         end
 
-        # URLÃÖ´¹¥ê¥¹¥È¤ò¸«¤ë
+        # URLç½®æ›ãƒªã‚¹ãƒˆã‚’è¦‹ã‚‹
         if conf_checkreftable == 'true'
-          # "URLÃÖ´¹¥ê¥¹¥È" ¤ò£±¤Ä¤º¤Ä¼è¤ê½Ð¤·¤Æreferer¤È¹çÃ×¤¹¤ë¤«¥Á¥§¥Ã¥¯¤¹¤ë
+          # "URLç½®æ›ãƒªã‚¹ãƒˆ" ã‚’ï¼‘ã¤ãšã¤å–ã‚Šå‡ºã—ã¦refererã¨åˆè‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
           @conf.referer_table.each do |url, name|
             begin
               if /#{url}/i =~ referer && url != '^(.{50}).*$'
@@ -111,11 +111,11 @@ module TDiary
         end
 
         @work_path = File.join(@conf.data_path,"AntiRefSpamFilter")
-        @spamurl_list = File.join(@work_path,"spamurls")  # referer spam ¤Î¥ê¥ó¥¯¸µ°ìÍ÷
-        @spamip_list  = File.join(@work_path,"spamips")   # referer spam ¤ÎIP°ìÍ÷
-        @safeurl_list = File.join(@work_path,"safeurls")  # ¤ª¤½¤é¤¯¤ÏÌäÂê¤Î¤Ê¤¤¥ê¥ó¥¯¸µ°ìÍ÷
+        @spamurl_list = File.join(@work_path,"spamurls")  # referer spam ã®ãƒªãƒ³ã‚¯å…ƒä¸€è¦§
+        @spamip_list  = File.join(@work_path,"spamips")   # referer spam ã®IPä¸€è¦§
+        @safeurl_list = File.join(@work_path,"safeurls")  # ãŠãã‚‰ãã¯å•é¡Œã®ãªã„ãƒªãƒ³ã‚¯å…ƒä¸€è¦§
 
-        # ¥Ç¥£¥ì¥¯¥È¥ê/¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤Ê¤±¤ì¤Ðºî¤ë
+        # ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª/ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã‘ã‚Œã°ä½œã‚‹
         unless File.exist? @work_path
           Dir::mkdir(@work_path)
         end
@@ -128,24 +128,24 @@ module TDiary
 
         uri = URI.parse(referer)
         temp_filename = File.join(@work_path,uri.host)
-        # ¥Á¥§¥Ã¥¯»þ¤Ë¤ÏÂÐ¾Ý¤Î¥É¥á¥¤¥óÌ¾¤ò»ý¤Ã¤¿°ì»þ¥Õ¥¡¥¤¥ë¤òºî¤ë
+        # ãƒã‚§ãƒƒã‚¯æ™‚ã«ã¯å¯¾è±¡ã®ãƒ‰ãƒ¡ã‚¤ãƒ³åã‚’æŒã£ãŸä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‹
         begin
           File::open(temp_filename, File::RDONLY | File::CREAT | File::EXCL).close
 
-          # °ìÅÙ SPAM URL ¤È¤ß¤Ê¤·¤¿¤é°Ê¸å¤Ï°Ê¸å¤ÏµñÈÝ
+          # ä¸€åº¦ SPAM URL ã¨ã¿ãªã—ãŸã‚‰ä»¥å¾Œã¯ä»¥å¾Œã¯æ‹’å¦
           spamurls = IO::readlines(@spamurl_list).map {|url| url.chomp }
           if spamurls.include? referer
             return false
           end
 
-          # °ìÅÙ SPAM URL ¤Ç¤Ê¤¤¤ÈÈ½ÃÇ¤·¤¿¤é°Ê¸å¤Ïµö²Ä
+          # ä¸€åº¦ SPAM URL ã§ãªã„ã¨åˆ¤æ–­ã—ãŸã‚‰ä»¥å¾Œã¯è¨±å¯
           safeurls = IO::readlines(@safeurl_list).map {|url| url.chomp }
           if safeurls.include? referer
             return true
           end
 
-          # ¥ê¥ó¥¯¸µ URL ¤Î HTML ¤ò°ú¤ÃÄ¥¤Ã¤Æ¤¯¤ë
-          Net::HTTP.version_1_2   # ¤ª¤Þ¤¸¤Ê¤¤¤é¤·¤¤
+          # ãƒªãƒ³ã‚¯å…ƒ URL ã® HTML ã‚’å¼•ã£å¼µã£ã¦ãã‚‹
+          Net::HTTP.version_1_2   # ãŠã¾ã˜ãªã„ã‚‰ã—ã„
           body = ""
           begin
             Net::HTTP::Proxy(conf_proxy_server, conf_proxy_port).start(uri.host, uri.port) do |http|
@@ -157,7 +157,7 @@ module TDiary
               body = response.body
             end
 
-            # body ¤ËÆüµ­¤Î URL ¤¬´Þ¤Þ¤ì¤Æ¤¤¤Ê¤±¤ì¤Ð SPAM ¤È¤ß¤Ê¤¹
+            # body ã«æ—¥è¨˜ã® URL ãŒå«ã¾ã‚Œã¦ã„ãªã‘ã‚Œã° SPAM ã¨ã¿ãªã™
             unless isIncludeMyUrl(body)
               File::open(@spamurl_list, "a+") {|f|
                 f.puts referer
@@ -172,12 +172,12 @@ module TDiary
               }
             end
           rescue
-            # ¥¨¥é¡¼¤¬½Ð¤¿¾ì¹ç¤Ï @spamurl_list ¤ËÆþ¤ì¤Ê¤¤¡õ¥ê¥ó¥¯¸µ¤Ë¤âÆþ¤ì¤Ê¤¤
+            # ã‚¨ãƒ©ãƒ¼ãŒå‡ºãŸå ´åˆã¯ @spamurl_list ã«å…¥ã‚Œãªã„ï¼†ãƒªãƒ³ã‚¯å…ƒã«ã‚‚å…¥ã‚Œãªã„
             return false
           end
 
         rescue StandardError, TimeoutError
-          # ¸½ºß¥Á¥§¥Ã¥¯Ãæ¤Ê¤é¡¢º£²ó¤Ï¥ê¥ó¥¯¸µ¤Ë´ªÄê¤·¤Ê¤¤
+          # ç¾åœ¨ãƒã‚§ãƒƒã‚¯ä¸­ãªã‚‰ã€ä»Šå›žã¯ãƒªãƒ³ã‚¯å…ƒã«å‹˜å®šã—ãªã„
           return false
         ensure
           begin
@@ -193,9 +193,9 @@ module TDiary
 
       def log_spamcomment( diary, comment )
         @work_path = File.join(@conf.data_path,"AntiRefSpamFilter")
-        @spamcomment_list = File.join(@work_path,"spamcomments")  # comment spam ¤Î°ìÍ÷
+        @spamcomment_list = File.join(@work_path,"spamcomments")  # comment spam ã®ä¸€è¦§
 
-        # ¥Ç¥£¥ì¥¯¥È¥ê/¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤Ê¤±¤ì¤Ðºî¤ë
+        # ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª/ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã‘ã‚Œã°ä½œã‚‹
         unless File.exist? @work_path
           Dir::mkdir(@work_path)
         end
@@ -213,17 +213,17 @@ module TDiary
       end
 
       def comment_filter( diary, comment )
-        # ¥Ä¥Ã¥³¥ß¤ËÆüËÜ¸ì(¤Ò¤é¤¬¤Ê/¥«¥¿¥«¥Ê)¤¬´Þ¤Þ¤ì¤Æ¤¤¤Ê¤±¤ì¤ÐÉÔµö²Ä
+        # ãƒ„ãƒƒã‚³ãƒŸã«æ—¥æœ¬èªž(ã²ã‚‰ãŒãª/ã‚«ã‚¿ã‚«ãƒŠ)ãŒå«ã¾ã‚Œã¦ã„ãªã‘ã‚Œã°ä¸è¨±å¯
         if @conf['antirefspam.comment_kanaonly'] != nil
           if @conf['antirefspam.comment_kanaonly'].to_s == 'true'
-            unless comment.body =~ /[¤¡-¤ó¥¡-¥ô¡¼]/
+            unless comment.body =~ /[ã-ã‚“ã‚¡-ãƒ´ãƒ¼]/
               log_spamcomment( diary, comment )
               return false
             end
           end
         end
 
-        # ¥Ä¥Ã¥³¥ß¤ÎÊ¸»ú¿ô¤¬»ØÄê¤·¤¿¾å¸Â°ÊÆâ¤Ç¤Ê¤¤¤Ê¤éÉÔµö²Ä
+        # ãƒ„ãƒƒã‚³ãƒŸã®æ–‡å­—æ•°ãŒæŒ‡å®šã—ãŸä¸Šé™ä»¥å†…ã§ãªã„ãªã‚‰ä¸è¨±å¯
         maxsize = @conf['antirefspam.comment_maxsize'].to_i
         if maxsize > 0
           unless comment.body.size <= maxsize
@@ -232,7 +232,7 @@ module TDiary
           end
         end
 
-        # NG¥ï¡¼¥É¤¬£±¤Ä¤Ç¤â´Þ¤Þ¤ì¤Æ¤¤¤¿¤éÉÔµö²Ä
+        # NGãƒ¯ãƒ¼ãƒ‰ãŒï¼‘ã¤ã§ã‚‚å«ã¾ã‚Œã¦ã„ãŸã‚‰ä¸è¨±å¯
         if @conf['antirefspam.comment_ngwords'] != nil
           ngwords = @conf['antirefspam.comment_ngwords']
           ngwords.to_s.each_line do |ngword|
@@ -242,7 +242,7 @@ module TDiary
               return false
             end
 
-            # ´Þ¤Þ¤ì¤Ê¤«¤Ã¤¿¾ì¹ç¤Ï "NG¥ï¡¼¥É" ¤òÀµµ¬É½¸½¤È¤ß¤Ê¤·¤ÆºÆ¥Á¥§¥Ã¥¯
+            # å«ã¾ã‚Œãªã‹ã£ãŸå ´åˆã¯ "NGãƒ¯ãƒ¼ãƒ‰" ã‚’æ­£è¦è¡¨ç¾ã¨ã¿ãªã—ã¦å†ãƒã‚§ãƒƒã‚¯
             begin
               if comment.body =~ Regexp.new( ngword, Regexp::MULTILINE )
                 log_spamcomment( comment )
