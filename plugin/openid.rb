@@ -8,7 +8,7 @@
 @openid_config = (Struct.const_defined?("OpenIdConfig") ? Struct::OpenIdConfig :
 	Struct.new("OpenIdConfig", :openid, :openid2, :x_xrds_location))
 
-if /^(latest|conf|saveconf)$/ =~ @mode then
+if /^(?:latest|conf|saveconf)$/ =~ @mode then
 	@openid_list = {
 		# service => @openid_config.new(
 		#    [openid.server, openid.delegate(replace #ID# as account name)],   # openid
@@ -28,6 +28,14 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid
 			['http://www.myopenid.com/server', 'http://#ID#.myopenid.com'], # openid2
 			"http://www.myopenid.com/xrds?username=#ID#"),
+		'claimID.com' => @openid_config.new(
+			['http://openid.claimid.com/server', 'http://openid.claimid.com/#ID#'],
+			nil, #['http://openid.claimid.com/server', 'http://openid.claimid.com/#ID#'],
+			'http://claimid.com/#ID#/xrds'),
+		'Personal Identity Provider (PIP)' => @openid_config.new(
+			['http://pip.verisignlabs.com/server', 'http://#ID#.pip.verisignlabs.com/'],
+			['http://pip.verisignlabs.com/server', 'http://#ID#.pip.verisignlabs.com/'],
+			'http://pip.verisignlabs.com/user/#ID#/yadisxrds'),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
@@ -45,7 +53,7 @@ if /^(latest|conf|saveconf)$/ =~ @mode then
 			result << <<-HTML if openid_service.x_xrds_location
 			<meta http-equiv="X-XRDS-Location" content="#{h openid_service.x_xrds_location.sub( /#ID#/, openid_id )}">
 			HTML
-			result.gsub( /^\t\t/, '' )
+			result.gsub( /^\t{2}/, '' )
 		end
 	end
 end
