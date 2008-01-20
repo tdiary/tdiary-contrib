@@ -8,7 +8,7 @@ package = {
   :binary_ext   => %w[swf].map{|ext| ".#{ext}" },
 }
 package[:pkgdir] = File.join(package[:root], 'package')
-package[:rev]    = 'r' << `svnversion --no-newline --committed #{package[:root]}`[/\d+[MS]?$/]
+package[:rev]    = 'r' << `svnversion --no-newline --committed #{package[:root]}`[/\d+[MS]{1,2}$/]
 package.freeze
 
 desc 'update source and packaging'
