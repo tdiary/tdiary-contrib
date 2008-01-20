@@ -7,85 +7,85 @@
 #
 
 @antispamref_html_antispamref = <<-TEXT
-	<h3>��󥯸������¤򤫤���</h3>
+	<h3>リンク元に制限をかける</h3>
 	<p>
-	��ե��饹�ѥ���ɤ�����ˡ�referer���Ф������¤򤫤��뤳�Ȥ��Ǥ��ޤ���
+	リファラスパムを防ぐために、refererに対して制限をかけることができます。
 	</p>
 	TEXT
 
 @antispamref_html_disable = <<-TEXT
-	referer���Ф������¤򤫤��ʤ�
+	refererに対して制限をかけない
 	TEXT
 
 @antispamref_html_myurl = <<-TEXT
-	<h3>���Ƥ�������λ���</h3>
+	<h3>許容するリンク先の指定</h3>
 	<p>
-	�ȥåץڡ���URL(#{h(if @conf.index_page.empty? then "̤����" else @conf.index_page end)})��������URL(#{h(if @conf.base_url.empty? then "����" else @conf.base_url end)})�ʳ��˥����Ȥ��Ƶ��Ƥ���URL����ꤷ�ޤ���
-	����ɽ�������Ѳ�ǽ�Ǥ���
+	トップページURL(#{h(if @conf.index_page.empty? then "未設定" else @conf.index_page end)})と日記のURL(#{h(if @conf.base_url.empty? then "不明" else @conf.base_url end)})以外にリンク先として許容するURLを指定します。
+	正規表現も利用可能です。
 	</p>
 	TEXT
 
 @antispamref_html_proxy = <<-TEXT
-	<h3>HTTP�ץ������������С��λ���</h3>
+	<h3>HTTPプロキシーサーバーの指定</h3>
 	<p>
-	���Υץ饰����ϡ���󥯸��˻��ꤵ�줿 HTTP �����С��˥����������ơ���󥯸���HTML ��������ޤ���
-	���Υ��������� HTTP �ץ��������ͳ����ɬ�פ�������ϰʲ������ꤷ�Ƥ���������<br>
-	�� : server : proxy.foo.com  port : 8080
+	このプラグインは、リンク元に指定された HTTP サーバーにアクセスして、リンク元のHTML を取得します。
+	このアクセスに HTTP プロキシを経由する必要がある場合は以下で設定してください。<br>
+	例 : server : proxy.foo.com  port : 8080
 	</p>
 	TEXT
 
 @antispamref_html_trustedurl = <<-TEXT
-	<h3>���ꤹ���󥯸��λ���</h3>
+	<h3>信頼するリンク元の指定</h3>
 	<p>
-	�ҥ�ȡ�
+	ヒント：
 	<ul>
-	<li>���Ԥˣ��Ĥ� URL ��񤤤Ƥ���������</li>
-	<li>\#�ǻϤޤ�ԡ����Ԥ�̵�뤵��ޤ���</li>
-	<li>"���ꤹ���󥯸�" �ϣ��ʳ���ʬ���ƥ����å�����ޤ���</li>
+	<li>１行に１つの URL を書いてください。</li>
+	<li>\#で始まる行、空行は無視されます。</li>
+	<li>"信頼するリンク元" は２段階に分けてチェックされます。</li>
 	<ul>
-	<li>�����ܤϡ�����ɽ����ȤäƤ��ʤ���ΤȤ��ƥ����å����ޤ����񤫤줿 URL ����󥯸���
-	    �ޤޤ�Ƥ�������С����ꤹ���󥯸��Ȥߤʤ��ޤ���<br>
-	    �� : ��󥯸��� http://www.foo.com/bar/ �� http://www.foo.com/baz/ �ξ�硢
-	         URL �ˤ� http://www.foo.com/ �Ƚ񤱤Ф褤��</li>
-	<li>�����ܤϡ�����ɽ����ȤäƤ����ΤȤ��ƥ����å����ޤ������ξ�硢URL�� �� : (������) �� / (����å���) ��
-	    �����ǥ��������פ���ޤ�������ɽ����Ȥ���硢��󥯸������Τ˥ޥå�����ɬ�פ������������դ��Ƥ���������<br>
-	    �� : ��󥯸��� http://aaa.foo.com/bar/ �� http://bbb.foo.com/baz/ �ξ�硢
-	         URL �ˤ� http://\\w+\.foo\.com/.* �Ƚ񤱤Ф褤��</li>
+	<li>１回目は、正規表現を使っていないものとしてチェックします。書かれた URL がリンク元に
+	    含まれてさえいれば、信頼するリンク元とみなします。<br>
+	    例 : リンク元が http://www.foo.com/bar/ や http://www.foo.com/baz/ の場合、
+	         URL には http://www.foo.com/ と書けばよい。</li>
+	<li>２回目は、正規表現を使っているものとしてチェックします。この場合、URL中 の : (コロン) と / (スラッシュ) は
+	    内部でエスケープされます。正規表現を使う場合、リンク元の全体にマッチする必要がある点に注意してください。<br>
+	    例 : リンク元が http://aaa.foo.com/bar/ や http://bbb.foo.com/baz/ の場合、
+	         URL には http://\\w+\.foo\.com/.* と書けばよい。</li>
 	</ul>
 	</ul>
 	</p>
 	TEXT
 
 @antispamref_html_checkreftable = <<-TEXT
-	�֥�󥯸��ִ��ꥹ�ȡפ˥ޥå������󥯸����ꤹ�롣
+	「リンク元置換リスト」にマッチするリンク元を信頼する。
 	TEXT
 
 
 @antispamref_html_comment = <<-TEXT
-	<h3>�ĥå��ߤ����¤򤫤���</h3>
+	<h3>ツッコミに制限をかける</h3>
 	<p>
-	�����ȥ��ѥ���ɤ�����ˡ������Ȥ��Ф����͡������¤򤫤��뤳�Ȥ��Ǥ��ޤ���
+	コメントスパムを防ぐために、コメントに対して様々な制限をかけることができます。
 	</p>
 	TEXT
 
 @antispamref_html_comment_kanaonly = <<-TEXT
-	�ĥå��ߤˤҤ餬��/�������ʤ��ޤޤ�Ƥ��ʤ����ϵ��ݤ��롣
+	ツッコミにひらがな/カタカナが含まれていない場合は拒否する。
 	TEXT
 
 @antispamref_html_comment_maxsize = <<-TEXT
-	�ĥå���ʸ�����Ĺ���ξ�¤�����ʸ������
+	ツッコミ文字列の長さの上限を指定（文字数）
 	TEXT
 
 @antispamref_html_comment_ngwords = <<-TEXT
-	�ʲ���ñ�줬�ĥå��ߤ˴ޤޤ�Ƥ������ϵ��ݤ���<br>
-	������ɽ�������Ѳ�ǽ�Ǥ�������ɽ����ʣ���ԥ⡼�ɤ�ư��ޤ���
-	����ɽ������Ƭ�������� \/ �ϤĤ��ʤ��Ǥ���������<br>
+	以下の単語がツッコミに含まれていた場合は拒否する<br>
+	（正規表現も利用可能です。正規表現は複数行モードで動作します。
+	正規表現の先頭と末尾に \/ はつけないでください）<br>
 	TEXT
 
 @antispamref_html_faq = <<-TEXT
 	<h3>FAQ</h3>
 	<p>
-	����¾���ǿ���FAQ�� <a href="http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02">http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02</a> �򻲾Ȥ��Ƥ���������
+	その他、最新のFAQは <a href="http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02">http://www.netlife.gr.jp/redbug/diary/?date=20041018\#p02</a> を参照してください。
 	</p>
 	TEXT
 
