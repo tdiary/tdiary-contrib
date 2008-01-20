@@ -79,28 +79,28 @@ add_conf_proc( 'google_adsense', 'Google AdSense' ) do
 	end
 
 	<<-HTML
-	<h3>¥Ð¥Ê¡¼¤Î¥µ¥¤¥º(#{@conf['google_adsense.layout']})</h3>
-	<p>¹­¹ð¥Ð¥Ê¡¼¤Î¥µ¥¤¥º¤ÏÁ´Éô¤Ç7¼ïÎà¤¢¤ê¤Þ¤¹¡£¤ª¹¥¤­¤Ê¥µ¥¤¥º¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤¡£</p>
+	<h3>ãƒãƒŠãƒ¼ã®ã‚µã‚¤ã‚º(#{@conf['google_adsense.layout']})</h3>
+	<p>åºƒå‘ŠãƒãƒŠãƒ¼ã®ã‚µã‚¤ã‚ºã¯å…¨éƒ¨ã§7ç¨®é¡žã‚ã‚Šã¾ã™ã€‚ãŠå¥½ããªã‚µã‚¤ã‚ºã‚’é¸ã‚“ã§ãã ã•ã„ã€‚</p>
 	<p><select name="google_adsense.layout">
-		<option value="0"#{' selected' if @conf['google_adsense.layout'] == 0}>²£Ä¹¾®¡¦¹­¹ð2¤Ä(468, 60)</option>
-		<option value="2"#{' selected' if @conf['google_adsense.layout'] == 2}>²£Ä¹Âç¡¦¹­¹ð4¤Ä(728, 90)</option>
-		<option value="4"#{' selected' if @conf['google_adsense.layout'] == 4}>Êý·ÁÈù¾®¡¦¹­¹ð1¤Ä(125, 125)</option>
-		<option value="7"#{' selected' if @conf['google_adsense.layout'] == 7}>Êý·Á¾®¡¦¹­¹ð1¤Ä(180, 150)</option>
-		<option value="8"#{' selected' if @conf['google_adsense.layout'] == 8}>Êý·ÁÃæ¡¦¹­¹ð3¤Ä(250, 250)</option>
-		<option value="3"#{' selected' if @conf['google_adsense.layout'] == 3}> Êý·ÁÂç¡¦¹­¹ð4¤Ä(300, 250)</option>
-		<option value="9"#{' selected' if @conf['google_adsense.layout'] == 9}> Êý·ÁÆÃÂç¡¦¹­¹ð4¤Ä(336, 280)</option>
-		<option value="6"#{' selected' if @conf['google_adsense.layout'] == 6}> ½ÄÄ¹¾®¡¦¹­¹ð2¤Ä(120, 240)</option>
-		<option value="1"#{' selected' if @conf['google_adsense.layout'] == 1}> ½ÄÄ¹Ãæ¡¦¹­¹ð4¤Ä(120, 600)</option>
-		<option value="5"#{' selected' if @conf['google_adsense.layout'] == 5}> ½ÄÄ¹Âç¡¦¹­¹ð5¤Ä(160, 600)</option>
+		<option value="0"#{' selected' if @conf['google_adsense.layout'] == 0}>æ¨ªé•·å°ãƒ»åºƒå‘Š2ã¤(468, 60)</option>
+		<option value="2"#{' selected' if @conf['google_adsense.layout'] == 2}>æ¨ªé•·å¤§ãƒ»åºƒå‘Š4ã¤(728, 90)</option>
+		<option value="4"#{' selected' if @conf['google_adsense.layout'] == 4}>æ–¹å½¢å¾®å°ãƒ»åºƒå‘Š1ã¤(125, 125)</option>
+		<option value="7"#{' selected' if @conf['google_adsense.layout'] == 7}>æ–¹å½¢å°ãƒ»åºƒå‘Š1ã¤(180, 150)</option>
+		<option value="8"#{' selected' if @conf['google_adsense.layout'] == 8}>æ–¹å½¢ä¸­ãƒ»åºƒå‘Š3ã¤(250, 250)</option>
+		<option value="3"#{' selected' if @conf['google_adsense.layout'] == 3}> æ–¹å½¢å¤§ãƒ»åºƒå‘Š4ã¤(300, 250)</option>
+		<option value="9"#{' selected' if @conf['google_adsense.layout'] == 9}> æ–¹å½¢ç‰¹å¤§ãƒ»åºƒå‘Š4ã¤(336, 280)</option>
+		<option value="6"#{' selected' if @conf['google_adsense.layout'] == 6}> ç¸¦é•·å°ãƒ»åºƒå‘Š2ã¤(120, 240)</option>
+		<option value="1"#{' selected' if @conf['google_adsense.layout'] == 1}> ç¸¦é•·ä¸­ãƒ»åºƒå‘Š4ã¤(120, 600)</option>
+		<option value="5"#{' selected' if @conf['google_adsense.layout'] == 5}> ç¸¦é•·å¤§ãƒ»åºƒå‘Š5ã¤(160, 600)</option>
 	</select></p>
-	<h3>¥Ð¥Ê¡¼¤Î¿§</h3>
-	<p>¥Ð¥Ê¡¼¤Î³Æ¥Ñ¡¼¥Ä¤Î¿§¤ò»ØÄê¤Ç¤­¤Þ¤¹¡£HTML¤äCSS¤ÈÆ±¤¸¡¢6·å¤Î16¿Ê¿ô¤Ç»ØÄê¤·¤Þ¤¹¡£</p>
+	<h3>ãƒãƒŠãƒ¼ã®è‰²</h3>
+	<p>ãƒãƒŠãƒ¼ã®å„ãƒ‘ãƒ¼ãƒ„ã®è‰²ã‚’æŒ‡å®šã§ãã¾ã™ã€‚HTMLã‚„CSSã¨åŒã˜ã€6æ¡ã®16é€²æ•°ã§æŒ‡å®šã—ã¾ã™ã€‚</p>
 	<table style="margin-left: 2em;">
-		<tr><td>ÏÈ</td><td style="background-color: ##{h @conf['google_adsense.color.border']};">&nbsp;<input name="google_adsense.color.border" size="7" value="#{h @conf['google_adsense.color.border']}">&nbsp;</td></tr>
-		<tr><td>ÇØ·Ê</td><td style="background-color: ##{h @conf['google_adsense.color.bg']};">&nbsp;<input name="google_adsense.color.bg" size="7" value="#{h @conf['google_adsense.color.bg']}">&nbsp;</td></tr>
-		<tr><td>¥ê¥ó¥¯</td><td style="background-color: ##{h @conf['google_adsense.color.link']};">&nbsp;<input name="google_adsense.color.link" size="7" value="#{h @conf['google_adsense.color.link']}">&nbsp;</td></tr>
+		<tr><td>æž </td><td style="background-color: ##{h @conf['google_adsense.color.border']};">&nbsp;<input name="google_adsense.color.border" size="7" value="#{h @conf['google_adsense.color.border']}">&nbsp;</td></tr>
+		<tr><td>èƒŒæ™¯</td><td style="background-color: ##{h @conf['google_adsense.color.bg']};">&nbsp;<input name="google_adsense.color.bg" size="7" value="#{h @conf['google_adsense.color.bg']}">&nbsp;</td></tr>
+		<tr><td>ãƒªãƒ³ã‚¯</td><td style="background-color: ##{h @conf['google_adsense.color.link']};">&nbsp;<input name="google_adsense.color.link" size="7" value="#{h @conf['google_adsense.color.link']}">&nbsp;</td></tr>
 		<tr><td>URL</td><td style="background-color: ##{h @conf['google_adsense.color.url']};">&nbsp;<input name="google_adsense.color.url" size="7" value="#{h @conf['google_adsense.color.url']}">&nbsp;</td></tr>
-		<tr><td>¥Æ¥­¥¹¥È</td><td style="background-color: ##{h @conf['google_adsense.color.text']};">&nbsp;<input name="google_adsense.color.text" size="7" value="#{h @conf['google_adsense.color.text']}">&nbsp;</td></tr>
+		<tr><td>ãƒ†ã‚­ã‚¹ãƒˆ</td><td style="background-color: ##{h @conf['google_adsense.color.text']};">&nbsp;<input name="google_adsense.color.text" size="7" value="#{h @conf['google_adsense.color.text']}">&nbsp;</td></tr>
 	</table>
 	HTML
 end

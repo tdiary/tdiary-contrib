@@ -13,7 +13,7 @@ require 'rexml/document'
 require 'pstore'
 require 'timeout'
 
-# ¿Íµ¤¤ÎÆüµ­¤Î¥½¡¼¥È½ç¡Ê¿·Ãå½ç: eid,  ÃíÌÜ½ç: hot, ¿Íµ¤½ç: count¡Ë
+# äººæ°—ã®æ—¥è¨˜ã®ã‚½ãƒ¼ãƒˆé †ï¼ˆæ–°ç€é †: eid,  æ³¨ç›®é †: hot, äººæ°—é †: countï¼‰
 @conf ||= {}
 @conf['my_hotentry.sort'] ||= 'hot'
 
@@ -22,7 +22,7 @@ class MyHotEntry
     @dbfile = dbfile
   end
 
-  # ¿Íµ¤¤ÎÆüµ­¤Î°ìÍ÷¤òÊÖ¤¹
+  # äººæ°—ã®æ—¥è¨˜ã®ä¸€è¦§ã‚’è¿”ã™
   def entries
     r = nil
     PStore.new(@dbfile).transaction(true) do |db|
@@ -31,13 +31,13 @@ class MyHotEntry
     r || []
   end
 
-  # ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¼èÆÀ¤¹¤ë
+  # äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’å–å¾—ã™ã‚‹
   def update(base_url, options = {})
     options[:title] ||= ''
     options[:sort] ||= 'eid'
     options[:threshold] ||= 3
 
-    # RSS¤ò¼èÆÀ
+    # RSSã‚’å–å¾—
     rss = nil
     rss_url = 'http://b.hatena.ne.jp/entrylist?mode=rss&url='
     rss_url << URI.escape(base_url, /[^a-zA-Z._~]/n)
@@ -52,16 +52,16 @@ class MyHotEntry
     rescue TimeoutError => e
       return
     end
-    # RDF/item¤¬¶õ¤Ê¤éDB¤ò¹¹¿·¤·¤Ê¤¤ (¤¿¤Ş¤Ëitem¤¬¶õ¤Î¥Ç¡¼¥¿¤¬ÊÖ¤ë¤¿¤á)
+    # RDF/itemãŒç©ºãªã‚‰DBã‚’æ›´æ–°ã—ãªã„ (ãŸã¾ã«itemãŒç©ºã®ãƒ‡ãƒ¼ã‚¿ãŒè¿”ã‚‹ãŸã‚)
     return if rss.elements['rdf:RDF/item'].nil?
 
-    # ¥­¥ã¥Ã¥·¥å¤Ë³ÊÇ¼¤¹¤ë
+    # ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«æ ¼ç´ã™ã‚‹
     PStore.new(@dbfile).transaction do |db|
       db[:entries] = []
       rss.elements.each('rdf:RDF/item') do |item|
         url = item.elements['link'].text
         title = Kconv.kconv(item.elements['title'].text, Kconv::EUC, Kconv::UTF8)
-        # ¥ê¥ó¥¯Àè¤Î¥¿¥¤¥È¥ë¤«¤é¥µ¥¤¥ÈÌ¾¤ÈÆüÉÕ¤ò¼è¤ê½ü¤¯
+        # ãƒªãƒ³ã‚¯å…ˆã®ã‚¿ã‚¤ãƒˆãƒ«ã‹ã‚‰ã‚µã‚¤ãƒˆåã¨æ—¥ä»˜ã‚’å–ã‚Šé™¤ã
         title.sub!(/( - )?#{options[:html_title]}( - )?/, '')
         title.sub!(/\(\d{4}-\d{2}-\d{2}\)/, '')
         db[:entries].push({ :url => url, :title => title })
@@ -70,14 +70,14 @@ class MyHotEntry
   end
 end
 
-# ¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤Î¥Ñ¥¹¤ò¼èÆÀ¤¹¤ë
+# ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’å–å¾—ã™ã‚‹
 def my_hotentry_dbfile
   cache_dir = "#{@cache_path}/hatena"
   Dir::mkdir(cache_dir) unless File::directory?(cache_dir)
   "#{cache_dir}/my_hotentry.dat"
 end
 
-# ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤òÉ½¼¨¤¹¤ë
+# äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’è¡¨ç¤ºã™ã‚‹
 def my_hotentry(count = 5)
   dbfile = my_hotentry_dbfile
   hotentry = MyHotEntry.new(dbfile)
@@ -87,7 +87,7 @@ def my_hotentry(count = 5)
     escape_url = entry[:url].gsub(/#/, '%23')
     b_image = "http://b.hatena.ne.jp/entry/image/#{escape_url}"
     b_link  = "http://b.hatena.ne.jp/entry/#{escape_url}"
-    b_title = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯"
+    b_title = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯"
     bookmark_link = %Q|<a href="#{b_link}" title="#{b_title}"><img border="0" src="#{b_image}"></a>|
     r << "\t\t<li>#{entry_link} #{bookmark_link}</li>"
   end
@@ -95,7 +95,7 @@ def my_hotentry(count = 5)
   r << %Q|\tPowered by <a href="http://b.hatena.ne.jp/entrylist?url=#{@conf.base_url}&sort=#{@conf['my_hotentry.sort']}">Hatena Bookmark</a>\n|
 end
 
-# ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¹¹¿·¤¹¤ë
+# äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’æ›´æ–°ã™ã‚‹
 def my_hotentry_update
   dbfile = my_hotentry_dbfile
   hotentry = MyHotEntry.new(dbfile)
@@ -105,8 +105,8 @@ def my_hotentry_update
 end
 
 if __FILE__ == $0
-  # ¥³¥Ş¥ó¥É¥é¥¤¥ó¤«¤é¼Â¹Ô¤·¤¿¾ì¹ç
-  # tdiary.conf ¤Ë base_url ¤òÀßÄê¤·¤Ê¤¤¤ÈÆ°ºî¤·¤Ê¤¤
+  # ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰å®Ÿè¡Œã—ãŸå ´åˆ
+  # tdiary.conf ã« base_url ã‚’è¨­å®šã—ãªã„ã¨å‹•ä½œã—ãªã„
   begin
     require 'tdiary'
   rescue LoadError
@@ -120,9 +120,9 @@ if __FILE__ == $0
   my_hotentry_update
   puts my_hotentry
 else
-  # ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¼èÆÀ¤¹¤ë ¡ÊÆüµ­¹¹¿·»ş¡Ë
+  # äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’å–å¾—ã™ã‚‹ ï¼ˆæ—¥è¨˜æ›´æ–°æ™‚ï¼‰
   add_update_proc do
-    # ¥Ä¥Ã¥³¥ß»ş¤Ï¼Â¹Ô¤·¤Ê¤¤
+    # ãƒ„ãƒƒã‚³ãƒŸæ™‚ã¯å®Ÿè¡Œã—ãªã„
     if @mode == 'append' or @mode == 'replace'
       begin
         my_hotentry_update

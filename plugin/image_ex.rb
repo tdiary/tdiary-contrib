@@ -2,48 +2,48 @@
 # version 0.3
 # -pv-
 # 
-# Ì¾¾Î:
-# ³¨Æüµ­Pluginµ¡Ç½ÄÉ²ÃÈÇ
+# åç§°:
+# çµµæ—¥è¨˜Pluginæ©Ÿèƒ½è¿½åŠ ç‰ˆ
 #
-# ³µÍ×:
-# Æüµ­¹¹¿·²èÌÌ¤«¤é¤Î²èÁü¥¢¥Ã¥×¥í¡¼¥É¡¢¥µ¥à¥Í¥¤¥ëºîÀ®¡¢ËÜÊ¸¤Ø¤ÎÉ½¼¨
+# æ¦‚è¦:
+# æ—¥è¨˜æ›´æ–°ç”»é¢ã‹ã‚‰ã®ç”»åƒã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã€ã‚µãƒ ãƒã‚¤ãƒ«ä½œæˆã€æœ¬æ–‡ã¸ã®è¡¨ç¤º
 #
-# »È¤¦¾ì½ê:
-# ËÜÊ¸
+# ä½¿ã†å ´æ‰€:
+# æœ¬æ–‡
 #
-# »È¤¤Êı:
-# image( number, 'altword', thumbnail ) - ²èÁü¤òÉ½¼¨¤·¤Ş¤¹¡£
-#    number - ²èÁü¤ÎÈÖ¹æ0¡¢1¡¢2Åù
-#    altword - img¥¿¥°¤Î alt¤ËÆş¤ì¤ëÊ¸»úÎó
-#    thumbnail - ¥µ¥à¥Í¥¤¥ë(¾®¤µ¤Ê²èÁü)¤ò»ØÄê¤¹¤ë(¾ÊÎ¬²Ä)
+# ä½¿ã„æ–¹:
+# image( number, 'altword', thumbnail ) - ç”»åƒã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
+#    number - ç”»åƒã®ç•ªå·0ã€1ã€2ç­‰
+#    altword - imgã‚¿ã‚°ã® altã«å…¥ã‚Œã‚‹æ–‡å­—åˆ—
+#    thumbnail - ã‚µãƒ ãƒã‚¤ãƒ«(å°ã•ãªç”»åƒ)ã‚’æŒ‡å®šã™ã‚‹(çœç•¥å¯)
 #
-# image_left( number, 'altword', thumbnail ) - image¤Ëclass=left¤òÄÉ²Ã¤·¤Ş¤¹¡£
-# image_right( number, 'altword', thumbnail ) - image¤Ëclass=right¤òÄÉ²Ã¤·¤Ş¤¹¡£
+# image_left( number, 'altword', thumbnail ) - imageã«class=leftã‚’è¿½åŠ ã—ã¾ã™ã€‚
+# image_right( number, 'altword', thumbnail ) - imageã«class=rightã‚’è¿½åŠ ã—ã¾ã™ã€‚
 #
-# image_link( number, 'desc' ) - ²èÁü¤Ø¤Î¥ê¥ó¥¯¤òÀ¸À®¤·¤Ş¤¹¡£
-#    number - ²èÁü¤ÎÈÖ¹æ0¡¢1¡¢2Åù
-#    desc - ²èÁü¤ÎÀâÌÀ
+# image_link( number, 'desc' ) - ç”»åƒã¸ã®ãƒªãƒ³ã‚¯ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
+#    number - ç”»åƒã®ç•ªå·0ã€1ã€2ç­‰
+#    desc - ç”»åƒã®èª¬æ˜
 #
-# ¤½¤ÎÂ¾:
-# tDiary version 1.5.4°Ê¹ß¤ÇÆ°ºî¤·¤Ş¤¹¡£
-# tdiary.conf¤Ç¡¢
-# ²èÁü¥Õ¥¡¥¤¥ë¤òÊİÂ¸¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê
+# ãã®ä»–:
+# tDiary version 1.5.4ä»¥é™ã§å‹•ä½œã—ã¾ã™ã€‚
+# tdiary.confã§ã€
+# ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 #  @options['image.dir']
-# ²èÁü¥Õ¥¡¥¤¥ë¤ÎURL
+# ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®URL
 #  @options['image.url']
-# ½Ì¾®²èÁü¤ÎÀ¸À®ÊıË¡
+# ç¸®å°ç”»åƒã®ç”Ÿæˆæ–¹æ³•
 #  @options['image.url']
-#     0 - ½Ì¾®²èÁü¤òÀ¸À®¤·¤Ê¤¤
-#     1 - ImageMagick¤Îconvert¤Ç½Ì¾®²è²¦¤òÀ¸À®
-#     2 - netpbm·²¤Ç½Ì¾®²è²¦¤òÀ¸À®
-# ¤òÀßÄê¤·¤Æ¤¯¤À¤µ¤¤¡£
-# ¤Ş¤¿¡¢@secure = true¤Ê´Ä¶­¤Ç¤ÏÆ°ºî¤·¤Ş¤»¤ó¡£
+#     0 - ç¸®å°ç”»åƒã‚’ç”Ÿæˆã—ãªã„
+#     1 - ImageMagickã®convertã§ç¸®å°ç”»ç‹ã‚’ç”Ÿæˆ
+#     2 - netpbmç¾¤ã§ç¸®å°ç”»ç‹ã‚’ç”Ÿæˆ
+# ã‚’è¨­å®šã—ã¦ãã ã•ã„ã€‚
+# ã¾ãŸã€@secure = trueãªç’°å¢ƒã§ã¯å‹•ä½œã—ã¾ã›ã‚“ã€‚
 #
-# ¾Ü¤·¤¯¤Ï¡¢
+# è©³ã—ãã¯ã€
 # http://shimoi.s26.xrea.com/hiki/hiki.xcg?TdiaryEnikkiEx
-# ¤ò¤´Í÷²¼¤µ¤¤¡£
+# ã‚’ã”è¦§ä¸‹ã•ã„ã€‚
 #
-# ¥é¥¤¥»¥ó¥¹¤Ë¤Ä¤¤¤Æ:
+# ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«ã¤ã„ã¦:
 # Copyright (c) 2002 Daisuke Kato <dai@kato-agri.com>
 # Copyright (c) 2002 Toshi Okada <toshi@neverland.to>
 # Copyright (c) 2003 Yoshimi KURUMA <yoshimik@iris.dti.ne.jp>
@@ -412,13 +412,13 @@ add_form_proc do |date|
 		else
 			src_tag = %Q[src="#{h image_url}#{h list[id.to_i]}"]
 			alt_tag = %Q[alt="#{h list[id.to_i]}"]
-			thumbnail_tag = %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_name" value="#{date.strftime( '%Y%m%d' )}_#{h id}"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"><input type="hidden" name="plugin_image_thumbnail" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="file" name="plugin_image_file"><input type="submit" name="plugin" value="¥µ¥à¥Í¥¤¥ë"></form>] if imageex_useresize == 0
+			thumbnail_tag = %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_name" value="#{date.strftime( '%Y%m%d' )}_#{h id}"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"><input type="hidden" name="plugin_image_thumbnail" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="file" name="plugin_image_file"><input type="submit" name="plugin" value="ã‚µãƒ ãƒã‚¤ãƒ«"></form>] if imageex_useresize == 0
 		end
 		
-		ptag = "#{image_plugin_tag1}image #{id}, '²èÁü¤ÎÀâÌÀ'#{image_plugin_tag2}"
+		ptag = "#{image_plugin_tag1}image #{id}, 'ç”»åƒã®èª¬æ˜'#{image_plugin_tag2}"
 		
-		i<< %Q[<td><table border="1" cellpadding="1" cellspacing="1"><tr><td style="text-align:center"><input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="ËÜÊ¸¤ËÄÉ²Ã"></td></tr><tr><td style="text-align:center">#{image_plugin_tag1}image #{h id},'title#{h id}'#{image_plugin_tag2}</td></tr><tr><td width="#{@imageex_thumbnailsize * 1.5}" height="#{@imageex_thumbnailsize * 1.3}" style="text-align:center">
-<img class="form" #{src_tag} #{alt_tag} height="#{@imageex_thumbnailsize}" ></tr><tr><td>#{thumbnail_tag}<form class="update" method="post" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_del" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="hidden" name="plugin_image_id" value="#{h id}"><input type="submit" name="plugin" value="²èÁü¤òºï½ü"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"></form>
+		i<< %Q[<td><table border="1" cellpadding="1" cellspacing="1"><tr><td style="text-align:center"><input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="æœ¬æ–‡ã«è¿½åŠ "></td></tr><tr><td style="text-align:center">#{image_plugin_tag1}image #{h id},'title#{h id}'#{image_plugin_tag2}</td></tr><tr><td width="#{@imageex_thumbnailsize * 1.5}" height="#{@imageex_thumbnailsize * 1.3}" style="text-align:center">
+<img class="form" #{src_tag} #{alt_tag} height="#{@imageex_thumbnailsize}" ></tr><tr><td>#{thumbnail_tag}<form class="update" method="post" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_del" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="hidden" name="plugin_image_id" value="#{h id}"><input type="submit" name="plugin" value="ç”»åƒã‚’å‰Šé™¤"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"></form>
 </tr></table></td>] if slist[id.to_i] || list[id.to_i]
 		nt += 1 if slist[id.to_i] || list[id.to_i]
 		
@@ -431,7 +431,7 @@ add_form_proc do |date|
 	if n_image > 0
 		r << %Q[<div class="form">
 		<div class="caption">
-		³¨Æüµ­(°ìÍ÷¡¦ºï½ü)
+		çµµæ—¥è¨˜(ä¸€è¦§ãƒ»å‰Šé™¤)
 		</div>
 
 		#{pretable}
@@ -443,7 +443,7 @@ add_form_proc do |date|
 
 	r << %Q[<div class="form">
 	<div class="caption">
-	³¨Æüµ­(ÄÉ²Ã)
+	çµµæ—¥è¨˜(è¿½åŠ )
 	</div>
 	<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">
 	#{csrf_protection}
@@ -451,6 +451,6 @@ add_form_proc do |date|
 	<input type="hidden" name="plugin_image_add" value="true">
 	<input type="file"	 name="plugin_image_file">
 	<input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}">
-	<input type="submit" name="plugin" value="²èÁü¤ÎÄÉ²Ã">
+	<input type="submit" name="plugin" value="ç”»åƒã®è¿½åŠ ">
 	</form></div>]
 end

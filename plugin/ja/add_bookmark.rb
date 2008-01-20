@@ -4,17 +4,17 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
-@add_bookmark_label = '¥Ö¥Ã¥¯¥Ş¡¼¥¯ÄÉ²Ã'
-@add_bookmark_desc = '¥Ú¡¼¥¸¤ËËä¤á¹ş¤ß¤¿¤¤¥ê¥ó¥¯¤ò¥Á¥§¥Ã¥¯¤·¤Æ¤¯¤À¤µ¤¤¡£'
+@add_bookmark_label = 'ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯è¿½åŠ '
+@add_bookmark_desc = 'ãƒšãƒ¼ã‚¸ã«åŸ‹ã‚è¾¼ã¿ãŸã„ãƒªãƒ³ã‚¯ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ãã ã•ã„ã€‚'
 
-@caption_delicious = 'del.icio.us¤ËÄÉ²Ã'
-@caption_hatena = '¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯¤ËÄÉ²Ã'
-@caption_livedoor = 'livedoor ¥¯¥ê¥Ã¥×¤ËÄÉ²Ã'
-@caption_buzzurl = 'Buzzurl ¤ËÄÉ²Ã'
+@caption_delicious = 'del.icio.usã«è¿½åŠ '
+@caption_hatena = 'ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã«è¿½åŠ '
+@caption_livedoor = 'livedoor ã‚¯ãƒªãƒƒãƒ—ã«è¿½åŠ '
+@caption_buzzurl = 'Buzzurl ã«è¿½åŠ '
 
 @bookmark_label = [
    'del.icio.us',
-   '¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯',
-   'livedoor ¥¯¥ê¥Ã¥×',
+   'ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯',
+   'livedoor ã‚¯ãƒªãƒƒãƒ—',
    'Buzzurl'
 ]

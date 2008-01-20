@@ -3,69 +3,69 @@
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
 #
-# е╫еще░едеє╟█╔█е┌б╝е╕бз
+# уГЧуГйуВ░уВдуГ│щЕНх╕ГуГЪуГ╝уВ╕я╝Ъ
 # http://phonondrive.com/trd/
 # --------------------------------------------------------------------
 #
 #
 #
-# Abstractбз
+# Abstractя╝Ъ
 # --------------------------------------------------------------------
-# ╞№╡ндЄ┼╨╧┐д╖д┐╗■┤╓┬╙дЄе┐едерещедеє╛хд╦╡н╧┐д╖д▐д╣бг╡н╧┐д╡дьд┐еиеєе╚еъд╧
-# ╞№╗■д╬╖╨▓сд╚╢жд╦е╒езб╝е╔евеже╚д╖д╞ддднд▐д╣бгд│д╬дшджд╩ MTBlogTimes дф 
-# tdiarytimes.rb д╚╞▒┼∙д╬╡б╟╜дЄ FLASH д╟╝┬╕╜д╖д▐д╣бг
-# ruby-gd д╬едеєе╣е╚б╝еы║ю╢╚дт╔м═╫д╩ддд┐дсбвд╣д░д╦╗╚═╤╜╨═шд▐д╣бг
+# цЧешиШуВТчЩ╗щМ▓уБЧуБЯцЩВщЦУх╕пуВТуВ┐уВдуГауГйуВдуГ│ф╕КуБлшиШщМ▓уБЧуБ╛уБЩуАВшиШщМ▓уБХуВМуБЯуВиуГ│уГИуГкуБп
+# цЧецЩВуБоч╡МщБОуБихЕ▒уБлуГХуВзуГ╝уГЙуВвуВжуГИуБЧуБжуБДуБНуБ╛уБЩуАВуБУуБоуВИуБЖуБк MTBlogTimes уВД 
+# tdiarytimes.rb уБихРМчнЙуБоцйЯшГ╜уВТ FLASH уБзхоЯчП╛уБЧуБ╛уБЩуАВ
+# ruby-gd уБоуВдуГ│уВ╣уГИуГ╝уГлф╜ЬценуВВх┐ЕшжБуБкуБДуБЯуВБуАБуБЩуБРуБлф╜┐чФихЗ║цЭеуБ╛уБЩуАВ
 #
 #
-# Usageбз
+# Usageя╝Ъ
 # --------------------------------------------------------------------
-# е╫еще░едеєд╧бве╫еще░едеєе╒ейеые└д╦╞■дьд╞▓╝д╡ддбг
+# уГЧуГйуВ░уВдуГ│уБпуАБуГЧуГйуВ░уВдуГ│уГХуВйуГлуГАуБлхЕеуВМуБжф╕ЛуБХуБДуАВ
 #
-# е╫еще░едеєд╧бве╫еще░едеєе╒ейеые└д╦╞■дьд╞дпд└д╡ддбг
-# tdiarytimes*.swf дЄ tdiary.rb д╚╞▒д╕е╒ейеые└д╦еве├е╫еэб╝е╔д╖д▐д╣бг
-# е╪е├е└бве╒е├е┐╔Їд╦╡н╜╥д╖д┐ <%= tdiarytimes_flashstyle %> д╬╔Ї╩мд╦бв
-# FLASH еве╫еье├е╚дм╔╜╝ид╡дьд▐д╣бг
-# tdiarytimes.log д╧╞№╡н┼╨╧┐╗■д╦ .swf д╚╞▒д╕е╒ейеые└д╦║ю└од╡дьд▐д╣бг
+# уГЧуГйуВ░уВдуГ│уБпуАБуГЧуГйуВ░уВдуГ│уГХуВйуГлуГАуБлхЕеуВМуБжуБПуБауБХуБДуАВ
+# tdiarytimes*.swf уВТ tdiary.rb уБихРМуБШуГХуВйуГлуГАуБлуВвуГГуГЧуГнуГ╝уГЙуБЧуБ╛уБЩуАВ
+# уГШуГГуГАуАБуГХуГГуВ┐щГиуБлшиШш┐░уБЧуБЯ <%= tdiarytimes_flashstyle %> уБощГихИЖуБлуАБ
+# FLASH уВвуГЧуГмуГГуГИуБМшбичд║уБХуВМуБ╛уБЩуАВ
+# tdiarytimes.log уБпцЧешиШчЩ╗щМ▓цЩВуБл .swf уБихРМуБШуГХуВйуГлуГАуБлф╜ЬцИРуБХуВМуБ╛уБЩуАВ
 #
-# ви tdiarytimes_textstyle.rb д╚д╬╕▀┤╣└нд╧двдъд▐д╗дєбг
+# тА╗ tdiarytimes_textstyle.rb уБиуБоф║ТцПЫцАзуБпуБВуВКуБ╛уБЫуВУуАВ
 #
 #
-# Optionsбз
+# Optionsя╝Ъ
 # --------------------------------------------------------------------
-# е┐едерещедеєд╬┐збв╞й╠└┼┘бве╡еде║д╩д╔д╧бве╫еъе╒ебеьеєе╣▓ш╠╠д╟└▀─ъд╟днд▐д╣бг
+# уВ┐уВдуГауГйуВдуГ│уБошЙ▓уАБщАПцШОх║жуАБуВ╡уВдуВ║уБкуБйуБпуАБуГЧуГкуГХуВбуГмуГ│уВ╣чФ╗щЭвуБзшинхоЪуБзуБНуБ╛уБЩуАВ
 #
 #
-# In secure modeбз
+# In secure modeя╝Ъ
 # --------------------------------------------------------------------
-# д┐д╓дє╞░║юд╖д▐д╗дєбг
+# уБЯуБ╢уВУхЛХф╜ЬуБЧуБ╛уБЫуВУуАВ
 #
 #
 =begin ChangeLog
 2004.05.02 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.2
-		е┐едерещедеєдм═╦╞№╩╠д╬ FLASH дЄ─╔▓├
+		уВ┐уВдуГауГйуВдуГ│уБМцЫЬцЧехИеуБо FLASH уВТш┐╜хКа
 2004.05.02 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.1
-		е┐едерещедеєдм▒▀╖┴д╟бв╗■╣я╚╫дм═╦╞№╔╜╝ид╬ FLASH дЄ─╔▓├
-		еэе░е╒ебедеыдм┬╕║▀д╖д╩дд╗■д╦еиещб╝дм╜╨ды╔╘╢ё╣чдЄ╜д└╡
+		уВ┐уВдуГауГйуВдуГ│уБМхЖЖх╜вуБзуАБцЩВхИ╗чЫдуБМцЫЬцЧешбичд║уБо FLASH уВТш┐╜хКа
+		уГнуВ░уГХуВбуВдуГлуБМхнШхЬиуБЧуБкуБДцЩВуБлуВиуГйуГ╝уБМхЗ║уВЛф╕НхЕ╖хРИуВТф┐оцнг
 2004.04.28 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.0
-		е┐едерещедеєдм▒▀╖┴д╬ FLASH дЄ─╔▓├
+		уВ┐уВдуГауГйуВдуГ│уБМхЖЖх╜вуБо FLASH уВТш┐╜хКа
 2004.04.27 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.1
-		╗■╣я╠▄└╣е╞ене╣е╚д╬┐здм╩╤╣╣д╡дьд╩дд╔╘╢ё╣чдЄ╜д└╡
+		цЩВхИ╗чЫочЫЫуГЖуВнуВ╣уГИуБошЙ▓уБМхдЙцЫ┤уБХуВМуБкуБДф╕НхЕ╖хРИуВТф┐оцнг
 2004.04.25 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.0
 =end
 
 
 # --------------------------------------------------------------------
-# е╫еще░едеєд╬╞░║ю
+# уГЧуГйуВ░уВдуГ│уБохЛХф╜Ь
 # --------------------------------------------------------------------
 
 def tdiarytimes_flashstyle
 	if @conf['tdiarytimes_f.templete'] == nil or @conf['tdiarytimes_f.templete'] == ""
-		r = %Q|╗╚═╤дЄ│л╗╧д╣дыд╦д╧бв<a href="./#{@update}?conf=tdiarytimes_f">е╫еъе╒ебеьеєе╣▓ш╠╠</a>д╦д╞░ь┼┘└▀─ъдЄ┤░╬╗д╖д╞▓╝д╡ддбг(tdiarytimes-flashstyle)|
+		r = %Q|ф╜┐чФиуВТщЦЛхзЛуБЩуВЛуБлуБпуАБ<a href="./#{@update}?conf=tdiarytimes_f">уГЧуГкуГХуВбуГмуГ│уВ╣чФ╗щЭв</a>уБлуБжф╕Ах║жшинхоЪуВТхоМф║ЖуБЧуБжф╕ЛуБХуБДуАВ(tdiarytimes-flashstyle)|
 	else
 		logname = ((@conf['tdiarytimes_f.log_path'] != "" and @conf['tdiarytimes_f.log_path'] != nil) ? @conf['tdiarytimes_f.log_path'] : "tdiarytimes.log")
 		r = @conf['tdiarytimes_f.templete'].gsub(/\&uid/,"\&uid=#{File.mtime(logname.untaint).to_i}")
@@ -73,7 +73,7 @@ def tdiarytimes_flashstyle
 end
 
 # --------------------------------------------------------------------
-# ╞№╡н┼╨╧┐╗■д╬╜ш═¤
+# цЧешиШчЩ╗щМ▓цЩВуБохЗжчРЖ
 # --------------------------------------------------------------------
 
 if /^(append|replace)$/ =~ @mode and @cgi.params['hide'][0] != 'true' then
@@ -98,10 +98,10 @@ if /^(append|replace)$/ =~ @mode and @cgi.params['hide'][0] != 'true' then
 end
 
 # --------------------------------------------------------------------
-# е╫еъе╒ебеьеєе╣▓ш╠╠д╟д╬└▀─ъ
+# уГЧуГкуГХуВбуГмуГ│уВ╣чФ╗щЭвуБзуБошинхоЪ
 # --------------------------------------------------------------------
 
-add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle д╬└▀─ъ' ) do
+add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle уБошинхоЪ' ) do
 
 	if @mode == 'saveconf' then
 
@@ -172,67 +172,67 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle д╬└▀─ъ' ) do
 
 
 	<<-HTML
-		<h3 class="subtitle">└▀─ъд╬│╡═╫</h3>
-		<p>() ╞тд╧╜щ┤№├═д╟д╣бг╜щ┤№├═дЄ╗╚═╤д╣ды╛ь╣чд╧бв╢ї═єд╬д▐д▐д╟╣╜ддд▐д╗дєбг┐зд╧ RRGGBB ╖┴╝░д╟╗╪─ъд╖д╞▓╝д╡ддбг╔╘╞й╠└┼┘д╧ 0 (╞й╠└) б┴ 100 (╔╘╞й╠└) д╟д╣бг└■╔¤д╧е╘епе╗еыд╟╗╪─ъд╖д▐д╣бг</p>
+		<h3 class="subtitle">шинхоЪуБоцжВшжБ</h3>
+		<p>() хЖЕуБпхИЭцЬЯхАдуБзуБЩуАВхИЭцЬЯхАдуВТф╜┐чФиуБЩуВЛха┤хРИуБпуАБчй║цмДуБоуБ╛уБ╛уБзцзЛуБДуБ╛уБЫуВУуАВшЙ▓уБп RRGGBB х╜вх╝ПуБзцМЗхоЪуБЧуБжф╕ЛуБХуБДуАВф╕НщАПцШОх║жуБп 0 (щАПцШО) уАЬ 100 (ф╕НщАПцШО) уБзуБЩуАВч╖Ъх╣ЕуБпуГФуВпуВ╗уГлуБзцМЗхоЪуБЧуБ╛уБЩуАВ</p>
 		<hr>
-		<h3 class="subtitle">е╫еье╙ехб╝</h3>
+		<h3 class="subtitle">уГЧуГмуГУуГеуГ╝</h3>
 		#{tdiarytimes_flashstyle_preview}
 		<hr>
-		<h3 class="subtitle">╔╜╝ид╣ды FLASH еве╫еье├е╚д╬┴к┬Є</h3>
+		<h3 class="subtitle">шбичд║уБЩуВЛ FLASH уВвуГЧуГмуГГуГИуБощБ╕цКЮ</h3>
 		<p><select name="type">
-		<option value="0"#{if @conf['tdiarytimes_f.type'] == "0" then " selected" end}>е╫еъе╗е├е╚дЄ╗╚═╤д╖д╩дд</option>
+		<option value="0"#{if @conf['tdiarytimes_f.type'] == "0" then " selected" end}>уГЧуГкуВ╗уГГуГИуВТф╜┐чФиуБЧуБкуБД</option>
 		<option value="125x30"#{if @conf['tdiarytimes_f.type'] == "125x30" then " selected" end}>tdiarytimes125x30.swf, 125x30</option>
 		<option value="234x30"#{if @conf['tdiarytimes_f.type'] == "234x30" or @conf['tdiarytimes_f.type'] == nil or @conf['tdiarytimes_f.type'] == "" then " selected" end}>tdiarytimes234x30.swf, 234x30</option>
 		<option value="468x30"#{if @conf['tdiarytimes_f.type'] == "468x30" then " selected" end}>tdiarytimes468x30.swf, 468x30</option>
-		<option value="125x125-r"#{if @conf['tdiarytimes_f.type'] == "125x125-r" then " selected" end}>tdiarytimes125x125r.swf, 125x125 (▒▀╖┴)</option>
-		<option value="125x125-r7"#{if @conf['tdiarytimes_f.type'] == "125x125-r7" then " selected" end}>tdiarytimes125x125r7.swf, 125x125 (▒▀╖┴, ═╦╞№)</option>
-		<option value="125x125-s"#{if @conf['tdiarytimes_f.type'] == "125x125-s" then " selected" end}>tdiarytimes125x125s.swf, 125x125 (═╦╞№╩╠)</option>
+		<option value="125x125-r"#{if @conf['tdiarytimes_f.type'] == "125x125-r" then " selected" end}>tdiarytimes125x125r.swf, 125x125 (хЖЖх╜в)</option>
+		<option value="125x125-r7"#{if @conf['tdiarytimes_f.type'] == "125x125-r7" then " selected" end}>tdiarytimes125x125r7.swf, 125x125 (хЖЖх╜в, цЫЬцЧе)</option>
+		<option value="125x125-s"#{if @conf['tdiarytimes_f.type'] == "125x125-s" then " selected" end}>tdiarytimes125x125s.swf, 125x125 (цЫЬцЧехИе)</option>
 		</select></p>
-		<h3 class="subtitle">е╫еъе╗е├е╚дЄ╗╚═╤д╖д╩дд╛ь╣чд╧бв░╩▓╝д╟╗╪─ъд╖д╞▓╝д╡ддбг</h3>
-		<p>FLASH д╬е╒ебедеы╠╛<br><input name="filename" value="#{@conf['tdiarytimes_f.filename'].to_s}" size="40"></p>
-		<p>FLASH д╬╔╜╝и╔¤<br><input name="width" value="#{@conf['tdiarytimes_f.width'].to_s}" size="20"></p>
-		<p>FLASH д╬╔╜╝и╣тд╡<br><input name="height" value="#{@conf['tdiarytimes_f.height'].to_s}" size="20"></p>
+		<h3 class="subtitle">уГЧуГкуВ╗уГГуГИуВТф╜┐чФиуБЧуБкуБДха┤хРИуБпуАБф╗еф╕ЛуБзцМЗхоЪуБЧуБжф╕ЛуБХуБДуАВ</h3>
+		<p>FLASH уБоуГХуВбуВдуГлхРН<br><input name="filename" value="#{@conf['tdiarytimes_f.filename'].to_s}" size="40"></p>
+		<p>FLASH уБошбичд║х╣Е<br><input name="width" value="#{@conf['tdiarytimes_f.width'].to_s}" size="20"></p>
+		<p>FLASH уБошбичд║щлШуБХ<br><input name="height" value="#{@conf['tdiarytimes_f.height'].to_s}" size="20"></p>
 		<hr>
-		<h3 class="subtitle">е┐еде╚еые╞ене╣е╚</h3>
-		<p>е┐еде╚еые╞ене╣е╚д╬╔╜╝и═н╠╡ (╔╜╝и)<br><select name="text_visible">
-		<option value="1"#{if @conf['tdiarytimes_f.text_visible'] != "0" then " selected" end}>╔╜╝и</option>
-		<option value="0"#{if @conf['tdiarytimes_f.text_visible'] == "0" then " selected" end}>╚є╔╜╝и</option>
+		<h3 class="subtitle">уВ┐уВдуГИуГлуГЖуВнуВ╣уГИ</h3>
+		<p>уВ┐уВдуГИуГлуГЖуВнуВ╣уГИуБошбичд║цЬЙчДб (шбичд║)<br><select name="text_visible">
+		<option value="1"#{if @conf['tdiarytimes_f.text_visible'] != "0" then " selected" end}>шбичд║</option>
+		<option value="0"#{if @conf['tdiarytimes_f.text_visible'] == "0" then " selected" end}>щЭЮшбичд║</option>
 		</select></p>
-		<p>е┐еде╚еые╞ене╣е╚ (TDIARYTIMES-FLASHSTYLE)<br>╗╚═╤╜╨═шды╩╕╗·д╧бв▒╤┬ч╩╕╗· (A-Z) д╚┐Ї╗· (0-9)бвдкдшд╙╡н╣цд╬д▀д╟д╣бг<br><input name="text_text" value="#{@conf['tdiarytimes_f.text_text'].to_s}" size="20"></p>
-		<p>е┐еде╚еые╞ене╣е╚д╬┐з (333333)<br><input name="text_rgb" value="#{@conf['tdiarytimes_f.text_rgb'].to_s}" size="20"></p>
-		<h3 class="subtitle">╗■╣я╠▄└╣е╞ене╣е╚</h3>
-		<p>╗■╣я╠▄└╣е╞ене╣е╚д╬╔╜╝и═н╠╡ (╔╜╝и)<br><select name="face_visible">
-		<option value="1"#{if @conf['tdiarytimes_f.face_visible'] != "0" then " selected" end}>╔╜╝и</option>
-		<option value="0"#{if @conf['tdiarytimes_f.face_visible'] == "0" then " selected" end}>╚є╔╜╝и</option>
+		<p>уВ┐уВдуГИуГлуГЖуВнуВ╣уГИ (TDIARYTIMES-FLASHSTYLE)<br>ф╜┐чФихЗ║цЭеуВЛцЦЗхнЧуБпуАБшЛ▒хдзцЦЗхнЧ (A-Z) уБицХ░хнЧ (0-9)уАБуБКуВИуБ│шиШхП╖уБоуБ┐уБзуБЩуАВ<br><input name="text_text" value="#{@conf['tdiarytimes_f.text_text'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГИуГлуГЖуВнуВ╣уГИуБошЙ▓ (333333)<br><input name="text_rgb" value="#{@conf['tdiarytimes_f.text_rgb'].to_s}" size="20"></p>
+		<h3 class="subtitle">цЩВхИ╗чЫочЫЫуГЖуВнуВ╣уГИ</h3>
+		<p>цЩВхИ╗чЫочЫЫуГЖуВнуВ╣уГИуБошбичд║цЬЙчДб (шбичд║)<br><select name="face_visible">
+		<option value="1"#{if @conf['tdiarytimes_f.face_visible'] != "0" then " selected" end}>шбичд║</option>
+		<option value="0"#{if @conf['tdiarytimes_f.face_visible'] == "0" then " selected" end}>щЭЮшбичд║</option>
 		</select></p>
-		<p>╗■╣я╠▄└╣е╞ене╣е╚д╬┐з (333333)<br><input name="face_rgb" value="#{@conf['tdiarytimes_f.face_rgb'].to_s}" size="20"></p>
+		<p>цЩВхИ╗чЫочЫЫуГЖуВнуВ╣уГИуБошЙ▓ (333333)<br><input name="face_rgb" value="#{@conf['tdiarytimes_f.face_rgb'].to_s}" size="20"></p>
 		<hr>
-		<h3 class="subtitle">╟╪╖╩дф╦└е░еще╒д╬┐з</h3>
-		<p>╟╪╖╩д╬┐з (FFFFFF)<br><input name="stage_rgb" value="#{@conf['tdiarytimes_f.stage_rgb'].to_s}" size="20"></p>
-		<p>╟╪╖╩д╬╔╘╞й╠└┼┘ (0)<br><input name="stage_alpha" value="#{@conf['tdiarytimes_f.stage_alpha'].to_s}" size="20"></p>
-		<p>е┐едерещедеєд╬╟╪╖╩д╬┐з (333333)<br><input name="bg_rgb" value="#{@conf['tdiarytimes_f.bg_rgb'].to_s}" size="20"></p>
-		<p>е┐едерещедеєд╬╟╪╖╩д╬╔╘╞й╠└┼┘ (100)<br><input name="bg_alpha" value="#{@conf['tdiarytimes_f.bg_alpha'].to_s}" size="20"></p>
-		<p>е┐едерещедеєд╦╡н╧┐д╡дьды╦└е░еще╒д╬┐з (EEEEEE)<br><input name="bar_rgb" value="#{@conf['tdiarytimes_f.bar_rgb'].to_s}" size="20"></p>
-		<p>е┐едерещедеєд╦╡н╧┐д╡дьды╦└е░еще╒д╬└■╔¤ (1)<br><input name="bar_width" value="#{@conf['tdiarytimes_f.bar_width'].to_s}" size="20"></p>
-		<p>е┐едерещедеєд╦╡н╧┐д╡дьды╦└е░еще╒д╬╝ў╠┐╞№┐Ї (30)<br><input name="fade_time" value="#{@conf['tdiarytimes_f.fade_time'].to_s}" size="20"></p>
+		<h3 class="subtitle">шГМцЩпуВДцгТуВ░уГйуГХуБошЙ▓</h3>
+		<p>шГМцЩпуБошЙ▓ (FFFFFF)<br><input name="stage_rgb" value="#{@conf['tdiarytimes_f.stage_rgb'].to_s}" size="20"></p>
+		<p>шГМцЩпуБоф╕НщАПцШОх║ж (0)<br><input name="stage_alpha" value="#{@conf['tdiarytimes_f.stage_alpha'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГауГйуВдуГ│уБошГМцЩпуБошЙ▓ (333333)<br><input name="bg_rgb" value="#{@conf['tdiarytimes_f.bg_rgb'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГауГйуВдуГ│уБошГМцЩпуБоф╕НщАПцШОх║ж (100)<br><input name="bg_alpha" value="#{@conf['tdiarytimes_f.bg_alpha'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГауГйуВдуГ│уБлшиШщМ▓уБХуВМуВЛцгТуВ░уГйуГХуБошЙ▓ (EEEEEE)<br><input name="bar_rgb" value="#{@conf['tdiarytimes_f.bar_rgb'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГауГйуВдуГ│уБлшиШщМ▓уБХуВМуВЛцгТуВ░уГйуГХуБоч╖Ъх╣Е (1)<br><input name="bar_width" value="#{@conf['tdiarytimes_f.bar_width'].to_s}" size="20"></p>
+		<p>уВ┐уВдуГауГйуВдуГ│уБлшиШщМ▓уБХуВМуВЛцгТуВ░уГйуГХуБохп┐хС╜цЧецХ░ (30)<br><input name="fade_time" value="#{@conf['tdiarytimes_f.fade_time'].to_s}" size="20"></p>
 		<hr>
-		<h3 class="subtitle">еэе░┤╔═¤</h3>
-		<p>┴░▓єд╬╞№╡н┼╨╧┐длдщ└▀─ъ╗■┤╓╞тд╧еиеєе╚еъдЄ┐╖╡м┼╨╧┐д╖д╩дд (2)<br><input name="entr_interval" value="#{@conf['tdiarytimes_f.entr_interval'].to_s}" size="20"></p>
-		<p>└▀─ъ╞№┐Ї╕хд╦еэе░е╒ебедеыдлдщеиеєе╚еъдЄ║я╜№д╣ды (30)<br><input name="entr_lifetime" value="#{@conf['tdiarytimes_f.entr_lifetime'].to_s}" size="20"></p>
-		<p>╦▄е╫еще░едеєдм║ю└од╣дыеэе░е╒ебедеы╠╛ (tdiarytimes.log)<br><input name="log_path" value="#{@conf['tdiarytimes_f.log_path'].to_s}" size="20"></p>
+		<h3 class="subtitle">уГнуВ░чобчРЖ</h3>
+		<p>хЙНхЫЮуБоцЧешиШчЩ╗щМ▓уБЛуВЙшинхоЪцЩВщЦУхЖЕуБпуВиуГ│уГИуГкуВТцЦ░шжПчЩ╗щМ▓уБЧуБкуБД (2)<br><input name="entr_interval" value="#{@conf['tdiarytimes_f.entr_interval'].to_s}" size="20"></p>
+		<p>шинхоЪцЧецХ░х╛МуБлуГнуВ░уГХуВбуВдуГлуБЛуВЙуВиуГ│уГИуГкуВТхЙКщЩдуБЩуВЛ (30)<br><input name="entr_lifetime" value="#{@conf['tdiarytimes_f.entr_lifetime'].to_s}" size="20"></p>
+		<p>цЬмуГЧуГйуВ░уВдуГ│уБМф╜ЬцИРуБЩуВЛуГнуВ░уГХуВбуВдуГлхРН (tdiarytimes.log)<br><input name="log_path" value="#{@conf['tdiarytimes_f.log_path'].to_s}" size="20"></p>
 		<hr>
-		<h3 class="subtitle">еце╦б╝епID дЄ╗╚═╤д╖д┐е╒ебедеы╝ш╞└</h3>
-		<p>е╒ебедеы╝ш╞└д╬еъепеие╣е╚д╦еце╦б╝епID (╬удид╨ ?#{Time.now.to_i}) дЄ┤▐дсдыд│д╚д╦дшдъбв╕┼дде╒ебедеыдме╓ещеже╢д╦енеуе├е╖ехд╡дьд┐д▐д▐д╦д╩дыд╬дЄ╦╔дод▐д╣бгFLASH д╬еце╦б╝епID д╧е╫еъе╒ебеьеєе╣└▀─ъ╗■д╦бвеэе░е╒ебедеыд╬еце╦б╝епID д╧еиеєе╚еъ┼╨╧┐╗■д╦╣╣┐╖д╡дьд▐д╣бг</p>
-		<p>еце╦б╝епID д╬╔╒▓├ (╔╒▓├д╣ды)<br><select name="uid">
-		<option value="1"#{if @conf['tdiarytimes_f.uid'] != "0" then " selected" end}>╔╒▓├д╣ды</option>
-		<option value="0"#{if @conf['tdiarytimes_f.uid'] == "0" then " selected" end}>╔╒▓├д╖д╩дд</option>
+		<h3 class="subtitle">уГжуГЛуГ╝уВпID уВТф╜┐чФиуБЧуБЯуГХуВбуВдуГлхПЦх╛Ч</h3>
+		<p>уГХуВбуВдуГлхПЦх╛ЧуБоуГкуВпуВиуВ╣уГИуБлуГжуГЛуГ╝уВпID (ф╛ЛуБИуБ░ ?#{Time.now.to_i}) уВТхРлуВБуВЛуБУуБиуБлуВИуВКуАБхПдуБДуГХуВбуВдуГлуБМуГЦуГйуВжуВ╢уБлуВнуГгуГГуВ╖уГеуБХуВМуБЯуБ╛уБ╛уБлуБкуВЛуБоуВТщШ▓уБОуБ╛уБЩуАВFLASH уБоуГжуГЛуГ╝уВпID уБпуГЧуГкуГХуВбуГмуГ│уВ╣шинхоЪцЩВуБлуАБуГнуВ░уГХуВбуВдуГлуБоуГжуГЛуГ╝уВпID уБпуВиуГ│уГИуГкчЩ╗щМ▓цЩВуБлцЫ┤цЦ░уБХуВМуБ╛уБЩуАВ</p>
+		<p>уГжуГЛуГ╝уВпID уБоф╗ШхКа (ф╗ШхКауБЩуВЛ)<br><select name="uid">
+		<option value="1"#{if @conf['tdiarytimes_f.uid'] != "0" then " selected" end}>ф╗ШхКауБЩуВЛ</option>
+		<option value="0"#{if @conf['tdiarytimes_f.uid'] == "0" then " selected" end}>ф╗ШхКауБЧуБкуБД</option>
 		</select></p>
 		<hr>
-		<h3 class="subtitle">е╫еье╙ехб╝</h3>
-		<p>╔╜╝ид╖д┐дд FLASH е╒ебедеы (.swf) дм tdiary.rb д╚╞▒д╕е╒ейеые└д╦еве├е╫еэб╝е╔д╡дьд╞ддды╔м═╫дмдвдъд▐д╣бгд▐д┐бвеэе░е╒ебедеыдм FLASH е╒ебедеыд╚╞▒д╕е╒ейеые└д╦║ю└од╡дьд╞ддд╩дд╛ь╣чд╦д╧е░еще╒дм╔╜╝ид╡дьд▐д╗дєбг</p>
-		<p>е╫еье╙ехб╝ (╚є╔╜╝и)<br><select name="preview">
-		<option value="0"#{if @conf['tdiarytimes_f.preview'] != "1" then " selected" end}>╚є╔╜╝и</option>
-		<option value="1"#{if @conf['tdiarytimes_f.preview'] == "1" then " selected" end}>╔╜╝и</option>
+		<h3 class="subtitle">уГЧуГмуГУуГеуГ╝</h3>
+		<p>шбичд║уБЧуБЯуБД FLASH уГХуВбуВдуГл (.swf) уБМ tdiary.rb уБихРМуБШуГХуВйуГлуГАуБлуВвуГГуГЧуГнуГ╝уГЙуБХуВМуБжуБДуВЛх┐ЕшжБуБМуБВуВКуБ╛уБЩуАВуБ╛уБЯуАБуГнуВ░уГХуВбуВдуГлуБМ FLASH уГХуВбуВдуГлуБихРМуБШуГХуВйуГлуГАуБлф╜ЬцИРуБХуВМуБжуБДуБкуБДха┤хРИуБлуБпуВ░уГйуГХуБМшбичд║уБХуВМуБ╛уБЫуВУуАВ</p>
+		<p>уГЧуГмуГУуГеуГ╝ (щЭЮшбичд║)<br><select name="preview">
+		<option value="0"#{if @conf['tdiarytimes_f.preview'] != "1" then " selected" end}>щЭЮшбичд║</option>
+		<option value="1"#{if @conf['tdiarytimes_f.preview'] == "1" then " selected" end}>шбичд║</option>
 		</select></p>
 	HTML
 
@@ -242,7 +242,7 @@ end
 def tdiarytimes_flashstyle_preview
 	unless @conf.mobile_agent?
 	<<-r
-		<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "е╫еье╙ехб╝╔╜╝идЄ═н╕·д╦д╣дыд╚бвд│д│д╦ FLASH дм╔╜╝ид╡дьд▐д╣бг" end}</p>
+		<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "уГЧуГмуГУуГеуГ╝шбичд║уВТцЬЙхК╣уБлуБЩуВЛуБиуАБуБУуБУуБл FLASH уБМшбичд║уБХуВМуБ╛уБЩуАВ" end}</p>
 	r
 	end
 end

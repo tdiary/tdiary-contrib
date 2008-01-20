@@ -3,72 +3,72 @@
 # Copyright (c) 2004 phonondrive <tdiary@phonondrive.com>
 # Distributed under the GPL
 #
-# �ץ饰�������ۥڡ�����
+# プラグイン配布ページ：
 # http://phonondrive.com/trd/
 # --------------------------------------------------------------------
 #
 #
 #
-# Abstract��
+# Abstract：
 # --------------------------------------------------------------------
-# ��������Ͽ���������Ӥ򥿥���饤���˵�Ͽ���ޤ���
-# ��Ͽ���줿����ȥ�������ηв�ȶ��˥ե����ɥ����Ȥ��Ƥ����ޤ���
-# ���Τ褦�� MTBlogTimes �� tdiarytimes ��Ʊ���ε�ǽ��ƥ����ȤǼ¸����ޤ���
-# �ޤ����ƥ����ȥ١����Ǥ��뤳�Ȥ�������������ʥ����ȥǥ����󤬲�ǽ�Ǥ���
-# ruby-gd �Υ��󥹥ȡ����Ȥ�ɬ�פʤ����ᡢ�����˻��ѽ���ޤ���
+# 日記を登録した時間帯をタイムライン上に記録します。
+# 記録されたエントリは日時の経過と共にフェードアウトしていきます。
+# このような MTBlogTimes や tdiarytimes と同等の機能をテキストで実現します。
+# また、テキストベースであることを生かした柔軟なサイトデザインが可能です。
+# ruby-gd のインストール作業も必要ないため、すぐに使用出来ます。
 #
 #
-# Usage��
+# Usage：
 # --------------------------------------------------------------------
-# �ץ饰����ϡ��ץ饰����ե����������Ƥ���������
-# �إå������뤤�ϥեå��������Ϥ��� <%= tdiarytimes_textstyle %>
-# �ΰ��֤˥�����饤��ʸ����Ÿ������ޤ���
-# ����������ȥ�ε�Ͽ���ݻ����֤β᤮���Ť�����ȥ�κ���ϡ�
-# �������ɲä������Ͽ���˹Ԥ��ޤ���
-# ������������ȥ�Υե����ɥ����ȸ��̤ϥꥢ�륿����˷׻�����ޤ���
-# ����ȥ��ɽ��ʬ��ǽ��10ʬ���ȤǤ���
+# プラグインは、プラグインフォルダに入れてください。
+# ヘッダ、あるいはフッタ部に入力した <%= tdiarytimes_textstyle %>
+# の位置にタイムライン文字列が展開されます。
+# 新しいエントリの記録や保持期間の過ぎた古いエントリの削除は、
+# 日記の追加および登録時に行われます。
+# ただし、エントリのフェードアウト効果はリアルタイムに計算されます。
+# エントリの表示分解能は10分ごとです。
 #
 #
-# Options��
+# Options：
 # --------------------------------------------------------------------
 #
-# ���ߡ�����9�ĤΥ��ץ�����Ѱդ���Ƥ��ޤ���
+# 現在、次の9つのオプションが用意されています。
 #
-# init_text	��������Ͽ����Ƥ��ʤ������Ӥ�ʸ���� (Ǥ�դ�ʸ����)
-# entr_text	��������Ͽ���줿�����Ӥ�ʸ���� (Ǥ�դ�ʸ����)
-# init_color	��������Ͽ����Ƥ��ʤ������Ӥ�ʸ����ο� (RRBBGG�����ǻ���)
-# entr_color	��������Ͽ���줿�����Ӥ�ʸ����ο� (RRBBGG�����ǻ���)
-# fade_color	��������Ͽ���줿�����Ӥ�ʸ����Υե����ɥ�������ο� (RRBBGG�����ǻ���)
-# init_css	������饤��ʸ�������Τ�CSS���� (CSS�ν񼰤˽��)
-# entr_css	��������Ͽ���줿�����Ӥ�ʸ�����CSS���� (CSS�ν񼰤˽��)
-# title_text	���֥������Ⱦ�˥ޥ�����ݥ���Ȥ�������TIPSʸ���� (Ǥ�դ�ʸ����)
-# fade_time	�����Ȥ�����¸���Ƥ���(�ե����ɥ����Ȥ��פ���)���� (Ǥ�դο���)
-# entr_interval	����Υ���ȥ���Ͽ���������ְ���Ͽ�����Ͽ���ʤ� (Ǥ�դο���)
+# init_text	日記の登録されていない時間帯の文字列 (任意の文字列)
+# entr_text	日記が登録された時間帯の文字列 (任意の文字列)
+# init_color	日記の登録されていない時間帯の文字列の色 (RRBBGG形式で指定)
+# entr_color	日記が登録された時間帯の文字列の色 (RRBBGG形式で指定)
+# fade_color	日記が登録された時間帯の文字列のフェードアウト先の色 (RRBBGG形式で指定)
+# init_css	タイムライン文字列全体のCSS設定 (CSSの書式に準拠)
+# entr_css	日記が登録された時間帯の文字列のCSS設定 (CSSの書式に準拠)
+# title_text	オブジェクト上にマウスをポイントした時のTIPS文字列 (任意の文字列)
+# fade_time	ログとして保存しておく(フェードアウトに要する)日数 (任意の数値)
+# entr_interval	前回のエントリ登録から指定時間以内は新規登録しない (任意の数値)
 #
-# ���ץ�����ͤ�������ˡ�ˤ�3�Ĥ���ˡ�����ꡢ����ͥ���̤ϼ����̤�Ǥ���
-# <%= tdiarytimes_textstyle %> �������� �� tdiary.conf������ �� �ǥե������
+# オプション値の設定方法には3つの方法があり、その優先順位は次の通りです。
+# <%= tdiarytimes_textstyle %> 引数指定 ＞ tdiary.conf設定値 ＞ デフォルト値
 # 
-# entr_interval����������ƤΥ��ץ�����ͤ� <%= %> �ؤΰ�������ˤ���������뤿�ᡢ
-# �ڡ����ˤ��Ȥ˰վ����ѹ�����ʤɼ�ͳ�٤ι⤤�����ȥǥ����󤬲�ǽ�Ǥ���
-# �����ǡ����ƤΥ��ץ����˥ǥե�����ͤ��Ѱդ���Ƥ��뤿�ᡢ
-# ���������Ԥ�ʤ��Ƥ�ư��ޤ���
-# �ǥե�����ͤζ���Ū���ͤˤĤ��Ƥϡ�tdiary.conf�ؤε�����ˡ�ι�򻲾Ȥ��Ʋ�������
+# entr_intervalを除いた全てのオプション値は <%= %> への引数指定により設定出来るため、
+# ページにごとに意匠を変更するなど自由度の高いサイトデザインが可能です。
+# 一方で、全てのオプションにデフォルト値が用意されているため、
+# 全く設定を行わなくても動作します。
+# デフォルト値の具体的な値については、tdiary.confへの記述方法の項を参照して下さい。
 #
 #
-# <%= tdiarytimes_textstyle %>�ؤΰ�������ˤ�륪�ץ����������ˡ
+# <%= tdiarytimes_textstyle %>への引数指定によるオプション設定方法
 # --------------------------------------------------------------------
-#�ڽ񼰡�
+#【書式】
 # <%= tdiarytimes_textstyle init_text, entr_text, init_color, entr_color, fade_color, init_css, entr_css, title_text, fade_time %>
 #
-#�ڵ������ 
-# <%=tdiarytimes_textstyle "��","��","004400","66ff66","004400","background-color:#002200;font-size:9px",nil,"TEXTSTYLE!!",15 %>
+#【記述例】 
+# <%=tdiarytimes_textstyle "●","●","004400","66ff66","004400","background-color:#002200;font-size:9px",nil,"TEXTSTYLE!!",15 %>
 #
-# �� tdiary.conf�����͡��ޤ��ϥǥե�����ͤ���Ѥ��������ϡ������� nil ����ꤷ�Ƥ���������
+# ※ tdiary.conf指定値、またはデフォルト値を使用したい場合は、引数に nil を指定してください。
 #
 #
-# tdiary.conf�ؤε��Ҥˤ�륪�ץ����������ˡ
+# tdiary.confへの記述によるオプション設定方法
 # --------------------------------------------------------------------
-#�ڵ������ (��Ȥ��ƻ��ꤵ��Ƥ����ͤϡ��ץ饰�������Τλ��ĥǥե�����ͤǤ�)
+#【記述例】 (例として指定されている値は、プラグイン本体の持つデフォルト値です)
 # @options['tdiarytimes_textstyle.init_text'] = "|"
 # @options['tdiarytimes_textstyle.entr_text'] = "|"
 # @options['tdiarytimes_textstyle.init_color'] = "444444"
@@ -80,21 +80,21 @@
 # @options['tdiarytimes_textstyle.fade_time'] = 30
 # @options['tdiarytimes_textstyle.entr_interval'] = 1
 #
-# �� fade_time ��ñ�̤�����entr_interval ��ñ�̤ϻ��֤Ǥ���
-# �� �����Ȥ�����¸���Ƥ�������(�ե����ɥ����ȴ���)��᤮���ǡ�������ȥ�ϡ�
-# ������ַв��μ��������ɲû��˥����ե����뤫��������ޤ���
-# ���δ��֤���ꤹ�� fade_time �ͤϡ�<%= %> ��������ϻ������ޤ���
-# �ǥե������(30��)�ʳ����ͤ��Ѥ��������ϡ�ɬ�� tdiary.conf �ˤƻ��ꤷ�Ʋ�������
-# Ʊ�ͤˡ�entr_interval ��ǥե������(1����)�ʳ������ꤷ�������ϡ�
-# tdiary.conf �ˤƻ��ꤷ�Ʋ����������ʤߤ�0.5����30ʬ�ֳ֤ˤʤ�ޤ���
+# ※ fade_time の単位は日、entr_interval の単位は時間です。
+# ※ ログとして保存しておく期間(フェードアウト期間)を過ぎたデータエントリは、
+# 指定期間経過後の次回日記追加時にログファイルから削除されます。
+# この期間を決定する fade_time 値は、<%= %> 引数からは指定出来ません。
+# デフォルト値(30日)以外の値を用いたい場合は、必ず tdiary.conf にて指定して下さい。
+# 同様に、entr_interval もデフォルト値(1時間)以外に設定したい場合は、
+# tdiary.conf にて指定して下さい。ちなみに0.5だと30分間隔になります。
 #
 #
-# In secure mode��
+# In secure mode：
 # --------------------------------------------------------------------
-# ���ߤΤȤ���ư��ޤ���(�����ե�������ɤ߹���ʤ���)
+# 現在のところ動作しません。(ログファイルを読み込めない為)
 #
 #
-# Acknowledgements��
+# Acknowledgements：
 # --------------------------------------------------------------------
 # This plugin is based on tdiarytimes.rb $Revision: 1.3 $
 # Copyright (c) 2003 neuichi <neuichi@nmnl.jp>
@@ -105,26 +105,26 @@
 =begin ChangeLog
 2004.03.04 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.4
-	�����USER-AGENT�ꥹ�Ȥ򹹿����ޤ�����
+	非応答USER-AGENTリストを更新しました。
 
 2004.02.05 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.3
-	�ե����ɥ����ȸ��̤η׻���̤����������Ϥ���ʤ����������ޤ�����
+	フェードアウト効果の計算結果が正しく出力されない点を修正しました。
 
 2004.01.30 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.2
-	������Ͽ�ֳ֤Υ��ץ���� (entr_interval) ���ɲá�
-	����Υ���ȥ���Ͽ���������ְ���Ͽ�����Ͽ���ʤ��褦�ˤ��ޤ�����
+	最低登録間隔のオプション (entr_interval) を追加。
+	前回のエントリ登録から指定時間以内は新規登録しないようにしました。
 
 2004.01.29 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.1
-	replace(��Ͽ)���⥨��ȥ��Ͽ����褦�ˤ��ޤ�����
-	����USER-AGENT����θƤӽФ��ˤϷ�̤���Ϥ��ʤ��褦�ˤ��ޤ�����
-		��Х���ü�� (tDiary���)
-		�ƥ����ȥ֥饦�� (w3m, Lynx, links)
-		CSS���б��֥饦�� (Mosaic, Lite, iCab, JustView, WebExplorer)
-		�����ܥå� (bot, crawler, Spider, Slurp, inktomi, Sidewinder, naver)
-		����¾ (libwww, antenna)
+	replace(登録)時もエントリを記録するようにしました。
+	次のUSER-AGENTからの呼び出しには結果を出力しないようにしました。
+		モバイル端末 (tDiary準拠)
+		テキストブラウザ (w3m, Lynx, links)
+		CSS非対応ブラウザ (Mosaic, Lite, iCab, JustView, WebExplorer)
+		検索ボット (bot, crawler, Spider, Slurp, inktomi, Sidewinder, naver)
+		その他 (libwww, antenna)
 
 2004.01.28 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.0
@@ -133,9 +133,9 @@
 
 
 
-# tDiarytimes_textstyle �η�̤���Ϥ��ʤ� USER-AGENT �ꥹ��
-# ��Х���ü�����ƥ����ȥ֥饦����CSS���б��֥饦���������ܥåȡ�����ƥʤʤ�
-# ��ʸ������ʸ���϶��̤��ޤ���
+# tDiarytimes_textstyle の結果を出力しない USER-AGENT リスト
+# モバイル端末、テキストブラウザ、CSS非対応ブラウザ、検索ボット、アンテナなど
+# 大文字・小文字は区別しません。
 
 def tdiarytimes_textstyle_ignore_user_agent; "w3m|Lynx|links|Mosaic|Lite|iCab|JustView|WebExplorer|bot|crawler|Spider|Slurp|inktomi|Sidewinder|naver|libwww|archiver|http|check|WDB|WWWC|WWWD|samidare|tamatebako|NATSU-MICAN|hina|antenna"; end
 
@@ -143,12 +143,12 @@ def tdiarytimes_textstyle_ignore_user_agent; "w3m|Lynx|links|Mosaic|Lite|iCab|Ju
 
 
 # --------------------------------------------------------------------
-# ������Ͽ���ν���
+# 日記登録時の処理
 # --------------------------------------------------------------------
 
 if /^(append|replace)$/ =~ @mode then
 
-	# ���ץ������(����ȥ��ݻ�����)���ɤ߹��ߤ�����
+	# オプション値(エントリ保持期間)の読み込みと設定
 
 	fade_time = @options['tdiarytimes_textstyle.fade_time'] || 30
 	fade_time = 24 * 60 * 60 * fade_time.to_f
@@ -157,7 +157,7 @@ if /^(append|replace)$/ =~ @mode then
 	entr_interval = 60 * 60 * entr_interval.to_f
 
 
-	# �����ǡ������ɤ߹���
+	# ログデータの読み込み
 
 	cache = "#{@cache_path}/tdiarytimes_textstyle"
 	Dir::mkdir( cache ) unless File::directory?( cache )
@@ -167,18 +167,18 @@ if /^(append|replace)$/ =~ @mode then
 		ary_data =  Marshal.load(io)
 		io.close
 
-		# 1.0.1 >> 1.0.2 �����ǡ����ܹ���
+		# 1.0.1 >> 1.0.2 ログデータ移行用
 		if ary_data.size == 144
 			ary_data.push(Time.now.to_i - entr_interval - 1)
 		end
 
 	rescue
-		# �������ʤ����ϲ��ǡ������Ѱ�
+		# ログがない場合は仮データを用意
 		ary_data = Array.new(145) {|i| 0 }
 	end
 
 
-	# ���ɥǡ������̿���褿����ȥ��������
+	# 不良データや寿命が来たエントリを削除する
 
 	(0..143).each {|i|
 		delta = (Time.now.to_i - ary_data[i])/fade_time.to_f
@@ -188,16 +188,16 @@ if /^(append|replace)$/ =~ @mode then
 	}
 
 
-	# ������Ͽ�ֳ֤�вᤷ�Ƥ����顢��������Ͽ���줿�����Ӥ˿���������ȥ�򥻥åȤ���
+	# 最低登録間隔を経過していたら、日記が登録された時間帯に新しいエントリをセットする
 
 	if (Time.now.to_i - ary_data[144]) > entr_interval.to_f
 		ary_data[(Time.now.strftime('%H').to_i*6 + Time.now.strftime('%M').to_f/10).to_i] = Time.now.to_i
-		# �ǽ���Ͽ���֤ε�Ͽ
+		# 最終登録時間の記録
 		ary_data[144] = Time.now.to_i 
 	end
 
 
-	# �����ǡ����ν񤭹���
+	# ログデータの書き込み
 
 	io = open("#{cache}/tdiarytimes_textstyle.dat","w")
 		Marshal.dump(ary_data,io)
@@ -208,13 +208,13 @@ end
 
 
 # --------------------------------------------------------------------
-# �ץ饰����ɽ������ư��
+# プラグイン表示時の動作
 # --------------------------------------------------------------------
 
 def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, entr_color = nil, fade_color = nil, init_css = nil, entr_css = nil, title_text = nil, fade_time = nil)
 
 
-    # ��Х���ü�����ƥ����ȥ֥饦����CSS���б��֥饦���������ܥåȤʤɤˤϷ�̤���Ϥ��ʤ�
+    # モバイル端末、テキストブラウザ、CSS非対応ブラウザ、検索ボットなどには結果を出力しない
 
     unless @cgi.mobile_agent? || @cgi.user_agent =~ %r[(#{tdiarytimes_textstyle_ignore_user_agent})]i
 
@@ -222,7 +222,7 @@ def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, en
 	r = ""
 
 
-	# ���ץ�����ͤ��ɤ߹��ߤ�����
+	# オプション値の読み込みと設定
 
 	init_text = @options['tdiarytimes_textstyle.init_text'] || "|" unless init_text
 	entr_text = @options['tdiarytimes_textstyle.entr_text'] || "|" unless entr_text
@@ -241,7 +241,7 @@ def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, en
 	fade_time = 24 * 60 * 60 * fade_time.to_f
 
 
-	# �����ǡ������ɤ߹���
+	# ログデータの読み込み
 
 	cache = "#{@cache_path}/tdiarytimes_textstyle"
 
@@ -250,13 +250,13 @@ def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, en
 		ary_data =  Marshal.load(io)
 		io.close
 	rescue
-		# �����ե����뤬���Ĥ���ʤ����ϥ��顼�ȥ��ߡ��ǡ�����ɽ��
+		# ログファイルが見つからない場合はエラーとダミーデータを表示
 		r << %Q|Error! cannot open log file.|
 		ary_data = Array.new(145) {|i| 0 }
 	end
 
 
-	# html�ǡ����ν���
+	# htmlデータの出力
 
 	r << %Q|<span style="color:##{h init_color};#{h init_css}" title="#{h title_text}">|
 
@@ -265,13 +265,13 @@ def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, en
 		if data != 0
 			delta = (Time.now.to_i - data)/fade_time.to_f
 			if  delta < 0
-				# ���ɥ���ȥ��к�
+				# 不良エントリ対策
 				now_color = init_color
 			elsif delta > 1
-				# �ե����ɥ����ȴ���Ķ�ᥨ��ȥ��к�
+				# フェードアウト期間超過エントリ対策
 				now_color = fade_color
 			else
-				# ����ʥ���ȥ�ν���
+				# 正常なエントリの処理
 				now_color = ""
 				(0..2).each{|i|
 					now_color << format("%02x", entr_color_rgb[i].hex + ((fade_color_rgb[i].hex - entr_color_rgb[i].hex)*delta).to_i)

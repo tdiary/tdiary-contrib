@@ -1,7 +1,7 @@
 # openid.rb: Japanese resource
 
 @openid_conf_label = 'OpenID'
-@openid_service_label = 'OpenIDÇ§¾Ú¥µ¡¼¥Ó¥¹Ì¾'
-@openid_service_desc = '¤¢¤Ê¤¿¤¬»È¤Ã¤Æ¤¤¤ëOpenID¤ÎÇ§¾Ú¥µ¡¼¥Ó¥¹Ì¾¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤'
-@openid_id_label = '¤¢¤Ê¤¿¤ÎID'
-@openid_id_desc = '¾å¤ÇÁªÂò¤·¤¿Ç§¾Ú¥µ¡¼¥Ó¥¹¤ËÅĞÏ¿¤·¤Æ¤¢¤ë¡¢¤¢¤Ê¤¿¤ÎID¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤'
+@openid_service_label = 'OpenIDèªè¨¼ã‚µãƒ¼ãƒ“ã‚¹å'
+@openid_service_desc = 'ã‚ãªãŸãŒä½¿ã£ã¦ã„ã‚‹OpenIDã®èªè¨¼ã‚µãƒ¼ãƒ“ã‚¹åã‚’é¸ã‚“ã§ãã ã•ã„'
+@openid_id_label = 'ã‚ãªãŸã®ID'
+@openid_id_desc = 'ä¸Šã§é¸æŠã—ãŸèªè¨¼ã‚µãƒ¼ãƒ“ã‚¹ã«ç™»éŒ²ã—ã¦ã‚ã‚‹ã€ã‚ãªãŸã®IDã‚’å…¥åŠ›ã—ã¦ãã ã•ã„'

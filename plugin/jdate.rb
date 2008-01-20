@@ -1,8 +1,8 @@
 # jdate.rb $Revision: 1.1 $
 #
-#¡Ö%J¡×¤ÇÆüËÜ¸ì¤ÎÍËÆüÌ¾¤ò½Ğ¤¹
-#    plugin¤ËÆş¤ì¤ë¤À¤±¤ÇÆ°ºî¤¹¤ë¡£
-#    ÆüÉÕ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ê¤É¤Ç¡Ö%J¡×¤ò»ØÄê¤¹¤ë¤È¤½¤³¤¬ÆüËÜ¸ì¤ÎÍËÆü¤Ë¤Ê¤ë
+#ã€Œ%Jã€ã§æ—¥æœ¬èªã®æ›œæ—¥åã‚’å‡ºã™
+#    pluginã«å…¥ã‚Œã‚‹ã ã‘ã§å‹•ä½œã™ã‚‹ã€‚
+#    æ—¥ä»˜ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãªã©ã§ã€Œ%Jã€ã‚’æŒ‡å®šã™ã‚‹ã¨ãã“ãŒæ—¥æœ¬èªã®æ›œæ—¥ã«ãªã‚‹
 #
 # Copyright (c) 2003 TADA Tadashi <sho@spc.gr.jp>
 # You can distribute this file under the GPL.
@@ -11,7 +11,7 @@ unless Time::new.respond_to?( :strftime_jdate_backup ) then
 	eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
 		class Time
 		   alias strftime_jdate_backup strftime
-		   JWDAY = %w(Æü ·î ²Ğ ¿å ÌÚ ¶â ÅÚ)
+		   JWDAY = %w(æ—¥ æœˆ ç« æ°´ æœ¨ é‡‘ åœŸ)
 		   def strftime( format )
 		      strftime_jdate_backup( format.gsub( /%J/, JWDAY[self.wday] ) )
 		   end

@@ -1,10 +1,10 @@
 # jroku.rb $Revision: 1.1 $
 #
-#��%R�פ�ϻ�ˤ�Ф�
-#    ư��������ˤ�
+#「%R」で六曜を出す
+#    動かすためには
 #    http://www.funaba.org/calendar.html#calendar
-#    �����ۤ���Ƥ���Clendar�⥸�塼�����°���Ƥ���calclass.rb��ɬ��
-#    ���եե����ޥåȤʤɤǡ�%R�פ���ꤹ��Ȥ�����ϻ�ˤˤʤ�
+#    で配布されているClendarモジュールと付属しているcalclass.rbが必要
+#    日付フォーマットなどで「%R」を指定するとそこが六曜になる
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can distribute this file under the GPL.
@@ -15,7 +15,7 @@ unless Time::new.respond_to?( :strftime_jroku_backup ) then
    eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
    class Time
       alias strftime_jroku_backup strftime
-      JROKU = %w(��� �ָ� �辡 ͧ�� ���� ʩ��)
+      JROKU = %w(大安 赤口 先勝 友引 先負 仏滅)
       
       def strftime( format )
          d=Gregorian.new(self.month, self.day, self.year)

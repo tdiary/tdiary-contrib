@@ -1,10 +1,10 @@
 # image_gps.rb $Revision: 1.6 $
 # 
-# ³µÍ×:
-# ²èÁü¤ËGPS¤Ë¤è¤ë°ÌÃÖ¾ğÊó¤¬´Ş¤Ş¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï¡¢ÂĞ±ş¤¹¤ëÃÏ¿Ş¤Ø¤Î¥ê¥ó¥¯¤òÀ¸À®¤¹¤ë¡£
+# æ¦‚è¦:
+# ç”»åƒã«GPSã«ã‚ˆã‚‹ä½ç½®æƒ…å ±ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ã€å¯¾å¿œã™ã‚‹åœ°å›³ã¸ã®ãƒªãƒ³ã‚¯ã‚’ç”Ÿæˆã™ã‚‹ã€‚
 #
-# »È¤¤Êı:
-# ³¨Æüµ­Plugin(image.rb)¤È¤ª¤Ê¤¸
+# ä½¿ã„æ–¹:
+# çµµæ—¥è¨˜Plugin(image.rb)ã¨ãŠãªã˜
 #
 # Copyright (c) 2004,2005 kp <kp@mmho.no-ip.org>
 # Distributed under the GPL
@@ -12,7 +12,7 @@
 
 =begin ChangeLog
 2008-01-17 kp
-  * ¤¤¤í¤¤¤íÊÑ¹¹
+  * ã„ã‚ã„ã‚å¤‰æ›´
 2006-03-28 kp
   * cooperation with ALPSLAB clip
 2006-03-27 kp
@@ -103,15 +103,15 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   url
 end
 
-add_conf_proc ('image_gps','image_gps¤ÎÀßÄê','etc') do
+add_conf_proc ('image_gps','image_gpsã®è¨­å®š','etc') do
   if @mode == 'saveconf' then
     @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
   end
   
   <<-HTML
     <p>
-    <h3>»£±Æ¾ò·ï¤ÎÉ½¼¨</h3>
-    <input type="checkbox" name="image_gps.add_info" value="true" #{if @conf['image_gps.add_info'] then " checked" end}>¥¿¥¤¥È¥ë¤Ë»£±Æ¾ò·ï¤òÄÉ²Ã¤¹¤ë</p>
+    <h3>æ’®å½±æ¡ä»¶ã®è¡¨ç¤º</h3>
+    <input type="checkbox" name="image_gps.add_info" value="true" #{if @conf['image_gps.add_info'] then " checked" end}>ã‚¿ã‚¤ãƒˆãƒ«ã«æ’®å½±æ¡ä»¶ã‚’è¿½åŠ ã™ã‚‹</p>
   HTML
 
 end

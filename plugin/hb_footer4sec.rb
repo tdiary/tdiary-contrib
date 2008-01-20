@@ -1,9 +1,7 @@
 #
 # hb_footer.rb
 #
-# ’¤Ï’¤Æ’¤Ê’¥Ö’¥Ã’¥¯’¥Ş’¡¼’¥¯ (http://b.hatena.ne.jp/) ’¤Î’¥³’¥á’¥ó’¥È’¤ò’³º’Åö’¥»’¥¯’¥·’¥ç’¥ó’¤Ë’Å½’¤ê’ÉÕ’¤±’¤ëtDiary’¥×’¥é’¥°’¥¤’¥ó
-# ’²ş’Â¤’ÈÇrss_recent Version 0.0.5i2’¤È’¶¦’¤Ë’»È’ÍÑ’¤¹’¤ë
-#
+# å½«ãƒå½«ãƒ‹å½«ãƒå¾´ãƒ¨å¾´ãƒ†å¾´ãƒƒå¾´ã‚›åºã‚·å¾´ãƒƒ (http://b.hatena.ne.jp/) å½«ãƒ›å¾´ã‚¦å¾´ç™‡ãƒ»è³´ãƒ»ãƒå½«å³µã‚¦ã‚³æ¤ãƒ»ã‚µå¾´ãƒƒå¾´ã‚­å¾´è¿ºãƒ»è³´ã€ãƒ’æ¤ã‚¹å½«é½Ÿãƒãƒ¦å½«ã‚¢å½«ï¸¾Diaryå¾´ãƒ©å¾´é«“ãƒ»ãƒ¼å¾´ã€å¾´èª¾# èª¿ãƒ„ã€éšãƒŒrss_recent Version 0.0.5i2å½«ãƒéŠšãƒ²å½«ãƒ’æ—ãƒæ´ãƒ å½«ã‚±å½«#
 # Licence: GPL
 # Author: ishinao <ishinao@ishinao.net>
 #
@@ -13,8 +11,8 @@ add_section_leave_proc do |date, index|
   hb_url = "http://b.hatena.ne.jp/entry/#{td_url}"
   rss_url = "http://b.hatena.ne.jp/entry/rss/#{td_url}"
 
-  template_head = %Q[<div class="section">\n<h4>’¤³’¤Î’¥»’¥¯’¥·’¥ç’¥ó’¤Ë’ÂĞ’¤¹’¤ë<a href="#{CGI.escapeHTML(hb_url)}">’¤Ï’¤Æ’¥Ö</a></h4>\n<ul class="hb_footer">\n]
-  template_list = '<li><span class="date">#{time.strftime("%Y’Ç¯%m’·î%d’Æü")}</span> <span class="hatenaid"><a href="#{CGI.escapeHTML(url)}">#{CGI.escapeHTML(title)}</a></span> <span class="comment">#{CGI.escapeHTML(description.to_s)}</span></li>'
+  template_head = %Q[<div class="section">\n<h4>å½«ã‚¦å½«ãƒ›å¾´ã‚µå¾´ãƒƒå¾´ã‚­å¾´è¿ºãƒ»è³´ã€ãƒ’é™³ãƒŸå½«ã‚±å½«a href="#{CGI.escapeHTML(hb_url)}">å½«ãƒå½«ãƒ‹å¾´ãƒ¨</a></h4>\n<ul class="hb_footer">\n]
+  template_list = '<li><span class="date">#{time.strftime("%Yè¿½ãƒƒ%mé•·dæ§Œ)}</span> <span class="hatenaid"><a href="#{CGI.escapeHTML(url)}">#{CGI.escapeHTML(title)}</a></span> <span class="comment">#{CGI.escapeHTML(description.to_s)}</span></li>'
   template_foot = "</ul>\n</div>\n"
 
   cache_time = 3600;

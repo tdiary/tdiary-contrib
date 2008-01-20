@@ -1,8 +1,8 @@
 # jmonth.rb $Revision: 1.1 $
 #
-#¡Ö%i¡×¤ÇÆüËÜ¸ì¤Î±¢Îñ·îÌ¾¤ò½Ğ¤¹
-#    plugin¤ËÆş¤ì¤ë¤À¤±¤ÇÆ°ºî¤¹¤ë¡£
-#    ÆüÉÕ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ê¤É¤Ç¡Ö%i¡×¤ò»ØÄê¤¹¤ë¤È¤½¤³¤¬±¢Îñ·îÌ¾¤Ë¤Ê¤ë
+#ã€Œ%iã€ã§æ—¥æœ¬èªã®é™°æš¦æœˆåã‚’å‡ºã™
+#    pluginã«å…¥ã‚Œã‚‹ã ã‘ã§å‹•ä½œã™ã‚‹ã€‚
+#    æ—¥ä»˜ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãªã©ã§ã€Œ%iã€ã‚’æŒ‡å®šã™ã‚‹ã¨ãã“ãŒé™°æš¦æœˆåã«ãªã‚‹
 #
 # Copyright (c) 2005 sasasin/SuzukiShinnosuke<sasasin@sasasin.sytes.net>
 # You can distribute this file under the GPL.
@@ -11,7 +11,7 @@ unless Time::new.respond_to?( :strftime_jmonth_backup ) then
 	eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
 		class Time
 		   alias strftime_jmonth_backup strftime
-		   JMONTH = %w(ËÓ·î Ç¡·î ÌïÀ¸ ±¬·î »©·î ¿åÌµ·î Ê¸·î ÍÕ·î Ä¹·î ¿ÀÌµ·î Áú·î »ÕÁö)
+		   JMONTH = %w(ç¦æœˆ å¦‚æœˆ å¼¥ç”Ÿ å¯æœˆ çšæœˆ æ°´ç„¡æœˆ æ–‡æœˆ è‘‰æœˆ é•·æœˆ ç¥ç„¡æœˆ éœœæœˆ å¸«èµ°)
 		   def strftime( format )
 		      strftime_jmonth_backup( format.gsub( /%i/, JMONTH[self.month-1] ) )
 		   end

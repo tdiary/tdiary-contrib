@@ -46,7 +46,7 @@ def aboutme( id )
 	html << %Q|<span class="aboutme-name">#{nickname.text}</span>|
 	html << '</a>'
 	html << %Q|<span class="aboutme-powered">|
-	html << %Q|<a href="http://aboutme.jp/" title="•¢•–•¶•»•ﬂ°º - º´ ¨»Ø∏´•◊•Ì•’•£°º•Î" target="_blank">powerd by •¢•–•¶•»•ﬂ°º°ß@nifty</a>|
+	html << %Q|<a href="http://aboutme.jp/" title="„Ç¢„Éê„Ç¶„Éà„Éü„Éº - Ëá™ÂàÜÁô∫Ë¶ã„Éó„É≠„Éï„Ç£„Éº„É´" target="_blank">powerd by „Ç¢„Éê„Ç¶„Éà„Éü„ÉºÔºö@nifty</a>|
 	html << '</span>'
 	html << '</div>'
 	@conf.to_native( html )

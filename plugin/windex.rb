@@ -2,28 +2,28 @@
 
 # windex.rb $Revision: 1.2 $
 #
-# windex: º÷°ú¤òÀ¸À®¤¹¤ë
-#   ¥Ñ¥é¥á¥¿:
-#     str:      ¥­¡¼¥ï¡¼¥ÉÊ¸»úÎó
-#     readname: ÆÉ¤ß²¾Ì¾
+# windex: ç´¢å¼•ã‚’ç”Ÿæˆã™ã‚‹
+#   ãƒ‘ãƒ©ãƒ¡ã‚¿:
+#     str:      ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰æ–‡å­—åˆ—
+#     readname: èª­ã¿ä»®å
 #
-# wikw: º÷°ú¤«¤é¥¢¥ó¥«¡¼¤òÀ¸À®¤¹¤ë
-#   ¥Ñ¥é¥á¥¿:
-#     str:      ¥­¡¼¥ï¡¼¥ÉÊ¸»úÎó
+# wikw: ç´¢å¼•ã‹ã‚‰ã‚¢ãƒ³ã‚«ãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
+#   ãƒ‘ãƒ©ãƒ¡ã‚¿:
+#     str:      ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰æ–‡å­—åˆ—
 #
-# ¤³¤Î¥Õ¥¡¥¤¥ë¤òtDiary¤Î¥È¥Ã¥×¥Ç¥£¥ì¥¯¥È¥ê¤Ë¤âÇÛÃÖ¤·¡¢CGI¤È¤·¤Æ
-# ¼Â¹Ô¤¹¤ë¤³¤È¤Çº÷°ú¥Ú¡¼¥¸¤ò½ÐÎÏ¤Ç¤­¤Þ¤¹¡£
+# ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’tDiaryã®ãƒˆãƒƒãƒ—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚‚é…ç½®ã—ã€CGIã¨ã—ã¦
+# å®Ÿè¡Œã™ã‚‹ã“ã¨ã§ç´¢å¼•ãƒšãƒ¼ã‚¸ã‚’å‡ºåŠ›ã§ãã¾ã™ã€‚
 #
-# CGIÆ°ºî»þ¤Î°ú¿ô
-#   http://(Æüµ­URL)/windex.rb?kw=(¥­¡¼¥ï¡¼¥ÉÊ¸»úÎó)
-#   ¤È¥­¡¼¥ï¡¼¥É¤ò»ØÄê¤·¤Æ¥¢¥¯¥»¥¹¤¹¤ë¤³¤È¤Ç¤½¤Î¥­¡¼¥ï¡¼¥É¤Ë´Ø·¸¤¹¤ëÆüµ­¤Î
-#   ÆüÉÕ°ìÍ÷¤ò½ÐÎÏ¤Ç¤­¤Þ¤¹¡£°ì¤Ä¤À¤±¤Î¾ì¹ç¤Ë¤Ï¤½¤ÎÆüÉÕ¤ÎÆüµ­¤Ø¤Î
-#   ¥ê¥À¥¤¥ì¥¯¥È¤ò½ÐÎÏ¤·¤Þ¤¹¡£
+# CGIå‹•ä½œæ™‚ã®å¼•æ•°
+#   http://(æ—¥è¨˜URL)/windex.rb?kw=(ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰æ–‡å­—åˆ—)
+#   ã¨ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’æŒ‡å®šã—ã¦ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã“ã¨ã§ãã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã«é–¢ä¿‚ã™ã‚‹æ—¥è¨˜ã®
+#   æ—¥ä»˜ä¸€è¦§ã‚’å‡ºåŠ›ã§ãã¾ã™ã€‚ä¸€ã¤ã ã‘ã®å ´åˆã«ã¯ãã®æ—¥ä»˜ã®æ—¥è¨˜ã¸ã®
+#   ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 #
-# tdiary.conf¤Ë¤è¤ëÀßÄê
+# tdiary.confã«ã‚ˆã‚‹è¨­å®š
 #   @options['windex.generate_all'] = true
-#     Á´¤Æ¤ÎÆüµ­¤«¤éº÷°ú¤òÀ¸À®¤·¤Þ¤¹¡£¤³¤ì¤Ï»þ´Ö¤¬¤«¤«¤ë¤Î¤Ç¡¢º÷°ú¤ÎÁ´À¸À®¤ò
-#     ¹Ô¤¤¤¿¤¤¤È¤­¤À¤±true¤ËÀßÄê¤·¤Æ¹¹¿·¤ò¹Ô¤¦¤è¤¦¤Ê»È¤¤Êý¤òÁÛÄê¤·¤Æ¤¤¤Þ¤¹¡£
+#     å…¨ã¦ã®æ—¥è¨˜ã‹ã‚‰ç´¢å¼•ã‚’ç”Ÿæˆã—ã¾ã™ã€‚ã“ã‚Œã¯æ™‚é–“ãŒã‹ã‹ã‚‹ã®ã§ã€ç´¢å¼•ã®å…¨ç”Ÿæˆã‚’
+#     è¡Œã„ãŸã„ã¨ãã ã‘trueã«è¨­å®šã—ã¦æ›´æ–°ã‚’è¡Œã†ã‚ˆã†ãªä½¿ã„æ–¹ã‚’æƒ³å®šã—ã¦ã„ã¾ã™ã€‚
 #
 # Copyright (c) 2003 Gony <gony@sm.rim.or.jp>
 # Distributed under the GPL
@@ -134,7 +134,7 @@ private
 
 		wistrs = body.scan(%r[<%\s*=\s*windex\s*[^(<%)]*\s*%>])
 		wistrs.each do |wistr|
-			# °ú¿ôÃê½Ð
+			# å¼•æ•°æŠ½å‡º
 			argstr = wistr.gsub(%r[<%\s*=\s*windex\s*],"")
 			argstr = argstr.gsub(%r[\s*%>],"")
 			args = []
@@ -142,7 +142,7 @@ private
 			while flag_done == false
 				pos_delimiter = argstr.index(%r['|"|%[Qq].]) #"'
 				if pos_delimiter != nil
-					# ¥Ç¥ê¥ß¥¿Ê¸»ú¼èÆÀ
+					# ãƒ‡ãƒªãƒŸã‚¿æ–‡å­—å–å¾—
 					delimiter = argstr.scan(%r['|"|%[Qq].])[0] #"'
 					if delimiter.length == 3
 						delimiter_end = delimiter[2].chr
@@ -153,17 +153,17 @@ private
 						delimiter_end = delimiter
 					end
 
-					# ¥Ç¥ê¥ß¥¿¤Þ¤Ç¤ÎÊ¸»úÎó¤òºï½ü
+					# ãƒ‡ãƒªãƒŸã‚¿ã¾ã§ã®æ–‡å­—åˆ—ã‚’å‰Šé™¤
 					argstr = argstr[(pos_delimiter + delimiter.length)..-1]
 					pos_delimiter = argstr.index(delimiter_end)
 					if pos_delimiter != nil
 						if pos_delimiter > 0
-							# °ú¿ô¤È¤·¤Æ¼èÆÀ
+							# å¼•æ•°ã¨ã—ã¦å–å¾—
 							args << argstr[0..(pos_delimiter - 1)]
 						else
 							args << ""
 						end
-						# ¥Ç¥ê¥ß¥¿¤Þ¤Ç¤ÎÊ¸»úÎó¤òºï½ü
+						# ãƒ‡ãƒªãƒŸã‚¿ã¾ã§ã®æ–‡å­—åˆ—ã‚’å‰Šé™¤
 						argstr = argstr[(pos_delimiter + delimiter_end.length)..-1]
 					else
 						flag_done = true
@@ -175,7 +175,7 @@ private
 
 			if args.length > 0
 				if @windex.has_key?(args[0]) == false
-					# ¥Ï¥Ã¥·¥å¤òÀ¸À®
+					# ãƒãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆ
 					@windex[args[0]] = {"readname" => nil,"anchor" => []}
 				end
 				if args.length > 1 && @windex[args[0]]["readname"] == nil && args[1] != ""
@@ -196,7 +196,7 @@ class WIIndexPage
 	def generate_html(windex)
 		body = ""
 
-		# Âç¹àÌÜÌ¾ => Ì¾Á°¤ÎÇÛÎó ¤Î¥Ï¥Ã¥·¥å¤òÀ¸À®
+		# å¤§é …ç›®å => åå‰ã®é…åˆ— ã®ãƒãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆ
 		subindex_to_name = {}
 		windex.keys.each do |key|
 			subindex = ""
@@ -211,12 +211,12 @@ class WIIndexPage
 			subindex_to_name[subindex] << key
 		end
 
-		# Âç¹àÌÜÌ¾¤´¤È¤ËHTML¤òÀ¸À®
-		if subindex_to_name.has_key?("µ­¹æ") == true
-			body << generate_html_subindex(windex,subindex_to_name,"µ­¹æ")
+		# å¤§é …ç›®åã”ã¨ã«HTMLã‚’ç”Ÿæˆ
+		if subindex_to_name.has_key?("è¨˜å·") == true
+			body << generate_html_subindex(windex,subindex_to_name,"è¨˜å·")
 		end
 		subindex_to_name.keys.sort.each do |key|
-			if key != "µ­¹æ"
+			if key != "è¨˜å·"
 				body << generate_html_subindex(windex,subindex_to_name,key)
 			end
 		end
@@ -225,11 +225,11 @@ class WIIndexPage
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{h @title}(º÷°ú)</title>
+					<title>#{h @title}(ç´¢å¼•)</title>
 					#{@css}
 				</head>
 				<body>
-					<h1>#{@title} [º÷°ú]</h1>
+					<h1>#{@title} [ç´¢å¼•]</h1>
 					<div class="day"><div class="body">
 						#{body}
 					</div></div>
@@ -258,7 +258,7 @@ private
 
 		body = %Q[<div class="section"><h2>#{key}</h2>\n]
 
-		# ÆÉ¤ß²¾Ì¾¤Î¥½¡¼¥È¤Ç¥ë¡¼¥× -> Ì¾Á°¤Î¥½¡¼¥È¤Ç¥ë¡¼¥×
+		# èª­ã¿ä»®åã®ã‚½ãƒ¼ãƒˆã§ãƒ«ãƒ¼ãƒ— -> åå‰ã®ã‚½ãƒ¼ãƒˆã§ãƒ«ãƒ¼ãƒ—
 		keys = readname_to_name.keys
 		if keys.empty? == false
 			keys.sort.each do |readname|
@@ -283,50 +283,50 @@ private
 
 	def get_subindex(name)
 		to_plainhiragana = {
-			"¤¡" => "¤¢","¤£" => "¤¤","¤¥" => "¤¦","¤§" => "¤¨","¤©" => "¤ª",
-			"¤¬" => "¤«","¤®" => "¤­","¤°" => "¤¯","¤²" => "¤±","¤´" => "¤³",
-			"¤¶" => "¤µ","¤¸" => "¤·","¤º" => "¤¹","¤¼" => "¤»","¤¾" => "¤½",
-			"¤À" => "¤¿","¤Â" => "¤Á","¤Ã" => "¤Ä","¤Å" => "¤Ä","¤Ç" => "¤Æ","¤É" => "¤È",
-			"¤Ð" => "¤Ï","¤Ñ" => "¤Ï","¤Ó" => "¤Ò","¤Ô" => "¤Ò","¤Ö" => "¤Õ","¤×" => "¤Õ","¤Ù" => "¤Ø","¤Ú" => "¤Ø","¤Ü" => "¤Û","¤Ý" => "¤Û",
-			"¤ã" => "¤ä","¤å" => "¤æ","¤ç" => "¤è",
-			"¤î" => "¤ï","¥ô" => "¤¦","¥õ" => "¤«","¥ö" => "¤±",
+			"ã" => "ã‚","ãƒ" => "ã„","ã…" => "ã†","ã‡" => "ãˆ","ã‰" => "ãŠ",
+			"ãŒ" => "ã‹","ãŽ" => "ã","ã" => "ã","ã’" => "ã‘","ã”" => "ã“",
+			"ã–" => "ã•","ã˜" => "ã—","ãš" => "ã™","ãœ" => "ã›","ãž" => "ã",
+			"ã " => "ãŸ","ã¢" => "ã¡","ã£" => "ã¤","ã¥" => "ã¤","ã§" => "ã¦","ã©" => "ã¨",
+			"ã°" => "ã¯","ã±" => "ã¯","ã³" => "ã²","ã´" => "ã²","ã¶" => "ãµ","ã·" => "ãµ","ã¹" => "ã¸","ãº" => "ã¸","ã¼" => "ã»","ã½" => "ã»",
+			"ã‚ƒ" => "ã‚„","ã‚…" => "ã‚†","ã‚‡" => "ã‚ˆ",
+			"ã‚Ž" => "ã‚","ãƒ´" => "ã†","ãƒµ" => "ã‹","ãƒ¶" => "ã‘",
 		}
 		to_1byte = {
-			"¡ª" => "!",'¡É' => '"',"¡ô" => "#","¡ð" => "$","¡ó" => "%","¡õ" => "&","¡Ç" => "'","¡Ê" => "(","¡Ë" => ")","¡ö" => "*","¡Ü" => "+","¡¤" => ",","¡Ý" => "-","¡¥" => ".","¡¿" => "/",
-			"£°" => "0","£±" => "1","£²" => "2","£³" => "3","£´" => "4","£µ" => "5","£¶" => "6","£·" => "7","£¸" => "8","£¹" => "9","¡§" => ":","¡¨" => ";","¡ã" => "<","¡á" => "=","¡ä" => ">","¡©" => "?",
-			"¡÷" => "@","£Á" => "A","£Â" => "B","£Ã" => "C","£Ä" => "D","£Å" => "E","£Æ" => "F","£Ç" => "G","£È" => "H","£É" => "I","£Ê" => "J","£Ë" => "K","£Ì" => "L","£Í" => "M","£Î" => "N","£Ï" => "O",
-			"£Ð" => "P","£Ñ" => "Q","£Ò" => "R","£Ó" => "S","£Ô" => "T","£Õ" => "U","£Ö" => "V","£×" => "W","£Ø" => "X","£Ù" => "Y","£Ú" => "Z","¡Î" => "[","¡ï" => "\\","¡Ï" => "]","¡°" => "^","¡²" => "_",
-			"£á" => "a","£â" => "b","£ã" => "c","£ä" => "d","£å" => "e","£æ" => "f","£ç" => "g","£è" => "h","£é" => "i","£ê" => "j","£ë" => "k","£ì" => "l","£í" => "m","£î" => "n","£ï" => "o",
-			"£ð" => "p","£ñ" => "q","£ò" => "r","£ó" => "s","£ô" => "t","£õ" => "u","£ö" => "v","£÷" => "w","£ø" => "x","£ù" => "y","£ú" => "z","¡Ð" => "{","¡Ã" => "|","¡Ñ" => "}","¡±" => "~",
+			"ï¼" => "!",'â€' => '"',"ï¼ƒ" => "#","ï¼„" => "$","ï¼…" => "%","ï¼†" => "&","â€™" => "'","ï¼ˆ" => "(","ï¼‰" => ")","ï¼Š" => "*","ï¼‹" => "+","ï¼Œ" => ",","âˆ’" => "-","ï¼Ž" => ".","ï¼" => "/",
+			"ï¼" => "0","ï¼‘" => "1","ï¼’" => "2","ï¼“" => "3","ï¼”" => "4","ï¼•" => "5","ï¼–" => "6","ï¼—" => "7","ï¼˜" => "8","ï¼™" => "9","ï¼š" => ":","ï¼›" => ";","ï¼œ" => "<","ï¼" => "=","ï¼ž" => ">","ï¼Ÿ" => "?",
+			"ï¼ " => "@","ï¼¡" => "A","ï¼¢" => "B","ï¼£" => "C","ï¼¤" => "D","ï¼¥" => "E","ï¼¦" => "F","ï¼§" => "G","ï¼¨" => "H","ï¼©" => "I","ï¼ª" => "J","ï¼«" => "K","ï¼¬" => "L","ï¼­" => "M","ï¼®" => "N","ï¼¯" => "O",
+			"ï¼°" => "P","ï¼±" => "Q","ï¼²" => "R","ï¼³" => "S","ï¼´" => "T","ï¼µ" => "U","ï¼¶" => "V","ï¼·" => "W","ï¼¸" => "X","ï¼¹" => "Y","ï¼º" => "Z","ï¼»" => "[","Â¥" => "\\","ï¼½" => "]","ï¼¾" => "^","ï¼¿" => "_",
+			"ï½" => "a","ï½‚" => "b","ï½ƒ" => "c","ï½„" => "d","ï½…" => "e","ï½†" => "f","ï½‡" => "g","ï½ˆ" => "h","ï½‰" => "i","ï½Š" => "j","ï½‹" => "k","ï½Œ" => "l","ï½" => "m","ï½Ž" => "n","ï½" => "o",
+			"ï½" => "p","ï½‘" => "q","ï½’" => "r","ï½“" => "s","ï½”" => "t","ï½•" => "u","ï½–" => "v","ï½—" => "w","ï½˜" => "x","ï½™" => "y","ï½š" => "z","ï½›" => "{","ï½œ" => "|","ï½" => "}","â€¾" => "~",
 		}
 
 		topchr = name[0,1]
 		if topchr.count("\xA1-\xFE") == 1
-			# 2¥Ð¥¤¥ÈÊ¸»ú
+			# 2ãƒã‚¤ãƒˆæ–‡å­—
 			topchr = name[0,2]
 		end
 		if to_1byte.has_key?(topchr) == true
 			topchr = to_1byte[topchr]
 		end
 		if topchr.length == 1
-			# 1¥Ð¥¤¥ÈÊ¸»ú¤Î½èÍý
+			# 1ãƒã‚¤ãƒˆæ–‡å­—ã®å‡¦ç†
 			topchr = topchr.upcase
 			
 			if (0x21 <= topchr[0] && topchr[0] <= 0x2F) \
 				|| (0x3A <= topchr[0] && topchr[0] <= 0x40) \
 				|| (0x5B <= topchr[0] && topchr[0] <= 0x60) \
 				|| (0x7B <= topchr[0] && topchr[0] <= 0x7B)
-					topchr = "µ­¹æ"
+					topchr = "è¨˜å·"
 			end
 		else
-			# 2¥Ð¥¤¥ÈÊ¸»ú¤Î½èÍý
-			# ¥«¥¿¥«¥Ê->¤Ò¤é¤¬¤ÊÊÑ´¹
+			# 2ãƒã‚¤ãƒˆæ–‡å­—ã®å‡¦ç†
+			# ã‚«ã‚¿ã‚«ãƒŠ->ã²ã‚‰ãŒãªå¤‰æ›
 			code = topchr[0] * 0x100 + topchr[1]
 			if 0xA5A1 <= code && code <= 0xA5F3
 				topchr = 0xA4.chr + topchr[1].chr
 			end
 
-			# ÂùÅÀ / È¾ÂùÅÀ Ùû²»¤Ê¤ÉÊÑ´¹
+			# æ¿ç‚¹ / åŠæ¿ç‚¹ æ’¥éŸ³ãªã©å¤‰æ›
 			if to_plainhiragana.has_key?(topchr) == true
 				topchr = to_plainhiragana[topchr]
 			end
@@ -378,11 +378,11 @@ class WISinglePage
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{h @title}(º÷°ú)</title>
+					<title>#{h @title}(ç´¢å¼•)</title>
 					#{@css}
 				</head>
 				<body>
-					<h1>#{@title} [º÷°ú]</h1>
+					<h1>#{@title} [ç´¢å¼•]</h1>
 					<div class="day"><div class="body">
 						#{body}
 					</div></div>
@@ -406,13 +406,13 @@ class WIErrorPage
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 				<head>
-					<title>#{h @title}(º÷°ú)</title>
+					<title>#{h @title}(ç´¢å¼•)</title>
 					#{@css}
 				</head>
 				<body>
-					<h1>#{@title} [º÷°ú]</h1>
+					<h1>#{@title} [ç´¢å¼•]</h1>
 					<div class="day"><div class="body">
-						¥­¡¼¥ï¡¼¥É¡Ö#{h @key}¡×¤ÏÅÐÏ¿¤µ¤ì¤Æ¤¤¤Þ¤»¤ó¡£
+						ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã€Œ#{h @key}ã€ã¯ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚
 					</div></div>
 				</body>
 			</html>
