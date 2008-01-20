@@ -4,10 +4,10 @@
 #
 # kp <k-nomura@s6.dion.ne.jp>
 # 
-# $B%*%j%8%J%k$+$i$NJQ99E@(B
-#  $B!&(BInterOperabilityIFD$BBP1~:o=|(B
-#  $B!&(BGPS IFD$B$X$NBP1~(B
-#  $B!&(BRational.new$B"*(BRational.new!
+# オリジナルからの変更点
+#  ・InterOperabilityIFD対応削除
+#  ・GPS IFDへの対応
+#  ・Rational.new→Rational.new!
 #
 
 require 'rational'
