@@ -31,7 +31,7 @@ if /^(latest|day|conf|saveconf)$/ =~ @mode then
 			   <foaf:maker rdf:parseType="Resource">
 			     <foaf:holdsAccount>
 			       <foaf:OnlineAccount foaf:accountName="#{h(account_name)}">
-			         <foaf:accountServiceHomepage rdf:resource="#{h(account_service)}"/>
+			          <foaf:accountServiceHomepage rdf:resource="#{h(account_service)}"/>
 			       </foaf:OnlineAccount>
 			     </foaf:holdsAccount>
 			   </foaf:maker>
