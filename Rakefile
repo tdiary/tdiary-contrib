@@ -48,18 +48,23 @@ end
 desc 'convert source encoding from UTF-8 to EUC-JP'
 task :to_euc => pkg.package_dir_path
 file pkg.package_dir_path do |t|
+  require 'shell'
   t.prerequisites.each do |f|
     filename = File.join(pkg.package_dir_path, f)
     # exclude directories and binary files
     next if File.ftype(filename) != 'file' ||
             package[:binary_ext].include?(File.extname(filename))
-    sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
-       "touch -m -r #{filename} #{filename}.tmp && " <<
-       "mv #{filename}.tmp #{filename}"
-    # use iconv instead of nkf in the following another way...
-    # sh "iconv --from-code=utf-8 --to-code=eucjp-ms --output #{filename}{.tmp,} && " <<
-    #    "touch -m -r #{filename}{,.tmp} && " <<
-    #    "mv #{filename}{.tmp,}"
+
+    if Shell.new.find_system_command('nkf')
+      sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
+         "touch -m -r #{filename} #{filename}.tmp && " <<
+         "mv #{filename}.tmp #{filename}"
+    else
+      # use iconv instead of nkf in the following another way...
+      sh "iconv --from-code=utf-8 --to-code=eucjp-ms --output #{filename}{.tmp,} && " <<
+         "touch -m -r #{filename}{,.tmp} && " <<
+         "mv #{filename}{.tmp,}"
+    end
   end
   touch t.name
 end
