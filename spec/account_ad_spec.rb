@@ -27,7 +27,7 @@ describe "account_ad plugin w/" do
 
 	def include_account_service_with(options)
 		msg = "include #{options[:service]}"
-		expected = %|<foaf:accountServiceHomepage rdf:resource="#{options[:service]}"/>|
+		expected = %|<foaf:accountServiceHomepage rdf:resource="#{options[:service]}" />|
 			Spec::Matchers::SimpleMatcher.new(msg) do |actual|
 			actual.include?(expected)
 		end
