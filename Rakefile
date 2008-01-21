@@ -14,6 +14,16 @@ package.freeze
 desc 'update source and packaging'
 task :default => [:update, :package, :clean]
 
+desc "Run all specs"
+task :spec do
+	require 'rake'
+	require 'spec/rake/spectask'
+	Spec::Rake::SpecTask.new do |t|
+		t.spec_files = FileList['spec/**/*_spec.rb']
+		t.spec_opts = ['--options', 'spec/spec.opts']
+	end
+end
+
 desc 'Update files from Subversion Repository'
 task :update do |t|
   sh 'svn', 'update', package[:root]
