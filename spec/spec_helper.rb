@@ -9,7 +9,7 @@ class PluginFake
 	attr_accessor :mode
 
 	def initialize
-		@conf = {}
+		@conf = Config.new
 		@mode = ""
 		@header_procs = []
 	end
@@ -30,6 +30,34 @@ class PluginFake
 		r.join.chomp
 	end
 
+	class Config
+		def initialize
+			@options = {}
+			@options2 = {}
+		end
+
+		def []( key )
+			@options[key]
+		end
+
+		def []=( key, val )
+			@options2[key] = @options[key] = val
+		end
+
+		def delete( key )
+			@options.delete( key )
+			@options2.delete( key )
+		end
+
+		def base_url
+			begin
+				if @options['base_url'].length > 0 then
+					return @options['base_url']
+				end
+			rescue
+			end
+		end
+	end
 end
 def fake_plugin( name_sym, base=nil, &block )
 	plugin = PluginFake.new
