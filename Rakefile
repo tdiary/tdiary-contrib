@@ -24,6 +24,15 @@ task :spec do
 	end
 end
 
+desc "Run all tests"
+task :test do
+	require 'test/unit'
+	test_files = FileList['test/**/*_test.rb']
+   test_files.each do |t|
+		sh "ruby #{t}"
+   end
+end
+
 desc 'Update files from Subversion Repository'
 task :update do |t|
   sh 'svn', 'update', package[:root]
