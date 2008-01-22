@@ -6,11 +6,12 @@ class PluginFake
 	include ERB::Util
 
 	attr_reader :conf
-	attr_accessor :mode
+	attr_accessor :mode, :date
 
 	def initialize
 		@conf = Config.new
 		@mode = ""
+		@date = nil
 		@header_procs = []
 	end
 
@@ -59,6 +60,7 @@ class PluginFake
 		end
 	end
 end
+
 def fake_plugin( name_sym, base=nil, &block )
 	plugin = PluginFake.new
 	yield plugin if block_given?
@@ -83,4 +85,16 @@ def plugin_path( plugin_sym, base=nil )
 	paths << ( base ? base : "plugin" )
 	paths << "#{plugin_sym.to_s}.rb"
 	File.expand_path( File.join( paths ))
+end
+
+def anchor( s )
+	if /^([\-\d]+)#?([pct]\d*)?$/ =~ s then
+		if $2 then
+			"?date=#$1##$2"
+		else
+			"?date=#$1"
+		end
+	else
+		""
+	end
 end
