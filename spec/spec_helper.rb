@@ -13,6 +13,7 @@ class PluginFake
 		@mode = ""
 		@date = nil
 		@header_procs = []
+		@update_procs = []
 	end
 
 	def add_conf_proc( key, label, genre=nil, &block )
@@ -21,6 +22,10 @@ class PluginFake
 
 	def add_header_proc( block = Proc::new )
 		@header_procs << block
+	end
+
+	def add_update_proc( block = Proc::new )
+		@update_procs << block
 	end
 
 	def header_proc
@@ -33,7 +38,7 @@ class PluginFake
 
 	class Config
 
-		attr_accessor :index, :html_title 
+		attr_accessor :index, :html_title
 
 		def initialize
 			@options = {}
