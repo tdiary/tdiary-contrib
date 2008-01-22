@@ -20,7 +20,6 @@ Rake::TestTask.new do |t|
 end
 
 Spec::Rake::SpecTask.new do |t|
-  t.spec_files = FileList[File.join('spec', '**', '*_spec.rb')]
   t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
 end
 
