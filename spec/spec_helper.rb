@@ -32,9 +32,14 @@ class PluginFake
 	end
 
 	class Config
+
+		attr_accessor :index, :html_title 
+
 		def initialize
 			@options = {}
 			@options2 = {}
+			@index = './'
+			@html_title = ''
 		end
 
 		def []( key )
