@@ -1,5 +1,6 @@
 # Rakefile for building tdiary-conrib package
 require 'rake'
+require 'rake/clean'
 require 'rake/packagetask'
 require 'rake/testtask'
 require 'spec/rake/spectask'
@@ -33,9 +34,9 @@ end
 
 pkg = Rake::PackageTask.new(package[:name], package[:rev]) do |p|
 	p.package_dir = package[:pkgdir]
-	p.package_files.include(package[:include_dirs])
+	p.package_files.include package[:include_dirs]
 	p.need_tar_gz  = true
-	p.need_tar_bz2 = false
+	#p.need_tar_bz2 = true
 end
 
 desc 'Convert source encoding from UTF-8 to EUC-JP'
@@ -66,10 +67,5 @@ file pkg.package_dir_path do |t|
 		end
 	end
 	touch t.name
-end
-
-desc 'Clean package files'
-task :clean do
-	rm_rf File.join(package[:pkgdir], "#{package[:name]}-#{package[:rev]}")
 end
 
