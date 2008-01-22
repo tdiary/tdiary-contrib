@@ -26,7 +26,6 @@ end
 
 desc 'Run all tests'
 task :test do
-  require 'test/unit'
   test_files     = FileList[File.join('test', '**', '*_test.rb')]
   opt_load_paths = [File.join(package[:root], 'plugin')].map{|path| "-I#{path}" }.join(' ')
   test_files.each do |t|
