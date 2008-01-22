@@ -21,7 +21,7 @@ Rake::TestTask.new do |t|
 end
 
 Spec::Rake::SpecTask.new do |t|
-	t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
+	t.spec_opts  = ['-c', '--options', File.join('spec', 'spec.opts')]
 end
 
 desc 'Update source and packaging'
