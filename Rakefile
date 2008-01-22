@@ -46,22 +46,23 @@ file pkg.package_dir_path do |t|
 		filename = File.join pkg.package_dir_path, f
 		# exclude directories and binary files
 		next if File.ftype(filename) != 'file' ||
-		package[:binary_ext].include?(File.extname(filename))
-		
+		        package[:binary_ext].include?(File.extname(filename))
+
 		case
 		when Shell.new.find_system_command('nkf')
 			sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
-				"touch -m -r #{filename} #{filename}.tmp && "  <<
-				"mv #{filename}.tmp #{filename}"
+			   "touch -m -r #{filename} #{filename}.tmp && "  <<
+			   "mv #{filename}.tmp #{filename}"
 		when Shell.new.find_system_command('iconv')
 			# use iconv instead of nkf in the following another way...
-			sh <<-EOS
-			iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \
-			touch -m -r #{filename}{,.tmp} && \
- 			mv #{filename}{.tmp,}
- 			EOS
-			#else
-			# ... or require 'nkf', 'iconv'
+			script =<<-EOS
+				iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \\
+				touch -m -r #{filename}{,.tmp} && \\
+				mv #{filename}{.tmp,}
+			EOS
+			sh script.gsub(/^\s+/, '')
+		#else
+		# ... or require 'nkf', 'iconv'
 		end
 	end
 	touch t.name
@@ -71,3 +72,4 @@ desc 'Clean package files'
 task :clean do
 	rm_rf File.join(package[:pkgdir], "#{package[:name]}-#{package[:rev]}")
 end
+
