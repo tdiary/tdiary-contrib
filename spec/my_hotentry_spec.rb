@@ -1,19 +1,14 @@
-$KCODE = 'e'
-require 'rubygems'
-gem 'rspec'
-require 'spec'
 require 'tmpdir'
 require 'fileutils'
 begin
-	$:.unshift(File.join(File.dirname(__FILE__), "..", "plugin"))
   require 'my_hotentry'
 rescue
 end
 
 describe "MyHotEntry" do
 	before do
-		# @cache_path ¤Ï¡Ö¥Õ¥¡¥¤¥ëÌ¾-¥×¥í¥»¥¹ÈÖ¹æ¡×
-		@cache_path = File.join(Dir.tmpdir, "#{__FILE__}-#{$$}")
+		# @cache_path ã¯ã€Œãƒ•ã‚¡ã‚¤ãƒ«å-ãƒ—ãƒ­ã‚»ã‚¹ç•ªå·ã€
+		@cache_path = File.join(Dir.tmpdir, "#{File.basename(__FILE__)}-#{$$}")
 		Dir.mkdir(@cache_path)
 		@dbfile = "#{@cache_path}/my_hotentry.dat"
 	end
@@ -23,13 +18,13 @@ describe "MyHotEntry" do
 	end
 
 	it "update" do
-		# ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¼èÆÀ¤¹¤ë
+		# äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’å–å¾—ã™ã‚‹
 		base_url = 'http://d.hatena.ne.jp/'
 		hotentry = MyHotEntry.new(@dbfile)
 		hotentry.update(base_url)
-		# ¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤¬À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È
+		# ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«ãŒç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨
 		File.file?(@dbfile).should be_true
-		# ¿Íµ¤¤ÎÆüµ­¤¬¼èÆÀ¤Ç¤­¤Æ¤¤¤ë¤³¤È
+		# äººæ°—ã®æ—¥è¨˜ãŒå–å¾—ã§ãã¦ã„ã‚‹ã“ã¨
 		entries = hotentry.entries
 		entries.size.should > 0
 		entries.each do |entry|
@@ -38,7 +33,7 @@ describe "MyHotEntry" do
 		end
 	end
 
-	# ²¿ÅÙ¤â¼èÆÀ¤·¤Æ¤â¥­¥ã¥Ã¥·¥å¥µ¥¤¥º¤¬Âç¤­¤¯¤Ê¤é¤Ê¤¤¤³¤È
+	# ä½•åº¦ã‚‚å–å¾—ã—ã¦ã‚‚ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚µã‚¤ã‚ºãŒå¤§ãããªã‚‰ãªã„ã“ã¨
 	it "double update" do
 		base_url = 'http://d.hatena.ne.jp/'
 		hotentry = MyHotEntry.new(@dbfile)
@@ -51,7 +46,7 @@ describe "MyHotEntry" do
 		hotentry.entries.size.should == size
 	end
 
-	# ¼èÆÀ·ë²Ì¤¬¶õ¤Î¾ì¹ç¤Ï¥­¥ã¥Ã¥·¥å¤ò¥¯¥ê¥¢¤·¤Ê¤¤
+	# å–å¾—çµæœãŒç©ºã®å ´åˆã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ã‚¯ãƒªã‚¢ã—ãªã„
 	it "update noentry" do
 		exist_url = 'http://d.hatena.ne.jp/'
 		empty_url = 'http://empty-url-123456'
