@@ -1,68 +1,77 @@
+$:.unshift(File.dirname(__FILE__))
+require 'spec_helper'
 require 'tmpdir'
 require 'fileutils'
-begin
-  require 'my_hotentry'
-rescue
-end
+
 
 describe "MyHotEntry" do
-	before do
-		# @cache_path は「ファイル名-プロセス番号」
-		@cache_path = File.join(Dir.tmpdir, "#{File.basename(__FILE__)}-#{$$}")
+	def cache_filename
+		"#{File.basename(__FILE__)}-#{$$}"
+	end
+	before(:each) do
+		fake_plugin(:my_hotentry)
+		@cache_path = File.join(Dir.tmpdir, cache_filename)
 		Dir.mkdir(@cache_path)
 		@dbfile = "#{@cache_path}/my_hotentry.dat"
+		@base_url = 'http://d.hatena.ne.jp/'
+		@hotentry = MyHotEntry.new(@dbfile)
 	end
 
-	after do
+	after(:each) do
 		FileUtils.rmtree(@cache_path)
 	end
 
-	it "update" do
-		# 人気の日記一覧を取得する
-		base_url = 'http://d.hatena.ne.jp/'
-		hotentry = MyHotEntry.new(@dbfile)
-		hotentry.update(base_url)
-		# キャッシュファイルが生成されていること
-		File.file?(@dbfile).should be_true
-		# 人気の日記が取得できていること
-		entries = hotentry.entries
-		entries.size.should > 0
-		entries.each do |entry|
-			entry[:url].should be_include(base_url)
-			entry[:title].size.should > 0
+	describe "#update" do
+		before do
+			@hotentry.update(@base_url)
+			@entries = @hotentry.entries
+		end
+
+		it "キャッシュファイルが生成されていること" do
+			File.should be_file(@dbfile)
+		end
+
+		it "人気の日記が取得できていること" do
+			@entries.size.should > 0
+		end
+
+		it "取得したエントリにbase_urlとタイトルが含まれていること" do
+			@entries.each do |entry|
+				entry[:url].should be_include(@base_url)
+				entry[:title].size.should > 0
+			end
 		end
 	end
 
-	# 何度も取得してもキャッシュサイズが大きくならないこと
-	it "double update" do
-		base_url = 'http://d.hatena.ne.jp/'
-		hotentry = MyHotEntry.new(@dbfile)
-		sleep 0.5
-		hotentry.update(base_url)
-		hotentry.entries.size.should > 0
-		size = hotentry.entries.size
-		sleep 0.5
-		hotentry.update(base_url)
-		hotentry.entries.size.should == size
+	describe "何度もupdateした場合" do
+		before do
+			@hotentry.update(@base_url)
+			@original_entry_size = @hotentry.entries.size
+			@hotentry.update(@base_url)
+			@entry_size = @hotentry.entries.size
+		end
+
+		it "キャッシュサイズが大きくならないこと" do
+			@entry_size.should == @original_entry_size
+		end
 	end
 
-	# 取得結果が空の場合はキャッシュをクリアしない
-	it "update noentry" do
-		exist_url = 'http://d.hatena.ne.jp/'
-		empty_url = 'http://empty-url-123456'
-		hotentry = MyHotEntry.new(@dbfile)
+	describe "取得結果が空の場合" do
+		before do
+			@exist_url = 'http://d.hatena.ne.jp/'
+			@empty_url = 'http://empty-url.example.com/'
+		end
 
-		sleep 0.5
-		hotentry.update(empty_url)
-		hotentry.entries.size.should == 0
+		it "キャッシュをクリアしないこと" do
+			@hotentry.update(@empty_url)
+			@hotentry.entries.size.should == 0
 
-		sleep 0.5
-		hotentry.update(exist_url)
-		hotentry.entries.size.should > 0
-		exist_size = hotentry.entries.size
+			@hotentry.update(@exist_url)
+			@hotentry.entries.size.should > 0
+			exist_size = @hotentry.entries.size
 
-		sleep 0.5
-		hotentry.update(empty_url)
-		hotentry.entries.size.should == exist_size
+			@hotentry.update(@empty_url)
+			@hotentry.entries.size.should == exist_size
+		end
 	end
 end
