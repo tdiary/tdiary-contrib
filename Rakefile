@@ -5,22 +5,22 @@ require 'rake/testtask'
 require 'spec/rake/spectask'
 
 package = {
-  :name         => 'tdiary-contrib',
-  :root         => File.expand_path(File.dirname(__FILE__)),
-  :include_dirs => %w[doc filter lib misc plugin spec test util].map{|d| File.join d, '**', '*' },
-  :binary_ext   => %w[swf].map{|ext| ".#{ext}" },
+	:name         => 'tdiary-contrib',
+	:root         => File.expand_path(File.dirname(__FILE__)),
+	:include_dirs => %w[doc filter lib misc plugin spec test util].map{|d| File.join d, '**', '*' },
+	:binary_ext   => %w[swf].map{|ext| ".#{ext}" },
 }
 package[:pkgdir] = File.join package[:root], 'package'
 package[:rev]    = 'r' << `svnversion --no-newline --committed #{package[:root]}`[/\d+[MS]{0,2}$/]
 package.freeze
 
 Rake::TestTask.new do |t|
-  t.libs << File.join(package[:root], 'plugin')
-  t.pattern = File.join 'test', '**', '*_test.rb'
+	t.libs << File.join(package[:root], 'plugin')
+	t.pattern = File.join 'test', '**', '*_test.rb'
 end
 
 Spec::Rake::SpecTask.new do |t|
-  t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
+	t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
 end
 
 desc 'Update source and packaging'
@@ -28,47 +28,46 @@ task :default => [:update, :package, :clean]
 
 desc 'Update files from Subversion Repository'
 task :update do |t|
-  sh 'svn', 'update', package[:root]
+	sh 'svn', 'update', package[:root]
 end
 
 pkg = Rake::PackageTask.new(package[:name], package[:rev]) do |p|
-  p.package_dir = package[:pkgdir]
-  p.package_files.include(package[:include_dirs])
-  p.need_tar_gz  = true
-  p.need_tar_bz2 = false
+	p.package_dir = package[:pkgdir]
+	p.package_files.include(package[:include_dirs])
+	p.need_tar_gz  = true
+	p.need_tar_bz2 = false
 end
 
 desc 'Convert source encoding from UTF-8 to EUC-JP'
 task :to_euc => pkg.package_dir_path
 file pkg.package_dir_path do |t|
-  require 'shell'
-  t.prerequisites.each do |f|
-    filename = File.join pkg.package_dir_path, f
-    # exclude directories and binary files
-    next if File.ftype(filename) != 'file' ||
-            package[:binary_ext].include?(File.extname(filename))
-
-    case
-    when Shell.new.find_system_command('nkf')
-      sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
-         "touch -m -r #{filename} #{filename}.tmp && "  <<
-         "mv #{filename}.tmp #{filename}"
-    when Shell.new.find_system_command('iconv')
-      # use iconv instead of nkf in the following another way...
-      sh <<-EOS
-        iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \
-        touch -m -r #{filename}{,.tmp} && \
-        mv #{filename}{.tmp,}
-      EOS
-    #else
-    # ... or require 'nkf', 'iconv'
-    end
-  end
-  touch t.name
+	require 'shell'
+	t.prerequisites.each do |f|
+		filename = File.join pkg.package_dir_path, f
+		# exclude directories and binary files
+		next if File.ftype(filename) != 'file' ||
+		package[:binary_ext].include?(File.extname(filename))
+		
+		case
+		when Shell.new.find_system_command('nkf')
+			sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
+				"touch -m -r #{filename} #{filename}.tmp && "  <<
+				"mv #{filename}.tmp #{filename}"
+		when Shell.new.find_system_command('iconv')
+			# use iconv instead of nkf in the following another way...
+			sh <<-EOS
+			iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \
+			touch -m -r #{filename}{,.tmp} && \
+ 			mv #{filename}{.tmp,}
+ 			EOS
+			#else
+			# ... or require 'nkf', 'iconv'
+		end
+	end
+	touch t.name
 end
 
 desc 'Clean package files'
 task :clean do
-  rm_rf File.join(package[:pkgdir], "#{package[:name]}-#{package[:rev]}")
+	rm_rf File.join(package[:pkgdir], "#{package[:name]}-#{package[:rev]}")
 end
-
