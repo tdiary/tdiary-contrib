@@ -1,72 +1,73 @@
-#!/usr/bin/env ruby
 $KCODE = 'e'
-require 'test/unit'
+require 'rubygems'
+gem 'rspec'
+require 'spec'
 require 'tmpdir'
 require 'fileutils'
 begin
+	$:.unshift(File.join(File.dirname(__FILE__), "..", "plugin"))
   require 'my_hotentry'
 rescue
 end
 
-class MyHotEntryTest < Test::Unit::TestCase
-  def setup
-    # @cache_path ã¯ã€Œãƒ•ã‚¡ã‚¤ãƒ«å-ãƒ—ãƒ­ã‚»ã‚¹ç•ªå·ã€
-    @cache_path = File.join(Dir.tmpdir, "#{__FILE__}-#{$$}")
-    Dir.mkdir(@cache_path)
-    @dbfile = "#{@cache_path}/my_hotentry.dat"
-  end
+describe "MyHotEntry" do
+	before do
+		# @cache_path ¤Ï¡Ö¥Õ¥¡¥¤¥ëÌ¾-¥×¥í¥»¥¹ÈÖ¹æ¡×
+		@cache_path = File.join(Dir.tmpdir, "#{__FILE__}-#{$$}")
+		Dir.mkdir(@cache_path)
+		@dbfile = "#{@cache_path}/my_hotentry.dat"
+	end
 
-  def teardown
-    FileUtils.rmtree(@cache_path)
-  end
+	after do
+		FileUtils.rmtree(@cache_path)
+	end
 
-  def test_update
-    # äººæ°—ã®æ—¥è¨˜ä¸€è¦§ã‚’å–å¾—ã™ã‚‹
-    base_url = 'http://d.hatena.ne.jp/'
-    hotentry = MyHotEntry.new(@dbfile)
-    hotentry.update(base_url)
-    # ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«ãŒç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨
-    assert(File.file?(@dbfile))
-    # äººæ°—ã®æ—¥è¨˜ãŒå–å¾—ã§ãã¦ã„ã‚‹ã“ã¨
-    entries = hotentry.entries
-    assert(entries.size > 0)
-    entries.each do |entry|
-      assert(entry[:url].include?(base_url), 'base_url ã§æŒ‡å®šã—ãŸURLãŒå«ã¾ã‚Œã¦ã„ã‚‹ã“ã¨')
-      assert(entry[:title].size > 0)
-    end
-  end
+	it "update" do
+		# ¿Íµ¤¤ÎÆüµ­°ìÍ÷¤ò¼èÆÀ¤¹¤ë
+		base_url = 'http://d.hatena.ne.jp/'
+		hotentry = MyHotEntry.new(@dbfile)
+		hotentry.update(base_url)
+		# ¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤¬À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È
+		File.file?(@dbfile).should be_true
+		# ¿Íµ¤¤ÎÆüµ­¤¬¼èÆÀ¤Ç¤­¤Æ¤¤¤ë¤³¤È
+		entries = hotentry.entries
+		entries.size.should > 0
+		entries.each do |entry|
+			entry[:url].should be_include(base_url)
+			entry[:title].size.should > 0
+		end
+	end
 
-  # ä½•åº¦ã‚‚å–å¾—ã—ã¦ã‚‚ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚µã‚¤ã‚ºãŒå¤§ãããªã‚‰ãªã„ã“ã¨
-  def test_double_update
-    base_url = 'http://d.hatena.ne.jp/'
-    hotentry = MyHotEntry.new(@dbfile)
-    sleep 0.5
-    hotentry.update(base_url)
-    assert(hotentry.entries.size > 0)
-    size = hotentry.entries.size
-    sleep 0.5
-    hotentry.update(base_url)
-    assert_equal(size, hotentry.entries.size)
-  end
+	# ²¿ÅÙ¤â¼èÆÀ¤·¤Æ¤â¥­¥ã¥Ã¥·¥å¥µ¥¤¥º¤¬Âç¤­¤¯¤Ê¤é¤Ê¤¤¤³¤È
+	it "double update" do
+		base_url = 'http://d.hatena.ne.jp/'
+		hotentry = MyHotEntry.new(@dbfile)
+		sleep 0.5
+		hotentry.update(base_url)
+		hotentry.entries.size.should > 0
+		size = hotentry.entries.size
+		sleep 0.5
+		hotentry.update(base_url)
+		hotentry.entries.size.should == size
+	end
 
-  # å–å¾—çµæžœãŒç©ºã®å ´åˆã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ã‚¯ãƒªã‚¢ã—ãªã„
-  def test_update_noentry
-    exist_url = 'http://d.hatena.ne.jp/'
-    empty_url = 'http://empty-url-123456'
-    hotentry = MyHotEntry.new(@dbfile)
+	# ¼èÆÀ·ë²Ì¤¬¶õ¤Î¾ì¹ç¤Ï¥­¥ã¥Ã¥·¥å¤ò¥¯¥ê¥¢¤·¤Ê¤¤
+	it "update noentry" do
+		exist_url = 'http://d.hatena.ne.jp/'
+		empty_url = 'http://empty-url-123456'
+		hotentry = MyHotEntry.new(@dbfile)
 
-    sleep 0.5
-    hotentry.update(empty_url)
-    assert_equal(0, hotentry.entries.size)
+		sleep 0.5
+		hotentry.update(empty_url)
+		hotentry.entries.size.should == 0
 
-    sleep 0.5
-    hotentry.update(exist_url)
-    assert(hotentry.entries.size > 0)
-    exist_size = hotentry.entries.size
+		sleep 0.5
+		hotentry.update(exist_url)
+		hotentry.entries.size.should > 0
+		exist_size = hotentry.entries.size
 
-    sleep 0.5
-    hotentry.update(empty_url)
-    assert_equal(exist_size, hotentry.entries.size)
-  end
+		sleep 0.5
+		hotentry.update(empty_url)
+		hotentry.entries.size.should == exist_size
+	end
 end
-
