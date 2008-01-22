@@ -6,7 +6,7 @@ require 'fileutils'
 
 describe "MyHotEntry" do
 	def cache_filename
-		"#{File.basename(__FILE__)}-#{$$}"
+		"#{File.basename(__FILE__, ".rb")}-#{$$}"
 	end
 	before(:each) do
 		fake_plugin(:my_hotentry)
