@@ -1,5 +1,8 @@
 # Rakefile for building tdiary-conrib package
+require 'rake'
 require 'rake/packagetask'
+require 'rake/testtask'
+require 'spec/rake/spectask'
 
 package = {
   :name         => 'tdiary-contrib',
@@ -11,27 +14,18 @@ package[:pkgdir] = File.join package[:root], 'package'
 package[:rev]    = 'r' << `svnversion --no-newline --committed #{package[:root]}`[/\d+[MS]{0,2}$/]
 package.freeze
 
+Rake::TestTask.new do |t|
+  t.libs << File.join(package[:root], 'plugin')
+  t.pattern = File.join 'test', '**', '*_test.rb'
+end
+
+Spec::Rake::SpecTask.new do |t|
+  t.spec_files = FileList[File.join('spec', '**', '*_spec.rb')]
+  t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
+end
+
 desc 'Update source and packaging'
 task :default => [:update, :package, :clean]
-
-desc 'Run all specs'
-task :spec do
-  require 'rake'
-  require 'spec/rake/spectask'
-  Spec::Rake::SpecTask.new do |t|
-    t.spec_files = FileList[File.join('spec', '**', '*_spec.rb')]
-    t.spec_opts  = ['--options', File.join('spec', 'spec.opts')]
-  end
-end
-
-desc 'Run all tests'
-task :test do
-  require 'rake/testtask'
-  Rake::TestTask.new do |t|
-    t.libs << File.join(package[:root], 'plugin')
-    t.pattern = File.join 'test', '**', '*_test.rb'
-  end
-end
 
 desc 'Update files from Subversion Repository'
 task :update do |t|
