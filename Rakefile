@@ -11,7 +11,7 @@ package[:pkgdir] = File.join package[:root], 'package'
 package[:rev]    = 'r' << `svnversion --no-newline --committed #{package[:root]}`[/\d+[MS]{0,2}$/]
 package.freeze
 
-desc 'update source and packaging'
+desc 'Update source and packaging'
 task :default => [:update, :package, :clean]
 
 desc 'Run all specs'
@@ -26,11 +26,11 @@ end
 
 desc 'Run all tests'
 task :test do
-	require 'rake/testtask'
-	Rake::TestTask.new do |t|
-		t.test_files = FileList[File.join('test', '**', '*_test.rb')]
-		t.ruby_opts << [File.join(package[:root], 'plugin')].map{|path| "-I#{path}" }.join(' ')
-	end
+  require 'rake/testtask'
+  Rake::TestTask.new do |t|
+    t.libs << File.join(package[:root], 'plugin')
+    t.pattern = File.join 'test', '**', '*_test.rb'
+  end
 end
 
 desc 'Update files from Subversion Repository'
@@ -45,7 +45,7 @@ pkg = Rake::PackageTask.new(package[:name], package[:rev]) do |p|
   p.need_tar_bz2 = false
 end
 
-desc 'convert source encoding from UTF-8 to EUC-JP'
+desc 'Convert source encoding from UTF-8 to EUC-JP'
 task :to_euc => pkg.package_dir_path
 file pkg.package_dir_path do |t|
   require 'shell'
@@ -63,7 +63,7 @@ file pkg.package_dir_path do |t|
     when Shell.new.find_system_command('iconv')
       # use iconv instead of nkf in the following another way...
       sh <<-EOS
-        iconv --from-code=utf-8 --to-code=eucJP-ms --output #{filename}{.tmp,} && \
+        iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \
         touch -m -r #{filename}{,.tmp} && \
         mv #{filename}{.tmp,}
       EOS
@@ -74,7 +74,7 @@ file pkg.package_dir_path do |t|
   touch t.name
 end
 
-desc 'clean package files'
+desc 'Clean package files'
 task :clean do
   rm_rf File.join(package[:pkgdir], "#{package[:name]}-#{package[:rev]}")
 end
