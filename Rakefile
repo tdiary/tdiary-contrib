@@ -21,7 +21,7 @@ Rake::TestTask.new do |t|
 end
 
 Spec::Rake::SpecTask.new do |t|
-	t.spec_opts  = ['-c', '--options', File.join('spec', 'spec.opts')]
+	t.spec_opts = ['--colour', '--options', File.join('spec', 'spec.opts')]
 end
 
 desc 'Update source and packaging'
@@ -56,12 +56,11 @@ file pkg.package_dir_path do |t|
 			   "mv #{filename}.tmp #{filename}"
 		when Shell.new.find_system_command('iconv')
 			# use iconv instead of nkf in the following another way...
-			script =<<-EOS
+			sh <<-EOS.gsub(/^\s+/, '')
 				iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \\
 				touch -m -r #{filename}{,.tmp} && \\
 				mv #{filename}{.tmp,}
 			EOS
-			sh script.gsub(/^\s+/, '')
 		#else
 		# ... or require 'nkf', 'iconv'
 		end
