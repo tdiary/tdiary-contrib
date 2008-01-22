@@ -26,11 +26,11 @@ end
 
 desc 'Run all tests'
 task :test do
-  test_files     = FileList[File.join('test', '**', '*_test.rb')]
-  opt_load_paths = [File.join(package[:root], 'plugin')].map{|path| "-I#{path}" }.join(' ')
-  test_files.each do |t|
-    ruby opt_load_paths, t
-  end
+	require 'rake/testtask'
+	Rake::TestTask.new do |t|
+		t.test_files = FileList[File.join('test', '**', '*_test.rb')]
+		t.ruby_opts << [File.join(package[:root], 'plugin')].map{|path| "-I#{path}" }.join(' ')
+	end
 end
 
 desc 'Update files from Subversion Repository'
