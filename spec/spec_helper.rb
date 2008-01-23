@@ -38,13 +38,18 @@ class PluginFake
 
 	class Config
 
-		attr_accessor :index, :html_title
+		attr_accessor :index, :html_title, :cgi
 
 		def initialize
+			@cgi = CGIFake.new
 			@options = {}
 			@options2 = {}
 			@index = './'
 			@html_title = ''
+
+			bot = ["bot", "spider", "antenna", "crawler", "moget", "slurp"]
+			bot += @options['bot'] || []
+			@bot = Regexp::new( "(#{bot.uniq.join( '|' )})", true )
 		end
 
 		def []( key )
@@ -68,10 +73,40 @@ class PluginFake
 			rescue
 			end
 		end
+
+		def mobile_agent?
+			@cgi.mobile_agent?
+		end
+
+		def bot?
+			@bot =~ @cgi.user_agent
+		end
+
+		def iphone?
+			@cgi.iphone?
+		end
+		alias ipod? iphone?
 	end
 end
 
-def fake_plugin( name_sym, base=nil, &block )
+class CGIFake
+	attr_accessor :user_agent
+	
+	def initialize
+		@user_agent = ""
+	end
+	
+	def mobile_agent?
+		self.user_agent =~ %r[(DoCoMo|J-PHONE|Vodafone|MOT-|UP\.Browser|DDIPOCKET|ASTEL|PDXGW|Palmscape|Xiino|sharp pda browser|Windows CE|L-mode|WILLCOM|SoftBank)]i
+	end
+
+	def iphone?
+		self.user_agent =~ /iPhone|iPod/
+	end
+end
+
+
+def fake_plugin( name_sym, cgi=nil, base=nil, &block )
 	plugin = PluginFake.new
 	yield plugin if block_given?
 
