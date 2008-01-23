@@ -30,7 +30,7 @@ describe "title_anchor plugin w/" do
 	end
 
 	def expected_html_title_in_day(options)
-		expected = "<h1><a href=\"#{options[:index]}\">#{options[:html_title]}</a></h1>"
+		expected = %{<h1><a href="#{options[:index]}">#{options[:html_title]}</a></h1>}
 	end
 
 	def expected_html_title_in_latest(options)

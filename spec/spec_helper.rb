@@ -82,7 +82,7 @@ class PluginFake
 			@bot =~ @cgi.user_agent
 		end
 	end
-	
+
 	def iphone?
 		@conf.cgi.iphone?
 	end
@@ -91,17 +91,23 @@ end
 
 class CGIFake
 	attr_accessor :user_agent
-	
+
 	def initialize
 		@user_agent = ""
 	end
-	
+
 	def mobile_agent?
-		self.user_agent =~ %r[(DoCoMo|J-PHONE|Vodafone|MOT-|UP\.Browser|DDIPOCKET|ASTEL|PDXGW|Palmscape|Xiino|sharp pda browser|Windows CE|L-mode|WILLCOM|SoftBank)]i
+		self.user_agent =~ %r[
+			^DoCoMo\/|
+			^(?:KDDI|UP\.Browser)|
+			^(?:J-(?:PHONE|EMULATOR)|Vodafone|SoftBank|MOT-|[VS]emulator)|
+			WILLCOM|DDIPOCKET|
+			PDXGW|ASTEL|Palmscape|Xiino|sharp pda browser|Windows CE|L-mode
+		]x
 	end
 
 	def iphone?
-		self.user_agent =~ /iPhone|iPod/
+		self.user_agent =~ /iP(?:hone|od)/
 	end
 end
 

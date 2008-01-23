@@ -26,7 +26,7 @@ describe "opensearch_ad plugin w/" do
 			plugin = setup_opensearch_ad_plugin('OpenSearch', 'http://example.com/opensearch.xml', 'latest')
 			@header_snippet = plugin.header_proc
 		end
-		
+
 		it { @header_snippet.should == expected_link_tag_with(
 				:title => 'OpenSearch',
 				:xml => 'http://example.com/opensearch.xml')}
@@ -37,11 +37,11 @@ describe "opensearch_ad plugin w/" do
 			plugin = setup_opensearch_ad_plugin('OpenSearch', 'http://example.com/opensearch.xml', 'edit')
 			@header_snippet = plugin.header_proc
 		end
-		
+
 		it { @header_snippet.should be_empty }
 	end
 
 	def expected_link_tag_with(options)
-		expected = "\t<link type=\"application/opensearchdescription+xml\" rel=\"search\" title=\"#{options[:title]}\" href=\"#{options[:xml]}\">"
+		expected = %{\t<link type="application/opensearchdescription+xml" rel="search" title="#{options[:title]}" href="#{options[:xml]}">}
 	end
 end

@@ -43,7 +43,7 @@ describe "account_ad plugin" do
 					:service => 'http://www.hatena.ne.jp/')}
 			
 			it { @header_snippet.should include_account_name_with(
-					:name => 'hsbt')}		
+					:name => 'hsbt')}
 		end
 	end
 
