@@ -9,13 +9,14 @@ describe "youtube plugin" do
 		@plugin = fake_plugin(:youtube)
 	end
 
-	it "should render object tag in mobile" do
+	it "should render object tag in mobile agent" do
 		@cgi.user_agent = "DoCoMo"
 		@plugin.conf.cgi = @cgi
 		snippet = @plugin.youtube(DUMMY_YOUTUBE_VIDEO_ID)
 		snippet.should == %Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>|
 	end
 
+	# ToDo: iphone? is added to @conf. it exists in unofficial code.
 	it "should render object tag in iPhone/iPod" do
 		@cgi.user_agent = "iPhone"
 		@plugin.conf.cgi = @cgi
@@ -23,7 +24,7 @@ describe "youtube plugin" do
 		snippet.should == %Q|<div class="youtube"><a href="youtube:#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>|
 	end
 
-	it "should render object tag in webbrowser" do
+	it "should render object tag" do
 		@cgi.user_agent = "Mozilla"
 		@plugin.conf.cgi = @cgi
 		snippet = @plugin.youtube(DUMMY_YOUTUBE_VIDEO_ID)
@@ -32,3 +33,4 @@ describe "youtube plugin" do
 		TAG
 	end
 end
+
