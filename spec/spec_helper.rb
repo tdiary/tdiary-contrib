@@ -98,7 +98,7 @@ class CGIFake
 
 	def mobile_agent?
 		self.user_agent =~ %r[
-			^DoCoMo\/|
+			^DoCoMo|
 			^(?:KDDI|UP\.Browser)|
 			^(?:J-(?:PHONE|EMULATOR)|Vodafone|SoftBank|MOT-|[VS]emulator)|
 			WILLCOM|DDIPOCKET|
