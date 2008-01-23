@@ -21,7 +21,10 @@ Rake::TestTask.new do |t|
 end
 
 Spec::Rake::SpecTask.new do |t|
-	t.spec_opts = ['--colour', '--options', File.join('spec', 'spec.opts')]
+	t.spec_opts << '--colour'
+	t.spec_opts << '--loadby' << 'mtime'
+	t.spec_opts << '--reverse'
+	t.spec_opts << '--options' << File.join('spec', 'spec.opts')
 end
 
 desc 'Update source and packaging'
