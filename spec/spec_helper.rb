@@ -102,7 +102,7 @@ class CGIFake
 			^(?:KDDI|UP\.Browser)|
 			^(?:J-(?:PHONE|EMULATOR)|Vodafone|SoftBank|MOT-|[VS]emulator)|
 			WILLCOM|DDIPOCKET|
-			PDXGW|ASTEL|Palmscape|Xiino|sharp pda browser|Windows CE|L-mode
+			PDXGW|ASTEL|Palmscape|Xiino|sharp\ pda\ browser|Windows\ CE|L-mode
 		]x
 	end
 
