@@ -1,7 +1,7 @@
 $:.unshift(File.dirname(__FILE__))
 require 'spec_helper'
 
-describe "title_anchor plugin w/" do
+describe "title_anchor plugin" do
 	def setup_title_anchor_plugin(mode)
 		fake_plugin(:title_anchor) { |plugin|
 			plugin.mode = mode
@@ -34,6 +34,6 @@ describe "title_anchor plugin w/" do
 	end
 
 	def expected_html_title_in_latest(options)
-		expected = "<h1>#{options[:html_title]}</h1>"
+		expected = %{<h1>#{options[:html_title]}</h1>}
 	end
 end
