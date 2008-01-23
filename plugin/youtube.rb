@@ -8,7 +8,7 @@
 def youtube( video_id )
 	if @conf.mobile_agent? then
 		%Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{video_id}">YouTube (#{video_id})</a></div>|
-	elsif defined?( iphone? ) and iphone?
+	elsif defined?( :iphone? ) and iphone?
 		%Q|<div class="youtube"><a href="youtube:#{video_id}">YouTube (#{video_id})</a></div>|
 	else
 		<<-TAG

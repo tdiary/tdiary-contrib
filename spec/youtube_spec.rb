@@ -16,7 +16,6 @@ describe "youtube plugin" do
 		snippet.should == %Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>|
 	end
 
-	# ToDo: iphone? is added to @conf. it exists in unofficial code.
 	it "should render object tag in iPhone/iPod" do
 		@cgi.user_agent = "iPhone"
 		@plugin.conf.cgi = @cgi

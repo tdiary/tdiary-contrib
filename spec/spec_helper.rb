@@ -81,12 +81,12 @@ class PluginFake
 		def bot?
 			@bot =~ @cgi.user_agent
 		end
-
-		def iphone?
-			@cgi.iphone?
-		end
-		alias ipod? iphone?
 	end
+	
+	def iphone?
+		@conf.cgi.iphone?
+	end
+	alias ipod? iphone?
 end
 
 class CGIFake
