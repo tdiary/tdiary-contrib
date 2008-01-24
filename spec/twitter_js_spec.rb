@@ -60,7 +60,7 @@ describe "twitter_js plugin" do
 	end
 
 	def expected_html_header_snippet(user_id)
-		<<-EXPECTED
+		expected = <<-EXPECTED
 		<script type="text/javascript"><!--
 		function twitter_cb(a){
 			var f=function(n){return (n<10?"0":"")+n};
@@ -88,6 +88,7 @@ describe "twitter_js plugin" do
 		}
 		// --></script>
 		EXPECTED
+		expected.gsub(/^\t/, '')
 	end
 
 	def expected_html_body_snippet
