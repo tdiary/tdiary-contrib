@@ -42,6 +42,9 @@ describe "opensearch_ad plugin w/" do
 	end
 
 	def expected_link_tag_with(options)
-		expected = %{\t<link type="application/opensearchdescription+xml" rel="search" title="#{options[:title]}" href="#{options[:xml]}">}
+		result = <<-HTML
+		<link type="application/opensearchdescription+xml" rel="search" title="#{options[:title]}" href="#{options[:xml]}">
+   	HTML
+		result.gsub( /^\t/, '' ).chomp
 	end
 end

@@ -88,11 +88,13 @@ describe "twitter_js plugin" do
 		}
 		// --></script>
 		EXPECTED
-		expected.gsub(/^\t/, '')
+		expected.gsub(/^\t/, '').chomp
 	end
 
 	def expected_html_body_snippet
-		return %|\t\t<div id="twitter_statuses_20080124" class="section"></div>|
+		expected = <<-HTML
+		<div id="twitter_statuses_20080124" class="section"></div>
+		HTML
+		expected.gsub( /^\t/, '' ).chomp
 	end
-
 end
