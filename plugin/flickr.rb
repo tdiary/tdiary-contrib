@@ -19,7 +19,7 @@
 # Distributed under the GPL
 #
 require 'open-uri'
-require 'md5'
+require 'digest/md5'
 require 'rexml/document'
 
 def flickr(photo_id, size = nil, place = 'flickr')
