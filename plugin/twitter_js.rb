@@ -2,7 +2,7 @@
 # Copyright (C) 2007 Michitaka Ohno <elpeo@mars.dti.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
-if /^(latest|day)$/ =~ @mode then
+if /^(?:latest|day)$/ =~ @mode then
 	add_header_proc do
 		result = <<-HTML
 		<script type="text/javascript"><!--
@@ -21,7 +21,7 @@ if /^(latest|day)$/ =~ @mode then
 			var e=document.createElement("script");
 			e.type="text/javascript";
 			e.src="http://twitter.com/statuses/user_timeline/#{@conf['twitter.user']}.json?callback=twitter_cb&amp;count=20";
-			document.body.appendChild(e);
+			document.documentElement.appendChild(e);
 		}
 		if(window.addEventListener){
 			window.addEventListener('load',twitter_js,false);
@@ -50,7 +50,7 @@ add_conf_proc( 'twitter_js', 'Twitter' ) do
 	end
 
 	<<-HTML
-   <h3 class="subtitle">Account Name</h3>  
+   <h3 class="subtitle">Account Name</h3>
    <p><input name="twitter.user" value="#{h @conf['twitter.user']}" /></p>
    HTML
 end

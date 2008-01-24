@@ -77,7 +77,7 @@ describe "twitter_js plugin" do
 			var e=document.createElement("script");
 			e.type="text/javascript";
 			e.src="http://twitter.com/statuses/user_timeline/#{user_id}.json?callback=twitter_cb&amp;count=20";
-			document.body.appendChild(e);
+			document.documentElement.appendChild(e);
 		}
 		if(window.addEventListener){
 			window.addEventListener('load',twitter_js,false);
