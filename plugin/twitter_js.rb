@@ -32,13 +32,14 @@ if /^(latest|day)$/ =~ @mode then
 		}
 		// --></script>
 		HTML
-		result.gsub( /^\t/, '')
+		result.gsub( /^\t/, '' )
 	end
 
 	add_body_leave_proc do |date|
-		<<-HTML
+		result = <<-HTML
 		<div id="twitter_statuses_#{date.strftime( "%Y%m%d" )}" class="section"></div>
 		HTML
+		result.gsub( /^\t/, '' )
 	end
 end
 
