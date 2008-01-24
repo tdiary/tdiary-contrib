@@ -14,6 +14,7 @@ class PluginFake
 		@date = nil
 		@header_procs = []
 		@update_procs = []
+		@body_leave_procs = []
 	end
 
 	def add_conf_proc( key, label, genre=nil, &block )
@@ -32,6 +33,18 @@ class PluginFake
 		r = []
 		@header_procs.each do |proc|
 			r << proc.call
+		end
+		r.join.chomp
+	end
+	
+	def add_body_leave_proc( block = Proc::new )
+		@body_leave_procs << block
+	end
+	
+	def body_leave_proc( date )
+		r = []
+		@body_leave_procs.each do |proc|
+			r << proc.call( date )
 		end
 		r.join.chomp
 	end
