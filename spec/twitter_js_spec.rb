@@ -3,17 +3,17 @@ require 'spec_helper'
 require 'time'
 
 describe "twitter_js plugin" do
-	def setup_twitter_js_plugin(mode)
+	def setup_twitter_js_plugin(mode, user_id)
 		fake_plugin(:twitter_js) { |plugin|
 			plugin.mode = mode
-			plugin.conf['twitter.user'] = "123456789"
+			plugin.conf['twitter.user'] = user_id
 			plugin.date = Time.parse("20080124")
 		}
 	end
 
-	describe "should render in day" do
+	describe "should render javascript and div tag in day" do
 		before do
-			@plugin = setup_twitter_js_plugin("day")
+			@plugin = setup_twitter_js_plugin("day", "123456789")
 		end
 		
 		it "for header" do
@@ -27,9 +27,9 @@ describe "twitter_js plugin" do
 		end
 	end
 
-	describe "should render in latest" do
+	describe "should render javascript and div tag in latest" do
 		before do
-			@plugin = setup_twitter_js_plugin("latest")
+			@plugin = setup_twitter_js_plugin("latest", "123456789")
 		end
 		
 		it "for header" do
@@ -43,9 +43,9 @@ describe "twitter_js plugin" do
 		end
 	end
 
-	describe "should render in edit" do
+	describe "should not render in edit" do
 		before do
-			@plugin = setup_twitter_js_plugin("edit")
+			@plugin = setup_twitter_js_plugin("edit", "123456789")
 		end
 		
 		it "for header" do
@@ -55,6 +55,22 @@ describe "twitter_js plugin" do
 		
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
+			snippet.should be_empty
+		end
+	end
+
+	describe "should not render when user_id is empty" do
+		before do
+			@plugin = setup_twitter_js_plugin("edit", "")
+		end
+		
+		it "for header" do
+			snippet = @plugin.header_proc
+			snippet.should be_empty
+		end
+		
+		it "for body leave" do
+			snippet = @plugin.body_leave_proc(Time.parse(""))
 			snippet.should be_empty
 		end
 	end
