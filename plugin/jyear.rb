@@ -17,13 +17,13 @@ unless Time::new.respond_to?( :strftime_jyear_backup ) then
 				case self.year
 					when 0 .. 1926
 						gengo = "昔々"
-						if self.year = 1926 && self.month = 12 && self.wday >=25 then
+						if self.year == 1926 && self.month == 12 && self.day >=25 then
 							gengo = "昭和元年"
 						end
 					when 1927 .. 1989
 						jyear = self.year - 1925
 						gengo = "昭和" + jyear.to_s
-						if self.year = 1989 && self.month = 1 && self.wday >= 8 then
+						if self.year == 1989 && self.month == 1 && self.day >= 8 then
 							gengo = "平成元年"
 						end
 					else
