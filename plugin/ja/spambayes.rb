@@ -6,123 +6,127 @@ class SpambayesConfig
 		module_function
 
 		def title
-			"Bayesãƒ•ã‚£ãƒ«ã‚¿"
+			"Bayes¥Õ¥£¥ë¥¿"
 		end
 
 		def check_comment
-			"ãƒ„ãƒƒã‚³ãƒŸã‚’ç¢ºèªã™ã‚‹"
+			"¥Ä¥Ã¥³¥ß¤ò³ÎÇ§¤¹¤ë"
 		end
 
 		def check_referer
-			"ãƒªãƒ³ã‚¯å…ƒã‚’ç¢ºèªã™ã‚‹"
+			"¥ê¥ó¥¯¸µ¤ò³ÎÇ§¤¹¤ë"
 		end
 
 		def token_list(type)
-			"#{type}ãƒˆãƒ¼ã‚¯ãƒ³ä¸€è¦§"
+			"#{type}¥È¡¼¥¯¥ó°ìÍ÷"
 		end
 
 		def rebuild_db
-			"ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®å†æ§‹ç¯‰"
+			"¥Ç¡¼¥¿¥Ù¡¼¥¹¤ÎºÆ¹½ÃÛ"
 		end
 
 		def use_bayes_filter
-			"Bayesãƒ•ã‚£ãƒ«ã‚¿ã‚’ä½¿ã†"
+			"Bayes¥Õ¥£¥ë¥¿¤ò»È¤¦"
 		end
 
 		def use_filter_to_referer
-			"ãƒªãƒ³ã‚¯å…ƒã«Bayesãƒ•ã‚£ãƒ«ã‚¿ã‚’ä½¿ã†"
+			"¥ê¥ó¥¯¸µ¤ËBayes¥Õ¥£¥ë¥¿¤ò»È¤¦"
 		end
 
 		def save_error_log
-			"ã‚¨ãƒ©ãƒ¼ãƒ­ã‚°ã‚’ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ä¿å­˜"
+			"¥¨¥é¡¼¥í¥°¤ò¥­¥ã¥Ã¥·¥å¥Ç¥£¥ì¥¯¥È¥ê¤ËÊİÂ¸"
 		end
 
 		def threshold
-			"é–¾å€¤"
+			"ïçÃÍ"
 		end
 
 		def receiver_addr
-			"å®›å…ˆãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹"
+			"°¸Àè¥á¡¼¥ë¥¢¥É¥ì¥¹"
 		end
 
 		def stay_ham
-			"ãƒãƒ ã®ã¾ã¾"
+			"¥Ï¥à¤Î¤Ş¤Ş"
 		end
 
 		def register_ham
-			"ãƒãƒ ã¨ã—ã¦ç™»éŒ²"
+			"¥Ï¥à¤È¤·¤ÆÅĞÏ¿"
 		end
 
 		def stay_spam
-			"ã‚¹ãƒ‘ãƒ ã®ã¾ã¾"
+			"¥¹¥Ñ¥à¤Î¤Ş¤Ş"
 		end
 
 		def register_spam
-			"ã‚¹ãƒ‘ãƒ ã¨ã—ã¦ç™»éŒ²"
+			"¥¹¥Ñ¥à¤È¤·¤ÆÅĞÏ¿"
 		end
 
 		def comment_processed
-			"ãƒ„ãƒƒã‚³ãƒŸã‚’å‡¦ç†ã—ã¾ã—ãŸ"
+			"¥Ä¥Ã¥³¥ß¤ò½èÍı¤·¤Ş¤·¤¿"
 		end
 
 		def token
-			"ãƒˆãƒ¼ã‚¯ãƒ³"
+			"¥È¡¼¥¯¥ó"
 		end
 
 		def probability(type)
-			"#{type}ç‡"
+			"#{type}Î¨"
 		end
 
 		def score_in_db(type)
-			"#{type}ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã§ã®ã‚¹ã‚³ã‚¢"
+			"#{type}¥Ç¡¼¥¿¥Ù¡¼¥¹¤Ç¤Î¥¹¥³¥¢"
 		end
 
 		def execute_after_click_OK
-			"OKã‚’æŠ¼ã™ã¨å®Ÿè¡Œã—ã¾ã™"
+			"OK¤ò²¡¤¹¤È¼Â¹Ô¤·¤Ş¤¹"
 		end
 
 		def registered_as(type)
-			"#{type}ã¨ã—ã¦ç™»éŒ²ã—ã¾ã—ãŸ"
+			"#{type}¤È¤·¤ÆÅĞÏ¿¤·¤Ş¤·¤¿"
 		end
 
 		def rebuild_db_after_click_OK
-			"OKã‚’æŠ¼ã™ã¨ã‚³ãƒ¼ãƒ‘ã‚¹ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’å†ä½œæˆã—ã¾ã™"
+			"OK¤ò²¡¤¹¤È¥³¡¼¥Ñ¥¹¤«¤é¥Ç¡¼¥¿¥Ù¡¼¥¹¤òºÆºîÀ®¤·¤Ş¤¹"
 		end
 
 		def processed_referer
-			"ãƒªãƒ³ã‚¯å…ƒã‚’å‡¦ç†ã—ã¾ã—ãŸ"
+			"¥ê¥ó¥¯¸µ¤ò½èÍı¤·¤Ş¤·¤¿"
 		end
 
 		def token_of_referer
-			"ãƒªãƒ³ã‚¯å…ƒã®ãƒˆãƒ¼ã‚¯ãƒ³"
+			"¥ê¥ó¥¯¸µ¤Î¥È¡¼¥¯¥ó"
 		end
 
 		def mail
-			"ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹"
+			"¥á¡¼¥ë¥¢¥É¥ì¥¹"
 		end
 
 		def posted_host_addr
-			"æŠ•ç¨¿ãƒ›ã‚¹ãƒˆã®IP"
+			"Åê¹Æ¥Û¥¹¥È¤ÎIP"
 		end
 
 		def name
-			"åå‰"
+			"Ì¾Á°"
 		end
 
 		def referer
-			"ãƒªãƒ³ã‚¯å…ƒ"
+			"¥ê¥ó¥¯¸µ"
 		end
 
 		def url_in_comment
-			"ã‚³ãƒ¡ãƒ³ãƒˆä¸­ã®URL"
+			"¥³¥á¥ó¥ÈÃæ¤ÎURL"
 		end
 
 		def comment_body_and_keyword
-			"ã‚³ãƒ¡ãƒ³ãƒˆæœ¬æ–‡ã¨æ¤œç´¢ãƒªãƒ³ã‚¯å…ƒã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰"
+			"¥³¥á¥ó¥ÈËÜÊ¸¤È¸¡º÷¥ê¥ó¥¯¸µ¤Î¥­¡¼¥ï¡¼¥É"
 		end
 
 		def no_token_exist
-			"(ãƒˆãƒ¼ã‚¯ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“)"
+			"(¥È¡¼¥¯¥ó¤¬¤¢¤ê¤Ş¤»¤ó)"
+		end
+
+		def spam_rate
+			"¥¹¥Ñ¥àÎ¨"
 		end
 	end
 end

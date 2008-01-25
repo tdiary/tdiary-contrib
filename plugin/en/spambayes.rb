@@ -123,5 +123,9 @@ class SpambayesConfig
 		def no_token_exist
 			"(No token exists)"
 		end
+
+		def spam_rate
+			"SPAM rate"
+		end
 	end
 end

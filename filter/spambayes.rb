@@ -213,16 +213,25 @@ module TDiary::Filter
 			end
 
 			def self.from_link(link)
-				new(CGI.unescape(link))
+				if /^(.*?)_(.*)$/=~link
+					addr = $1
+					url = $2
+					new(CGI.unescape(url), addr ? CGI.unescape(addr) : nil)
+				end
 			end
 
 			def self.from_html(html)
-				new(CGI.unescapeHTML(html))
+				if /^(.*?)_(.*)$/=~html
+					addr = $1
+					url = $2
+					new(CGI.unescapeHTML(url), addr ? CGI.unescapeHTML(addr) : nil)
+				end
 			end
 
-			attr_reader :referer
-			def initialize(referer)
+			attr_reader :referer, :remote_addr
+			def initialize(referer, remote_addr = nil)
 				@referer = referer
+				@remote_addr = remote_addr
 			end
 
 			def hash
@@ -238,11 +247,11 @@ module TDiary::Filter
 			end
 
 			def to_html
-				CGI.escapeHTML(@referer)
+				CGI.escapeHTML(@remote_addr||"") + "_" + CGI.escapeHTML(@referer)
 			end
 
 			def to_link
-				CGI.escape(@referer)
+				CGI.escape(@remote_addr||"") + "_" + CGI.escape(@referer)
 			end
 
 			def <=>(o)
@@ -257,9 +266,9 @@ module TDiary::Filter
 				if l=special?
 					m = l+"_token"
 					if respond_to?(m)
-						send(m)
+						r = send(m)
 					else
-						special_token(@@specials[l])
+						r = special_token(@@specials[l])
 					end
 				else
 					r = TokenList.new
@@ -268,9 +277,10 @@ module TDiary::Filter
 					r.add_url(base, "R")
 					r.add_message(Misc.to_native(request)) if request
 					r.add_message(Misc.to_native(anchor)) if anchor
-
-					r
 				end
+
+				r.add_host(@remote_addr, "A") if @remote_addr
+				r
 			end
 
 			def viewable_html
@@ -315,12 +325,28 @@ module TDiary::Filter
 			RE_QUERY_SEP = /[&;]|$/
 			RE_QUERY_HEAD = /\?(?:.*#{RE_QUERY_SEP})?/o
 
-			RE_GOOGLE_HOSTS = /.*\.google\.(?:co\.[a-z]{2}|com(?:\.[a-z]{2})?)/o
-			RE_GOOGLE = %r[^https?://#{RE_GOOGLE_HOSTS}/.*?#{RE_QUERY_HEAD}q=(.*?)#{RE_QUERY_SEP}]o
+			RE_GOOGLE_HOSTS = /.*\.google\.(?:(?:co\.)?[a-z]{2}|com(?:\.[a-z]{2})?)/o
+			RE_GOOGLE = %r[^https?://#{RE_GOOGLE_HOSTS}/.*#{RE_QUERY_HEAD}(?:as_)?q=(.*?)#{RE_QUERY_SEP}]o
 			special :google, RE_GOOGLE
 
-			RE_GOOGLE_CACHE = %r[^https?://72\.14\.235\.104/.*?#{RE_QUERY_HEAD}q=.*?(?:\+|\s+)(.*?)#{RE_QUERY_SEP}]o
-			special :google_cache, RE_GOOGLE_CACHE, "Google(Cache)"
+			RE_GOOGLE_IP = /209\.85\.\d{3}\.\d{1,3}|72\.14\.\d{3}\.\d{1,3}/
+			RE_GOOGLE_CACHE = %r[^https?://#{RE_GOOGLE_IP}/search#{RE_QUERY_HEAD}q=cache:[^:]+:(.*?)(?:(?:\+|\s+)(.*?))?#{RE_QUERY_SEP}]o
+			special :google_cache, RE_GOOGLE_CACHE
+			def google_cache_token
+				r = TokenList.new
+				RE_GOOGLE_CACHE =~ @referer
+				ref = "http://#{CGI.unescape($1)}"
+				words = $2
+				r.add_url(ref, "R")
+				r.add_message(Misc.to_native(words))
+			end
+
+			def google_cache_html	
+				RE_GOOGLE_CACHE =~ @referer
+				ref = "http://#{CGI.unescape($1)}"
+				words = $2
+				"Google(Cache): #{ref} #{Misc.to_native(words)}"
+			end
 
 			RE_EZ_GOOGLE = %r[^https?://ezsch\.ezweb\.ne\.jp/search/ezGoogleMain\.php#{RE_QUERY_HEAD}query=(.*?)#{RE_QUERY_SEP}]o
 			special :ez_google, RE_EZ_GOOGLE, "Google(ezweb)"
@@ -348,6 +374,12 @@ module TDiary::Filter
 
 			RE_HATENA_B = %r[^https?://b\.hatena\.ne\.jp/[^/]+/(.*?)(?:\?.*)?$]o
 			special :hatena_b, RE_HATENA_B, "Hatena::Bookmark"
+
+			RE_YAHOO = %r[^https?://.*\.yahoo\.co(?:m|\.[a-z]{2})/.*?#{RE_QUERY_HEAD}p=(.*?)#{RE_QUERY_SEP}]o
+			special :yahoo, RE_YAHOO
+
+			RE_BAIDU = %r[^https?://.*\.baidu\.jp/.*?#{RE_QUERY_HEAD}wd=(.*?)#{RE_QUERY_SEP}]o
+			special :baidu, RE_BAIDU
 		end
 
 		include Misc
@@ -433,7 +465,7 @@ EOT
 		def referer_filter(referer)
 			return true if without_filtering? || !(@conf[conf_for_referer])
 			r = true
-			referer = Referer.new(referer)
+			referer = Referer.new(referer, ENV["REMOTE_ADDR"])
 			token = referer.token
 			e = bayes_filter.estimate(token)
 			case

@@ -83,7 +83,7 @@ module Bayes
 				push(host, prefix)
 
 				h = host
-				while /^(.*?)[\.\-](.*)$/=~h
+				while /^(.*?)[\.\-_](.*)$/=~h
 					h = $2
 					push($1, prefix)
 					push(h, prefix)
@@ -103,7 +103,7 @@ module Bayes
 					push(path, prefix)
 
 					p = path
-					re = %r[^(.*)[/\-\.](.*?)$]
+					re = %r[^(.*)[/\-\._](.*?)$]
 					while re=~p
 						p = $1
 						push($2, prefix)

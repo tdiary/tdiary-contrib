@@ -149,13 +149,33 @@ class SpambayesConfig
 EOT
 	end
 
-	def show_comment(data, anchor=false)
-		<<EOT
-#{"<a href='#{update_url}?edit=true;year=#{data.diary_date.year};month=#{data.diary_date.month};day=#{data.diary_date.day}'>" if anchor}
+	def show_comment(data, name=nil, checked=nil)
+		r = <<EOT
+<a href='#{update_url}?edit=true;year=#{data.diary_date.year};month=#{data.diary_date.month};day=#{data.diary_date.day}'>
 <span>#{data.name}(#{data.mail}) / #{data.date}</span>
-#{"</a>" if anchor}
+</a>
 <pre>#{CGI.escapeHTML(data.body)}</pre>
 EOT
+		rate = bayes_filter.estimate(data.token)
+		r << "#{Res.spam_rate} : #{rate}" if rate
+		if name
+			sc = hc = ""
+			case checked
+			when :ham
+				hc = "checked='checked'"
+			when :spam
+				sc = "checked='checked'"
+			end
+			r << <<EOT
+<br>
+<input type='radio' name='#{name}' value='ham' id='H#{name}' #{hc}>
+<label for='H#{name}'>#{Res.stay_ham}</label><br>
+<input type='radio' name='#{name}' value='spam' id='S#{name}' #{sc}>
+<label for='S#{name}'>#{Res.register_spam}</label><br>
+<a href='#{update_url}?conf=spambayes;sb_mode=show_comment_token;comment_id=#{name}'>token</a>
+EOT
+		end
+		r
 	end
 
 	def show_all_comment
@@ -166,38 +186,17 @@ EOT
 		r << "<h2>HAM</h2><ul>"
 		ham_list.each do |f|
 			data = Comment.load(data_file(f))
-			r << <<EOT
-<li>
-#{show_comment(data, true)}
-<input type='radio' name='#{f}' value='ham' checked='checked'>#{Res.stay_ham}<br>
-<input type='radio' name='#{f}' value='spam'>#{Res.register_spam}<br>
-<a href='#{update_url}?conf=spambayes;sb_mode=show_comment_token;comment_id=#{f}'>token</a>
-</li>
-EOT
+			r << "<li>\n#{show_comment(data, f, :ham)}\n</li>\n"
 		end
 		r << "</ul><h2>DOUBT</h2><ul>"
 		doubt_list.each do |f|
 			data = Comment.load(data_file(f))
-			r << <<EOT
-<li>
-#{show_comment(data)}
-<input type='radio' name='#{f}' value='ham'>#{Res.register_ham}<br>
-<input type='radio' name='#{f}' value='spam'>#{Res.register_spam}<br>
-<a href='#{update_url}?conf=spambayes;sb_mode=show_comment_token;comment_id=#{f}'>token</a>
-</li>
-EOT
+			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
 		end
 		r << "</ul><h2>SPAM</h2><ul>"
 		spam_list.each do |f|
 			data = Comment.load(data_file(f))
-			r << <<EOT
-<li>
-#{show_comment(data)}
-<input type='radio' name='#{f}' value='ham'>#{Res.register_ham}<br>
-<input type='radio' name='#{f}' value='spam' checked='chedked'>#{Res.stay_spam}</br>
-<a href='#{update_url}?conf=spambayes;sb_mode=show_comment_token;comment_id=#{f}'>token</a>
-</li>
-EOT
+			r << "<li>\n#{show_comment(data, f, :spam)}\n</li>\n"
 		end
 		r << "</ul>"
 		r << "<input type='hidden' name='conf' value='spambayes'>"
@@ -433,17 +432,17 @@ EOT
 	end
 
 	def show_referer_list(referer_list, type, ham_label, spam_label)
-		c = "checked='checked'"
-		checked = Hash.new("")
-		checked[type] = "checked='checked'"
 		h = "r"+type[0, 1]
 
 		r = "<h3>#{type.upcase}</h3>\n"
 		r << "<ul>\n"
 		referer_list.uniq.sort.each do |l|
 			r << "<li>#{l.viewable_html}<br>\n"
-			r << "<input type='radio' name='#{h}#{l.to_html}' value='ham' #{checked["ham"]}>#{ham_label}<br>\n"
-			r << "<input type='radio' name='#{h}#{l.to_html}' value='spam' #{checked["spam"]}>#{spam_label}<br>\n"
+			r << "from #{l.remote_addr}<br>\n"
+			rate = bayes_filter.estimate(l.token)
+			r << "#{Res.spam_rate} : #{rate}<br>\n" if rate
+			r << "<input type='radio' name='#{h}#{l.to_html}' id='H#{h}#{l.to_html}' value='ham'><label for='H#{h}#{l.to_html}'>#{ham_label}</label><br>\n"
+			r << "<input type='radio' name='#{h}#{l.to_html}' id='S#{h}#{l.to_html}' value='spam'><label for='S#{h}#{l.to_html}'>#{spam_label}</label><br>\n"
 			r << "<a href='#{update_url}?conf=spambayes;sb_mode=show_referer_token;referer=#{l.to_link}'>token</a>"
 			r << "</li>"
 		end
@@ -508,6 +507,7 @@ EOT
 
 	def show_referer_token
 		ref = Referer.from_html(@cgi.params["referer"][0]||"")
-		show_token_list(ref.token)
+		url = CGI.escapeHTML(ref.referer)
+		"<a href='#{url}'>#{url}</a>"+show_token_list(ref.token)
 	end
 end
