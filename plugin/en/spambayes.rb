@@ -125,7 +125,7 @@ class SpambayesConfig
 		end
 
 		def spam_rate
-			"rate of spam"
+			"Rate of spam"
 		end
 	end
 end
