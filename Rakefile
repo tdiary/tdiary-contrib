@@ -20,9 +20,27 @@ Rake::TestTask.new do |t|
 	t.pattern = File.join 'test', '**', '*_test.rb'
 end
 
-Spec::Rake::SpecTask.new do |t|
+Spec::Rake::SpecTask.new(:spec) do |t|
 	t.spec_opts << '--colour'
 	t.spec_opts << '--options' << File.join('spec', 'spec.opts')
+end
+
+namespace :spec do
+	desc "Run all specs with RCov"
+	Spec::Rake::SpecTask.new(:rcov) do |t|
+		t.spec_opts << '--colour'
+		t.spec_opts << '--options' << File.join('spec', 'spec.opts')
+		t.rcov = true
+		t.rcov_opts = lambda do
+			IO.readlines(File.join('spec', 'rcov.opts')).map {|l| l.chomp.split " "}.flatten
+		end
+	end
+		
+	namespace :rcov do
+		task :clean do
+			rm_rf "coverage"
+		end
+	end
 end
 
 desc 'Update source and packaging'
