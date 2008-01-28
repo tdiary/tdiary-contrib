@@ -2,6 +2,7 @@
 # You can redistribute it and/or modify it under GPL2. 
 
 require "pstore"
+require "uri"
 
 module Bayes
 	module CHARSET
@@ -83,7 +84,7 @@ module Bayes
 				push(host, prefix)
 
 				h = host
-				while /^(.*?)[\.\-_](.*)$/=~h
+				while /^(.*?)[._-](.*)$/=~h
 					h = $2
 					push($1, prefix)
 					push(h, prefix)
@@ -93,9 +94,10 @@ module Bayes
 		end
 
 		def add_url(url, prefix=nil)
-			if %r[^(?:https?|ftp)://(.*?)(?::\d+)?/(.*?)\/?(\?.*)?$] =~ url
-				host = $1
-				path = $2
+			if URI.regexp(%w[http https ftp]) === url
+				url  = URI.parse url
+				host = url.host                       # $4
+				path = url.path.gsub(%r{^/+|/+$}, '') # $7
 
 				add_host(host, prefix)
 
@@ -103,7 +105,7 @@ module Bayes
 					push(path, prefix)
 
 					p = path
-					re = %r[^(.*)[/\-\._](.*?)$]
+					re = %r[^(.*)[/._-](.*?)$]
 					while re=~p
 						p = $1
 						push($2, prefix)
