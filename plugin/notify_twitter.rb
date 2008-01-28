@@ -20,10 +20,10 @@ module Twitter
 			Net::HTTP.version_1_2
 			req = Net::HTTP::Post.new(PATH)
 			req.basic_auth(@user, @pass)
-			req.body = 'status=' + URI.encode(status, /./n)
+			req.body = 'status=' + URI.encode(status, /[^-.!~*'()\w]/n)
 
 			Net::HTTP.start(URL, 80) {|http|
-  					res = http.request(req)
+					res = http.request(req)
 			}
 		end
 	end
@@ -41,7 +41,9 @@ def notify_twitter
 	blogtitle = @conf.html_title
 	url = @conf.base_url + anchor(date)
 
-	status = "[blog update] #{blogtitle} : #{sectitles} #{url}"
+	format = @conf['twitter.notify.format'] || '%s%s : %s %s'
+	prefix = @conf['twitter.notify.prefix'] || '[blog update] ' # '[diary update] '
+	status = format % [prefix, blogtitle, sectitles, url]
 	#STDERR.puts status
 
 	user = @conf['twitter.user']
@@ -61,7 +63,7 @@ add_edit_proc do
 	end
 	<<-HTML
 	<div class="notify_twitter">
-	<input type="checkbox" name="notify_twitter" value="true"#{checked} tabindex="400" />
+	<input type="checkbox" name="notify_twitter" value="true"#{checked} tabindex="400">
 	Post the update to Twitter
 	</div>
 	HTML
