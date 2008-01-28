@@ -2,6 +2,7 @@
 # You can redistribute it and/or modify it under GPL2. 
 
 require "bayes"
+require "uri"
 
 module TDiary::Filter
 	class SpambayesFilter < Filter
@@ -116,7 +117,17 @@ module TDiary::Filter
 				if /^https?:\/\// =~ (path||"")
 					path
 				else
-					"#{@conf.base_url[/^(.*?)\/?$/, 1]}/#{path||""}"
+					@conf.base_url.sub(/\/*$/, '/') + (path||'')
+				end
+			end
+
+			def url2(path=nil)
+				if path && URI.parse(path).absolute?
+					path
+				else
+					base = URI.parse @conf.base_url
+					base.path = base.path.sub(%r{/*$}, '/') + (path || '')
+					base.to_s
 				end
 			end
 
@@ -149,14 +160,13 @@ module TDiary::Filter
 				@body = comment.body || ""
 				@remote_addr = cgi.remote_addr || ""
 				d = cgi.params['date'][0] || Time.now.strftime("%Y%m%d")
-				@diary_date = Time::local(*d.scan(/^(\d{4})(\d\d)(\d\d)$/)[0]) + 12*60*60
+				@diary_date = Time::local(*d.scan(/^(\d{4})(\d{2})(\d{2})$/)[0]) + 12*60*60
 			end
 
 			def digest
 				Digest::MD5.hexdigest([@name, @date, @mail, @body, @remote_addr, @diary_date].join)
 			end
 
-			RE_URL = %r[(?:https?|ftp)://[a-zA-Z0-9;/?:@&=+$,\-_.!~*\'()%]+]
 			def token
 				r = TokenList.new
 
@@ -167,9 +177,8 @@ module TDiary::Filter
 				end
 				r.add_mail_addr(@mail, "M")
 				b = @body.dup
-				b.gsub!(RE_URL) do |m|
-					r.add_url(m, "U")
-					""
+				URI.extract(b, %w[http https ftp]) do |url|
+					r.add_url(url, "U")
 				end
 				r.add_message(b)
 				r.add_host(@remote_addr, "A")
@@ -259,7 +268,17 @@ module TDiary::Filter
 			end
 
 			def split_url
-				base, request, anchor = @referer.scan(/^(.*?)(?:\?(.*?)(?:\#(.*))?)?$/)[0]
+				begin
+					url = URI.parse(@referer)
+					query    = url.query
+					fragment = url.fragment
+					url.query    = nil
+					url.fragment = nil
+					base = url.to_s
+				rescue
+					base, query, fragment = @referer.scan(/^(.*?)(?:\?([^#]*?)(?:#(.*))?)?$/)[0]
+				end
+				[base, query, fragment]
 			end
 
 			def token
@@ -341,7 +360,7 @@ module TDiary::Filter
 				r.add_message(Misc.to_native(words))
 			end
 
-			def google_cache_html	
+			def google_cache_html
 				RE_GOOGLE_CACHE =~ @referer
 				ref = "http://#{CGI.unescape($1)}"
 				words = $2
