@@ -40,13 +40,13 @@ class MyHotEntry
     # RSSを取得
     rss = nil
     rss_url = 'http://b.hatena.ne.jp/entrylist?mode=rss&url='
-    rss_url << URI.escape(base_url, /[^a-zA-Z._~]/n)
+    rss_url << URI.escape(base_url, /[^-.!~*'()\w]/n)
     rss_url << "&sort=#{options[:sort]}&threshold=#{options[:threshold]}"
     begin
       timeout(5) do
         # convert Tempfile to String because REXML can't accept Tempfile
         open(rss_url) do |f|
-          rss = REXML::Document.new(f.readlines.join("\n")) 
+          rss = REXML::Document.new(f.readlines.join("\n"))
         end
       end
     rescue TimeoutError => e
