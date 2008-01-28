@@ -3,6 +3,7 @@
 #
 
 require 'resolv'
+require 'uri'
 
 module TDiary
   module Filter
@@ -17,8 +18,9 @@ module TDiary
       end
 
       def black_url?( body )
-        body.scan( %r|http://([^/]+)/| ) do |s|
-          return true if black_domain?( s[0] )
+        URI.extract( body, %w[http] ) do |url|
+          domain = URI.parse( url ).host.sub( /\.$/, '' )
+          return true if black_domain?( domain )
         end
         false
       end
