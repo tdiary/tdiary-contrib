@@ -136,7 +136,7 @@ def parse_sbm_yaml(file, date, index)
 
 	r = " | "
 	unless config.nil? then
-		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}")>|
+		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
 		r << %Q|title="#{config["title"]}" |
 		r << %Q|alt="#{config["title"]}" />|
