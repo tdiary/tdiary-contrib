@@ -36,6 +36,8 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 			['http://pip.verisignlabs.com/server', 'http://<ID>.pip.verisignlabs.com/'],
 			['http://pip.verisignlabs.com/server', 'http://<ID>.pip.verisignlabs.com/'],
 			'http://pip.verisignlabs.com/user/<ID>/yadisxrds'),
+		'Yahoo! Japan' => @openid_config.new(
+			['https://open.login.yahooapis.jp/openid/op/auth', 'https://me.yahoo.co.jp/a/<ID>']),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then

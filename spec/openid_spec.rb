@@ -149,6 +149,22 @@ describe "openid plugin w/" do
 				:href => "http://tdtds.myopenid.com")}
 	end
 
+	describe "Yahoo! Japan" do
+		before do
+			plugin = setup_open_id_plugin('Yahoo! Japan', 'tdtds')
+			@header_snippet = plugin.header_proc
+		end
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => 'openid.server',
+				:href => 'https://open.login.yahooapis.jp/openid/op/auth')}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => 'openid.delegate',
+				:href => 'https://me.yahoo.co.jp/a/tdtds')}
+	end
+
+
 	def include_link_tag_with(options)
 		msg = "include #{options[:rel]} link tag"
 		expected = %|<link rel="#{options[:rel]}" href="#{options[:href]}">|
