@@ -83,7 +83,7 @@ def add_delicious_json(date, index)
 	count = 0
 
 	r = " | "
-	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
+	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
 
 	begin
 		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
