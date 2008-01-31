@@ -39,11 +39,11 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 		'Yahoo! Japan' => @openid_config.new(
 			nil,
 			['https://open.login.yahooapis.jp/openid/op/auth', 'https://me.yahoo.co.jp/a/<ID>'],
-			nil),
+			'http://open.login.yahoo.co.jp/openid20/www.yahoo.co.jp/xrds'),
 		'Yahoo!' => @openid_config.new(
 			nil,
 			['https://open.login.yahooapis.com/openid/op/auth', 'https://me.yahoo.com/a/<ID>'],
-			nil),
+			'http://open.login.yahooapis.com/openid20/www.yahoo.com/xrds'),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
