@@ -37,14 +37,21 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 			['http://pip.verisignlabs.com/server', 'http://<ID>.pip.verisignlabs.com/'],
 			'http://pip.verisignlabs.com/user/<ID>/yadisxrds'),
 		'Yahoo! Japan' => @openid_config.new(
-			['https://open.login.yahooapis.jp/openid/op/auth', 'https://me.yahoo.co.jp/a/<ID>']),
+			nil,
+			['https://open.login.yahooapis.jp/openid/op/auth', 'https://me.yahoo.co.jp/a/<ID>'],
+			nil),
+		'Yahoo!' => @openid_config.new(
+			nil,
+			['https://open.login.yahooapis.com/openid/op/auth', 'https://me.yahoo.com/a/<ID>'],
+			nil),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
 		openid_service = @openid_list[@conf['openid.service']]
 		openid_id = @conf['openid.id']
+		result = ''
 		add_header_proc do
-			result = <<-HTML
+			result = <<-HTML if openid_service.openid
 			<link rel="openid.server" href="#{h openid_service.openid[0]}">
 			<link rel="openid.delegate" href="#{h openid_service.openid[1].sub( /<ID>/, openid_id )}">
 			HTML

@@ -149,6 +149,50 @@ describe "openid plugin w/" do
 				:href => "http://tdtds.myopenid.com")}
 	end
 
+	describe "claimID.com" do
+		before do
+			@plugin = setup_open_id_plugin('claimID.com', 'tdtds')
+			@header_snippet = @plugin.header_proc
+		end
+
+		it { @header_snippet.should include_xrds_meta_tag_with(
+				:content => "http://claimid.com/tdtds/xrds")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid.server",
+				:href => "http://openid.claimid.com/server")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid.delegate",
+				:href => "http://openid.claimid.com/tdtds")}
+	end
+
+	describe "Personal Identity Provider (PIP)" do
+		before do
+			@plugin = setup_open_id_plugin('Personal Identity Provider (PIP)', 'tdtds')
+			@header_snippet = @plugin.header_proc
+		end
+
+		it { @header_snippet.should include_xrds_meta_tag_with(
+				:content => "http://pip.verisignlabs.com/user/tdtds/yadisxrds")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid.server",
+				:href => "http://pip.verisignlabs.com/server")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid.delegate",
+				:href => "http://tdtds.pip.verisignlabs.com/")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid2.provider",
+				:href => "http://pip.verisignlabs.com/server")}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => "openid2.local_id",
+				:href => "http://tdtds.pip.verisignlabs.com/")}
+	end
+
 	describe "Yahoo! Japan" do
 		before do
 			plugin = setup_open_id_plugin('Yahoo! Japan', 'tdtds')
@@ -156,14 +200,28 @@ describe "openid plugin w/" do
 		end
 
 		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.server',
+				:rel => 'openid2.provider',
 				:href => 'https://open.login.yahooapis.jp/openid/op/auth')}
 
 		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.delegate',
+				:rel => 'openid2.local_id',
 				:href => 'https://me.yahoo.co.jp/a/tdtds')}
 	end
 
+	describe "Yahoo!" do
+		before do
+			plugin = setup_open_id_plugin('Yahoo!', 'tdtds')
+			@header_snippet = plugin.header_proc
+		end
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => 'openid2.provider',
+				:href => 'https://open.login.yahooapis.com/openid/op/auth')}
+
+		it { @header_snippet.should include_link_tag_with(
+				:rel => 'openid2.local_id',
+				:href => 'https://me.yahoo.com/a/tdtds')}
+	end
 
 	def include_link_tag_with(options)
 		msg = "include #{options[:rel]} link tag"
