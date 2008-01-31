@@ -206,6 +206,13 @@ describe "openid plugin w/" do
 		it { @header_snippet.should include_link_tag_with(
 				:rel => 'openid2.local_id',
 				:href => 'https://me.yahoo.co.jp/a/tdtds')}
+
+		it { @header_snippet.should_not include_link_tag_with(
+				:rel => "openid.server")}
+
+		it { @header_snippet.should_not include_link_tag_with(
+				:rel => "openid.delegate")}
+
 	end
 
 	describe "Yahoo!" do
@@ -221,13 +228,20 @@ describe "openid plugin w/" do
 		it { @header_snippet.should include_link_tag_with(
 				:rel => 'openid2.local_id',
 				:href => 'https://me.yahoo.com/a/tdtds')}
+
+		it { @header_snippet.should_not include_link_tag_with(
+				:rel => "openid.server")}
+
+		it { @header_snippet.should_not include_link_tag_with(
+				:rel => "openid.delegate")}
 	end
 
 	def include_link_tag_with(options)
 		msg = "include #{options[:rel]} link tag"
-		expected = %|<link rel="#{options[:rel]}" href="#{options[:href]}">|
+		expected = %|<link rel="#{options[:rel]}"| if options[:rel]
+		expected <<= %| href="#{options[:href]}">| if options[:href]
 			Spec::Matchers::SimpleMatcher.new(msg) do |actual|
-			actual.include?(expected)
+			actual.include? expected
 		end
 	end
 
@@ -237,7 +251,7 @@ describe "openid plugin w/" do
 <meta http-equiv="X-XRDS-Location" content="#{options[:content]}">
       EOS
 		Spec::Matchers::SimpleMatcher.new(msg) do |actual|
-				actual.include?(expected)
+				actual.include?( expected )
 		end
 	end
 
