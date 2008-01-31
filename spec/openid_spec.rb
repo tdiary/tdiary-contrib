@@ -241,7 +241,7 @@ describe "openid plugin w/" do
 		expected = %|<link rel="#{options[:rel]}"| if options[:rel]
 		expected <<= %| href="#{options[:href]}">| if options[:href]
 			Spec::Matchers::SimpleMatcher.new(msg) do |actual|
-			actual.include? expected
+			actual.include?( expected )
 		end
 	end
 
