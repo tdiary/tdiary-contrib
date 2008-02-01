@@ -1,6 +1,6 @@
 #
-# key.rb: Comment-key filter  Ver.0.5.0
-#  included TDiary::Filter::KeyFilter class
+# comment_key.rb: Comment-key filter  Ver.0.5.0
+#  included TDiary::Filter::CommentKeyFilter class
 #
 # caution:
 #   * This filter must use together plugin 'comment_key.rb'.
@@ -17,7 +17,7 @@ module TDiary
 		class CommentKeyFilter < Filter
 			def comment_filter( diary, comment )
 				return true unless @conf['comment_key.enable']
-				return true if /^(TrackBack|Pingback)$/ =~ comment.name
+				return true if /^(?:TrackBack|Pingback)$/ =~ comment.name
 
 				require 'digest/md5'
 				keyprefix = @conf['comment_key.prefix'] || 'tdiary'

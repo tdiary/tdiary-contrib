@@ -5,7 +5,7 @@
 #   * add "comment_key" key in comment form.
 #
 # caution:
-#   * This plugin must use together filter 'key.rb'.
+#   * This plugin must use together filter 'comment_key.rb'.
 #
 # see:
 #   http://www20.big.or.jp/~rin_ne/soft/tdiary/commentkey.htm
@@ -31,7 +31,7 @@ def comment_key( label )
 	require 'digest/md5'
 	keyprefix = @conf['comment_key.prefix'] || 'tdiary'
 	vkey = Digest::MD5.hexdigest(keyprefix + (@conf['comment_key.nodate'] == 'true' ? "" : @date.strftime( '%Y%m%d' )))
-	%Q!<input type="hidden" name="comment_key" value="#{vkey}">\n! + label
+	%Q!<input type="hidden" name="comment_key" value="#{vkey}">\n#{label}!
 end
 
 # configuration
