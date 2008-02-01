@@ -1,5 +1,5 @@
 #
-# antirefspamfilter.rb
+# antirefspam.rb
 #
 # Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -35,7 +35,7 @@ module TDiary
 
         # str にトップページURLが含まれているかどうか
         unless @conf.index_page.empty?
-          if /\Ahttps?:\/\// =~ @conf.index_page
+          if @conf.index_page.index(URI.regexp(%w[http https])) == 0
             if str.include? @conf.index_page
               return true
             end
@@ -47,9 +47,10 @@ module TDiary
           if str.include? myurl
             return true
           end
-          
-          url = myurl.gsub("/", "\\/").gsub(":", "\\:")
-          exp = Regexp.new(url)
+
+          #url = myurl.gsub("/", "\\/").gsub(":", "\\:")
+          #exp = Regexp.new(url)
+          exp = Regexp.union(myurl)
           if exp =~ str
             return true
           end
@@ -75,18 +76,19 @@ module TDiary
 
         # "信頼できるURL" を１つずつ取り出してrefererと合致するかチェックする
         conf_trustedurl.each_line do |trusted|
-          trusted.sub!(/\r?\n/,'')
+          trusted.sub!(/\r?\n|\r/,'')
           next if trusted =~ /\A(\#|\s*)\z/  # #または空白で始まる行は読み飛ばす
-          
+
           # まずは "信頼できる URL" が referer に含まれるかどうか
           if referer.include? trusted
             debug_out("trusted", trusted+" (include?) "+referer)
             return true
           end
-          
+
           # 含まれなかった場合は "信頼できる URL" を正規表現とみなして再チェック
           begin
-            if referer =~ Regexp.new( trusted.gsub("/", "\\/").gsub(":", "\\:") )
+            #if referer =~ Regexp.new( trusted.gsub("/", "\\/").gsub(":", "\\:") )
+            if referer =~ Regexp.union( trusted )
               debug_out("trusted", trusted+" (=~) "+referer)
               return true
             end
@@ -236,7 +238,7 @@ module TDiary
         if @conf['antirefspam.comment_ngwords'] != nil
           ngwords = @conf['antirefspam.comment_ngwords']
           ngwords.to_s.each_line do |ngword|
-            ngword.sub!(/\r?\n/,'')
+            ngword.sub!(/\r?\n|\r/,'')
             if comment.body.downcase.include? ngword.downcase
               log_spamcomment( comment )
               return false
