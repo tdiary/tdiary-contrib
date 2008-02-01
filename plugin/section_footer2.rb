@@ -8,7 +8,7 @@ require 'digest/md5'
 require 'open-uri'
 require 'timeout'
 require 'yaml'
-require "pathname"
+require 'pathname'
 
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
@@ -30,7 +30,7 @@ alias subtitle_link_original subtitle_link
 def subtitle_link( date, index, subtitle )
 	s = ''
 	if subtitle then
-		s = subtitle.sub( /^(\[([^\[]+?)\])+/ ) do
+		s = subtitle.sub( /^(?:\[[^\[]+?\])+/ ) do
 			$&.scan( /\[(.*?)\]/ ) do |tag|
 				@category_to_tag_list[tag] = false # false when diary
 			end
@@ -56,7 +56,7 @@ add_section_leave_proc do |date, index|
 			end
 		end
 
-		# 「このエントリを含む del.icio.us(json API)」
+		# 「このエントリの del.icio.us history (JSON API)」
 		r << add_delicious_json(date, index)
 
 		# SBM アイコンの追加
@@ -74,16 +74,14 @@ end
 
 def add_delicious_json(date, index)
 	require 'json'
-	
+
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 	cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
 	file_name = "#{cache_dir}/#{url_md5}.json"
 	cache_time = 8 * 60 * 60  # 8 hour
 	update = false
 	count = 0
-
-	r = " | "
-	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="このエントリを含む del.icio.us" title="このエントリを含む del.icio.us">|
+	r = ''
 
 	begin
 		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
@@ -99,7 +97,7 @@ def add_delicious_json(date, index)
 		if cached_time.nil? or update
 			begin
 				timeout(10) do
-					open( 'http://badges.del.icio.us/feeds/json/url/data?hash=' + url_md5 ) do |file|
+					open( "http://badges.del.icio.us/feeds/json/url/data?hash=#{url_md5}" ) do |file|
 						File::open( file_name, 'wb' ) do |f|
 							f.write( file.read )
 						end
@@ -114,7 +112,7 @@ def add_delicious_json(date, index)
 
 	begin
 		File::open( file_name ) do |f|
-				data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
+			data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
 			unless data[0].nil?
 				count = data[0]["total_posts"].to_i
 			end
@@ -123,19 +121,21 @@ def add_delicious_json(date, index)
 	end
 
 	if count > 0
-		r << %Q| #{count} users|
+		r << ' | '
+		r << %Q{<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="このエントリの del.icio.us history" title="このエントリの del.icio.us history"> #{count} user}
+		r << 's' if count > 1
+		r << '</a>'
 	end
 
-	r << %Q|</a>|
-	
 	return r
 end
 
 def parse_sbm_yaml(file, date, index)
 	config = YAML.load(Pathname.new(file).expand_path.read)
 
-	r = " | "
+	r = ""
 	unless config.nil? then
+		r << ' | '
 		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
 		r << %Q|title="#{config["title"]}" |
@@ -143,7 +143,7 @@ def parse_sbm_yaml(file, date, index)
 		unless config["counter"].nil? then
 			r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;" />|
 		end
-		r << %Q|</a>|
+		r << '</a>'
 	end
 
 	return r
