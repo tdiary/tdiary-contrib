@@ -11,28 +11,17 @@ require 'socket'
 module TDiary
   module Filter
     class RblcheckFilter < Filter
-      def referer_filter( referer )
-        a,b,c,d = @cgi.remote_addr.split(/\./)
+      alias :_filter :referer_filter
+      alias :_filter :comment_filter
+
+      private
+
+      def _filter( *args )
+        rev_addr = @cgi.remote_addr.split(".").reverse.join(".")
         @conf['rblcheck.list'].each {|rbl|
-          addr = "#{d}.#{c}.#{b}.#{a}.#{rbl}"
+          addr = "#{rev_addr}.#{rbl}"
           begin
-            host = Socket.getaddrinfo(addr,"http")[0][3]
-            case host
-            when "127.0.0.2"
-              return false
-            end
-          rescue SocketError
-          end
-        }
-        true
-      end
-      
-      def comment_filter( diary, comment )
-        a,b,c,d = @cgi.remote_addr.split(/\./)
-        @conf['rblcheck.list'].each {|rbl|
-          addr = "#{d}.#{c}.#{b}.#{a}.#{rbl}"
-          begin
-            host = Socket.getaddrinfo(addr,"http")[0][3]
+            host = Socket.getaddrinfo(addr, "http")[0][3]
             case host
             when "127.0.0.2"
               return false
