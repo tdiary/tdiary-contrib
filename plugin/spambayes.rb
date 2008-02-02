@@ -292,19 +292,19 @@ EOT
 		tl = {}
 		token_list.uniq.each do |t|
 			k = case t
-				 when /^A (.*)/
-					 :addr
-				 when /^M (.*)/
-					 :mail
-				 when /^N (.*)/
-					 :name
-				 when /^R (.*)/
-					 :referer
-				 when /^U (.*)/
-					 :url
-				 else
-					 :body
-				 end
+			    when /^A (.*)/
+			       :addr
+			    when /^M (.*)/
+			       :mail
+			    when /^N (.*)/
+			       :name
+			    when /^R (.*)/
+			       :referer
+			    when /^U (.*)/
+			       :url
+			    else
+			       :body
+			    end
 
 			tl[k] ||= []
 			tl[k] << ($1 ? $1 : t)
