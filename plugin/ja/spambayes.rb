@@ -45,16 +45,8 @@ class SpambayesConfig
 			"宛先メールアドレス"
 		end
 
-		def stay_ham
-			"ハムのまま"
-		end
-
 		def register_ham
 			"ハムとして登録"
-		end
-
-		def stay_spam
-			"スパムのまま"
 		end
 
 		def register_spam

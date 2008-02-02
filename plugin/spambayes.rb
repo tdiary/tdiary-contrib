@@ -149,7 +149,7 @@ class SpambayesConfig
 EOT
 	end
 
-	def show_comment(data, name=nil, checked=nil)
+	def show_comment(data, name=nil)
 		r = <<EOT
 <a href='#{update_url}?edit=true;year=#{data.diary_date.year};month=#{data.diary_date.month};day=#{data.diary_date.day}'>
 <span>#{data.name}(#{data.mail}) / #{data.date}</span>
@@ -159,18 +159,12 @@ EOT
 		rate = bayes_filter.estimate(data.token)
 		r << "#{Res.spam_rate} : #{rate}" if rate
 		if name
-			sc = hc = ""
-			case checked
-			when :ham
-				hc = "checked='checked'"
-			when :spam
-				sc = "checked='checked'"
-			end
 			r << <<EOT
+<input type='hidden' name='process_#{name}' value='1'>
 <br>
-<input type='radio' name='#{name}' value='ham' id='H#{name}' #{hc}>
-<label for='H#{name}'>#{Res.stay_ham}</label><br>
-<input type='radio' name='#{name}' value='spam' id='S#{name}' #{sc}>
+<input type='radio' name='#{name}' value='ham' id='H#{name}'>
+<label for='H#{name}'>#{Res.register_ham}</label><br>
+<input type='radio' name='#{name}' value='spam' id='S#{name}'>
 <label for='S#{name}'>#{Res.register_spam}</label><br>
 <a href='#{update_url}?conf=spambayes;sb_mode=show_comment_token;comment_id=#{name}'>token</a>
 EOT
@@ -186,7 +180,7 @@ EOT
 		r << "<h2>HAM</h2><ul>"
 		ham_list.each do |f|
 			data = Comment.load(data_file(f))
-			r << "<li>\n#{show_comment(data, f, :ham)}\n</li>\n"
+			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
 		end
 		r << "</ul><h2>DOUBT</h2><ul>"
 		doubt_list.each do |f|
@@ -196,7 +190,7 @@ EOT
 		r << "</ul><h2>SPAM</h2><ul>"
 		spam_list.each do |f|
 			data = Comment.load(data_file(f))
-			r << "<li>\n#{show_comment(data, f, :spam)}\n</li>\n"
+			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
 		end
 		r << "</ul>"
 		r << "<input type='hidden' name='conf' value='spambayes'>"
@@ -209,7 +203,7 @@ EOT
 		"#{bayes_cache}/#{f}"
 	end
 
-	def delete_data(f, type)
+	def register_data(f, type)
 		require "fileutils"
 		case type
 		when :ham
@@ -231,29 +225,20 @@ EOT
 			next unless k=~/^[SHD]\d+[a-z0-9]+$/
 			v = v[0]
 			data = Comment.load(data_file(k))
-			case k
-			when RE_DOUBT_FILE
-				case v
-				when "spam"
-					add_spam(data)
-				when "ham"
-					add_ham(data, true)
-				else
-					raise "INVALID VALUE"
-				end
-			when RE_SPAM_FILE
-				if v=="ham"
-					add_ham(data, true)
-				end
-			when RE_HAM_FILE
-				if v=="spam"
-					add_spam(data)
-				end
+			case v
+			when "spam"
+				add_spam(data)
+			when "ham"
+				add_ham(data, k !~ RE_HAM_FILE)
 			else
 				raise "INVALID VALUE:#{k}"
 			end
-			delete_data(k, v=="spam" ? :spam : :ham)
+			register_data(k, v=="spam" ? :spam : :ham)
 		end
+		@cgi.params.keys.select{|k| k=~/\Aprocess_[SHD]\d+[a-z0-9]+\z/}.each do |k|
+			FileUtils.rm_f(data_file(k[/^process_(.*)$/, 1]))
+		end
+
 		save_db
 
 		"<p>#{Res.comment_processed}</p><hr>"
@@ -307,19 +292,19 @@ EOT
 		tl = {}
 		token_list.uniq.each do |t|
 			k = case t
-			when /^A (.*)/
-				:addr
-			when /^M (.*)/
-				:mail
-			when /^N (.*)/
-				:name
-			when /^R (.*)/
-				:referer
-			when /^U (.*)/
-				:url
-			else
-				:body
-			end
+				 when /^A (.*)/
+					 :addr
+				 when /^M (.*)/
+					 :mail
+				 when /^N (.*)/
+					 :name
+				 when /^R (.*)/
+					 :referer
+				 when /^U (.*)/
+					 :url
+				 else
+					 :body
+				 end
 
 			tl[k] ||= []
 			tl[k] << ($1 ? $1 : t)
@@ -379,7 +364,7 @@ EOT
 			r << Res.registered_as(:SPAM)
 		end
 		save_db
-		delete_data(id, type)
+		register_data(id, type)
 		r << show_comment(data) << "<hr>"
 	end
 
@@ -431,7 +416,7 @@ EOT
 		""
 	end
 
-	def show_referer_list(referer_list, type, ham_label, spam_label)
+	def show_referer_list(referer_list, type)
 		h = "r"+type[0, 1]
 
 		r = "<h3>#{type.upcase}</h3>\n"
@@ -441,8 +426,8 @@ EOT
 			r << "from #{l.remote_addr}<br>\n"
 			rate = bayes_filter.estimate(l.token)
 			r << "#{Res.spam_rate} : #{rate}<br>\n" if rate
-			r << "<input type='radio' name='#{h}#{l.to_html}' id='H#{h}#{l.to_html}' value='ham'><label for='H#{h}#{l.to_html}'>#{ham_label}</label><br>\n"
-			r << "<input type='radio' name='#{h}#{l.to_html}' id='S#{h}#{l.to_html}' value='spam'><label for='S#{h}#{l.to_html}'>#{spam_label}</label><br>\n"
+			r << "<input type='radio' name='#{h}#{l.to_html}' id='H#{h}#{l.to_html}' value='ham'><label for='H#{h}#{l.to_html}'>#{Res.register_ham}</label><br>\n"
+			r << "<input type='radio' name='#{h}#{l.to_html}' id='S#{h}#{l.to_html}' value='spam'><label for='S#{h}#{l.to_html}'>#{Res.register_spam}</label><br>\n"
 			r << "<a href='#{update_url}?conf=spambayes;sb_mode=show_referer_token;referer=#{l.to_link}'>token</a>"
 			r << "</li>"
 		end
@@ -456,9 +441,9 @@ EOT
 		hams = Referer.load_list(referer_cache("ham"))
 		doubts = Referer.load_list(referer_cache("doubt"))
 
-		r << show_referer_list(hams, "ham", Res.stay_ham, Res.register_spam)
-		r << show_referer_list(spams, "spam", Res.register_ham, Res.stay_spam)
-		r << show_referer_list(doubts, "doubt", Res.register_ham, Res.register_spam)
+		r << show_referer_list(hams, "ham")
+		r << show_referer_list(spams, "spam")
+		r << show_referer_list(doubts, "doubt")
 		r << "<input type='hidden' name='sb_mode' value='process_referer'>\n"
 	end
 
