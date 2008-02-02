@@ -2,7 +2,6 @@
 # You can redistribute it and/or modify it under GPL2. 
 
 require "pstore"
-require "uri"
 
 module Bayes
 	module CHARSET
@@ -16,8 +15,9 @@ module Bayes
 		module EUC
 			KCODE = "e"
 			KATAKANA = "\xa5\xa2-\xa5\xf3"
+      BAR = "\xa1\xbc"
 			KANJI = "\xb0\xa1-\xfc\xfe"
-			RE_KATAKANA = /[#{KATAKANA}]{2,}/eo
+			RE_KATAKANA = /[#{KATAKANA}#{BAR}]{2,}/eo
 			RE_KANJI = /[#{KANJI}]{2,}/eo
 
 			CHARSET.setup_re(self)
@@ -32,8 +32,9 @@ module Bayes
 				"#{c2u(a)}-#{c2u(b)}"
 			end
 			KATAKANA = utf_range(0x30a0, 0x30ff)
+      BAR = c2u(0x30fc)
 			KANJI = utf_range(0x4e00, 0x9faf)
-			RE_KATAKANA = /[#{KATAKANA}]{2,}/uo
+			RE_KATAKANA = /[#{KATAKANA}#{BAR}]{2,}/uo
 			RE_KANJI = /[#{KANJI}]{2,}/uo
 
 			CHARSET.setup_re(self)
@@ -84,7 +85,7 @@ module Bayes
 				push(host, prefix)
 
 				h = host
-				while /^(.*?)[._-](.*)$/=~h
+				while /^(.*?)[\.\-_](.*)$/=~h
 					h = $2
 					push($1, prefix)
 					push(h, prefix)
@@ -94,10 +95,9 @@ module Bayes
 		end
 
 		def add_url(url, prefix=nil)
-			if URI.regexp(%w[http https ftp]) === url
-				url  = URI.parse url
-				host = url.host                       # $4
-				path = url.path.gsub(%r{^/+|/+$}, '') # $7
+			if %r[^(?:https?|ftp)://(.*?)(?::\d+)?/(.*?)\/?(\?.*)?$] =~ url
+				host = $1
+				path = $2
 
 				add_host(host, prefix)
 
@@ -105,7 +105,7 @@ module Bayes
 					push(path, prefix)
 
 					p = path
-					re = %r[^(.*)[/._-](.*?)$]
+					re = %r[^(.*)[/\-\._](.*?)$]
 					while re=~p
 						p = $1
 						push($2, prefix)
