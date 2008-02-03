@@ -129,8 +129,8 @@ class SpambayesConfig
 <ul>
 <li><a href="#{update_url}?conf=spambayes;sb_mode=show_comment">#{Res.check_comment}</a></li>
 <li><a href="#{update_url}?conf=spambayes;sb_mode=show_all_referer">#{Res.check_referer}</a></li>
-<li><a href="#{update_url}?conf=spambayes;sb_mode=show_spam_tokens">#{Res.token_list("SPAM")}</a></li>
-<li><a href="#{update_url}?conf=spambayes;sb_mode=show_ham_tokens">#{Res.token_list("HAM")}</a></li>
+<li><a href="#{update_url}?conf=spambayes;sb_mode=show_spam_tokens">#{Res.token_list("Spam")}</a></li>
+<li><a href="#{update_url}?conf=spambayes;sb_mode=show_ham_tokens">#{Res.token_list("Ham")}</a></li>
 <li><a href="#{update_url}?conf=spambayes;sb_mode=confirm_rebuild_db">#{Res.rebuild_db}</a></li>
 </ul>
 <hr>
@@ -177,17 +177,17 @@ EOT
 		spam_list = Dir["#{bayes_cache}/S*"].map{|i| File.basename(i)}.sort
 		ham_list = Dir["#{bayes_cache}/H*"].map{|i| File.basename(i)}.sort
 		doubt_list = Dir["#{bayes_cache}/D*"].map{|i| File.basename(i)}.sort
-		r << "<h2>HAM</h2><ul>"
+		r << "<h2>Ham</h2><ul>"
 		ham_list.each do |f|
 			data = Comment.load(data_file(f))
 			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
 		end
-		r << "</ul><h2>DOUBT</h2><ul>"
+		r << "</ul><h2>Doubt</h2><ul>"
 		doubt_list.each do |f|
 			data = Comment.load(data_file(f))
 			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
 		end
-		r << "</ul><h2>SPAM</h2><ul>"
+		r << "</ul><h2>Spam</h2><ul>"
 		spam_list.each do |f|
 			data = Comment.load(data_file(f))
 			r << "<li>\n#{show_comment(data, f)}\n</li>\n"
@@ -272,7 +272,7 @@ EOT
 	def token_table(label, tokens, prefix)
 		return "" if tokens.empty?
 		r = "<h3>#{label}</h3>\n"
-		r << "<table border='1'><tr><th>#{Res.token}</th><th>#{Res.probability("SPAM")}</th></tr>"
+		r << "<table border='1'><tr><th>#{Res.token}</th><th>#{Res.probability("Spam")}</th></tr>"
 		bf = bayes_filter
 		tokens = tokens.sort do |a, b|
 			a=prefix+a
@@ -291,20 +291,21 @@ EOT
 	def show_token_list(token_list)
 		tl = {}
 		token_list.uniq.each do |t|
-			k = case t
-			    when /^A (.*)/
-			       :addr
-			    when /^M (.*)/
-			       :mail
-			    when /^N (.*)/
-			       :name
-			    when /^R (.*)/
-			       :referer
-			    when /^U (.*)/
-			       :url
-			    else
-			       :body
-			    end
+			k =
+				case t
+				when /^A (.*)/
+					:addr
+				when /^M (.*)/
+					:mail
+				when /^N (.*)/
+					:name
+				when /^R (.*)/
+					:referer
+				when /^U (.*)/
+					:url
+				else
+					:body
+				end
 
 			tl[k] ||= []
 			tl[k] << ($1 ? $1 : t)
@@ -358,11 +359,10 @@ EOT
 		case type
 		when :ham
 			add_ham(data, true)
-			r << Res.registered_as(:HAM)
 		when :spam
 			add_spam(data)
-			r << Res.registered_as(:SPAM)
 		end
+		r << Res.registered_as(type)
 		save_db
 		register_data(id, type)
 		r << show_comment(data) << "<hr>"
