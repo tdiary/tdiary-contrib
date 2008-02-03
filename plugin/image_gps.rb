@@ -103,7 +103,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   url
 end
 
-add_conf_proc ('image_gps','image_gpsの設定','etc') do
+add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
     @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
   end
