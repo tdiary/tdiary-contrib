@@ -1,0 +1,98 @@
+Index: update.rb
+===================================================================
+--- update.rb	(revision 97)
++++ update.rb	(working copy)
+@@ -5,7 +5,7 @@
+ # Copyright (C) 2001-2003, TADA Tadashi <sho@spc.gr.jp>
+ # You can redistribute it and/or modify it under GPL2.
+ #
+-BEGIN { $defout.binmode }
++BEGIN { $stdout.binmode }
+ $KCODE = 'n'
+ 
+ begin
+Index: misc/lib/hikidoc.rb
+===================================================================
+--- misc/lib/hikidoc.rb	(revision 97)
++++ misc/lib/hikidoc.rb	(working copy)
+@@ -476,7 +476,7 @@
+ 
+   def escape_meta_char( text )
+     text.gsub( META_CHAR_RE ) do |s|
+-      '&#x%x;' % s[1]
++      '&#x%x;' % s[1].ord
+     end
+   end
+ 
+Index: misc/plugin/amazon.rb
+===================================================================
+--- misc/plugin/amazon.rb	(revision 97)
++++ misc/plugin/amazon.rb	(working copy)
+@@ -205,6 +205,7 @@
+ 				xml =  amazon_call_ecs( asin, id_type )
+ 				File::open( "#{cache}/#{asin}.xml", 'wb' ) {|f| f.write( xml )}
+ 			end
++			xml.force_encoding('UTF-8')
+ 			doc = REXML::Document::new( xml ).root
+ 			item = doc.elements.to_a( '*/Item' )[0]
+ 			if pos == 'detail' then
+Index: tdiary.rb
+===================================================================
+--- tdiary.rb	(revision 97)
++++ tdiary.rb	(working copy)
+@@ -11,6 +11,7 @@
+ 
+ $:.insert( 1, File::dirname( __FILE__ ) + '/misc/lib' )
+ 
++require 'compatible'
+ require 'cgi'
+ require 'uri'
+ begin
+@@ -466,6 +467,7 @@
+ 			load
+ 
+ 			instance_variables.each do |v|
++				v = v.to_s
+ 				v.sub!( /@/, '' )
+ 				instance_eval( <<-SRC
+ 					def #{v}
+@@ -631,11 +633,10 @@
+ 				cgi_conf.untaint unless @secure
+ 				def_vars = ""
+ 				variables.each do |var| def_vars << "#{var} = nil\n" end
+-				eval( def_vars )
++				extend_vars = 'variables.each do |var| eval "@#{var} = #{var} if #{var} != nil" end'
+ 				Safe::safe( @secure ? 4 : 1 ) do
+-					eval( cgi_conf, binding, "(TDiary::Config#cgi_conf)", 1 )
++					eval( def_vars + cgi_conf + extend_vars, binding, "(TDiary::Config#cgi_conf)", 1 )
+ 				end
+-				variables.each do |var| eval "@#{var} = #{var} if #{var} != nil" end
+ 			rescue IOError, Errno::ENOENT
+ 			end
+ 		end
+Index: plugin/ja/05referer.rb
+===================================================================
+--- plugin/ja/05referer.rb	(revision 97)
++++ plugin/ja/05referer.rb	(working copy)
+@@ -31,7 +31,7 @@
+ 	<p>→<a href="#{h @update}?referer=volatile" target="referer">既存設定はこちら</a></p>
+ 	<p><textarea name="only_volatile" cols="70" rows="10">#{h @conf.only_volatile2.join( "\n" )}</textarea></p>
+ 	<h3 class="subtitle">#{label_referer_table}</h3>
+-	#{"<p>リンク元リストのURLを、特定の文字列に変換する対応表を指定できます。1件につき、URLと表示文字列を空白で区切って指定します。正規表現が使えるので、URL中に現れた「(〜)」は、置換文字列中で「\\1」のような「\数字」で利用できます。</p>" unless @conf.mobile_agent?}
++	#{"<p>リンク元リストのURLを、特定の文字列に変換する対応表を指定できます。1件につき、URLと表示文字列を空白で区切って指定します。正規表現が使えるので、URL中に現れた「(〜)」は、置換文字列中で「\\\\1」のような「\\数字」で利用できます。</p>" unless @conf.mobile_agent?}
+ 	<p>→<a href="#{h @update}?referer=table" target="referer">既存設定はこちら</a></p>
+ 	<p><textarea name="referer_table" cols="70" rows="10">#{h @conf.referer_table2.collect{|a|a.join( " " )}.join( "\n" )}</textarea></p>
+ 	HTML
+Index: index.rb
+===================================================================
+--- index.rb	(revision 97)
++++ index.rb	(working copy)
+@@ -5,7 +5,7 @@
+ # Copyright (C) 2001-2006, TADA Tadashi <sho@spc.gr.jp>
+ # You can redistribute it and/or modify it under GPL2.
+ #
+-BEGIN { $defout.binmode }
++BEGIN { $stdout.binmode }
+ $KCODE = 'n'
+ 
+ begin
