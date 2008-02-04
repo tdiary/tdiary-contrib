@@ -1,11 +1,11 @@
 # = for Ruby1.9.0 compatible =
 #
-# == Á°Äó¾ò·ï ==
+# == å‰ææ¡ä»¶ ==
 #
-#  * Ruby1.9 ¤Î¾ì¹ç¤Ï --encoding=Binary ¥ª¥×¥·¥ç¥ó¤ÇÆ°ºî¤µ¤»¤ë¤³¤È
+#  * Ruby1.9 ã®å ´åˆã¯ --encoding=Binary ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§å‹•ä½œã•ã›ã‚‹ã“ã¨
 
 # --------------------------------------------------------
-# ÈÆÍÑÅª¤ÊÀßÄê
+# æ±ç”¨çš„ãªè¨­å®š
 # --------------------------------------------------------
 
 # for Ruby1.9.0
@@ -24,7 +24,7 @@ unless "".respond_to?('each')
   end
 end
 
-# Ruby1.9¤Ç¤Ï String ¤¬ Enumerable ¤Ç¤Ï¤Ê¤¯¤Ê¤Ã¤¿
+# Ruby1.9ã§ã¯ String ãŒ Enumerable ã§ã¯ãªããªã£ãŸ
 class String
   def method_missing(name, *args, &block)
     each_line.__send__(name, *args, &block)
@@ -63,12 +63,12 @@ unless "".respond_to?('ord')
 end
 
 # --------------------------------------------------------
-# tDiary ÍÑ¤ÎÀßÄê
+# tDiary ç”¨ã®è¨­å®š
 # --------------------------------------------------------
 
-# Ruby1.9¤ÇNKF::nkf¤ò¸Æ¤Ö¤ÈÊ¸»úÎó¤Îencoding¤¬ÊÑ¤ï¤Ã¤Æ¤·¤Ş¤¦¡£
-# ¤½¤Î¤¿¤á¡¢encoding¤¬Binary¤Î´Ä¶­¤ÇÆ°¤«¤¹¤È
-# "character encodings differ" ¥¨¥é¡¼¤È¤Ê¤ë¡£
+# Ruby1.9ã§NKF::nkfã‚’å‘¼ã¶ã¨æ–‡å­—åˆ—ã®encodingãŒå¤‰ã‚ã£ã¦ã—ã¾ã†ã€‚
+# ãã®ãŸã‚ã€encodingãŒBinaryã®ç’°å¢ƒã§å‹•ã‹ã™ã¨
+# "character encodings differ" ã‚¨ãƒ©ãƒ¼ã¨ãªã‚‹ã€‚
 begin
   require 'nkf'
   module NKF
@@ -82,13 +82,13 @@ begin
 rescue
 end
 
-# ÆüËÜ¸ì¤ò´Ş¤à¥Ä¥Ã¥³¥ß¤òÆş¤ì¤ë¤È diary.last_modified ¤¬ String ¤Ë¤Ê¤ë (¸¶°øÉÔÌÀ)
-# (PStore ÊİÂ¸Á°¤Ï Time ¤À¤¬, ÊİÂ¸¸å¤Ë String ¤È¤Ê¤ë)
-# »ÃÄêÅª¤Ë String ¤À¤Ã¤¿¤é Time ¤ØÊÑ´¹¤¹¤ë
+# æ—¥æœ¬èªã‚’å«ã‚€ãƒ„ãƒƒã‚³ãƒŸã‚’å…¥ã‚Œã‚‹ã¨ diary.last_modified ãŒ String ã«ãªã‚‹ (åŸå› ä¸æ˜)
+# (PStore ä¿å­˜å‰ã¯ Time ã ãŒ, ä¿å­˜å¾Œã« String ã¨ãªã‚‹)
+# æš«å®šçš„ã« String ã ã£ãŸã‚‰ Time ã¸å¤‰æ›ã™ã‚‹
 module TDiary
   class WikiDiary
     def last_modified
-      if @last_modified.class == String
+      if @last_modified.is_a? String
         @last_modified = Time.at(0)
       end
       @last_modified
