@@ -51,11 +51,7 @@ def google_video( doc_id, player_size=nil)
 
 	url = "http://video.google.com/googleplayer.swf?docId=#{doc_id}&hl=en"
 	url += google_video_extra_options(@conf)
-	<<-TAG
-   <object class="googlevideo" width="#{width}" height="#{height}"><param name="movie" value="#{url}"></param
-   ><embed src="#{url}" type="application/x-shockwave-flash" width="#{width}" height="#{height}"
-   ></embed></object>
-	TAG
+	%|<object class="googlevideo" width="#{width}" height="#{height}"><param name="movie" value="#{url}"></param><embed src="#{url}" type="application/x-shockwave-flash" width="#{width}" height="#{height}"></embed></object>|
 end
 
 def google_video_conf_proc
