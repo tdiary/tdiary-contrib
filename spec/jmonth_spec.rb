@@ -3,117 +3,34 @@ require 'spec_helper'
 require 'time'
 
 describe "jmonth plugin" do
-	def setup_jmonth_plugin(date)
-		fake_plugin(:jmonth) { |plugin|
-			plugin.date = date
-		}
-	end
+  with_fixtures :date => :jmonth do
+    def setup_jmonth_plugin(date)
+      fake_plugin(:jmonth) { |plugin|
+        plugin.date = date
+      }
+    end
 
-	describe "in Janu" do
-		before do
-			@date = Time.parse('20070101');
-			@plugin = setup_jmonth_plugin(@date)
-		end
+    filters({
+      :date => lambda {|val| Time.parse(val) }
+    })
 
-		it { @plugin.date.strftime("%i").should  == "睦月" }
-	end
+    it 'in :jmonth' do |date, jmonth|
+      setup_jmonth_plugin(date).date.strftime('%i').should == jmonth
+    end
 
-	describe "in " do
-		before do
-			@date = Time.parse('20070201');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "如月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20070301');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "弥生" }
-	end
-
-	describe "in Janu" do
-		before do
-			@date = Time.parse('20070401');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "卯月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20070501');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "皐月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20070601');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "水無月" }
-	end
-
-	describe "in Janu" do
-		before do
-			@date = Time.parse('20070701');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "文月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20070801');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "葉月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20070901');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "長月" }
-	end
-
-	describe "in Janu" do
-		before do
-			@date = Time.parse('20071001');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "神無月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20071101');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "霜月" }
-	end
-
-	describe "in " do
-		before do
-			@date = Time.parse('20071201');
-			@plugin = setup_jmonth_plugin(@date)
-		end
-
-		it { @plugin.date.strftime("%i").should  == "師走" }
-	end
+    set_fixtures([
+      [ '2007/01/01' => '睦月'] ,
+      [ '2007/02/01' => '如月'] ,
+      [ '2007/03/01' => '弥生'] ,
+      [ '2007/04/01' => '卯月'] ,
+      [ '2007/05/01' => '皐月'] ,
+      [ '2007/06/01' => '水無月' ] ,
+      [ '2007/07/01' => '文月'] ,
+      [ '2007/08/01' => '葉月'] ,
+      [ '2007/09/01' => '長月'] ,
+      [ '2007/10/01' => '神無月'],
+      [ '2007/11/01' => '霜月'] ,
+      [ '2007/12/01' => '師走'] ,
+    ]) 
+  end
 end

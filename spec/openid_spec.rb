@@ -10,7 +10,6 @@ describe "openid plugin w/" do
 		}
 	end
 
-
 	describe "Hatena" do
 		before do
 			plugin = setup_open_id_plugin('Hatena', 'tdtds')

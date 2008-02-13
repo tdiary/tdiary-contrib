@@ -1,4 +1,7 @@
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "plugin")))
+require 'rubygems'
+require 'spec'
+require 'spec/fixture'
 require 'erb'
 
 # FIXME PluginFake in under construction.
