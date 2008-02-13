@@ -88,7 +88,7 @@ end
 module TDiary
   class WikiDiary
     def last_modified
-      if @last_modified.is_a? String
+      if @last_modified.inctance_of? String
         @last_modified = Time.at(0)
       end
       @last_modified
