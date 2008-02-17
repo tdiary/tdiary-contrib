@@ -17,6 +17,7 @@ class PluginFake
 		@date = nil
 		@header_procs = []
 		@update_procs = []
+		@body_enter_procs = []
 		@body_leave_procs = []
 	end
 
@@ -41,7 +42,7 @@ class PluginFake
 	end
 	
 	def add_body_enter_proc( block = Proc::new )
-		@body_leave_procs << block
+		@body_enter_procs << block
 	end
 	
 	def body_enter_proc( date )
