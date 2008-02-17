@@ -36,19 +36,19 @@ def nicovideo_inline( elem )
 	mylist = elem.to_a( 'mylist_counter' )[0].text
 
 	result = <<-TABLE
-		<table border="0" cellpadding="4" cellspacing="0" summary="">
+		<table border="0" cellpadding="4" cellspacing="0" summary="#{title}" style="margin-left:0em;">
 		<tr valign="top">
-		<td>
-		<div style="margin:4px 0px;"><a href="#{url}" target="_blank"><img alt="#{title}" src="#{thumb}" width="130" height="100" class="thumb_img_normal"></a></div>
-		<p class="TXT10"><strong>#{length}</strong><br>
+		<td style="font-size:70%;border-width:0px;">
+		<div style="margin:4px 0px;"><a href="#{url}" target="_blank"><img alt="#{title}" src="#{thumb}" width="130" height="100" style="border:solid 1px #333;"></a></div>
+		<p><strong>#{length}</strong><br>
 		再生: <strong>#{view}</strong><br>
 		コメント: <strong>#{comment_num}</strong><br>
 		マイリスト:<strong>#{mylist}</strong></p>
 		</td>
-		<td width="100%">
-		<p class="TXT12"><a href="#{url}" target="_blank" class="video">#{title}</a><br>#{desc}</p>
-		<div class="thumb_res">
-		<p class="TXT12"><strong>#{comment}</strong></p>
+		<td width="100%" style="font-size:80%;border-width:0px;">
+		<p><a href="#{url}" target="_blank" class="video"><strong>#{title}</strong></a><br>#{desc}</p>
+		<div style="background:#FFF; border:solid 2px #CCC; padding:6px; margin-top:4px;">
+		<p><strong>#{comment}</strong></p>
 		</div>
 		</td>
 		</tr>
@@ -59,10 +59,6 @@ end
 
 def nicovideo_iframe( video_id )
 	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
-end
-
-add_header_proc do
-	'<link rel="stylesheet" type="text/css" href="http://res.nicovideo.jp/css/thumb.css">'
 end
 
 def nicovideo( video_id, label = nil )
