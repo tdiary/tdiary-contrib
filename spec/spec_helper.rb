@@ -40,6 +40,18 @@ class PluginFake
 		r.join.chomp
 	end
 	
+	def add_body_enter_proc( block = Proc::new )
+		@body_leave_procs << block
+	end
+	
+	def body_enter_proc( date )
+		r = []
+		@body_enter_procs.each do |proc|
+			r << proc.call( date )
+		end
+		r.join.chomp
+	end
+
 	def add_body_leave_proc( block = Proc::new )
 		@body_leave_procs << block
 	end
