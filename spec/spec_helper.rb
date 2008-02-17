@@ -16,6 +16,7 @@ class PluginFake
 		@mode = ""
 		@date = nil
 		@header_procs = []
+		@footer_procs = []
 		@update_procs = []
 		@body_enter_procs = []
 		@body_leave_procs = []
@@ -27,6 +28,10 @@ class PluginFake
 
 	def add_header_proc( block = Proc::new )
 		@header_procs << block
+	end
+
+	def add_footer_proc( block = Proc::new )
+		@footer_procs << block
 	end
 
 	def add_update_proc( block = Proc::new )
@@ -41,6 +46,14 @@ class PluginFake
 		r.join.chomp
 	end
 	
+	def footer_proc
+		r = []
+		@footer_procs.each do |proc|
+			r << proc.call
+		end
+		r.join.chomp
+	end
+
 	def add_body_enter_proc( block = Proc::new )
 		@body_enter_procs << block
 	end
