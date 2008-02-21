@@ -122,7 +122,7 @@ def add_delicious_json(date, index)
 
 	if count > 0
 		r << ' | '
-		r << %Q{<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="このエントリの del.icio.us history" title="このエントリの del.icio.us history"> #{count} user}
+		r << %Q{<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}"> #{count} user}
 		r << 's' if count > 1
 		r << '</a>'
 	end
@@ -135,11 +135,12 @@ def parse_sbm_yaml(file, date, index)
 
 	r = ""
 	unless config.nil? then
+		title = config["title"][@conf.lang]
 		r << ' | '
 		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
-		r << %Q|title="#{config["title"]}" |
-		r << %Q|alt="#{config["title"]}" />|
+		r << %Q|title="#{title}" |
+		r << %Q|alt="#{title}" />|
 		unless config["counter"].nil? then
 			r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;" />|
 		end

@@ -1,4 +1,6 @@
 url: http://bookmark.fc2.com/search/detail?url=
 src: http://bookmark.fc2.com/img/add-16.gif
-title: このエントリを含む FC2ブックマーク
+title:
+  ja: このエントリを含む FC2ブックマーク
+  =: this entry on FC2 Bookmark
 counter: http://bookmark.fc2.com/image/users/

@@ -1,4 +1,6 @@
 url: http://b.hatena.ne.jp/entry/
 src: http://d.hatena.ne.jp/images/b_entry.gif
-title: このエントリを含むはてなブックマーク
+title:
+  ja: このエントリを含むはてなブックマーク
+  =: this entry on Hatena Bookmark
 counter: http://b.hatena.ne.jp/entry/image/normal/

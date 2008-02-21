@@ -1,4 +1,6 @@
 url: http://clip.livedoor.com/page/
 src: http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif
-title: このエントリを含む livedoor クリップ
+title:
+  ja: このエントリを含む livedoor クリップ
+  =: this entry on livedoor clip
 counter: http://image.clip.livedoor.com/counter/

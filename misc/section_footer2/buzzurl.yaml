@@ -1,4 +1,6 @@
 url: http://buzzurl.jp/entry/
 src: http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif
-title: このエントリを含む Buzzurl
+title:
+  ja: このエントリを含む Buzzurl
+  =:  this entry on Buzzurl
 counter: http://buzzurl.jp/api/counter/
