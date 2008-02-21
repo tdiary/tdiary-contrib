@@ -1,6 +1,6 @@
 # section_footer.rb: Japanese resource
-@section_footer_delicious_label = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us"
-@section_footer_hatenabm_label = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¥Ş¡¼¥¯"
-@section_footer_ldclip_label = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à livedoor ¥¯¥ê¥Ã¥×"
-@section_footer_buzzurl_label = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Buzzurl"
-@section_footer_yahoobm_label = "¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Yahoo!¥Ö¥Ã¥¯¥Ş¡¼¥¯"
+@section_footer_delicious_label = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã® del.icio.us history"
+@section_footer_hatenabm_label = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯"
+@section_footer_ldclip_label = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ livedoor ã‚¯ãƒªãƒƒãƒ—"
+@section_footer_buzzurl_label = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Buzzurl"
+@section_footer_yahoobm_label = "ã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Yahoo!ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯"

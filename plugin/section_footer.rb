@@ -55,7 +55,7 @@ add_section_leave_proc do |date, index|
    r = '<div class="tags">'
 
    unless @conf.mobile_agent? then
-      # ¥«¥Æ¥´¥ê¥¿¥°¤ÎÄÉ²Ã
+      # ã‚«ãƒ†ã‚´ãƒªã‚¿ã‚°ã®è¿½åŠ 
       if @category_to_tag_list and not @category_to_tag_list.empty? then
          r << "Tags: "
          @category_to_tag_list.each do |tag, blog|
@@ -67,25 +67,25 @@ add_section_leave_proc do |date, index|
          end
       end
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us(json)¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã® del.icio.us history (JSON)ã€
       r << add_delicious_json(date, index)
 
-		# ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à del.icio.us(²èÁüAPI)¡×
+		# ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ del.icio.us (ç”»åƒAPI)ã€
 		# r << add_delicious(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à¤Ï¤Æ¤Ê¥Ö¥Ã¥¯¡¼¥¯¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ã¯ã¦ãªãƒ–ãƒƒã‚¯ãƒ¼ã‚¯ã€
       r << add_hatenabm(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à livedoor ¥¯¥ê¥Ã¥×¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ livedoor ã‚¯ãƒªãƒƒãƒ—ã€
       r << add_ldclip(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Buzzurl¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Buzzurlã€
       r << add_buzzurl(date, index)
 
-      # ¡Ö¤³¤Î¥¨¥ó¥È¥ê¤ò´Ş¤à Yahoo!¥Ö¥Ã¥¯¥Ş¡¼¥¯¡×
+      # ã€Œã“ã®ã‚¨ãƒ³ãƒˆãƒªã‚’å«ã‚€ Yahoo!ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã€
       r << add_yahoobm(date, index)
 
-      # Permalink¤ÎÄÉ²Ã
+      # Permalinkã®è¿½åŠ 
       r << add_permalink(date, index)
    end
 
