@@ -37,7 +37,10 @@ def nicovideo_inline( elem )
 
 	if feed? then
 		result = <<-HTML
-			<a href="#{url}"><img alt="#{title}" src="#{thumb}" width="130" height="100" style="border:solid 1px #333;"><strong>#{title}</strong></a> (#{length})<br>#{desc}
+			<table border="0" cellpadding="4" cellspacing="0" summary="#{title}"><tr valign="top">
+			<td><a href="#{url}"><img alt="#{title}" src="#{thumb}" width="130" height="100" style="border:solid 1px #333;"></a></td>
+			<td width="100%"><a href="#{url}"><strong>#{title}</strong></a> (#{length})<br>#{desc}</td>
+			</tr></table>
 		HTML
 	else
 		result = <<-HTML
