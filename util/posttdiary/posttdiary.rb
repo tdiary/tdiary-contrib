@@ -169,9 +169,9 @@ begin
 			img_src += image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i )
 		end
 		if use_subject then
-			@body = "#{img_src}\n#{@body.sub( /\n+\z/, '' )}"
+			@body = "#{img_src}\n#{(@body || '').sub( /\n+\z/, '' )}"
 		else
-			@body = "#{@body.sub( /\n+\z/, '' )}\n#{img_src}"
+			@body = "#{(@body || '').sub( /\n+\z/, '' )}\n#{img_src}"
 		end
 	end
 
@@ -242,6 +242,7 @@ begin
 
 rescue
 	$stderr.puts $!
+	$stderr.puts $@.join( "\n" )
 	File::delete( image_dir + image_name ) if image_dir and image_name and FileTest::exist?( image_dir + image_name )
 	exit 1
 end
