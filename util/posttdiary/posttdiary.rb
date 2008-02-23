@@ -112,7 +112,7 @@ begin
 	mail = NKF::nkf( '-m0 -Xed', ARGF.read )
 	raise "#{File::basename __FILE__}: no mail text." if not mail or mail.length == 0
 
-	head, body = mail.split( /(?:\r?\n){2}, 2 )
+	head, body = mail.split( /(?:\r?\n){2}/, 2 )
 
 	if head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"(.*?)\"/im then
 		if not image_dir or not image_url then
