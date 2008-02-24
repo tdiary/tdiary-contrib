@@ -67,10 +67,10 @@ begin
 	image_format = ' <img class="photo" src="$1" alt="">'
 	use_subject = false
 	parser.set_options(
-		['--image-path',   '-i', GetoptLong::REQUIRED_ARGUMENT],
-		['--image-url',    '-u', GetoptLong::REQUIRED_ARGUMENT],
+		['--image-path', '-i', GetoptLong::REQUIRED_ARGUMENT],
+		['--image-url', '-u', GetoptLong::REQUIRED_ARGUMENT],
 		['--image-format', '-f', GetoptLong::REQUIRED_ARGUMENT],
-		['--use-subject',  '-s', GetoptLong::NO_ARGUMENT]
+		['--use-subject', '-s', GetoptLong::NO_ARGUMENT]
 	)
 	begin
 		parser.each do |opt, arg|
@@ -92,12 +92,10 @@ begin
 	image_dir.sub!( %r[/*$], '/' ) if image_dir
 	image_url.sub!( %r[/*$], '/' ) if image_url
 	url = ARGV.shift
-	if %r|http://([^:/]*):?(\d*)(/.*)| =~ url then
+	if %r|http://([^:/]+)(?::(\d+))?(/.*)| =~ url then
 		host = $1
-		port = $2.to_i
-		cgi = $3
-		raise 'bad url.' if not host or not cgi
-		port = 80 if port == 0
+		port = ($2 || 80).to_i
+		cgi  = $3
 	else
 		raise 'bad url.'
 	end
@@ -133,9 +131,9 @@ begin
 				(?:image/ | application/octet-stream).+
 				name=".+(\.[^.]+?)" (?# 1: extension)
 			]imx
-				image_ext  = $1.downcase
-				now        = Time::now
-				list       = image_list( now.strftime( "%Y%m%d" ), image_dir )
+				image_ext = $1.downcase
+				now = Time::now
+				list = image_list( now.strftime( "%Y%m%d" ), image_dir )
 				image_name = now.strftime( "%Y%m%d" ) + "_" + list.length.to_s + image_ext
 				File::umask( 022 )
 				open( image_dir + image_name, "wb" ) do |s|
@@ -175,8 +173,7 @@ begin
 	addr = nil
 	if /^To:(.*)$/ =~ head then
 		addr = case to = $1.strip
-		when /.*?\s*<(.+)>/
-		when /(.+?)\s*\(.*\)/
+		when /.*?\s*<(.+)>/, /(.+?)\s*\(.*\)/
 			$1
 		else
 			to
@@ -226,13 +223,13 @@ begin
 		auth = ["#{user}:#{pass}"].pack( 'm' ).strip
 		res, = http.get( cgi, {
 				'Authorization' => "Basic #{auth}",
-				'Referer'       => url })
+				'Referer' => url })
 		if %r|<input type="hidden" name="csrf_protection_key" value="([^"]+)">| =~ res.body then
 			data << "&csrf_protection_key=#{CGI::escape( CGI::unescapeHTML( $1 ) )}"
 		end
 		res, = http.post( cgi, data, {
 				'Authorization' => "Basic #{auth}",
-				'Referer'       => url })
+				'Referer' => url })
 	end
 
 rescue
