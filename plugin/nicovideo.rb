@@ -75,7 +75,7 @@ def nicovideo( video_id, label = nil )
 		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements ), 'UTF-8' )
 	rescue ::Errno::ENOENT
 		"<strong>Sorry, #{video_id} was deleted.</strong>"
-	rescue Timeout::Error
+	rescue Timeout::Error,OpenURI::HTTPError
 		nicovideo_iframe( video_id )
 	end
 end
