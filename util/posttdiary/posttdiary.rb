@@ -160,7 +160,7 @@ begin
 	if @image_name then
 		img_src = ""
 		@image_name.each do |i|
-			serial = i.sub( /^\d+_(\d+)\./n, '\1' )
+			serial = i.sub( /^\d+_(\d+)\..*$/n, '\1' )
 			img_src += image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i )
 		end
 		if use_subject then
