@@ -76,7 +76,6 @@ file_names.each {|file_name|
 }
 
 deleted_comments.each {|comment|
-  puts comment.date
   print comment.body
   puts "."
 }
