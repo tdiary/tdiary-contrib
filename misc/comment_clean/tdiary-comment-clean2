@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+#
+# Copyright (C) 2004 Satoru Takabayashi <satoru@namazu.org>
+# You can redistribute it and/or modify it under GPL2.
+#
+# Modified by machu ( http://www.machu.jp/diary/ )
+# 2008-03-07: adding last-modified filter with -a and -b option
+#
+require 'optparse'
+after_date = Time.at(0)
+before_date = Time.now
+test = false
+
+opt = OptionParser.new
+opt.on('-a AFTER_HOUR') {|v|
+  after_date = Time.at(Time.now - 60 * 60 * v.to_i)
+}
+opt.on('-b BEFORE_HOUR') {|v|
+  before_date = Time.at(Time.now - 60 * 60 * v.to_i)
+}
+opt.on('-t') {|v|
+  test = true
+}
+opt.parse!(ARGV)
+
+puts "Usage: tdiary-comment-clean [-a AFTER_HOUR] [-b BEFORE_HOUR] PATTERN FILE..." if ARGV.length == 0
+pattern = Regexp.new(ARGV.shift)
+file_names = ARGV
+
+class Comment
+  attr_accessor :body, :date
+
+  def initialize
+    @body = ""
+  end
+
+  def <<(body)
+    if body.match(/^Last-Modified: (\d+)$/)
+      @date = Time.at($1.to_i)
+    end
+    @body << body
+  end
+end
+
+deleted_comments = []
+file_names.each {|file_name|
+  i = File.open(file_name)
+  first_line = i.gets
+
+  comments = []
+  comment = Comment.new
+  while line = i.gets
+    if line == ".\n"
+      comments.push(comment)
+      comment = Comment.new
+    else
+      comment << line
+    end
+  end
+  i.close
+
+  tmp_name = "tmp.#{Process.pid}"
+  File.open(tmp_name, "w") {|o|
+    o.print first_line
+    comments.each {|comment|
+      if pattern.match(comment.body) and (before_date > comment.date) and (after_date < comment.date)
+        deleted_comments.push(comment)
+      else
+        o.print comment.body
+        o.puts "."
+      end
+    }
+  }
+  File.rename(file_name, file_name + ".bak") unless test
+  File.rename(tmp_name, file_name) unless test
+}
+
+deleted_comments.each {|comment|
+  puts comment.date
+  print comment.body
+  puts "."
+}
