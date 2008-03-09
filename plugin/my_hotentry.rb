@@ -7,7 +7,6 @@
 # Distributed under the GPL
 #
 require 'uri'
-require 'kconv'
 require 'open-uri'
 require 'rexml/document'
 require 'pstore'
@@ -60,7 +59,7 @@ class MyHotEntry
       db[:entries] = []
       rss.elements.each('rdf:RDF/item') do |item|
         url = item.elements['link'].text
-        title = Kconv.kconv(item.elements['title'].text, Kconv::EUC, Kconv::UTF8)
+        title = item.elements['title'].text
         # リンク先のタイトルからサイト名と日付を取り除く
         title.sub!(/( - )?#{options[:html_title]}( - )?/, '')
         title.sub!(/\(\d{4}-\d{2}-\d{2}\)/, '')
