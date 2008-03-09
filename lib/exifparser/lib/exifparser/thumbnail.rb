@@ -28,7 +28,7 @@ module Exif
   class Thumbnail
 
     def initialize(ifd1, data)
-      @ifd1 = ifd1 
+      @ifd1 = ifd1
       @data = data
     end
 

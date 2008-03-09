@@ -51,9 +51,9 @@ module Exif
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
-	
+
         obj = tagclass.new(tag, "MakerNote", count)
-	obj.extend formatter, @byteOrder_module
+        obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
         if unit * count > 4
           curpos = @fin.pos
@@ -74,7 +74,7 @@ module Exif
     end
 
     private
-    
+
     def fin_read_n(n)
       @fin.read(n)
     end

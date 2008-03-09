@@ -1,5 +1,5 @@
 #
-#    exifparser/scan.rb 
+#    exifparser/scan.rb
 #
 #    Copyright (C) 2002 Ryuichi Tamura (r-tam@fsinet.or.jp)
 #
@@ -19,7 +19,7 @@ module Exif
       @fin = fin.binmode
       @result = {}
       @tiffHeader0 = nil  # origin at which TIFF header begins
-      @byteOrder_module = nil 
+      @byteOrder_module = nil
     end
     attr_reader :result
 
@@ -41,10 +41,10 @@ module Exif
       # seek app1 (EXIF signature)
       #
       begin
-	marker = get_marker
-	break if (marker == 0xFFE1)
-	size = get_marker_datasize
-	@fin.seek(size - 2, IO::SEEK_CUR)
+        marker = get_marker
+        break if (marker == 0xFFE1)
+        size = get_marker_datasize
+        @fin.seek(size - 2, IO::SEEK_CUR)
       end while (!@fin.eof?)
 
       if marker != 0xFFE1
@@ -58,11 +58,11 @@ module Exif
       curpos = @fin.pos
       @result[:app1Data] = fin_read_n(@result[:app1DataSize])
       @fin.pos = curpos
-      
+
       #
       # EXIF header must be exactly "Exif\000\000", but some model
       # does not provide correct one. So we relax the condition.
-      # 
+      #
       if (h = exif_identifier()) !~ /\AExif\000/
         raise RuntimeError, "Invalid EXIF header: #{h}"
       end
@@ -73,13 +73,13 @@ module Exif
       @tiffHeader0, tiff_header = get_tiff_header()
 
       #
-      # get byte order 
+      # get byte order
       #
       case tiff_header[0,2]
       when "MM"
-	@byteOrder_module = Utils::Decode::Motorola
+        @byteOrder_module = Utils::Decode::Motorola
       when "II"
-	@byteOrder_module = Utils::Decode::Intel
+        @byteOrder_module = Utils::Decode::Intel
       else
         raise RuntimeError, "Unknown byte order"
       end
@@ -101,12 +101,12 @@ module Exif
       @result[:IFD1] = []
       next_ifd = decode_ulong(fin_read_n(4))
       if next_ifd > 0
-	@fin.pos = @tiffHeader0 + next_ifd
-	scan_IFD(Tag::IFD1Table, Tag::IFD1Table.name) do |tag|
-	  @result[:IFD1].push tag
-	end
+        @fin.pos = @tiffHeader0 + next_ifd
+        scan_IFD(Tag::IFD1Table, Tag::IFD1Table.name) do |tag|
+          @result[:IFD1].push tag
+        end
       end
-      
+
       #
       # GPS IFD
       #
@@ -136,7 +136,7 @@ module Exif
           @result[:Exif].push tag
         end
       end
-      
+
       #
       # Interoperability subIFD
       #
@@ -156,18 +156,18 @@ module Exif
       # MakerNote subIFD
       #
       @result[:MakerNote]=[]
-      found = @result[:Exif].find {|e| e.class == Tag::Exif::MakerNote } 
+      found = @result[:Exif].find {|e| e.class == Tag::Exif::MakerNote }
       if (found)
         begin
-	  # Because some vendors do not put any identifier in the header,
-	  # we try to find which model is by seeing Tag::TIFF::Make, Tag::TIFF::Model.
-	  make = @result[:IFD0].find {|e| e.class == Tag::TIFF::Make}
-	  model = @result[:IFD0].find {|e| e.class == Tag::TIFF::Model}
-	  # prove the maker
-	  makernote_class = Exif::MakerNote.prove(found.data, make, model)  
+          # Because some vendors do not put any identifier in the header,
+          # we try to find which model is by seeing Tag::TIFF::Make, Tag::TIFF::Model.
+          make = @result[:IFD0].find {|e| e.class == Tag::TIFF::Make}
+          model = @result[:IFD0].find {|e| e.class == Tag::TIFF::Model}
+          # prove the maker
+          makernote_class = Exif::MakerNote.prove(found.data, make, model)
           # set file pointer to the position where the tag was found.
           @fin.pos = found.pos
-	  makernote = makernote_class.new(@fin, @tiffHeader0, found.dataPos, @byteOrder_module)
+          makernote = makernote_class.new(@fin, @tiffHeader0, found.dataPos, @byteOrder_module)
           makernote.scan_IFD do |tag|
             @result[:MakerNote].push tag
           end
@@ -183,50 +183,50 @@ module Exif
       # get thumbnail
       #
       if !@result[:IFD1].empty?
-	format = @result[:IFD1].find do |e| 
-	  e.class == Tag::TIFF::Compression
-	end.value
-	unless format == 6
-	  raise NotImplementedError, "Sorry, thumbnail of other than JPEG format is not supported."
-	end
-	thumbStart = @result[:IFD1].find do |e|
-	  e.class == Exif::Tag::TIFF::JpegInterchangeFormat
-	end.value
-	thumbLen = @result[:IFD1].find do |e|
-	  e.class == Exif::Tag::TIFF::JpegInterchangeFormatLength
-	end.value
-	@fin.pos = @tiffHeader0 + thumbStart
-	# check JPEG soi maker
-	unless @fin.readchar == "FF".hex and  @fin.readchar == "D8".hex
-	  raise RuntimeError, 'not JPEG format'
-	end
-	@fin.pos = @fin.pos - 2
-	# now read thumbnail image
-	@result[:Thumbnail] = @fin.read(thumbLen)
+        format = @result[:IFD1].find do |e|
+          e.class == Tag::TIFF::Compression
+        end.value
+        unless format == 6
+          raise NotImplementedError, "Sorry, thumbnail of other than JPEG format is not supported."
+        end
+        thumbStart = @result[:IFD1].find do |e|
+          e.class == Exif::Tag::TIFF::JpegInterchangeFormat
+        end.value
+        thumbLen = @result[:IFD1].find do |e|
+          e.class == Exif::Tag::TIFF::JpegInterchangeFormatLength
+        end.value
+        @fin.pos = @tiffHeader0 + thumbStart
+        # check JPEG soi maker
+        unless @fin.readchar == "FF".hex and  @fin.readchar == "D8".hex
+          raise RuntimeError, 'not JPEG format'
+        end
+        @fin.pos = @fin.pos - 2
+        # now read thumbnail image
+        @result[:Thumbnail] = @fin.read(thumbLen)
       end
 
       # turn on if $DEBUG
       toc = Time.now if $DEBUG
       puts(sprintf("scan time: %1.4f sec.", toc-tic)) if $DEBUG
     end
-    
+
     private
-    
+
     def fin_read_n(n)
       @fin.read(n)
     end
 
     def scan_IFD(tagTable, ifdname)
       num_dirs = decode_ushort(fin_read_n(2))
-      1.upto(num_dirs) { 
+      1.upto(num_dirs) {
         curpos_tag = @fin.pos
         tag = parseTagID(fin_read_n(2))
         tagclass = Tag.find(tag.hex, tagTable)
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
-	obj = tagclass.new(tag, ifdname, count)
-	obj.extend formatter, @byteOrder_module
+        obj = tagclass.new(tag, ifdname, count)
+        obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
         if unit * count > 4
           curpos = @fin.pos

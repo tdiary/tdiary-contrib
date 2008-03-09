@@ -20,37 +20,37 @@ module Exif
       #
       class Quality < Base
 
-	def to_s
-	  n = @formatted.to_i - 1
-	  (s, q) = n.divmod(3)
+        def to_s
+          n = @formatted.to_i - 1
+          (s, q) = n.divmod(3)
 
-	  f =
-	    case s
-	    when 0
-	      'VGA'
-	    when 1
-	      'SVGA'
-	    when 2
-	      'SXGA'
-	    when 3
-	      'UXGA'
-	    else
-	      'Unknown size'
-	  end
+          f =
+            case s
+            when 0
+              'VGA'
+            when 1
+              'SVGA'
+            when 2
+              'SXGA'
+            when 3
+              'UXGA'
+            else
+              'Unknown size'
+          end
 
-	  f << ' ' <<
-	    case q
-	    when 0
-	      'Basic'
-	    when 1
-	      'Normal'
-	    when 2
-	      'Fine'
-	    else
-	      'Unknown quality'
-	    end
-	  f
-	end
+          f << ' ' <<
+            case q
+            when 0
+              'Basic'
+            when 1
+              'Normal'
+            when 2
+              'Fine'
+            else
+              'Unknown quality'
+            end
+          f
+        end
 
       end
 
@@ -59,16 +59,16 @@ module Exif
       #
       class ColorMode < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'Color'
-	  when 2
-	    'Monochrome'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'Color'
+          when 2
+            'Monochrome'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -76,23 +76,23 @@ module Exif
       # 0x0005 - ImageAdjustment
       #
       class ImageAdjustment < Base
-	
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal'
-	  when 1
-	    'Bright+'
-	  when 2
-	    'Bright-'
-	  when 3
-	    'Contrast+'
-	  when 4
-	    'Contrast-'
-	  else
-	    'Unknown'
-	  end
-	end
+
+        def to_s
+          case @formatted
+          when 0
+            'Normal'
+          when 1
+            'Bright+'
+          when 2
+            'Bright-'
+          when 3
+            'Contrast+'
+          when 4
+            'Contrast-'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -101,19 +101,19 @@ module Exif
       #
       class CCDSensitivity < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'ISO80'
-	  when 2
-	    'ISO160'
-	  when 4
-	    'ISO320'
-	  when 5
-	    'ISO100'
-	  else
-	    "Unknown(#{@formatted})"
-	  end
+        def to_s
+          case @formatted
+          when 0
+            'ISO80'
+          when 2
+            'ISO160'
+          when 4
+            'ISO320'
+          when 5
+            'ISO100'
+          else
+            "Unknown(#{@formatted})"
+          end
       end
 
       end
@@ -123,25 +123,25 @@ module Exif
       #
       class WhiteBalance < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto'
-	  when 1
-	    'Preset'
-	  when 2
-	    'Daylight'
-	  when 3
-	    'Incandescense'
-	  when 4
-	    'Fluorescence'
-	  when 5
-	    'Cloudy'
-	  when 6
-	    'SpeedLight'
-	  else
-	    "Unknown(#{@formatted})"
-	  end
+        def to_s
+          case @formatted
+          when 0
+            'Auto'
+          when 1
+            'Preset'
+          when 2
+            'Daylight'
+          when 3
+            'Incandescense'
+          when 4
+            'Fluorescence'
+          when 5
+            'Cloudy'
+          when 6
+            'SpeedLight'
+          else
+            "Unknown(#{@formatted})"
+          end
       end
 
       end
@@ -150,12 +150,12 @@ module Exif
       # 0x0008 - Focus
       #
       class Focus < Base
-	
-	def to_s
-	  n = @formatted.numerator
-	  d = @formatted.denominator
-	  (n == 1 && d == 0) ? 'Pan Focus' : "#{n}/#{d}"
-	end
+
+        def to_s
+          n = @formatted.numerator
+          d = @formatted.denominator
+          (n == 1 && d == 0) ? 'Pan Focus' : "#{n}/#{d}"
+        end
 
       end
 
@@ -163,30 +163,30 @@ module Exif
       # 0x000a - DigitalZoom
       #
       class DigitalZoom < Base
-	
-	def to_s
-	  n = @formatted.numerator
-	  d = @formatted.denominator
-	  (n == 0 && d == 100) ? 'None' : "%0.1f"%[n.to_f/d.to_f]
-	end
+
+        def to_s
+          n = @formatted.numerator
+          d = @formatted.denominator
+          (n == 0 && d == 100) ? 'None' : "%0.1f"%[n.to_f/d.to_f]
+        end
 
       end
-      
+
       #
       # 0x000b - Converter
       #
       class Converter < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'None'
-	  when 1
-	    'Fisheye'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'None'
+          when 1
+            'Fisheye'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -230,34 +230,34 @@ module Exif
       #
       1.upto(num_dirs) {
         curpos_tag = @fin.pos
-	tag = parseTagID(fin_read_n(2))
-	tagclass = Tag.find(tag.hex, Tag::NikonIFDTable)
-	unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
-	count = decode_ulong(fin_read_n(4))
-	tagdata = fin_read_n(4)
-	obj = tagclass.new(tag, "MakerNote", count)
-	obj.extend formatter, @byteOrder_module
-	obj.pos = curpos_tag
-	if unit * count > 4
+        tag = parseTagID(fin_read_n(2))
+        tagclass = Tag.find(tag.hex, Tag::NikonIFDTable)
+        unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
+        count = decode_ulong(fin_read_n(4))
+        tagdata = fin_read_n(4)
+        obj = tagclass.new(tag, "MakerNote", count)
+        obj.extend formatter, @byteOrder_module
+        obj.pos = curpos_tag
+        if unit * count > 4
           curpos = @fin.pos
-          begin 
+          begin
             @fin.pos = @tiffHeader0 + decode_ulong(tagdata)
             obj.dataPos = @fin.pos
             obj.data = fin_read_n(unit*count)
           ensure
             @fin.pos = curpos
           end
-	else
-	  obj.dataPos = @fin.pos - 4
-	  obj.data = tagdata
-	end
-	obj.processData
-	yield obj
+        else
+          obj.dataPos = @fin.pos - 4
+          obj.data = tagdata
+        end
+        obj.processData
+        yield obj
       }
     end
 
     private
-    
+
     def fin_read_n(n)
       @fin.read(n)
     end

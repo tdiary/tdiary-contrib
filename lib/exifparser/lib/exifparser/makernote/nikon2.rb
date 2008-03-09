@@ -103,7 +103,7 @@ module Exif
       #
       class AFFocusPosition < Base
       end
-      
+
     end
 
     Nikon2IFDTable = {
@@ -137,18 +137,18 @@ module Exif
       magic = fin_read_n(6)
 
       if magic == "Nikon\000"
-	@nikonOffset = 18   # D100, E5700, etc..
-	fin_read_n(4)
-	@tiffHeader0 = @fin.pos
-	bo = @fin.read(2)
-	case bo
-	when "MM"
-	  byteOrder_module = Utils::Decode::Motorola
-	when "II"
-	  byteOrder_module = Utils::Decode::Intel
-	else
-	  raise RuntimeError, "Unknown byte order"
-	end
+        @nikonOffset = 18   # D100, E5700, etc..
+        fin_read_n(4)
+        @tiffHeader0 = @fin.pos
+        bo = @fin.read(2)
+        case bo
+        when "MM"
+          byteOrder_module = Utils::Decode::Motorola
+        when "II"
+          byteOrder_module = Utils::Decode::Intel
+        else
+          raise RuntimeError, "Unknown byte order"
+        end
       end
       @byteOrder_module = byteOrder_module
       self.extend @byteOrder_module
@@ -164,23 +164,23 @@ module Exif
       # get the number of tags
       #
       num_dirs = decode_ushort(fin_read_n(2))
-      
+
       #
       # now scan them
       #
       1.upto(num_dirs) {
-	curpos_tag = @fin.pos
-	tag = parseTagID(fin_read_n(2))
+        curpos_tag = @fin.pos
+        tag = parseTagID(fin_read_n(2))
         tagclass = Tag.find(tag.hex, Tag::Nikon2IFDTable)
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
         obj = tagclass.new(tag, "MakerNote", count)
-	obj.extend formatter, @byteOrder_module
+        obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
         if unit * count > 4
           curpos = @fin.pos
-          begin 
+          begin
             @fin.pos = @tiffHeader0 + decode_ulong(tagdata)
             obj.dataPos = @fin.pos
             obj.data = fin_read_n(unit*count)

@@ -28,9 +28,9 @@ module Exif
       #
       module UByte
 
-	def format
-	  'Unsigned byte'
-	end
+        def format
+          'Unsigned byte'
+        end
 
         def _formatData(data)
           data[0]
@@ -43,9 +43,9 @@ module Exif
       #
       module Ascii
 
-	def format
-	  'Ascii'
-	end
+        def format
+          'Ascii'
+        end
 
         def _formatData(data)
           data.delete("\000")
@@ -53,17 +53,17 @@ module Exif
 
       end
 
-      # 
+      #
       # convert data to unsigned short(2 byte) value.
       #
       module UShort
 
-	def format
-	  'Unsigned short'
-	end
+        def format
+          'Unsigned short'
+        end
 
         def _formatData(data)
-	  decode_ushort(data)
+          decode_ushort(data)
         end
 
       end
@@ -73,9 +73,9 @@ module Exif
       #
       module ULong
 
-	def format
-	  'Unsigned long'
-	end
+        def format
+          'Unsigned long'
+        end
 
         def _formatData(data)
           decode_ulong(data)
@@ -84,14 +84,14 @@ module Exif
       end
 
       #
-      # convert data to unsigned rational(4+4 byte) value, 
+      # convert data to unsigned rational(4+4 byte) value,
       # which in turn is converted to Rational object.
       #
       module URational
 
-	def format
-	  'Unsigned rational'
-	end
+        def format
+          'Unsigned rational'
+        end
 
         def _formatData(data)
           a = decode_ulong(data[0,4])
@@ -108,9 +108,9 @@ module Exif
       #
       module Undefined
 
-	def format
-	  'Undefined'
-	end
+        def format
+          'Undefined'
+        end
 
         def _formatData(data)
           self.respond_to?(:_format0) ? _format0(data) : data
@@ -123,9 +123,9 @@ module Exif
       #
       module SShort
 
-	def format
-	  'Signed short'
-	end
+        def format
+          'Signed short'
+        end
 
         def _formatData(data)
           decode_sshort(data)
@@ -138,12 +138,12 @@ module Exif
       #
       module SLong
 
-	def format
-	  'Signed long'
-	end
+        def format
+          'Signed long'
+        end
 
         def _formatData(data)
-	  decode_slong(data)
+          decode_slong(data)
         end
       end
 
@@ -152,9 +152,9 @@ module Exif
       #
       module SRational
 
-	def format
-	  'Signed rational'
-	end
+        def format
+          'Signed rational'
+        end
 
         def _formatData(data)
           a = decode_slong(data[0,4])
@@ -169,8 +169,8 @@ module Exif
     end # module Formatter
 
     #
-    # maps number to size of one unit and the 
-    # corresponding formatter (defined below) module. 
+    # maps number to size of one unit and the
+    # corresponding formatter (defined below) module.
     #
     module Format
 
@@ -180,19 +180,19 @@ module Exif
         3 =>  [2, ::Exif::Tag::Formatter::UShort],
         4 =>  [4, ::Exif::Tag::Formatter::ULong],
         5 =>  [8, ::Exif::Tag::Formatter::URational],
-	#6 =>  [1, ::Exif::Tag::Formatter::SByte],
+        #6 =>  [1, ::Exif::Tag::Formatter::SByte],
         7 =>  [1, ::Exif::Tag::Formatter::Undefined],
         8 =>  [2, ::Exif::Tag::Formatter::SShort],
         9 =>  [4, ::Exif::Tag::Formatter::SLong],
         10 => [8, ::Exif::Tag::Formatter::SRational],
         #11 => [4, Exif::Formatter::SFloat],
-        #12 => [8, Exif::Formatter::DFloat] 
+        #12 => [8, Exif::Formatter::DFloat]
       }
 
     end
 
     #
-    # The base class that specifies common operations for tag data. 
+    # The base class that specifies common operations for tag data.
     # All the tag classes are derived from this, and client code
     # shoude use the public methods as interface.
     #
@@ -229,7 +229,7 @@ module Exif
       # String representation of tag's value
       # this is the default method that simply
       # sends Object#to_s to @formatted.
-      # Subclasses may override this so that 
+      # Subclasses may override this so that
       # it returns more human-readable form.
       #
       def to_s
@@ -240,7 +240,7 @@ module Exif
       # return tag's name
       #
       def name
-	self.class.to_s.split("::")[-1]
+        self.class.to_s.split("::")[-1]
       end
 
       #
@@ -259,31 +259,31 @@ module Exif
       # format exposure time
       #
       def formatExposureTime(ss)
-	rss = 1.0/ss
-	if (rss >= 3.0)
-	  str = "1/%.0f"%[rss]
-	elsif (3.0 > rss && rss > 1.0)
-	  str = "1/%.1f"%[rss]
-	elsif (ss == 1.0)
-	  str = "1.0"
-	elsif (3.0 > ss && ss > 1.0)
-	  str = "%.1f"%[ss]
-	else
-	  str = "%.0f"%[ss]
-	end
-	"#{str}sec."
+        rss = 1.0/ss
+        if (rss >= 3.0)
+          str = "1/%.0f"%[rss]
+        elsif (3.0 > rss && rss > 1.0)
+          str = "1/%.1f"%[rss]
+        elsif (ss == 1.0)
+          str = "1.0"
+        elsif (3.0 > ss && ss > 1.0)
+          str = "%.1f"%[ss]
+        else
+          str = "%.0f"%[ss]
+        end
+        "#{str}sec."
       end
 
       #
       # format f number
       #
       def formatFNumber(f)
-	if (f.abs < 10.0)
-	  str = "%.1f"%[f]
-	else
-	  str = "%.0f"%[f]
-	end
-	"F#{str}"
+        if (f.abs < 10.0)
+          str = "%.1f"%[f]
+        else
+          str = "%.0f"%[f]
+        end
+        "F#{str}"
       end
 
       if not $DEBUG
@@ -308,7 +308,7 @@ module Exif
     end
 
     ##
-    ## the class for any unknown tags in 
+    ## the class for any unknown tags in
     ## IFD0, IFD1, GPSIFD, ExifIFD, InteroperabilityIFD
     ##
     class Unknown < Base
@@ -363,16 +363,16 @@ module Exif
       #
       class BitsPerSample < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -381,16 +381,16 @@ module Exif
       #
       class Compression < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'uncompressed'
-	  when 6
-	    'JPEG compression'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'uncompressed'
+          when 6
+            'JPEG compression'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -399,16 +399,16 @@ module Exif
       #
       class PhotometricInterpretation < Base
 
-	def to_s
-	  case @formatted
-	  when 2
-	    'RGB'
-	  when 6
-	    'YCbCr'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 2
+            'RGB'
+          when 6
+            'YCbCr'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -459,16 +459,16 @@ module Exif
       #
       class PlanarConfiguration < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'chunky format'
-	  when 2
-	    'planar format'
-	  else
-	    'unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'chunky format'
+          when 2
+            'planar format'
+          else
+            'unknown'
+          end
+        end
 
       end
 
@@ -477,16 +477,16 @@ module Exif
       #
       class ResolutionUnit < Base
 
-	def to_s
-	  case @formatted
-	  when 2
-	    'inch'
-	  when 3
-	    'centimeter'
-	  else
-	    'unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 2
+            'inch'
+          when 3
+            'centimeter'
+          else
+            'unknown'
+          end
+        end
 
       end
 
@@ -507,16 +507,16 @@ module Exif
       #
       class YCbCrCoefficients < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -525,23 +525,23 @@ module Exif
       #
       class YCbCrSubSampling < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  case @formatted
-	  when [2,1]
-	    'YCbCr4:2:2'
-	  when [2,2]
-	    'YCbCr4:2:0'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when [2,1]
+            'YCbCr4:2:2'
+          when [2,2]
+            'YCbCr4:2:0'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -550,16 +550,16 @@ module Exif
       #
       class YCbCrPositioning < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'centered'
-	  when 2
-	    'co-sited'
-	  else
-	    'unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'centered'
+          when 2
+            'co-sited'
+          else
+            'unknown'
+          end
+        end
 
       end
 
@@ -574,8 +574,8 @@ module Exif
       #
       class ImageDescription < Base
       end
-      
-      # 
+
+      #
       # 0x010f - Make
       #
       class Make < Base
@@ -592,28 +592,28 @@ module Exif
       #
       class Orientation < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    "top - left"
-	  when 2
-	    "top - right"
-	  when 3
-	    "bottom - right"
-	  when 4
-	    "bottom - left"
-	  when 5
-	    "left - top"
-	  when 6
-	    "right - top"
-	  when 7
-	    "right - bottom"
-	  when 8
-	    "left - bottom"
-	  else
-	    "unknown"
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            "top - left"
+          when 2
+            "top - right"
+          when 3
+            "bottom - right"
+          when 4
+            "bottom - left"
+          when 5
+            "left - top"
+          when 6
+            "right - top"
+          when 7
+            "right - bottom"
+          when 8
+            "left - bottom"
+          else
+            "unknown"
+          end
+        end
 
       end
 
@@ -634,18 +634,18 @@ module Exif
       #
       class ResolutionUnit < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    "none"
-	  when 2
-	    "inch"
-	  when 3
-	    "centimeter"
-	  else
-	    "unknown"
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            "none"
+          when 2
+            "inch"
+          when 3
+            "centimeter"
+          else
+            "unknown"
+          end
+        end
 
       end
 
@@ -678,16 +678,16 @@ module Exif
       #
       class WhitePoint < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -696,16 +696,16 @@ module Exif
       #
       class PrimaryChromaticities < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -714,19 +714,19 @@ module Exif
       #
       class YCbCrCoefficients < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
-      
+
       #
       # 0x0213 - YCbCrPositioning
       #
@@ -738,16 +738,16 @@ module Exif
       #
       class ReferenceBlackWhite < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -756,16 +756,16 @@ module Exif
       #
       class Copyright < Base
 
-	def _format0(data)
-	  data.inspect
-	end
-	
-	def to_s
-	  sep = @data.index(0)
-	  photographer = @data[0..sep-1]
-	  editor = @data[sep+1..-1]
-	  "#{photographer} (Photographer) - #{editor} (Editor)"
-	end
+        def _format0(data)
+          data.inspect
+        end
+
+        def to_s
+          sep = @data.index(0)
+          photographer = @data[0..sep-1]
+          editor = @data[sep+1..-1]
+    "#{photographer} (Photographer) - #{editor} (Editor)"
+        end
 
       end
 
@@ -773,7 +773,7 @@ module Exif
 
     ##
     ## Exif IFD tags
-    ## 
+    ##
 
     module Exif
 
@@ -782,20 +782,20 @@ module Exif
       #
       class ExposureTime < Base
 
-	def to_s
-	  formatExposureTime(@formatted.to_f)
-	end
+        def to_s
+          formatExposureTime(@formatted.to_f)
+        end
 
       end
-      
+
       #
       # 0x829d - FNumber
       #
       class FNumber < Base
 
-	def to_s
-	  formatFNumber(@formatted.to_f)
-	end
+        def to_s
+          formatFNumber(@formatted.to_f)
+        end
 
       end
 
@@ -804,30 +804,30 @@ module Exif
       #
       class ExposureProgram < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    "Not defined"
-	  when 1
-	    "Manual"
-	  when 2
-	    "Normal program"
-	  when 3
-	    "Aperture priority"
-	  when 4
-	    "Shutter priority"
-	  when 5
-	    "Creative program (biased toward depth of field)"
-	  when 6 
-	    "Action program (biased toward fast shutter speed)"
-	  when 7
-	    "Portrait mode (for closeup photos with the background out of focus)"
-	  when 8
-	    "Landscape mode (for landscape photos with the background in focus)"
-	  else
-	    "Unknown"
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            "Not defined"
+          when 1
+            "Manual"
+          when 2
+            "Normal program"
+          when 3
+            "Aperture priority"
+          when 4
+            "Shutter priority"
+          when 5
+            "Creative program (biased toward depth of field)"
+          when 6
+            "Action program (biased toward fast shutter speed)"
+          when 7
+            "Portrait mode (for closeup photos with the background out of focus)"
+          when 8
+            "Landscape mode (for landscape photos with the background in focus)"
+          else
+            "Unknown"
+          end
+        end
 
       end
 
@@ -854,22 +854,22 @@ module Exif
       #
       class ExifVersion < Base
 
-	def _format0(data)
-	  data
-	end
+        def _format0(data)
+          data
+        end
 
-	def to_s
-	  case @formatted
-	  when "0200"
-	    "Exif Version 2.0"
-	  when "0210"
-	    "Exif Version 2.1"
-	  when "0220"
-	    "Exif Version 2.2"
-	  else
-	    "Unknown Exif Version"
-	  end
-	end
+        def to_s
+          case @formatted
+          when "0200"
+            "Exif Version 2.0"
+          when "0210"
+            "Exif Version 2.1"
+          when "0220"
+            "Exif Version 2.2"
+          else
+            "Unknown Exif Version"
+          end
+        end
 
       end
 
@@ -890,18 +890,18 @@ module Exif
       #
       class ComponentsConfiguration < Base
 
-	def _format0(data)
-	  data.unpack("C*").collect{|e| e.to_i}
-	end
-	
-	def to_s
-	  case @formatted
-	  when [0x04,0x05,0x06,0x00]
-	    'RGB'
-	  when [0x01,0x02,0x03,0x00]
-	    'YCbCr'
-	  end
-	end
+        def _format0(data)
+          data.unpack("C*").collect{|e| e.to_i}
+        end
+
+        def to_s
+          case @formatted
+          when [0x04,0x05,0x06,0x00]
+            'RGB'
+          when [0x01,0x02,0x03,0x00]
+            'YCbCr'
+          end
+        end
 
       end
 
@@ -910,20 +910,20 @@ module Exif
       #
       class CompressedBitsPerPixel < Base
 
-	def to_s
-	  "%.1fbits/pixel"%[@formatted.to_f]
-	end
+        def to_s
+          "%.1fbits/pixel"%[@formatted.to_f]
+        end
 
       end
 
-      #
-      # 0x9201 - ShutterSpeedValue
-      #
+        #
+        # 0x9201 - ShutterSpeedValue
+        #
       class ShutterSpeedValue < Base
 
-	def to_s
-	  formatExposureTime(1.0/(2.0**(@formatted.to_f)))
-	end
+        def to_s
+          formatExposureTime(1.0/(2.0**(@formatted.to_f)))
+        end
 
       end
 
@@ -932,9 +932,9 @@ module Exif
       #
       class ApertureValue < Base
 
-	def to_s
+        def to_s
           formatFNumber(Math.sqrt(2.0)**(@formatted.to_f))
-	end
+        end
 
       end
 
@@ -943,9 +943,9 @@ module Exif
       #
       class BrightnessValue < Base
 
-	def to_s
-	  "%+.1f"%[@formatted.to_f]
-	end
+        def to_s
+          "%+.1f"%[@formatted.to_f]
+        end
 
       end
 
@@ -954,9 +954,9 @@ module Exif
       #
       class ExposureBiasValue < Base
 
-	def to_s
-	  "%+.1f"%[@formatted.to_f]
-	end
+        def to_s
+          "%+.1f"%[@formatted.to_f]
+        end
 
       end
 
@@ -965,9 +965,9 @@ module Exif
       #
       class MaxApertureValue < Base
 
-	def to_s
-	  "F%.01f"%[Math.sqrt(2.0)**(@formatted.to_f)]
-	end
+        def to_s
+          "F%.01f"%[Math.sqrt(2.0)**(@formatted.to_f)]
+        end
 
       end
 
@@ -982,26 +982,26 @@ module Exif
       #
       class MeteringMode < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'Average'
-	  when 2
-	    'CenterWeightedAverage'
-	  when 3
-	    'Spot'
-	  when 4
-	    'MultiSpot'
-	  when 5
-	    'Pattern'
-	  when 6
-	    'Partial'
-	  when 255
-	    'other'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'Average'
+          when 2
+            'CenterWeightedAverage'
+          when 3
+            'Spot'
+          when 4
+            'MultiSpot'
+          when 5
+            'Pattern'
+          when 6
+            'Partial'
+          when 255
+            'other'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1010,54 +1010,54 @@ module Exif
       #
       class LightSource < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Unknown'
-	  when 1
-	    'Daylight'
-	  when 2 
-	    'Fluorescent'
-	  when 3
-	    'Tungsten'
-	  when 4
-	    'Flash'
-	  when 9
-	    'Fine weather'
-	  when 10
-	    'Croudy weather'
-	  when 11
-	    'Shade'
-	  when 12
-	    'Daylight fluorescent'
-	  when 13
-	    'Day white fluorescent'
-	  when 14
-	    'Cool white fluorescent'
-	  when 15
-	    'White fluorescent'
-	  when 17
-	    'Standard light A'
-	  when 18
-	    'Standard light B'
-	  when 19
-	    'Standard light C'
-	  when 20
-	    'D55'
-	  when 21
-	    'D65'
-	  when 22
-	    'D75'
-	  when 23
-	    'D50'
-	  when 24
-	    'ISO studio tungsten'
-	  when 255
-	    'other light source'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Unknown'
+          when 1
+            'Daylight'
+          when 2
+            'Fluorescent'
+          when 3
+            'Tungsten'
+          when 4
+            'Flash'
+          when 9
+            'Fine weather'
+          when 10
+            'Croudy weather'
+          when 11
+            'Shade'
+          when 12
+            'Daylight fluorescent'
+          when 13
+            'Day white fluorescent'
+          when 14
+            'Cool white fluorescent'
+          when 15
+            'White fluorescent'
+          when 17
+            'Standard light A'
+          when 18
+            'Standard light B'
+          when 19
+            'Standard light C'
+          when 20
+            'D55'
+          when 21
+            'D65'
+          when 22
+            'D75'
+          when 23
+            'D50'
+          when 24
+            'ISO studio tungsten'
+          when 255
+            'other light source'
+          else
+            'reserved'
+          end
+        end
 
       end
 
@@ -1066,56 +1066,56 @@ module Exif
       #
       class Flash < Base
 
-	def to_s
-	  case @formatted
-	  when 0x0000
-	    'Flash did not fire.'
-	  when 0x0001
-	    'Flash fired.'
-	  when 0x0005
-	    'Strobe return light not detected.'
-	  when 0x0007
-	    'Strobe return light detected.'
-	  when 0x0009
-	    'Flash fired, compulsory flash mode.'
-	  when 0x000d
-	    'Flash fired, compulsory flash mode, return light not detected.'
-	  when 0x000f
-	    'Flash fired, compulsory flash mode, return light detected.'
-	  when 0x0010
-	    'Flash did not fire, compulsory flash mode.'
-	  when 0x0018
-	    'Flash did not fire, auto mode.'
-	  when 0x0019
-	    'Flash fired, auto mode.'
-	  when 0x001d
-	    'Flash fired, auto mode, return light not detected.'
-	  when 0x001f
-	    'Flash fired, auto mode, return light detected.'
-	  when 0x0020
-	    'No flash function.'
-	  when 0x0041
-	    'Flash fired, red-eye reduction mode.'
-	  when 0x0045
-	    'Flash fired, red-eye reduction mode, return light not detected.'
-	  when 0x0047
-	    'Flash fired, red-eye reduction mode, return light detected.'
-	  when 0x0049
-	    'Flash fired, compulsory flash mode.'
-	  when 0x004d
-	    'Flash fired, compulsory flash mode, return light not detected.'
-	  when 0x004f
-	    'Flash fired, compulsory flash mode, return light detected.'
-	  when 0x0059
-	    'Flash fired, auto mode, red-eye reduction mode.'
-	  when 0x005d
-	    'Flash fired, auto mode, return light not detected, red-eye reduction mode.'
-	  when 0x005f
-	    'Flash fired, auto mode, return light detected, red-eye reduction mode.'
-	  else
-	    "reserved"
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0x0000
+            'Flash did not fire.'
+          when 0x0001
+            'Flash fired.'
+          when 0x0005
+            'Strobe return light not detected.'
+          when 0x0007
+            'Strobe return light detected.'
+          when 0x0009
+            'Flash fired, compulsory flash mode.'
+          when 0x000d
+            'Flash fired, compulsory flash mode, return light not detected.'
+          when 0x000f
+            'Flash fired, compulsory flash mode, return light detected.'
+          when 0x0010
+            'Flash did not fire, compulsory flash mode.'
+          when 0x0018
+            'Flash did not fire, auto mode.'
+          when 0x0019
+            'Flash fired, auto mode.'
+          when 0x001d
+            'Flash fired, auto mode, return light not detected.'
+          when 0x001f
+            'Flash fired, auto mode, return light detected.'
+          when 0x0020
+            'No flash function.'
+          when 0x0041
+            'Flash fired, red-eye reduction mode.'
+          when 0x0045
+            'Flash fired, red-eye reduction mode, return light not detected.'
+          when 0x0047
+            'Flash fired, red-eye reduction mode, return light detected.'
+          when 0x0049
+            'Flash fired, compulsory flash mode.'
+          when 0x004d
+            'Flash fired, compulsory flash mode, return light not detected.'
+          when 0x004f
+            'Flash fired, compulsory flash mode, return light detected.'
+          when 0x0059
+            'Flash fired, auto mode, red-eye reduction mode.'
+          when 0x005d
+            'Flash fired, auto mode, return light not detected, red-eye reduction mode.'
+          when 0x005f
+            'Flash fired, auto mode, return light detected, red-eye reduction mode.'
+          else
+            "reserved"
+          end
+        end
 
       end
 
@@ -1124,9 +1124,9 @@ module Exif
       #
       class FocalLength < Base
 
-	def to_s
-	  formatFocalLength(@formatted.to_f)
-	end
+        def to_s
+          formatFocalLength(@formatted.to_f)
+        end
 
       end
 
@@ -1135,25 +1135,25 @@ module Exif
       #
       class SubjectArea < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  case @count
-	  when 2
-	    "Coordinate - [%d, %d]"%[*@formatted]  
-	  when 3
-	    "Circle - Center: [%d, %d], Diameter: %d"%[*@formatted]
-	  when 4
-	    "Rectanglar - Center: [%d, %d], Width: %d, Height: %d"%[*@formatted]
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @count
+          when 2
+            "Coordinate - [%d, %d]"%[*@formatted]
+          when 3
+            "Circle - Center: [%d, %d], Diameter: %d"%[*@formatted]
+          when 4
+            "Rectanglar - Center: [%d, %d], Width: %d, Height: %d"%[*@formatted]
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1162,17 +1162,17 @@ module Exif
       #
       class MakerNote < Base
 
-	def data
-	  @data
-	end
+        def data
+          @data
+        end
 
-	def _format0(data)
-	  @data
-	end
+        def _format0(data)
+          @data
+        end
 
-	def to_s
-	  sprintf("MakerNote data (%i bytes)", data.size)
-	end
+        def to_s
+          sprintf("MakerNote data (%i bytes)", data.size)
+        end
 
       end
 
@@ -1181,23 +1181,23 @@ module Exif
       #
       class UserComment < Base
 
-	def to_s
-	  case @data[0..7]
-	  # ASCII
-	  when [0x41,0x53,0x43,0x49,0x49,0x0,0x0,0x0]
-	    @data[8..-1].pack("C*")
-	  # JIS
-	  when [0x4a,0x59,0x53,0x0,0x0,0x0,0x0,0x0]
-	    @data[8..-1].pack("C*")
-	  # Unicode
-	  when [0x55,0x4e,0x49,0x43,0x4f,0x44,0x45,0x0]
-	    @data[8..-1].pack("U*")
-	  when [0x0]*8
-	    @data[8..-1].pack("C*")
-	  else
-	    "unknown"
-	  end
-	end
+        def to_s
+          case @data[0..7]
+          # ASCII
+          when [0x41,0x53,0x43,0x49,0x49,0x0,0x0,0x0]
+            @data[8..-1].pack("C*")
+          # JIS
+          when [0x4a,0x59,0x53,0x0,0x0,0x0,0x0,0x0]
+            @data[8..-1].pack("C*")
+          # Unicode
+          when [0x55,0x4e,0x49,0x43,0x4f,0x44,0x45,0x0]
+            @data[8..-1].pack("U*")
+          when [0x0]*8
+            @data[8..-1].pack("C*")
+          else
+            "unknown"
+          end
+        end
 
       end
 
@@ -1220,21 +1220,21 @@ module Exif
       end
 
       #
-      # 0xa000 - FlashPixVersion 
+      # 0xa000 - FlashPixVersion
       #
       class FlashPixVersion < Base
-	def _format0(data)
-	  data
-	end
+        def _format0(data)
+          data
+        end
 
-	def to_s
-	  case @formatted
-	  when "0100"
-	    "FlashPix Version 1.0"
-	  else
-	    "Unknown FlashPix Version"
-	  end
-	end
+        def to_s
+          case @formatted
+          when "0100"
+            "FlashPix Version 1.0"
+          else
+            "Unknown FlashPix Version"
+          end
+        end
 
       end
 
@@ -1243,16 +1243,16 @@ module Exif
       #
       class ColorSpace < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'sRGB'
-	  when 65535
-	    'Uncalibrated'
-	  else
-	    'Unknown: #{@formatted}'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'sRGB'
+          when 65535
+            'Uncalibrated'
+          else
+            'Unknown: #{@formatted}'
+          end
+        end
 
       end
 
@@ -1261,14 +1261,14 @@ module Exif
       #
       class PixelXDimension < Base
 
-	def processData
-	  case self.byte_order
-	  when :intel
-	    @formatted = decode_ushort(@data[0,2])
-	  when :motorola
-	    @formatted = decode_ushort(@data[2,2])
-	  end
-	end
+        def processData
+          case self.byte_order
+          when :intel
+            @formatted = decode_ushort(@data[0,2])
+          when :motorola
+            @formatted = decode_ushort(@data[2,2])
+          end
+        end
 
       end
 
@@ -1277,14 +1277,14 @@ module Exif
       #
       class PixelYDimension < Base
 
-	def processData
-	  case self.byte_order
-	  when :intel
-	    @formatted = decode_ushort(@data[0,2])
-	  when :motorola
-	    @formatted = decode_ushort(@data[2,2])
-	  end
-	end
+        def processData
+          case self.byte_order
+          when :intel
+            @formatted = decode_ushort(@data[0,2])
+          when :motorola
+            @formatted = decode_ushort(@data[2,2])
+          end
+        end
 
       end
 
@@ -1323,18 +1323,18 @@ module Exif
       #
       class FocalPlaneResolutionUnit < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    'No unit'
-	  when 2
-	    'Inch'
-	  when 3
-	    'Centimeter'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            'No unit'
+          when 2
+            'Inch'
+          when 3
+            'Centimeter'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1343,16 +1343,16 @@ module Exif
       #
       class SubjectLocation < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  "[%d, %d]"%[*@formatted]
-	end
+        def to_s
+          "[%d, %d]"%[*@formatted]
+        end
 
       end
 
@@ -1367,14 +1367,14 @@ module Exif
       #
       class SensingMethod < Base
 
-	def to_s
-	  case @formatted
-	  when 2
-	    'One-chip color area sensor'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 2
+            'One-chip color area sensor'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1382,38 +1382,38 @@ module Exif
       # 0xa300 - FileSource
       #
       class FileSource < Base
-	def _format0(data)
-	  data[0]
-	end
+        def _format0(data)
+          data[0]
+        end
 
-	def to_s
-	  case @formatted
-	  when 0x03
-	    'Digital still camera'
-	  else 
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0x03
+            'Digital still camera'
+          else
+            'Unknown'
+          end
+        end
 
       end
-      
+
       #
       # 0xa301 - SceneType
       #
       class SceneType < Base
 
-	def _format0(data)
-	  data[0]
-	end
+        def _format0(data)
+          data[0]
+        end
 
-	def to_s
-	  case @formatted
-	  when 0x01
-	    'Directory photographed'
-	  else 
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0x01
+            'Directory photographed'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1427,168 +1427,168 @@ module Exif
       # 0xa401 - CustomRendered
       #
       class CustomRendered < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal process'
-	  when 1
-	    'Custom process'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal process'
+          when 1
+            'Custom process'
+          else
+            'reserved'
+          end
+        end
       end
 
       #
       # 0xa402 - ExposureMode
       #
       class ExposureMode < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto exposure'
-	  when 1
-	    'Manual exposure'
-	  when 2
-	    'Auto bracket'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto exposure'
+          when 1
+            'Manual exposure'
+          when 2
+            'Auto bracket'
+          else
+            'reserved'
+          end
+        end
       end
 
       #
       # 0xa403 - WhiteBalance
       #
       class WhiteBalance < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto white balance'
-	  when 1
-	    'Manual white balance'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto white balance'
+          when 1
+            'Manual white balance'
+          else
+            'reserved'
+          end
+        end
       end
 
       #
       # 0xa404 - DigitalZoomRatio
       #
       class DigitalZoomRatio < Base
-	def to_s
-	  n = @formatted.numerator
-	  d = @formatted.denominator
-	  n == 0 ? 'None' : "%.1f"%[n.to_f/d.to_f]
-	end
+        def to_s
+          n = @formatted.numerator
+          d = @formatted.denominator
+          n == 0 ? 'None' : "%.1f"%[n.to_f/d.to_f]
+        end
       end
 
       #
       # 0xa405 - FocalLengthIn35mmFilm
       #
       class FocalLengthIn35mmFilm < Base
-	def to_s
-	  @formatted == 0 ? 'Unknown' : formatFocalLength(@formatted)
-	end
+        def to_s
+          @formatted == 0 ? 'Unknown' : formatFocalLength(@formatted)
+        end
       end
 
       #
       # 0xa406 - SceneCaptureType
       #
       class SceneCaptureType < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Standard'
-	  when 1
-	    'Landscape'
-	  when 2
-	    'Portrait'
-	  when 3
-	    'Nigit scene'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Standard'
+          when 1
+            'Landscape'
+          when 2
+            'Portrait'
+          when 3
+            'Nigit scene'
+          else
+            'reserved'
+          end
+        end
       end
 
       #
       # 0xa407 - GaincControl
       #
       class GainControl < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'None'
-	  when 1
-	    'Low gain up'
-	  when 2
-	    'High gain up'
-	  when 3
-	    'Low gain down'
-	  when 4
-	    'High gain down'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'None'
+          when 1
+            'Low gain up'
+          when 2
+            'High gain up'
+          when 3
+            'Low gain down'
+          when 4
+            'High gain down'
+          else
+            'reserved'
+          end
+        end
       end
-      
+
       #
       # 0xa408 - Contrast
       #
       class Contrast < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal'
-	  when 1
-	    'Soft'
-	  when 2
-	    'Hard'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal'
+          when 1
+            'Soft'
+          when 2
+            'Hard'
+          else
+            'reserved'
+          end
+        end
       end
-      
+
       #
       # 0xa409 - Saturation
       #
       class Saturation < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal'
-	  when 1
-	    'Low saturation'
-	  when 2
-	    'High saturation'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal'
+          when 1
+            'Low saturation'
+          when 2
+            'High saturation'
+          else
+            'reserved'
+          end
+        end
       end
-      
+
       #
       # 0xa40a - Sharpness
       #
       class Sharpness < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal'
-	  when 1
-	    'Soft'
-	  when 2
-	    'Hard'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal'
+          when 1
+            'Soft'
+          when 2
+            'Hard'
+          else
+            'reserved'
+          end
+        end
       end
-      
+
       #
       # 0xa40b - DeviceSettingDescription
       #
@@ -1599,20 +1599,20 @@ module Exif
       # 0xa40c - SubjectDistanceRange
       #
       class SubjectDistanceRange < Base
-	def to_s
-	  case @formatted
-	  when 0
-	    'Unknown'
-	  when 1
-	    'Macro'
-	  when 2
-	    'Close view'
-	  when 3
-	    'Distant view'
-	  else
-	    'reserved'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Unknown'
+          when 1
+            'Macro'
+          when 2
+            'Close view'
+          when 3
+            'Distant view'
+          else
+            'reserved'
+          end
+        end
       end
 
       #
@@ -1637,14 +1637,14 @@ module Exif
       #
       class GPSVersionID < Base
 
-	def to_s
-	  case @formatted
-	  when [2,0,0,0]
-	    "Version 2.0"
-	  else
-	    "Unknown"
-	  end
-	end
+        def to_s
+          case @formatted
+          when [2,0,0,0]
+            "Version 2.0"
+          else
+            "Unknown"
+          end
+        end
 
       end
 
@@ -1653,16 +1653,16 @@ module Exif
       #
       class GPSLatitudeRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'N'
-	    'North latitude'
-	  when 'S'
-	    'South latitude'
-	  else 
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'N'
+            'North latitude'
+          when 'S'
+            'South latitude'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1671,16 +1671,16 @@ module Exif
       #
       class GPSLatitude < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -1689,16 +1689,16 @@ module Exif
       #
       class GPSLongitudeRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'E'
-	    'East longitude'
-	  when 'W'
-	    'West longitude'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'E'
+            'East longitude'
+          when 'W'
+            'West longitude'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1707,16 +1707,16 @@ module Exif
       #
       class GPSLongitude < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -1725,14 +1725,14 @@ module Exif
       #
       class GPSAltitudeRef < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Sea level'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Sea level'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1746,17 +1746,17 @@ module Exif
       # 0x0007 - GPSTimeStamp
       #
       class GPSTimeStamp < Base
-	
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
+
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -1771,16 +1771,16 @@ module Exif
       #
       class GPSStatus < Base
 
-	def to_s
-	  case @formatted
-	  when 'A'
-	    'Measurement in progress'
-	  when 'V'
-	    'Measurement in interoperability'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'A'
+            'Measurement in progress'
+          when 'V'
+            'Measurement in interoperability'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1789,16 +1789,16 @@ module Exif
       #
       class GPSMeasureMode < Base
 
-	def to_s
-	  case @formatted
-	  when '2'
-	    '2-dimensional measurement'
-	  when '3'
-	    '3-dimensional measurement'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when '2'
+            '2-dimensional measurement'
+          when '3'
+            '3-dimensional measurement'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1813,18 +1813,18 @@ module Exif
       #
       class GPSSpeedRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'K'
-	    'Kilometers per hour'
-	  when 'M'
-	    'Miles per hour'
-	  when 'N'
-	    'Knots'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'K'
+            'Kilometers per hour'
+          when 'M'
+            'Miles per hour'
+          when 'N'
+            'Knots'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1839,16 +1839,16 @@ module Exif
       #
       class GPSTrackRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'T'
-	    'True direction'
-	  when 'M'
-	    'Magnetic direction'
-	  else 
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'T'
+            'True direction'
+          when 'M'
+            'Magnetic direction'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1863,16 +1863,16 @@ module Exif
       #
       class GPSImgDirectionRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'T'
-	    'True direction'
-	  when 'M'
-	    'Magnetic direction'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'T'
+            'True direction'
+          when 'M'
+            'Magnetic direction'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1893,16 +1893,16 @@ module Exif
       #
       class GPSDestLatitudeRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'N'
-	    'North latitude'
-	  when 'S'
-	    'South latitude'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'N'
+            'North latitude'
+          when 'S'
+            'South latitude'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1911,16 +1911,16 @@ module Exif
       #
       class GPSDestLatitude < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -1929,16 +1929,16 @@ module Exif
       #
       class GPSDestLongitudeRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'E'
-	    'East longitude'
-	  when 'W'
-	    'West longitude'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'E'
+            'East longitude'
+          when 'W'
+            'West longitude'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1947,16 +1947,16 @@ module Exif
       #
       class GPSDestLongitude < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  @formatted.join(",")
-	end
+        def to_s
+          @formatted.join(",")
+        end
 
       end
 
@@ -1965,16 +1965,16 @@ module Exif
       #
       class GPSDestBearingRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'T'
-	    'True direction'
-	  when 'M'
-	    'Magnetic direction'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'T'
+            'True direction'
+          when 'M'
+            'Magnetic direction'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -1989,18 +1989,18 @@ module Exif
       #
       class GPSDestDistanceRef < Base
 
-	def to_s
-	  case @formatted
-	  when 'K'
-	    'Kilometers'
-	  when 'M'
-	    'Miles'
-	  when 'N'
-	    'Knots'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 'K'
+            'Kilometers'
+          when 'M'
+            'Miles'
+          when 'N'
+            'Knots'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -2029,7 +2029,7 @@ module Exif
       #
       class InteroperabilityVersion < Base
       end
-      
+
       #
       # 0x1000 - RelatedImageFileFormat
       #
@@ -2049,8 +2049,8 @@ module Exif
       end
 
     end
-    
-        
+
+
     #
     # Hash tables that maps tag ID to the corresponding class.
     #
@@ -2102,7 +2102,7 @@ module Exif
     def IFD0Table.name
       "IFD0"
     end
-    
+
     #
     # ExifStandard 2.2, Section 4.6.8-B
     #
@@ -2222,7 +2222,7 @@ module Exif
       "Interoperability"
     end
 
-    
+
     module_function
 
     def find(tagid, table)

@@ -24,7 +24,7 @@ module Exif
     module MakerNote
 
       #
-      # 0x0000 - Version 
+      # 0x0000 - Version
       #
       class Version < Base
       end
@@ -40,18 +40,18 @@ module Exif
       #
       class Sharpness < Base
 
-	def to_s
-	  case @formatted
-	  when 1,2
-	    'Weak'
-	  when 3
-	    'Standard'
-	  when 4
-	    'Strong'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1,2
+            'Weak'
+          when 3
+            'Standard'
+          when 4
+            'Strong'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -60,28 +60,28 @@ module Exif
       #
       class White < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto'
-	  when 256
-	    'Daylight'
-	  when 512
-	    'Cloudy'
-	  when 768
-	    'DaylightColor-fluorescence'
-	  when 769
-	    'DaywhiteColor-fluorescence'
-	  when 770
-	    'WhiteColor-fluorescence'
-	  when 1024
-	    'Incandescence'
-	  when 3840
-	    'Custom white balance'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto'
+          when 256
+            'Daylight'
+          when 512
+            'Cloudy'
+          when 768
+            'DaylightColor-fluorescence'
+          when 769
+            'DaywhiteColor-fluorescence'
+          when 770
+            'WhiteColor-fluorescence'
+          when 1024
+            'Incandescence'
+          when 3840
+            'Custom white balance'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -90,18 +90,18 @@ module Exif
       #
       class Color < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal(STD)'
-	  when 256
-	    'High(HARD)'
-	  when 
-	    'Low(ORG)'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal(STD)'
+          when 256
+            'High(HARD)'
+          when
+            'Low(ORG)'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -110,18 +110,18 @@ module Exif
       #
       class Tone < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Normal(STD)'
-	  when 256
-	    'High(HARD)'
-	  when 512
-	    'Low(ORG)'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Normal(STD)'
+          when 256
+            'High(HARD)'
+          when 512
+            'Low(ORG)'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -130,20 +130,20 @@ module Exif
       #
       class FlashMode < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto'
-	  when 1
-	    'On'
-	  when 2
-	    'Off'
-	  when 3
-	    'Red-eye reduction'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto'
+          when 1
+            'On'
+          when 2
+            'Off'
+          when 3
+            'Red-eye reduction'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -158,16 +158,16 @@ module Exif
       #
       class Macro < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Off'
-	  when 1
-	    'On'
-	  else 
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Off'
+          when 1
+            'On'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -176,16 +176,16 @@ module Exif
       #
       class FocusMode < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto focus'
-	  when 1
-	    'Manual focus'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto focus'
+          when 1
+            'Manual focus'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -194,16 +194,16 @@ module Exif
       #
       class SlowSync < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Off'
-	  when 1
-	    'On'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Off'
+          when 1
+            'On'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -212,31 +212,31 @@ module Exif
       #
       class PictureMode < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto'
-	  when 1
-	    'Portrait scene'
-	  when 2
-	    'Landscape scene'
-	  when 4
-	    'Sports scene'
-	  when 5
-	    'Night scene'
-	  when 6
-	    'Program Auto Exposure'
-	  when 256
-	    'Aperture prior Auto Exposure'
-	  when 512
-	    'Shutter prior Auto Exposure'
-	  when 768
-	    'Manual exposure'
-	  else
-	    'Unknown'
-	  end
-	end
-	    
+        def to_s
+          case @formatted
+          when 0
+            'Auto'
+          when 1
+            'Portrait scene'
+          when 2
+            'Landscape scene'
+          when 4
+            'Sports scene'
+          when 5
+            'Night scene'
+          when 6
+            'Program Auto Exposure'
+          when 256
+            'Aperture prior Auto Exposure'
+          when 512
+            'Shutter prior Auto Exposure'
+          when 768
+            'Manual exposure'
+          else
+            'Unknown'
+          end
+        end
+
       end
 
       #
@@ -248,20 +248,20 @@ module Exif
       #
       class Cont_Bracket < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Off'
-	  when 1
-	    'On'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Off'
+          when 1
+            'On'
+          else
+            'Unknown'
+          end
+        end
 
-	def name
-	  'Continuous/AutoBracket'
-	end
+        def name
+          'Continuous/AutoBracket'
+        end
 
       end
 
@@ -274,16 +274,16 @@ module Exif
       #
       class BlurWarning < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'No blur warning'
-	  when 1
-	    'Blur warning'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'No blur warning'
+          when 1
+            'Blur warning'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -292,16 +292,16 @@ module Exif
       #
       class FocusWarning < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto Focus good'
-	  when 1
-	    'Out of Focus'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto Focus good'
+          when 1
+            'Out of Focus'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -310,16 +310,16 @@ module Exif
       #
       class AutoExposureWarning < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Auto exposure good'
-	  when 1
-	    'Over exposure'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Auto exposure good'
+          when 1
+            'Over exposure'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -382,9 +382,9 @@ module Exif
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
-	
+
         obj = tagclass.new(tag, "MakerNote", count)
-	obj.extend formatter, @byteOrder_module
+        obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
         if unit * count > 4
           curpos = @fin.pos

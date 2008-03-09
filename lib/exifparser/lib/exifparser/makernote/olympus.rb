@@ -27,42 +27,42 @@ module Exif
       #
       class SpecialMode < Base
 
-	def processData
-	  @formatted = []
-	  partition_data(@count) do |data|
-	    @formatted.push _formatData(data)
-	  end
-	end
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
 
-	def to_s
-	  buf = "Picture taking mode: "
-	  case @formatted[0]
-	  when 0
-	    buf << 'Normal,'
-	  when 1
-	    buf << 'Unknown,'
-	  when 2
-	    buf << 'Fast,'
-	  when 3
-	    buf << 'Panorama,'
-	  else
-	    buf << 'Unknown,'
-	  end
-	  buf << " Sequence number: #{@formatted[1]},"
-	  buf << " Panorama direction: "
-	  case @formatted[2]
-	  when 1
-	    buf << 'left to right'
-	  when 2
-	    buf << 'right to left'
-	  when 3
-	    buf << 'bottom to top'
-	  when 4
-	    buf << 'top to bottom'
-	  else
-	    buf << 'unknown'
-	  end
-	end
+        def to_s
+          buf = "Picture taking mode: "
+          case @formatted[0]
+          when 0
+            buf << 'Normal,'
+          when 1
+            buf << 'Unknown,'
+          when 2
+            buf << 'Fast,'
+          when 3
+            buf << 'Panorama,'
+          else
+            buf << 'Unknown,'
+          end
+          buf << " Sequence number: #{@formatted[1]},"
+          buf << " Panorama direction: "
+          case @formatted[2]
+          when 1
+            buf << 'left to right'
+          when 2
+            buf << 'right to left'
+          when 3
+            buf << 'bottom to top'
+          when 4
+            buf << 'top to bottom'
+          else
+            buf << 'unknown'
+          end
+        end
 
       end
 
@@ -71,18 +71,18 @@ module Exif
       #
       class JpegQual < Base
 
-	def to_s
-	  case @formatted
-	  when 1
-	    "Standard Quality"
-	  when 2
-	    "High Quality"
-	  when 3
-	    "Super High Quality"
-	  else
-	    "Unknown"
-	  end
-	end
+        def to_s
+          case @formatted
+          when 1
+            "Standard Quality"
+          when 2
+            "High Quality"
+          when 3
+            "Super High Quality"
+          else
+            "Unknown"
+          end
+        end
 
       end
 
@@ -91,16 +91,16 @@ module Exif
       #
       class Macro < Base
 
-	def to_s
-	  case @formatted
-	  when 0
-	    'Off'
-	  when 1
-	    'On'
-	  else
-	    'Unknown'
-	  end
-	end
+        def to_s
+          case @formatted
+          when 0
+            'Off'
+          when 1
+            'On'
+          else
+            'Unknown'
+          end
+        end
 
       end
 
@@ -117,7 +117,7 @@ module Exif
       #
       # 0x0205 - Unknown
       #
-      
+
       #
       # 0x0206 - Unknown
       #
@@ -187,18 +187,18 @@ module Exif
       # now scan them
       #
       1.upto(num_dirs) {
-	curpos_tag = @fin.pos
+        curpos_tag = @fin.pos
         tag = parseTagID(fin_read_n(2))
         tagclass = Tag.find(tag.hex, Tag::OlympusIFDTable)
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
         obj = tagclass.new(tag, "MakerNote", count)
-	obj.extend formatter, @byteOrder_module
+        obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
         if unit * count > 4
           curpos = @fin.pos
-          begin 
+          begin
             @fin.pos = @tiffHeader0 + decode_ulong(tagdata)
             obj.dataPos = @fin.pos
             obj.data = fin_read_n(unit*count)

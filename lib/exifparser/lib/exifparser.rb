@@ -1,4 +1,4 @@
-# 
+#
 #
 #=  exifparser.rb - Exif tag parser written in pure ruby
 #
@@ -8,8 +8,8 @@
 # $Id: exifparser.rb,v 1.1.1.1 2002/12/16 07:59:00 tam Exp $
 #
 #== INTRODUCTION
-# 
-#There are 2 classes you work with. ExifParser class is 
+#
+#There are 2 classes you work with. ExifParser class is
 #the Exif tag parser that parses all tags defined EXIF-2.2 standard,
 #and many of extension tags uniquely defined by some digital equipment
 #manufacturers. Currently, part of tags defined by FujiFilm, and
@@ -24,25 +24,25 @@
 #
 # #<Exif::Tag::TIFF::Make ID=0x010f, IFD="IFD0" Name="Make", Format="Ascii" Value="FUJIFILM">
 #
-#here, ID is Tag ID defined in EXIF-2.2 standard, IFD is the name of 
+#here, ID is Tag ID defined in EXIF-2.2 standard, IFD is the name of
 #Image File Directory, Name is String representation of tag ID, Format is
-#string that shows how the data is formatted, and Value is the value of 
+#string that shows how the data is formatted, and Value is the value of
 #the tag. This is retrieved by Exif::Tag::Make#value.
-# 
+#
 #Another example. If you want to know whether flash was fired when the image
 #was generated, ExifParser returns Exif::Tag::Flash object:
-# 
+#
 # tag = exif['Flash']
 # p tag
 # => #<Exif::Tag::Exif::Flash ID=0x9209, IFD="Exif" Name="Flash", Format="Unsigned short" Value="1">
 # p tag.value
 # => 1
 #
-#It may happen that diffrent IFDs have the same tag name. In this case, 
+#It may happen that diffrent IFDs have the same tag name. In this case,
 #use Exif#tag(tagname, IFD)
 #
 #The value of the tag above, 1, is not clearly understood
-#(supposed to be 'true', though). Exif::Tag::Flash#to_s will provides 
+#(supposed to be 'true', though). Exif::Tag::Flash#to_s will provides
 #more human-readable form as String.
 #
 # tag.to_s #=> "Flash fired."
@@ -53,7 +53,7 @@
 # require 'exifparser'
 #
 # exif = ExifParser.new("fujifilm.jpg")
-# 
+#
 # 1. get a tag value by its name('Make') or its ID (0x010f)
 # exif['Make'] #=> 'FUJIFILM'
 # exif[0x010f] #=> 'FUJIFILM'
@@ -68,7 +68,7 @@
 #
 # exif.tags
 #
-# or, if you want to know all the tags defined in specific IFD, 
+# or, if you want to know all the tags defined in specific IFD,
 #
 # exif.tags(:IFD0) # get all the tags defined in IFD0
 #
@@ -77,7 +77,7 @@
 # exif.each do |tag|
 #   p tag.to_s
 # end
-# 
+#
 # # each tag in IFD0
 # exif.each(:IFD0) do |ifd0_tag|
 #  p ifd0_tag.to_s
@@ -90,7 +90,7 @@
 # end
 #
 # dest object must respond to '<<'.
-# 
+#
 require 'exifparser/scan'
 
 module Exif
@@ -134,7 +134,7 @@ module Exif
     end
 
     #
-    # search the specified tag values. return value is object of 
+    # search the specified tag values. return value is object of
     # classes defined under Exif::Tag module.
     #
     def [](tagname)
@@ -184,12 +184,12 @@ module Exif
         @scanner.result[ifd]
       else
         [
-        @IFD0, 
-         @IFD1,
-        @Exif,
-        @GPS,
-        @Interoperability,
-         @MakerNote
+          @IFD0,
+          @IFD1,
+          @Exif,
+          @GPS,
+          @Interoperability,
+          @MakerNote
         ].flatten
       end
     end
@@ -197,7 +197,7 @@ module Exif
     #
     # execute given block with block argument being every tags defined
     # in all the IFDs contained in the image.
-    # 
+    #
     # if argument ifd is specified, every tags defined in the
     # specified IFD are passed to block.
     #
@@ -215,13 +215,13 @@ module Exif
         @scanner.result[ifd].each{ |tag| yield tag }
       else
         [
-        @IFD0, 
-         @IFD1,
-        @Exif,
-        @Interoperability,
-         @MakerNote
-        ].flatten.each do |tag| 
-         yield tag 
+          @IfD0,
+          @IFD1,
+          @Exif,
+          @Interoperability,
+          @MakerNote
+        ].flatten.each do |tag|
+          yield tag
         end
       end
     end
@@ -230,30 +230,30 @@ module Exif
 
     def search_tag(tagID, ifd=nil)
       if ifd
-	@scanner.result(ifd).find do |tag| 
-	  case tagID
-	  when Fixnum
-	    tag.tagID.hex == tagID
-	  when String
-	    tag.name == tagID
-	  end
-	end
+        @scanner.result(ifd).find do |tag|
+          case tagID
+          when Fixnum
+            tag.tagID.hex == tagID
+          when String
+            tag.name == tagID
+          end
+        end
       else
-	[
-	@IFD0,
-	@IFD1,
-	@Exif,
-	@GPS,
-	@Interoperability,
-	@MakerNote
-	].flatten.find do |tag| 
-	  case tagID
-	  when Fixnum
-	    tag.tagID.hex == tagID
-	  when String
-	    tag.name == tagID
-	  end
-	end
+        [
+          @IFD0,
+          @IFD1,
+          @Exif,
+          @GPS,
+          @Interoperability,
+          @MakerNote
+        ].flatten.find do |tag|
+          case tagID
+          when Fixnum
+            tag.tagID.hex == tagID
+          when String
+            tag.name == tagID
+          end
+        end
       end
     end
 
