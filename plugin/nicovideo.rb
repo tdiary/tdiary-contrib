@@ -63,7 +63,7 @@ def nicovideo_inline( elem )
 			</table>
 		HTML
 	end
-	result.gsub( /^\t*/, '' )
+	result.gsub( /^\t+/, '' )
 end
 
 def nicovideo_iframe( video_id )
