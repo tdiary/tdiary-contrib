@@ -153,8 +153,8 @@ module TDiary
 					doc.add_attr("@uri", anchor)
 				end
 				doc.add_attr("@mdate", last_modified)
-				doc.add_hidden_text(NKF::nkf('-Ew -m0',title))
-				doc.add_text(NKF::nkf('-Ew -m0',body))
+				doc.add_hidden_text(title)
+				doc.add_text(body)
 				@db.put_doc(doc)
 			end
 
@@ -178,8 +178,8 @@ module TDiary
 					doc.add_attr("@uri", anchor)
 				end
 				doc.add_attr("@mdate", comment.date.strftime("%FT%T"))
-				doc.add_hidden_text(NKF::nkf('-Ew -m0',title))
-				doc.add_text(NKF::nkf('-Ew -m0',body))
+				doc.add_hidden_text(title)
+				doc.add_text(body)
 				@db.put_doc(doc)
 			end
 		end

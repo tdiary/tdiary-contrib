@@ -93,7 +93,7 @@ module TDiary
 			begin
 				t = Time.now
 				cond = create_search_options
-				cond.set_phrase(NKF::nkf('-Ew -m0',@query))
+				cond.set_phrase(@query)
 				@result = @db.search(cond, 0)
 				@secs = Time.now - t
 			rescue
