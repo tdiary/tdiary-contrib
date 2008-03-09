@@ -25,16 +25,16 @@ DEBUG = $DEBUG
 # HTML Templates
 #
 
-def unindent(str, n)
-  str.gsub(/^ {0,#{n}}/, '')
+def unindent(str)
+  str.gsub(/^#{str[/\A(?:\t+| +)/]}/, '')
 end
 
-HEADER = unindent(<<-'EOS', 2)
+HEADER = unindent <<'EOS'
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-  <html lang="ja-JP">
+  <html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
-    <meta http-equiv="Content-Language" content="ja-JP">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="ja">
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="theme/base.css" type="text/css" media="all">
     <link rel="stylesheet" href="theme/<%= theme %>/<%= theme %>.css" title="<%= theme %>" type="text/css" media="all">
@@ -43,12 +43,12 @@ HEADER = unindent(<<-'EOS', 2)
   <body>
 EOS
 
-FOOTER = unindent(<<'EOS', 2)
+FOOTER = unindent <<'EOS'
   </body>
   </html>
 EOS
 
-SEARCH_FORM = unindent(<<"EOS", 2)
+SEARCH_FORM = unindent <<"EOS"
   <form method="post" action="#{File.basename(__FILE__)}">
   <input type="text" name="q" size="20" value="<%= patterns.map {|re| escape(re.source) }.join(' ') %>">
   <input type="submit" value="Search">
@@ -60,14 +60,14 @@ SEARCH_FORM = unindent(<<"EOS", 2)
   </form>
 EOS
 
-SEARCH_PAGE = unindent(<<-"EOS", 2)
+SEARCH_PAGE = unindent <<"EOS"
   <h1>tDiary Search</h1>
   #{SEARCH_FORM}
 EOS
 
 TOO_MANY_HITS = 50
 
-SEARCH_RESULT = unindent(<<-"EOS", 2)
+SEARCH_RESULT = unindent <<"EOS"
   <h1>tDiary Search: Search Result</h1>
   #{SEARCH_FORM}
   <%
@@ -94,12 +94,12 @@ SEARCH_RESULT = unindent(<<-"EOS", 2)
   #{SEARCH_FORM}
 EOS
 
-SEARCH_ERROR = unindent(<<"EOS", 2)
+SEARCH_ERROR = unindent <<"EOS"
   #{SEARCH_FORM}
   <%= escape(reason) %>.
 EOS
 
-HISTORY = unindent(<<"EOS", 2)
+HISTORY = unindent <<"EOS"
   <h1>tDiary Search: Search History</h1>
   #{SEARCH_FORM}
   <ul>
@@ -133,7 +133,7 @@ Z_SPACE = "\241\241"   # zen-kaku space
 BEGIN { $defout.binmode }
 
 def main
-  $KCODE = 'EUC'
+  $KCODE = 'u'
   cgi = CGI.new
   @config = TDiary::Config.new(cgi)
   @config.options['apply_plugin'] = true
@@ -181,7 +181,7 @@ end
 def send_html(cgi, html)
   print cgi.header('status' => '200 OK',
                    'type' => 'text/html',
-                   'charset' => 'euc-jp',
+                   'charset' => 'utf-8',
                    'Content-Length' => html.length.to_s,
                    'Cache-Control' => 'no-cache',
                    'Pragma' => 'no-cache')
@@ -387,7 +387,7 @@ def short_html(component)
 end
 
 def tdiary2text(html)
-  apply_tdiary_plugins(html).gsub(%r[<.*?>]em, '').slice(/\A.{0,120}/me)
+  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]em, '').slice(/\A.{0,120}/me)
 end
 
 Years = {}
@@ -432,7 +432,7 @@ def escape_url(u)
 end
 
 def urlencode(str)
-  str.gsub(/[^\w\-]/n) {|ch| sprintf('%%%02x', ch[0]) }
+  str.gsub(/[^\w-]/n) {|ch| sprintf('%%%02x', ch[0]) }
 end
 
 #
