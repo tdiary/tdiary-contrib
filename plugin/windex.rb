@@ -302,16 +302,16 @@ private
 
 		topchr = name[0,1]
 		if topchr.count("\xA1-\xFE") == 1
-			# 2バイト文字
+			# マルチバイト文字
 			topchr = name[0,2]
 		end
 		if to_1byte.has_key?(topchr) == true
 			topchr = to_1byte[topchr]
 		end
 		if topchr.length == 1
-			# 1バイト文字の処理
+			# シングルバイト文字の処理
 			topchr = topchr.upcase
-			
+
 			if (0x21 <= topchr[0] && topchr[0] <= 0x2F) \
 				|| (0x3A <= topchr[0] && topchr[0] <= 0x40) \
 				|| (0x5B <= topchr[0] && topchr[0] <= 0x60) \
@@ -319,7 +319,7 @@ private
 					topchr = "記号"
 			end
 		else
-			# 2バイト文字の処理
+			# マルチバイト文字の処理
 			# カタカナ->ひらがな変換
 			code = topchr[0] * 0x100 + topchr[1]
 			if 0xA5A1 <= code && code <= 0xA5F3
@@ -499,7 +499,7 @@ else
 
 	header = {
 		"type" => "text/html",
-		"charset" => "EUC-JP",
+		"charset" => "UTF-8",
 		"Content-Length" => body.size.to_s,
 		"Pragma" => "no-cache",
 		"Cache-Control" => "no-cache",
