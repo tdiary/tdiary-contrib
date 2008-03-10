@@ -48,10 +48,10 @@ def nicovideo_inline( elem )
 			<tr valign="top">
 			<td style="font-size:70%;border-width:0px;">
 			<div style="margin:4px 0px;"><a href="#{url}" target="_blank"><img alt="#{title}" src="#{thumb}" width="130" height="100" style="border:solid 1px #333;"></a></div>
-			<p><strong>#{length}</strong><br>
-			再生: <strong>#{view}</strong><br>
-			コメント: <strong>#{comment_num}</strong><br>
-			マイリスト:<strong>#{mylist}</strong></p>
+			<p><strong>#{length.split(/:/).map{|i|'%02d' % i.to_i}.join(':')}</strong><br>
+			再生: <strong>#{view.scan(/\d+?(?=\d{3}*$)/).join(",")}</strong><br>
+			コメント: <strong>#{comment_num.scan(/\d+?(?=\d{3}*$)/).join(",")}</strong><br>
+			マイリスト: <strong>#{mylist.scan(/\d+?(?=\d{3}*$)/).join(",")}</strong></p>
 			</td>
 			<td width="100%" style="font-size:80%;border-width:0px;">
 			<p><a href="#{url}" target="_blank" class="video"><strong>#{title}</strong></a><br>#{desc}</p>
