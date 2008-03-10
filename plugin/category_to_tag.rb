@@ -24,7 +24,6 @@ if respond_to?( :categorized_title_of_day ) then # BlogKit
 elsif respond_to?( :category_anchor ) # diary
 	add_section_enter_proc do |date, index|
 		@category_to_tag_list = {}
-		category_to_tag_list
 	end
 	alias subtitle_link_original subtitle_link
 	def subtitle_link( date, index, subtitle )
