@@ -20,7 +20,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "rast-register.rb $Revision: 1.14 $"
+		puts "rast-register.rb $Revision: 1.10.2.2 $"
 		puts " register to rast index files from tDiary's database."
 		puts " usage: ruby rast-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit
@@ -220,12 +220,7 @@ module TDiary
 		def cookie_mail; ''; end
 
 		def convert(str)
-			case @encoding
-			when 'utf8'
-				NKF::nkf('-w -m0', str)
-			else
-				str
-			end
+			str
 		end
 	end
 
@@ -277,7 +272,7 @@ if mode == "CMD"
 		conf.hide_comment_form = true
 		conf.show_nyear = false
 		def conf.bot?; true; end
-		encoding = conf.options['rast.encoding'] || 'euc_jp'
+		encoding = 'utf8'
 		TDiary::RastRegisterMain.new(conf).execute(encoding)
 	rescue
 		print $!, "\n"
@@ -299,7 +294,7 @@ else
 		def conf.bot?; true; end
 	
 		diary = @diaries[@date.strftime('%Y%m%d')]
-		encoding = @options['rast.encoding'] || 'euc_jp'
+		encoding = 'utf8'
 		TDiary::RastDB.new(conf, encoding).transaction do |rast_db|
 			TDiary::RastRegister.new(rast_db, diary).execute(true)
 		end
@@ -318,7 +313,7 @@ else
 HTML
 			if @mode == 'saveconf'
 				if @cgi.valid?( 'rast_register_rebuild' )
-					encoding = @conf.options['rast.encoding'] || 'euc_jp'
+					encoding = 'utf8'
 					str << '<p>The following diaries were registered.</p>'
 					out = ''
 					TDiary::RastRegisterMain.new(@conf).execute(encoding, out)

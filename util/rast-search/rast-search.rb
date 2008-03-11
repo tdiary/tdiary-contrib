@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
-# rast-search.rb $Revision: 1.9 $
+# rast-search.rb $Revision: 1.6.2.2 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
-$KCODE= 'e'
+$KCODE= 'u'
 BEGIN { $defout.binmode }
 
 if FileTest::symlink?( __FILE__ ) then
@@ -36,7 +36,7 @@ module TDiary
 		def initialize( cgi, rhtml, conf )
 			super
 			@db_path = conf.options['rast.db_path'] || "#{cache_path}/rast"
-			@encoding = conf.options['rast.encoding'] || 'euc_jp'
+			@encoding = 'utf8'
 			# conf.options['sp.selected'] = ''
 			parse_args
 			format_form
@@ -198,13 +198,7 @@ module TDiary
 		end
 
 		def convert(str)
-			case @encoding
-			when 'utf8'
-				require 'nkf'
-				NKF::nkf('-w -m0', str)
-			else
-				@conf.to_native(str)
-			end
+			@conf.to_native(str)
 		end
 	end
 end

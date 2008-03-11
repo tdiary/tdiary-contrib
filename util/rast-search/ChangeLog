@@ -1,3 +1,6 @@
+2007-01-08  Kazuhiko  <kazuhiko@fdiary.net>
+	* rast-register.rb, rast-search.rb: revise for UTF8.
+
 2005-12-10  Kazuhiko  <kazuhiko@fdiary.net>
 	* rast-register.rb: set 'diaries' for the 'my-ex' plugin.
 
