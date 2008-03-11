@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# estraier-register.rb $Revision: 1.3 $
+# estraier-register.rb $Revision: 1.1.2.13 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
@@ -22,7 +22,7 @@ if mode == "CMD"
 	$stdout.sync = true
 
 	def usage
-		puts "hyper-estraier-register.rb $Revision: 1.3 $"
+		puts "hyper-estraier-register.rb $Revision: 1.1.2.13 $"
 		puts " register to hyper-estraier index files from tDiary's database."
 		puts " usage: ruby hyper-estraier-regiser.rb [-p <tDiary directory>] [-c <tdiary.conf directory>]"
 		exit

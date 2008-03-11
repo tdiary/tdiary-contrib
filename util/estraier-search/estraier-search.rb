@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
-# estraier-search.rb $Revision: 1.4 $
+# estraier-search.rb $Revision: 1.1.2.12 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
+$KCODE= 'u'
 BEGIN { $defout.binmode }
 
-require "misc/lib/estraierpure"
+require "estraierpure"
 require "enumerator"
 require "date"
 
@@ -93,7 +94,7 @@ module TDiary
 			begin
 				t = Time.now
 				cond = create_search_options
-				cond.set_phrase(@query)
+				cond.set_phrase(convert(@query))
 				@result = @db.search(cond, 0)
 				@secs = Time.now - t
 			rescue

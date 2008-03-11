@@ -15,7 +15,7 @@
       <title><%= _(@date.sub(/^(\d{4})(\d{2})(\d{2}).*/, "\\1-\\2-\\3")) %> <%= _(@conf.to_native(@title)) %></title>
       <link><%= @conf.base_url %><%= @plugin.anchor(@date) %></link>
       <pubDate><%= _(CGI.rfc1123_date(Time.parse(@last_modified))) %></pubDate>
-      <description><%= _(@conf.to_native(@summary, "utf-8")) %></description>
+      <description><%= _(@conf.to_native(@summary)) %></description>
       <guid><%= @conf.base_url %><%= @plugin.anchor(@date) %></guid>
     </item>
     <% end %>

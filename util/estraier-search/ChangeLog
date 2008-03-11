@@ -2,10 +2,6 @@
 
 	* estraier-search.rb: add override whatsnew plugin.
 	
-2007-02-19 SHIBATA Hiroshi <h-sbt@nifty.com>
-
-	* merge from Test_UTF8.
-
 2007-02-18  Kazuhiko  <kazuhiko@fdiary.net>
 
 	* estraier-search.rb: add 'require "date"'.
