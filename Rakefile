@@ -35,7 +35,7 @@ namespace :spec do
 			IO.readlines(File.join('spec', 'rcov.opts')).map {|l| l.chomp.split " "}.flatten
 		end
 	end
-		
+
 	namespace :rcov do
 		task :clean do
 			rm_rf "coverage"
@@ -65,24 +65,22 @@ task :to_euc do |t|
 		filename = File.join pkg.package_dir_path, f
 		# exclude directories and binary files
 		next if File.ftype(filename) != 'file' ||
-			package[:binary_ext].include?(File.extname(filename))
-		
+		        package[:binary_ext].include?(File.extname(filename))
+
 		case
 		when Shell.new.find_system_command('nkf')
-			sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
-			   "touch -m -r #{filename} #{filename}.tmp && "  <<
-			   "mv #{filename}.tmp #{filename}"
-		when Shell.new.find_system_command('iconv')
-			# use iconv instead of nkf in the following another way...
 			sh <<-EOS.gsub(/^\s+/, '')
-				iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \\
-				touch -m -r #{filename}{,.tmp} && \\
+				nkf -O --euc #{filename}{,.tmp} && \\
+				touch -m --reference=#{filename} #{filename}.tmp && \\
 				mv #{filename}{.tmp,}
 			EOS
-			#else
-			# ... or require 'nkf', 'iconv'
+		when Shell.new.find_system_command('iconv')
+			sh <<-EOS.gsub(/^\s+/, '')
+				iconv --from-code=utf-8 --to-code=euc-jp --output #{filename}{.tmp,} && \\
+				touch -m --reference=#{filename} #{filename}.tmp && \\
+				mv #{filename}{.tmp,}
+			EOS
 		end
-		touch filename
 	end
 end
 
