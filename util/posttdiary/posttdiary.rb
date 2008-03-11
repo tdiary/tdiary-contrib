@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
-$KCODE= 'e'
+$KCODE= 'u'
 #
-# posttdiary: update tDiary via e-mail. $Revision: 1.5 $
+# posttdiary: update tDiary via e-mail. $Revision: 1.5.2.1 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
 
 def usage
-	<<-TEXT.gsub( /^\t{2}/, '' )
+	text = <<-TEXT
 		#{File::basename __FILE__}: update tDiary via e-mail.
 		usage: ruby #{File::basename __FILE__} [options] <url> [user] [passwd]
 		arguments:
@@ -26,14 +26,17 @@ def usage
 		          default format is ' <img class="photo" src="$1" alt="">'.
 		  --use-subject,  -s: use mail subject to subtitle.
 		          and insert image between subtitle and body.
-	TEXT
+  TEXT
+  text.gsub( /\t/, '' )
 end
 
 def image_list( date, path )
 	image_path = []
 	Dir.foreach( path ) do |file|
-		if file =~ /(\d{8,})_(\d+)\./ and $1 == date then
-			image_path[$2.to_i] = file
+		if file =~ /(\d{8,})_(\d+)\.(.*)/ then
+			if $1 == date then
+				image_path[$2.to_i] = file
+			end
 		end
 	end
 	image_path
@@ -89,17 +92,23 @@ begin
 		raise usage
 	end
 	raise usage if (image_dir and not image_url) or (not image_dir and image_url)
-	image_dir.sub!( %r[/*$], '/' ) if image_dir
-	image_url.sub!( %r[/*$], '/' ) if image_url
+	if image_dir then
+		image_dir += '/' unless %r[/$] =~ image_dir
+	end
+	if image_url then
+		image_url += '/' unless %r[/$] =~ image_url
+	end
 	url = ARGV.shift
-	if %r|http://([^:/]+)(?::(\d+))?(/.*)| =~ url then
+	if %r|http://([^:/]*):?(\d*)(/.*)| =~ url then
 		host = $1
-		port = ($2 || 80).to_i
-		cgi  = $3
+		port = $2.to_i
+		cgi = $3
+		raise 'bad url.' if not host or not cgi
+		port = 80 if port == 0
 	else
 		raise 'bad url.'
 	end
-
+	
 	user = ARGV.shift
 	pass = ARGV.shift
 
@@ -107,31 +116,27 @@ begin
 	require 'nkf'
 	image_name = nil
 
-	mail = NKF::nkf( '-m0 -Xed', ARGF.read )
+	mail = NKF::nkf( '-m0 -wXd', ARGF.read )
 	raise "#{File::basename __FILE__}: no mail text." if not mail or mail.length == 0
-
-	head, body = mail.split( /(?:\r?\n){2}/, 2 )
+	
+	head, body = mail.split( /\r*\n\r*\n/, 2 )
 
 	if head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"(.*?)\"/im then
 		if not image_dir or not image_url then
 			raise "no --image-path and --image-url options"
 		end
-
+	
 		bound = "--" + $1
 		body_sub = body.split( Regexp.compile( Regexp.escape( bound ) ) )
 		body_sub.each do |b|
-			sub_head, sub_body = b.split( /(?:\r?\n){2}/, 2 )
+			sub_head, sub_body = b.split( /\r*\n\r*\n/, 2 )
 
-			next unless sub_head =~ /Content-Type:/i
+			next unless sub_head =~ /Content-Type/
 
 			if sub_head =~ %r[^Content-Type:\s*text/plain]i then
 				@body = sub_body
-			elsif sub_head =~ %r[
-				^Content-Type:\s*
-				(?:image/ | application/octet-stream).+
-				name=".+(\.[^.]+?)" (?# 1: extension)
-			]imx
-				image_ext = $1.downcase
+			elsif sub_head =~ %r[^Content-Type:\s*(image/|application/octet-stream).*name=".*(\..*?)"]im
+				image_ext = $2.downcase
 				now = Time::now
 				list = image_list( now.strftime( "%Y%m%d" ), image_dir )
 				image_name = now.strftime( "%Y%m%d" ) + "_" + list.length.to_s + image_ext
@@ -145,63 +150,66 @@ begin
 				end
 				if /\.bmp$/i =~ image_name then
 					bmp_to_png( image_dir + image_name )
-					image_name.sub!( /\.bmp$/i, '.png' )
+					image_name.sub!( /\.bmp$/, '.png' )
 				end
-				@image_name ||= []
+				@image_name = [] unless @image_name
 				@image_name << image_name
 			end
 		end
-	elsif head =~ /^Content-Type:\s*text\/plain/i
+	elsif head =~ /^Content-Type:\s*text\/plain/i 
 		@body = body
 	else
-		raise "cannot read this mail"
+		raise "can not read this mail"
 	end
 
 	if @image_name then
 		img_src = ""
 		@image_name.each do |i|
-			serial = i.sub( /^\d+_(\d+)\..*$/n, '\1' )
+			serial = i.sub( /^\d+_(\d+)\..*$/, '\1' )
 			img_src += image_format.gsub( /\$0/, serial ).gsub( /\$1/, image_url + i )
 		end
 		if use_subject then
-			@body = "#{img_src}\n#{@body}".sub( /(?:\r?\n|\r)+\z/, "\n" )
+			@body = "#{img_src}\n#{@body.sub( /\n+\z/, '' )}"
 		else
-			@body = "#{@body}".sub( /(?:\r?\n|\r)+\z/, "\n" ) << img_src
+			@body = "#{@body.sub( /\n+\z/, '' )}\n#{img_src}"
 		end
 	end
 
 	addr = nil
 	if /^To:(.*)$/ =~ head then
-		addr = case to = $1.strip
-		when /.*?\s*<(.+)>/, /(.+?)\s*\(.*\)/
-			$1
+		to = $1.strip
+		if /.*?\s*<(.*)>/ =~ to then
+			addr = $1
+		elsif /(.*?)\s*\(.*\)/ =~ to
+			addr = $1
 		else
-			to
+			addr = to
 		end
 	end
-
+	
 	if /([^-]+)-(.*)@/ =~ addr then
-		user ||= $1
-		pass ||= $2
+		user = $1 unless user
+		pass = $2 unless pass
 	end
-
+	
 	raise "no user." unless user
 	raise "no passwd." unless pass
-
+	
 	subject = ''
 	nextline = false
-	headlines = head.split( /(?:\r?\n|\r)+/ )
+	headlines = head.split( /[\r\n]+/ )
 	for n in 0 .. headlines.size-1
 		if nextline then
 			if /^[ \t]/ =~ headlines[n] then
 				s = headlines[n].sub( /^[ \t]/, '' )
-				subject += NKF::nkf( '-eXd', s )
+				subject += NKF::nkf( '-wXd', s )
 			else
 				break
 			end
 		end
-		if /^Subject:\s*(.+)$/i =~ headlines[n] then
-			subject = NKF::nkf( '-eXd', $1 )
+		if /^Subject:(.*)$/ =~ headlines[n] then
+			s = $1.sub( /^\s+/, '' )
+			subject = NKF::nkf( '-wXd', s )
 			nextline = true
 		end
 	end
@@ -221,20 +229,19 @@ begin
 	require 'net/http'
 	Net::HTTP.start( host, port ) do |http|
 		auth = ["#{user}:#{pass}"].pack( 'm' ).strip
-		res, = http.get( cgi, {
+		res, = http.get( cgi,
 				'Authorization' => "Basic #{auth}",
-				'Referer' => url })
+				'Referer' => url )
 		if %r|<input type="hidden" name="csrf_protection_key" value="([^"]+)">| =~ res.body then
 			data << "&csrf_protection_key=#{CGI::escape( CGI::unescapeHTML( $1 ) )}"
 		end
-		res, = http.post( cgi, data, {
+		res, = http.post( cgi, data,
 				'Authorization' => "Basic #{auth}",
-				'Referer' => url })
+				'Referer' => url )
 	end
 
 rescue
 	$stderr.puts $!
-	$stderr.puts $@.join( "\n" )
 	File::delete( image_dir + image_name ) if image_dir and image_name and FileTest::exist?( image_dir + image_name )
 	exit 1
 end

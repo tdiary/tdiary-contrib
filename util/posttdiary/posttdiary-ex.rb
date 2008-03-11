@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
-$KCODE= 'e'
+$KCODE= 'u'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.9 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.6.2.4 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2007.11.22: v.1.66: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2007.9.22: v.1.66: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb v1.2 by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
@@ -326,7 +326,7 @@ def read_exif_comment( fullpath_imgname )
 		s = f.readlines
 		s.each do |t|
 			t.gsub!( /.*Value:/, '' )
-			v = NKF::nkf( '-m0 -Xed', t ).gsub!( /^\s+/, '' ).chomp! if $&
+			v = NKF::nkf( '-m0 -wXd', t ).gsub!( /^\s+/, '' ).chomp! if $&
 		end
 	end
 	v = '' if v =~ /^\(null\)$/i
@@ -406,7 +406,7 @@ def add_body_text( prev, sub_head , sub_body )
 		addtext += "\n"
 	end
 	if sub_head =~ %r[^Content-Transfer-Encoding:\s*base64]i then
-		addtext += NKF::nkf( '-eXd -mB', sub_body )
+		addtext += NKF::nkf( '-wXd -mB', sub_body )
 	elsif
 		addtext += sub_body
 	end
@@ -637,14 +637,14 @@ def parse_mail( head, body , image_dir )
 		if nextline then
 			if /^[ \t]/ =~ headlines[n] then
 				s = headlines[n].sub( /^[ \t]/, '' )
-				subject += NKF::nkf( '-eXd', s )
+				subject += NKF::nkf( '-wXd', s )
 			else
 				break
 			end
 		end
 		if /^Subject:(.*)$/ =~ headlines[n] then
 			s = $1.sub( /^\s+/, '' )
-			subject = NKF::nkf( '-eXd', s )
+			subject = NKF::nkf( '-wXd', s )
 			nextline = true
 		end
 	end
@@ -901,7 +901,7 @@ begin
 	require 'shell'
 	Net::HTTP.version_1_2
 
-	mail = NKF::nkf( '-m0 -Xed', ARGF.read )
+	mail = NKF::nkf( '-m0 -wXd', ARGF.read )
 	raise "posttdiary-ex: no mail text." if not mail or mail.length == 0
 	
 	head, body = mail.split( /\r*\n\r*\n/, 2 )
