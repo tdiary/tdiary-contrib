@@ -59,15 +59,14 @@ pkg = Rake::PackageTask.new(package[:name], package[:rev]) do |p|
 end
 
 desc 'Convert source encoding from UTF-8 to EUC-JP'
-task :to_euc => pkg.package_dir_path
-file pkg.package_dir_path do |t|
+task :to_euc do |t|
 	require 'shell'
-	t.prerequisites.each do |f|
+	pkg.package_files.each do |f|
 		filename = File.join pkg.package_dir_path, f
 		# exclude directories and binary files
 		next if File.ftype(filename) != 'file' ||
-		        package[:binary_ext].include?(File.extname(filename))
-
+			package[:binary_ext].include?(File.extname(filename))
+		
 		case
 		when Shell.new.find_system_command('nkf')
 			sh "nkf -O --euc #{filename} #{filename}.tmp && " <<
@@ -80,10 +79,10 @@ file pkg.package_dir_path do |t|
 				touch -m -r #{filename}{,.tmp} && \\
 				mv #{filename}{.tmp,}
 			EOS
-		#else
-		# ... or require 'nkf', 'iconv'
+			#else
+			# ... or require 'nkf', 'iconv'
 		end
+		touch filename
 	end
-	touch t.name
 end
 
