@@ -7,12 +7,12 @@ add_header_proc do
   <script type="text/javascript" src="prettify.js"></script>
   <script type="text/javascript"><!--
   function google_prettify(){
-    var div=document.getElementsByTagName("div");
-    for(var i=0;i<div.length;i++){
-      if(div[i].className!="body") continue;
-      var pre=div[i].getElementsByTagName("pre");
-      for(var j=0;j<pre.length;j++){
-        pre[j].className="prettyprint";
+    var divs=document.getElementsByTagName("div");
+    for(var i=divs.length;i-->0;){
+      if(divs[i].className!="body") continue;
+      var pres=divs[i].getElementsByTagName("pre");
+      for(var j=pres.length;j-->0;){
+        pres[j].className="prettyprint";
       }
     }
     prettyPrint();
