@@ -6,7 +6,7 @@
 # n: 表示最大数(default: nil)
 #
 # options configurable through settings:
-# 	@options['tagcloud.hidecss']	: cssの出力 default: false
+#   @options['tagcloud.hidecss'] : cssの出力 default: false
 #
 # This plugin modifes and includes tagcloud-ruby.
 # http://yatsu.info/articles/2005/08/05/ruby%E3%81%A7tagcloud-tagcloud-ruby
@@ -14,7 +14,7 @@
 require 'pstore'
 
 def category_enable?
-	!@plugin_files.grep(/\/category.rb$/).empty?
+	!@plugin_files.grep(/\/category\.rb$/).empty?
 end
 
 def add tag, url, count, elapsed_time
@@ -38,7 +38,7 @@ def print_html
 	min = Math.sqrt(@counts[tags.last])
 	max = Math.sqrt(@counts[tags.first])
 	factor = 0
-	
+
 	# special case all tags having the same count
 	if max - min == 0
 		min = min - 24
@@ -46,8 +46,8 @@ def print_html
 	else
 	  factor = 24 / (max - min)
 	end
-	  
-	html = "<ul class=\"tagcloud\">"
+
+	html = %{<ul class="tagcloud">}
 	tags.sort.each do |tag|
 		count = @counts[tag]
 		level = ((Math.sqrt(count) - min) * factor).to_i
@@ -68,11 +68,11 @@ end
 def tag_list limit = nil
 	return '' if bot?
 	return '' unless category_enable?
-	
+
 	init_category_to_tagcloud
 	cache = @conf['category_to_tagcloud.cache']
 	@limit = limit
-	
+
 	PStore.new(cache).transaction(read_only=true) do |db|
 		break unless db.root?('tagcloud') or db.root?('last_update')
 		break if Time.now.strftime('%Y%m%d').to_i > db['last_update']
@@ -83,7 +83,7 @@ def tag_list limit = nil
 
 	gen_tag_list if @urls.empty?
 	print_html
-end	
+end
 
 def styleclass diff
 	c = ' old'
@@ -102,7 +102,7 @@ def gen_tag_list
 	cache = @conf['category_to_tagcloud.cache']
 	info = Category::Tagcloud_Info.new(@cgi, @years, @conf)
 	categorized = @category_cache.categorize(info.category, info.years)
-	
+
 	categorized.keys.each do |key|
 		count = categorized[key].size
 		ymd = categorized[key].keys.sort.reverse
@@ -110,7 +110,7 @@ def gen_tag_list
 		url = "#{@conf.index}?year=#{Time.now.year};month=#{(Time.now.month - 1) / 3 + 1}Q;category=#{CGI.escape(key)}"
 		add(key, url, count, "#{styleclass(diff.to_i)}")
 	end
-	
+
 	PStore.new(cache).transaction do |db|
 		db['last_update'] = Time.now.strftime('%Y%m%d').to_i
 		db['tagcloud'] = [@counts, @urls, @elapsed_times]
