@@ -6,9 +6,9 @@
 
 add_header_proc do
 	generator_xml = @conf['generator.xml']
-	
+
 	if generator_xml != nil and @mode == 'latest' and !@cgi.valid?( 'date' )
-		%Q|\t<link rel="microsummary" href="#{generator_xml}">\n|
+		%Q|\t<link rel="microsummary" href="#{generator_xml}" type="application/x.microsummary+xml">\n|
 	end
 end
 
