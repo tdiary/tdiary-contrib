@@ -1,6 +1,6 @@
 require 'Calendar.rb'
 require 'date'
-unless Time::new.respond_to?( :strftime_holiday_backup )   
+unless Time::new.respond_to?( :strftime_holiday_backup )
 then
  eval( <<-MODIFY_CLASS, TOPLEVEL_BINDING )
   class Time
