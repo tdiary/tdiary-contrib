@@ -11,11 +11,14 @@ end
 def google_analytics_insert_code
 	return '' unless @conf['google_analytics.profile']
 	<<-HTML
-	<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.") ;
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E")) ;
 	</script>
 	<script type="text/javascript">
-	_uacct = "UA-#{h @conf['google_analytics.profile']}";
-	urchinTracker();
+	var pageTracker = _gat._getTracker("UA-#{h @conf['google_analytics.profile']}");
+	pageTracker._initData();
+	pageTracker._trackPageview();
 	</script>
 	HTML
 end
