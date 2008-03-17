@@ -4,8 +4,10 @@
 # Copyright (C) 2005 TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-add_footer_proc do
-	google_analytics_insert_code
+if /^(latest|day|month|nyear)$/ =~ @mode then
+	add_footer_proc do
+		google_analytics_insert_code
+	end
 end
 
 def google_analytics_insert_code
