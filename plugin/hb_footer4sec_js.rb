@@ -4,20 +4,17 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
-def permalink( date, index, escape = true )
-   ymd = date.strftime( "%Y%m%d" )
-   uri = @conf.index.dup
-   uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
-   uri.gsub!( %r|/\./|, '/' )
-   if escape
-      uri + CGI::escape(anchor( "#{ymd}p%02d" % index ))
-   else
-      uri + anchor( "#{ymd}p%02d" % index )
-   end
+def permalink( date, index )
+	ymd = date.strftime( "%Y%m%d" )
+	uri = @conf.index.dup
+	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
+	uri.gsub!( %r|/\./|, '/' )
+
+	uri + anchor( "#{ymd}p%02d" % index )
 end
 
 add_section_leave_proc do |date, index|
-   unless @conf.mobile_agent? then
+	if @mode == 'day' and not bot? and not @conf.mobile_agent? then
 		<<-SCRIPT
 		<script type= "text/javascript">/*<![CDATA[*/
 		var hatena_bookmark_anywhere_limit = 10;
@@ -28,6 +25,5 @@ add_section_leave_proc do |date, index|
 		<script src="#{@conf.base_url}hatena-bookmark-anywhere.js" type="text/javascript" charset="utf-8"></script>
 		<div id="hatena_bookmark_anywhere"></div>
 		SCRIPT
-   end
+	end
 end
-
