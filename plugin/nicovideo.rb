@@ -4,7 +4,15 @@
 # Copyright (C) TADA Tadashi <sho@spc.gr.jp>
 # Distributed under GPL.
 #
-# usage: <%= nicovideo 'sm99999999' %>
+# usage:
+#    Link to the movie and show thumbnail , description...:
+#    <%= nicovideo 'sm99999999' %>
+#
+#    Show Inline player:
+#    <%= nicovideo_player 'sm99999999' %>
+#
+#    Show Inline player with size:
+#    <%= nicovideo_player 'sm99999999', [400,300] %>
 #
 require 'open-uri'
 require 'timeout'
@@ -77,5 +85,17 @@ def nicovideo( video_id, label = nil )
 		"<strong>Sorry, #{video_id} was deleted.</strong>"
 	rescue Timeout::Error,OpenURI::HTTPError
 		nicovideo_iframe( video_id )
+	end
+end
+
+def nicovideo_player( video_id, size = nil )
+	if feed? then
+		nicovideo( video_id )
+	else
+		s = ''
+		if size then
+			s = "?w=#{h size[0]}&h=#{h size[1]}"
+		end
+		%Q|<script type="text/javascript" src="http://www.nicovideo.jp/thumb_watch/#{video_id}#{s}"></script>|
 	end
 end
