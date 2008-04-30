@@ -14,7 +14,7 @@
 
 module TDiary
 	module Filter
-		class CommentKeyFilter < Filter
+		class CommentkeyFilter < Filter
 			def comment_filter( diary, comment )
 				return true unless @conf['comment_key.enable']
 				return true if /^(?:TrackBack|Pingback)$/ =~ comment.name

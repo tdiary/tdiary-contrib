@@ -4,7 +4,7 @@
 
 module TDiary
    module Filter
-      class CommentSizeFilter < Filter
+      class CommentsizeFilter < Filter
          def comment_filter( diary, comment )
             return false if comment.body.size > @conf['comment.size']
             true
