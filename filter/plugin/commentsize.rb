@@ -10,6 +10,6 @@ def size_conf_proc
   result = <<-HTML
   <h3>#{@comment_size}</h3>
   <p>#{@comment_size_desc}</p>
-  <p><input name="comment.size" value="#{CGI::escapeHTML( @conf['comment.size'] )}">Bytes</p>
+  <p><input name="comment.size" value="#{@conf['comment.size']}">Bytes</p>
   HTML
 end
