@@ -43,6 +43,10 @@ def nicovideo_inline( elem )
 	comment_num = elem.to_a( 'comment_num' )[0].text
 	mylist = elem.to_a( 'mylist_counter' )[0].text
 
+	if @conf.mobile_agent? then
+		comment = ''
+	end
+
 	if feed? then
 		result = <<-HTML
 			<table border="0" cellpadding="4" cellspacing="0" summary="#{title}"><tr valign="top">
@@ -89,7 +93,7 @@ def nicovideo( video_id, label = nil )
 end
 
 def nicovideo_player( video_id, size = nil )
-	if feed? then
+	if feed? or @conf.mobile_agent? then
 		nicovideo( video_id )
 	else
 		s = ''
