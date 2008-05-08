@@ -1,6 +1,6 @@
 # prettify.rb
 
-if /^(latest|day|month|nyear)$/ =~ @mode then
+if /^(?:latest|day|month|nyear)$/ =~ @mode then
 	add_header_proc do
 		<<-HTML
 		<link href="prettify.css" type="text/css" rel="stylesheet" />
