@@ -4,7 +4,7 @@
 # Distributed under the GPL
 #
 
-if /^(latest|day|conf|saveconf)$/ =~ @mode then
+if /^(latest|day)$/ =~ @mode then
 	
 	@account_ad_list = {
 		# Service => ServiceHomepage
@@ -12,8 +12,8 @@ if /^(latest|day|conf|saveconf)$/ =~ @mode then
 	}
 	
 	if @conf['account.service'] and @conf['account.name'] then
-		if @mode == "day"
-			permalink=@conf.base_url+anchor(@date.strftime('%Y%m%d'))
+		if @mode == "day" 
+			permalink=@conf.base_url + anchor(@date.strftime('%Y%m%d'))
 		else
 			permalink=@conf.base_url
 		end
