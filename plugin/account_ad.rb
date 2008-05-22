@@ -12,8 +12,8 @@ if /^(latest|day)$/ =~ @mode then
 	}
 	
 	if @conf['account.service'] and @conf['account.name'] then
-		if @mode == "day" 
-			permalink=@conf.base_url + anchor(@date.strftime('%Y%m%d'))
+		if @mode == "day" and not @date == nil then
+			permalink=@conf.base_url + anchor( @date.strftime('%Y%m%d') )
 		else
 			permalink=@conf.base_url
 		end
