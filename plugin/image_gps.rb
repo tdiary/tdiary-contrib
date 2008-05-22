@@ -11,6 +11,8 @@
 #
 
 =begin ChangeLog
+2008-05-22 kp
+  * MapDatumがTOKYO以外の場合、WGS-84と類推する
 2008-01-17 kp
   * いろいろ変更
 2006-03-28 kp
@@ -68,7 +70,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       alt += ' '+exif['FNumber'].to_s if exif.tag?('FNumber')
     end
     begin
-      if(exif['GPSLatitudeRef'].value == 'N' && exif['GPSLongitudeRef'].value == 'E' && exif['GPSMapDatum'].value =~ /(WGS-?84|TOKYO)/)
+      if(exif['GPSLatitudeRef'].value == 'N' && exif['GPSLongitudeRef'].value == 'E')
         nl = exif['GPSLatitude'].value if exif.tag?('GPSLatitude')
         el = exif['GPSLongitude'].value if exif.tag?('GPSLongitude')
         datum = exif['GPSMapDatum'].value if exif.tag?('GPSMapDatum')
@@ -82,7 +84,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       lat = "#{sprintf("%d.%d.%.2f",*nl)}"
       lon = "#{sprintf("%d.%d.%.2f",*el)}"
     else
-      Wgs2Tky.conv!(nl,el) if datum =~ /WGS-?84/
+      Wgs2Tky.conv!(nl,el) unless datum == /TOKYO/
       lat ="#{sprintf("%d/%d/%.3f",*nl)}"
       lon ="#{sprintf("%d/%d/%.3f",*el)}"
     end
