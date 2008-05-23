@@ -58,7 +58,7 @@ end
 
 require 'rast'
 
-module TDiary
+module ::TDiary
 	#
 	# Database
 	#

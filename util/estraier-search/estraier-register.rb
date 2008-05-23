@@ -58,7 +58,7 @@ if mode == "CMD"
 	end
 end
 
-module TDiary
+module ::TDiary
 	#
 	# Database
 	#
