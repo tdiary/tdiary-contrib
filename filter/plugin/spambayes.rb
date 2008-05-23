@@ -36,10 +36,11 @@ class SpambayesConfig
 		@cgi = cgi
 		@conf = conf
 		filter_path = conf.filter_path || "#{PATH}/tdiary/filter"
-		require "#{filter_path}/spambayes"
+		require "#{filter_path}/spambayes" unless ::TDiary::Filter::SpambayesFilter.const_defined?(:Misc)
 
 		extend ::TDiary::Filter::SpambayesFilter::Misc
 		::TDiary::Filter::SpambayesFilter::Misc.conf = conf
+		bayes_filter
 	end
 
 	def save_mode?
@@ -112,7 +113,12 @@ class SpambayesConfig
 		@conf[conf_for_referer] = @cgi.params[conf_for_referer][0] || nil
 		@conf[conf_log] = @cgi.params[conf_log][0] || nil
 		@conf[conf_mail] = @cgi.params[conf_mail][0] || nil
-		@conf[conf_threshold] = @cgi.params[conf_threshold][0] || nil
+		cpt_ham = (@cgi.params[conf_threshold_ham][0]||threshold_ham).to_f
+		cpt_spam = (@cgi.params[conf_threshold][0]||threshold).to_f
+		if 0<cpt_ham and cpt_ham<=cpt_spam and cpt_spam<1.0
+			@conf[conf_threshold] = cpt_spam
+			@conf[conf_threshold_ham] = cpt_ham
+		end
 		prm = @cgi.params[conf_filter][0] || "Plain"
 		@conf[conf_filter] ||= "Plain"
 		if @conf[conf_filter] != prm
@@ -138,7 +144,7 @@ class SpambayesConfig
 <li>#{Res.use_bayes_filter} : <input type='checkbox' name='#{conf_use}' #{@conf[conf_use] ? "checked='checked'" : ""}>
 <li>#{Res.use_filter_to_referer} : <input type='checkbox' name='#{conf_for_referer}' #{@conf[conf_for_referer] ? "checked='checked'" : ""}>
 <li>#{Res.save_error_log} : <input type='checkbox' name='#{conf_log}' #{@conf[conf_log] ? "checked='checked'" : ""}>
-<li>#{Res.threshold} : <input type="text" name="#{conf_threshold}" value="#{threshold}"></li>
+<li>#{Res.threshold}: 0 &lt;= Ham &lt; <input type="text" name="#{conf_threshold_ham}" value="#{threshold_ham}"> &lt;= Doubt &lt;= <input type="text" name="#{conf_threshold}" value="#{threshold}"> &lt; Spam &lt;= 1.0</li>
 <li>#{Res.receiver_addr} : <input type="text" name="#{conf_mail}" value="#{@conf[conf_mail]}"></li>
 <li><select name='#{conf_filter}'>
 <option #{@conf[conf_filter]=="Plain" ? selected : ""}>Plain</option>
@@ -451,10 +457,8 @@ EOT
 		return "" unless save_mode?
 		spams = []
 		hams = []
-		processed = false
 		@cgi.params.each do |k, v|
 			next unless k=~/^r([shd])(.*)$/
-			processed = true
 			type = $1
 			referer = Referer.from_html($2)
 			v = v[0]
@@ -467,19 +471,18 @@ EOT
 				hams << referer
 			end
 		end
-		if processed
-			bayes_filter.save
-			["ham", "spam", "doubt"].each do |k|
-				size = (@cgi.params[k[0, 1]+"size"][0]||"0").to_i
-				Referer.truncate_list(referer_cache(k), size)
-			end
 
-			PStore.new(referer_corpus).transaction do |db|
-				spams.concat(db['spam']||[])
-				hams.concat(db['ham']||[])
-				db["spam"] = spams.uniq
-				db["ham"] = hams.uniq
-			end
+		bayes_filter.save
+		["ham", "spam", "doubt"].each do |k|
+			size = (@cgi.params[k[0, 1]+"size"][0]||"0").to_i
+			Referer.truncate_list(referer_cache(k), size)
+		end
+
+		PStore.new(referer_corpus).transaction do |db|
+			spams.concat(db['spam']||[])
+			hams.concat(db['ham']||[])
+			db["spam"] = spams.uniq
+			db["ham"] = hams.uniq
 		end
 
 		"<p>#{Res.processed_referer}</p><hr>"

@@ -2,7 +2,6 @@
 # You can redistribute it and/or modify it under GPL2. 
 
 require "bayes"
-require "uri"
 
 module TDiary::Filter
 	class SpambayesFilter < Filter
@@ -47,6 +46,7 @@ module TDiary::Filter
 			def conf_filter; "#{PREFIX}.filter"; end
 			def conf_mail; "#{PREFIX}.mail"; end
 			def conf_threshold; "#{PREFIX}.threshold"; end
+			def conf_threshold_ham; "#{PREFIX}.threshold_ham"; end
 			def conf_use; "#{PREFIX}.use"; end
 			def conf_log; "#{PREFIX}.log"; end
 			def conf_for_referer; "#{PREFIX}.for_referer"; end
@@ -91,7 +91,7 @@ module TDiary::Filter
 			end
 
 			def bayes_db
-				 "#{@conf.data_path}/bayes.db"
+				"#{@conf.data_path}/bayes.db"
 			end
 
 			def bayes_filter(reset=false)
@@ -102,32 +102,45 @@ module TDiary::Filter
 
 				case @conf[conf_filter]
 				when /graham/i
-					@bayes_filter ||= Bayes::PaulGraham.new(bayes_db)
+					@bayes_filter ||= Bayes::PaulGraham.new(bayes_db, Bayes::CHARSET::UTF8)
 				else
-					@bayes_filter ||= Bayes::PlainBayes.new(bayes_db)
+					@bayes_filter ||= Bayes::PlainBayes.new(bayes_db, Bayes::CHARSET::UTF8)
 				end
+				convert_to_utf8 unless @bayes_filter.charset==Bayes::CHARSET::UTF8
 				@bayes_filter
+			end
+
+			def convert_to_utf8
+				require "bayes/convert"
+				require "kconv"
+
+				@bayes_filter.convert(Bayes::CHARSET::UTF8, Bayes::CHARSET::EUC)
+				@bayes_filter.save
+				comments = []
+				["S", "H", "D"].each do |c|
+					comments.concat(Dir["#{bayes_cache}/#{c}*"])
+				end
+				["S", "H"].each do |c|
+					comments.concat(Dir["#{corpus_path}/#{c}*"])
+				end
+				comments.each do |f|
+					Comment.load(f).convert_to_utf8.save(f)
+				end
 			end
 
 			def threshold
 				(@conf[conf_threshold]||"0.95").to_f
 			end
 
+			def threshold_ham
+				(@conf[conf_threshold_ham]||"0.05").to_f
+			end
+
 			def url(path=nil)
 				if /^https?:\/\// =~ (path||"")
 					path
 				else
-					@conf.base_url.sub(/\/*$/, '/') + (path||'')
-				end
-			end
-
-			def url2(path=nil)
-				if path && URI.parse(path).absolute?
-					path
-				else
-					base = URI.parse @conf.base_url
-					base.path = base.path.sub(%r{/*$}, '/') + (path || '')
-					base.to_s
+					File.join(@conf.base_url, (path||""))
 				end
 			end
 
@@ -160,13 +173,28 @@ module TDiary::Filter
 				@body = comment.body || ""
 				@remote_addr = cgi.remote_addr || ""
 				d = cgi.params['date'][0] || Time.now.strftime("%Y%m%d")
-				@diary_date = Time::local(*d.scan(/^(\d{4})(\d{2})(\d{2})$/)[0]) + 12*60*60
+				@diary_date = Time::local(*d.scan(/^(\d{4})(\d\d)(\d\d)$/)[0]) + 12*60*60
+			end
+
+			def convert_to_utf8
+				@name = @name.kconv(Kconv::UTF8, Kconv::EUC)
+				@body = @body.kconv(Kconv::UTF8, Kconv::EUC)
+				self
+			end
+
+			def save(filename)
+				open(filename, "w") do |f|
+					f.flock(File::LOCK_SH)
+					f.rewind
+					Marshal.dump(self, f)
+				end
 			end
 
 			def digest
 				Digest::MD5.hexdigest([@name, @date, @mail, @body, @remote_addr, @diary_date].join)
 			end
 
+			RE_URL = %r[(?:https?|ftp)://[a-zA-Z0-9;/?:@&=+$,\-_.!~*\'()%]+]
 			def token
 				r = TokenList.new
 
@@ -177,8 +205,9 @@ module TDiary::Filter
 				end
 				r.add_mail_addr(@mail, "M")
 				b = @body.dup
-				URI.extract(b, %w[http https ftp]) do |url|
-					r.add_url(url, "U")
+				b.gsub!(RE_URL) do |m|
+					r.add_url(m, "U")
+					""
 				end
 				r.add_message(b)
 				r.add_host(@remote_addr, "A")
@@ -268,17 +297,7 @@ module TDiary::Filter
 			end
 
 			def split_url
-				begin
-					url = URI.parse(@referer)
-					query    = url.query
-					fragment = url.fragment
-					url.query    = nil
-					url.fragment = nil
-					base = url.to_s
-				rescue
-					base, query, fragment = @referer.scan(/^(.*?)(?:\?([^#]*?)(?:#(.*))?)?$/)[0]
-				end
-				[base, query, fragment]
+				base, request, anchor = @referer.scan(/^(.*?)(?:\?(.*?)(?:\#(.*))?)?$/)[0]
 			end
 
 			def token
@@ -409,6 +428,18 @@ module TDiary::Filter
 			Misc.conf = conf
 		end
 
+		def ham?(tokens)
+			e = bayes_filter.estimate(tokens) || (threshold_ham+threshold)/2
+			case
+			when e<threshold_ham
+				true
+			when e>threshold
+				false
+			else
+				nil
+			end
+		end
+
 		def comment_filter(diary, comment)
 			return false if force_filtering?
 			return true if without_filtering?
@@ -419,27 +450,22 @@ module TDiary::Filter
 			spam_url = "Register as spam : #{base_url}confirm_spam"
 			ham_url = "Register as ham : #{base_url}confirm_ham"
 
-			e = bayes_filter.estimate(data.token)
-			case
-			when e == nil
-				r = false
-				tag = "DOUBT"
-				url = "#{spam_url}\n#{ham_url}"
-			when e>threshold
+			case ham?(data.token)
+			when true
+				r = true
+				tag = "HAM"
+				url = spam_url
+			when false
 				r = false
 				tag = "SPAM"
 				url = ham_url
 			else
-				r = true
-				tag = "HAM"
-				url = spam_url
+				r = false
+				tag = "DOUBT"
+				url = "#{spam_url}\n#{ham_url}"
 			end
 			cn = tag[0,1]+data.cache_name
-			open("#{bayes_cache}/#{cn}", "w") do |f|
-				f.flock(File::LOCK_SH)
-				f.rewind
-				Marshal.dump(data, f)
-			end
+			data.save("#{bayes_cache}/#{cn}")
 			url.gsub!(/(\n|\z)/){";comment_id=#{cn}#$1"}
 
 			require "socket"
@@ -486,16 +512,15 @@ EOT
 			r = true
 			referer = Referer.new(referer, ENV["REMOTE_ADDR"])
 			token = referer.token
-			e = bayes_filter.estimate(token)
-			case
-			when e==nil
-				r = false
-				key = "doubt"
-			when e>threshold
+			case ham?(token)
+			when true
+				key = "ham"
+			when false
 				r = false
 				key = "spam"
 			else
-				key = "ham"
+				r = false
+				key = "doubt"
 			end
 			open(referer_cache(key), "a") do |f|
 				f.flock(File::LOCK_SH)
