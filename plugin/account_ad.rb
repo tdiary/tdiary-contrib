@@ -4,12 +4,12 @@
 # Distributed under the GPL
 #
 
+@account_ad_list = {
+	# Service => ServiceHomepage
+	'Hatena' => 'http://www.hatena.ne.jp/',
+}
+
 if /^(latest|day)$/ =~ @mode then
-	
-	@account_ad_list = {
-		# Service => ServiceHomepage
-		'Hatena' => 'http://www.hatena.ne.jp/',
-	}
 	
 	if @conf['account.service'] and @conf['account.name'] then
 		if @mode == "day" and not @date == nil then

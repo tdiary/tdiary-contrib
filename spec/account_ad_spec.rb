@@ -45,6 +45,17 @@ describe "account_ad plugin" do
 			it { @header_snippet.should include_account_name_with(
 					:name => 'hsbt')}
 		end
+
+		describe "in configuration mode" do
+			before do
+				@plugin = setup_account_ad_plugin('Hatena', 'hsbt', 'conf')
+			end
+
+			
+			it "should not raise error" do
+				lambda{@plugin.conf_proc}.should_not raise_error
+			end
+		end
 	end
 
 	def include_description_about_with(options)

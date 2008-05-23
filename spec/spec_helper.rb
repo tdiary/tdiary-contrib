@@ -18,12 +18,13 @@ class PluginFake
 		@header_procs = []
 		@footer_procs = []
 		@update_procs = []
+		@conf_procs = []
 		@body_enter_procs = []
 		@body_leave_procs = []
 	end
 
 	def add_conf_proc( key, label, genre=nil, &block )
-		# XXX Do we need to verify add_* called??
+		@conf_procs << block
 	end
 
 	def add_header_proc( block = Proc::new )
@@ -36,6 +37,14 @@ class PluginFake
 
 	def add_update_proc( block = Proc::new )
 		@update_procs << block
+	end
+
+	def conf_proc
+		r = []
+		@conf_procs.each do |proc|
+			r << proc.call
+		end
+		r.join.chomp
 	end
 
 	def header_proc
