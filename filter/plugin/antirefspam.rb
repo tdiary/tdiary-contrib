@@ -6,7 +6,7 @@
 # Please use version 1.0.0 (not 1.0.0G) if GPL doesn't want to be forced on me.
 #
 
-add_conf_proc( 'antirefspam', 'Anti Referer Spam' ) do
+add_conf_proc( 'antirefspam', 'Anti Referer Spam',  'security') do
 	if @mode == 'saveconf'
 		@conf['antirefspam.disable'] = @cgi.params['antirefspam.disable'][0]
 		@conf['antirefspam.trustedurl'] = @cgi.params['antirefspam.trustedurl'][0]
