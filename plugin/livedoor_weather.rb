@@ -153,10 +153,6 @@ def lwws_conf_proc
 		@conf['lwws.min_temp.disp'] = @cgi.params['lwws.min_temp.disp'][0]
 		@conf['lwws.cache'] = @cgi.params['lwws.cache'][0]
 		@conf['lwws.cache_time'] = @cgi.params['lwws.cache_time'][0].to_i
-
-		lwws_get( "today", true)
-		lwws_get( "tomorrow", true)
-		lwws_get( "dayaftertomorrow", true)
 	end
 
 	result = ''
@@ -196,7 +192,9 @@ add_body_enter_proc do |date|
 end
 
 add_update_proc do
-	lwws_get( "today" )
+	lwws_get( "today", true)
+	lwws_get( "tomorrow", true)
+	lwws_get( "dayaftertomorrow", true)
 end
 
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
