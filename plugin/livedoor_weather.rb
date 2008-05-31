@@ -5,6 +5,7 @@
 # Copyright (C) 2007 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
 #
+
 require 'open-uri'
 require 'timeout'
 require 'rexml/document'
@@ -78,7 +79,7 @@ def lwws_to_html( date_status, date = nil )
 
 	cache = "#{@cache_path}/lwws"
 
-	if date == nil
+	unless date
 		file_name = "#{cache}/#{convert_date( date_status)}.xml" # file_name is YYYYMMDD
 	else
 		file_name = "#{cache}/#{date}.xml"
@@ -96,7 +97,7 @@ def lwws_to_html( date_status, date = nil )
 		result = ""
 		result << %Q|<div class=\"lwws\">|
 
-		if @conf['lwws.icon.disp'] != "t" || @conf.mobile_agent? then
+		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
 			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
 		else
 			title = @conf.to_native( doc.elements["image/title"].text, 'utf-8' )
@@ -107,15 +108,12 @@ def lwws_to_html( date_status, date = nil )
 			result << %Q|<a href="#{link}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}" /></a>|
 		end
 
-		if @conf['lwws.max_temp.disp'] == "t" then
-			unless max_temp == nil
-				result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
-			end
+		if @conf['lwws.max_temp.disp'] == "t" and not max_temp.nil? then
+			result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
 		end
-		if @conf['lwws.min_temp.disp'] == "t" then
-			unless min_temp == nil
-				result << %Q| #{@lwws_min_temp_label}:#{h(min_temp)}#{@celsius_label}|
-			end
+
+		if @conf['lwws.min_temp.disp'] == "t" and not min_temp.nil? then
+			result << %Q| #{@lwws_min_temp_label}:#{h(min_temp)}#{@celsius_label}|
 		end
 
 		result << %Q|</div>|
