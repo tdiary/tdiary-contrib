@@ -193,8 +193,8 @@ end
 
 add_update_proc do
 	lwws_get( "today" )
-	lwws_get( "tomorrow", true )
-	lwws_get( "dayaftertomorrow", true )
+	lwws_get( "tomorrow" )
+	lwws_get( "dayaftertomorrow" )
 end
 
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
