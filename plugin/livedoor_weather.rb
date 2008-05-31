@@ -192,9 +192,9 @@ add_body_enter_proc do |date|
 end
 
 add_update_proc do
-	lwws_get( "today", true)
-	lwws_get( "tomorrow", true)
-	lwws_get( "dayaftertomorrow", true)
+	lwws_get( "today" )
+	lwws_get( "tomorrow", true )
+	lwws_get( "dayaftertomorrow", true )
 end
 
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
