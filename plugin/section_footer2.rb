@@ -44,7 +44,7 @@ add_section_leave_proc do |date, index|
 	r = '<div class="tags">'
 
 	unless @conf.mobile_agent? then
-		# カテゴリタグの追加
+		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then
 			r << "Tags: "
 			@category_to_tag_list.each do |tag, blog|
@@ -56,16 +56,16 @@ add_section_leave_proc do |date, index|
 			end
 		end
 
-		# 「このエントリの del.icio.us history (JSON API)」
+		# add del.icio.us link
 		r << add_delicious_json(date, index)
 
-		# SBM アイコンの追加
+		# add SBM link
 		yaml_dir = "#{@cache_path}/yaml/"
 		Dir.glob( yaml_dir + "*.yaml" ) do |file|
 			r << parse_sbm_yaml(file, date, index)
 		end
 
-		# Permalinkの追加
+		# add Permalink
 		r << add_permalink(date, index)
 	end
 
@@ -81,7 +81,6 @@ def add_delicious_json(date, index)
 	cache_time = 8 * 60 * 60  # 8 hour
 	update = false
 	count = 0
-	r = ''
 
 	begin
 		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
@@ -120,12 +119,15 @@ def add_delicious_json(date, index)
 	rescue
 	end
 
+	r = ''
+	r << ' | '
+	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
+
 	if count > 0
-		r << ' | '
-		r << %Q{<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}"> #{count} user}
+		r << %Q| #{count} user|
 		r << 's' if count > 1
-		r << '</a>'
 	end
+	r << '</a>'
 
 	return r
 end
