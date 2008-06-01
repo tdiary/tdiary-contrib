@@ -10,7 +10,6 @@
 #   @options['lwws.city_id']  : 天気情報を取得したい都市のIDを指定(設定画面から編集可能)
 #
 
-@lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'
 @lwws_plugin_name = 'livedoor 天気情報'
 @lwws_label_city_id = '都市IDの設定'
 @lwws_desc_city_id = '天気情報を取得する都市IDを指定します。<a href ="http://weather.livedoor.com/forecast/rss/forecastmap.xml">全国の地点定義表（RSS）</a>内の「1次細分区（cityタグ）」のidから選択してください。(初期設定は東京)'

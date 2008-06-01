@@ -10,6 +10,8 @@ require 'open-uri'
 require 'timeout'
 require 'rexml/document'
 
+@lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'
+
 def lwws_init
 	@conf['lwws.city_id'] ||= 63
 	@conf['lwws.icon.disp'] ||= ""
@@ -74,16 +76,18 @@ def lwws_get( date_status , update = false)
 	end
 end
 
-def lwws_to_html( date_status, date = nil )
+def lwws_to_html( date )
 	lwws_init
 
 	cache = "#{@cache_path}/lwws"
-
-	unless date
-		file_name = "#{cache}/#{convert_date( date_status)}.xml" # file_name is YYYYMMDD
+	case date
+	when "today", "tommorow", "dayaftertommorow"
+		file_name = "#{cache}/#{convert_date( date_status)}.xml" 
 	else
 		file_name = "#{cache}/#{date}.xml"
 	end
+
+	today = Time.now.strftime("%Y%m%d")
 
 	begin
 		xml = File::read( file_name )
@@ -105,7 +109,13 @@ def lwws_to_html( date_status, date = nil )
 			url = doc.elements["image/url"].text
 			width = doc.elements["image/width"].text
 			height = doc.elements["image/height"].text
-			result << %Q|<a href="#{link}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}" /></a>|
+			if date == today 
+				result << %Q|<a href="#{link}">|
+			end
+			result << %Q|<img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}" /></a>|
+			if date == today
+				result << %Q|</a>|
+			end
 		end
 
 		if @conf['lwws.max_temp.disp'] == "t" and not max_temp.nil? then
@@ -122,25 +132,6 @@ def lwws_to_html( date_status, date = nil )
 	rescue Errno::ENOENT
 		return ''
 	end
-end
-
-def lwws_today
-	lwws_get( "today" )
-	lwws_to_html( "today" )
-end
-
-def lwws_tomorrow
-	lwws_get( "tomorrow" )
-	lwws_to_html( "tomorrow" )
-end
-
-def lwws_dayaftertomorrow
-	lwws_get( "dayaftertomorrow" )
-	lwws_to_html( "dayaftertomorrow" )
-end
-
-def lwws( date )
-	lwws_to_html( "", date )
 end
 
 def lwws_conf_proc
@@ -187,7 +178,7 @@ end
 
 add_body_enter_proc do |date|
 	unless feed?
-		lwws_to_html( "", date.strftime("%Y%m%d"))
+		lwws_to_html( date.strftime("%Y%m%d") )
 	end
 end
 

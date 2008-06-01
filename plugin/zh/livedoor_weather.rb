@@ -10,7 +10,6 @@
 #   @options['lwws.city_id']  : City ID where weather information is specified.
 #
 
-@lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'
 @lwws_plugin_name = 'livedoor weather'
 @lwws_label_city_id = 'City ID'
 @lwws_desc_city_id = 'City ID where weather information is specified. Please select City ID from among <a href ="http://weather.livedoor.com/forecast/rss/forecastmap.xml">Point definition table(RSS)</a>'
