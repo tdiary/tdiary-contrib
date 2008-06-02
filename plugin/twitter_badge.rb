@@ -25,34 +25,38 @@ def twitter_badge( id, count )
 		end
 	end
 
-	doc = REXML::Document::new( xml )
-	if doc then
-		html = '<div class="twitter-badge">'
-		html << '<p class="twitter-badge-title">'
-		html << %Q|<a href="http://twitter.com/#{id}">| << 'What am I doing...</a>'
-		html << '</p>'
-		html << '<ul class="twitter-badge-body">'
-		i = 0
-		doc.elements.each( 'statuses/status' ) do |status|
-			created_at = Time.parse( status.elements.to_a( 'created_at' )[0].text )
-			text = status.elements.to_a( 'text' )[0].text
-			if /^\@(.*)?/.match( text ) == nil and i < count then
-				html << '<li class="twitter-badge-status">'
-				if Time.now > created_at + 60*60*23 then
-					time = created_at.localtime.strftime( '%b %d %H:%M' )
-				else
-					time = created_at.localtime.strftime( '%H:%M' )
+	begin
+		doc = REXML::Document::new( xml )
+		if doc then
+			html = '<div class="twitter-badge">'
+			html << '<p class="twitter-badge-title">'
+			html << %Q|<a href="http://twitter.com/#{id}">| << 'What am I doing...</a>'
+			html << '</p>'
+			html << '<ul class="twitter-badge-body">'
+			i = 0
+			doc.elements.each( 'statuses/status' ) do |status|
+				created_at = Time.parse( status.elements.to_a( 'created_at' )[0].text )
+				text = status.elements.to_a( 'text' )[0].text
+				if /^\@(.*)?/.match( text ) == nil and i < count then
+					html << '<li class="twitter-badge-status">'
+					if Time.now > created_at + 60*60*23 then
+						time = created_at.localtime.strftime( '%b %d %H:%M' )
+					else
+						time = created_at.localtime.strftime( '%H:%M' )
+					end
+					html << '<span class="twitter-badge-text">' << %Q|#{text}| << '</span> '
+					html << '<span class="twitter-badge-time">(' << %Q|#{time}| << ')</span>'
+					html << '</li>'
+					i += 1
 				end
-				html << '<span class="twitter-badge-text">' << %Q|#{text}| << '</span> '
-				html << '<span class="twitter-badge-time">(' << %Q|#{time}| << ')</span>'
-				html << '</li>'
-				i += 1
 			end
+			html << '</ul></div>'
+			@conf.to_native( html )
+		else
+			return '<div class="twitter-badge error">twitter_badge: Failed to open file</div>'
 		end
-		html << '</ul></div>'
-		@conf.to_native( html )
-	else
-		return '<div class="twitter-badge error">twitter_badge: Failed to open file</div>'
+	rescue REXML::ParseException
+		return '<div class="twitter-badge error">twitter_badge: Failed to parse XML</div>'
 	end
 end
 
