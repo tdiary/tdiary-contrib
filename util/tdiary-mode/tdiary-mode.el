@@ -1,4 +1,4 @@
-;;; tdiary-mode.el -- Major mode for tDiary editing -*- coding: euc-jp -*-
+;;; tdiary-mode.el -- Major mode for tDiary editing -*- coding: utf-8 -*-
 
 ;; Copyright (C) 2002 Junichiro Kita
 
@@ -90,7 +90,7 @@ Each element looks like (NAME URL) or (NAME URL INDEX-RB UPDATE-RB).")
 (defvar tdiary-csrf-key nil
   "CSRF protection key.")
 
-(defvar tdiary-coding-system 'euc-japan-dos)
+(defvar tdiary-coding-system 'utf-8)
 
 (defvar tdiary-title nil
   "Title of diary")
