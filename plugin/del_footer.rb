@@ -22,15 +22,6 @@ require 'net/https'
 require 'rexml/document'
 require 'fileutils'
 
-def force_to_euc(str)
-  begin
-	 str2 = Uconv.u8toeuc(str)
-  rescue Uconv::Error
-	 str2 = NKF::nkf("-e", str)
-  end
-  return str2
-end
-
 def delicious_save_cache cache_file, file
   FileUtils.mkdir_p "#{@cache_path}/delicious"
   File.open("#{@cache_path}/delicious/#{cache_file}", 'w') do |f|
@@ -45,7 +36,7 @@ def delicious_parse_xml(xml)
   REXML::Document.new(xml).elements.each("posts/post") do |post|
 	 post = <<-EOS
 <li><a href="#{post.attribute("href").to_s}">
-#{force_to_euc(post.attribute("description").to_s)}
+#{post.attribute("description").to_s}
 </a></li>
 	 EOS
 	 posts << post.gsub(/[\n\r]/,'')
