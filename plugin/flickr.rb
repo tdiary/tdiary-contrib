@@ -41,7 +41,7 @@ def flickr(photo_id, size = nil, place = 'flickr')
     body << %Q|></a>|
   end
 
-  @flickr_encoder.call(body)
+  body
 end
 
 def flickr_left(photo_id, size = nil)

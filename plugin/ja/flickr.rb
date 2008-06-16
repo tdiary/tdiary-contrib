@@ -1,16 +1,4 @@
 # flickr.rb Japanese resources
-begin
-  require 'kconv'
-  @flickr_encoder = Proc::new {|s| Kconv::kconv(s, Kconv::EUC, Kconv::UTF8) }
-rescue LoadError
-  begin
-    require 'uconv'
-    @flickr_encoder = Proc::new {|s| Uconv.u8toeuc(s) }
-  rescue LoadError
-    @flickr_encoder = Proc::new {|s| s }
-  end
-end
-
 @flickr_label_form_add = '本文に追加'
 
 add_conf_proc('flickr', 'Flickr プラグイン') do
