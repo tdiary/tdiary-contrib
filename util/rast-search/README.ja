@@ -47,7 +47,7 @@ rast-search README
 
   7. (オプション) tdiary.conf で以下のように encoding の設定をできます。
      Rast の encoding module の名前で設定してください。デフォルトは
-     'euc_jp' です。encoding の設定を変更する場合は、Rast のインデックス
+     'utf8' です。encoding の設定を変更する場合は、Rast のインデックス
      があるディレクトリ (cache ディレクトリの下の /rast) を消して、再度イ
      ンデックスを作りなおしてください。
 
