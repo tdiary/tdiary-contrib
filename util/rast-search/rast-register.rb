@@ -120,9 +120,9 @@ module ::TDiary
 			}
 		end
 
-                def cache_path
-                        @conf.cache_path || "#{@conf.data_path}cache"
-                end
+		def cache_path
+			@conf.cache_path || "#{@conf.data_path}cache"
+		end
 
 		def db_path
 			@conf['rast.db_path'] || "#{cache_path}/rast".untaint
@@ -141,11 +141,11 @@ module ::TDiary
 			@date = diary.date
 			@diaries = {@date.strftime('%Y%m%d') => @diary} if @diaries.empty?
 			@plugin = ::TDiary::Plugin::new(
-							'conf' => @conf,
-							'cgi' => @cgi,
-							'cache_path' => cache_path,
-							'diaries' => @diaries
-							)
+				'conf' => @conf,
+				'cgi' => @cgi,
+				'cache_path' => cache_path,
+				'diaries' => @diaries
+				)
 			def @plugin.apply_plugin_alt( str, remove_tag = false )
 				apply_plugin( str, remove_tag )
 			end
@@ -292,7 +292,7 @@ else
 		conf.hide_comment_form = true
 		conf.show_nyear = false
 		def conf.bot?; true; end
-	
+
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		encoding = 'utf8'
 		TDiary::RastDB.new(conf, encoding).transaction do |rast_db|
