@@ -7,14 +7,14 @@
 # Distributed under the GPL
 #
 add_footer_proc do
-  if @mode == 'day'
-    <<-SCRIPT
-    <script type="text/javascript">
-    if(!location.hash) {
-      location.replace(location.hash + "#p01");
-    }
-    </script>
-    SCRIPT
-  end
+	if @mode == 'day'
+		<<-SCRIPT
+		<script type="text/javascript">
+		if(!location.hash) {
+			location.replace(location.hash + "#p01");
+		}
+		</script>
+		SCRIPT
+	end
 end
 
