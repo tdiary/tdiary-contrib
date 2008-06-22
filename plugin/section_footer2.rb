@@ -5,8 +5,9 @@
 #
 
 require 'digest/md5'
-require 'open-uri'
+require 'json/ext'
 require 'timeout'
+require 'open-uri'
 require 'yaml'
 require 'pathname'
 
@@ -15,7 +16,7 @@ def permalink( date, index, escape = true )
 	uri = @conf.index.dup
 	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
 	uri.gsub!( %r|/\./|, '/' )
-	if escape then
+	if escape 
 		uri + CGI::escape(anchor( "#{ymd}p%02d" % index ))
 	else
 		uri + anchor( "#{ymd}p%02d" % index )
@@ -42,22 +43,18 @@ end
 
 add_section_leave_proc do |date, index|
 	r = '<div class="tags">'
-
 	unless @conf.mobile_agent? then
 		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then
 			r << "Tags: "
 			@category_to_tag_list.each do |tag, blog|
-				if blog
-					r << %Q|<a href="#{@index}?blogcategory=#{h tag}">#{tag}</a> |
-				else
-					r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
-				end
+				r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
 			end
+			r << ' | '
 		end
-
+		
 		# add del.icio.us link
-		r << add_delicious_json(date, index)
+		r << add_delicious(date, index)
 
 		# add SBM link
 		yaml_dir = "#{@cache_path}/yaml/"
@@ -66,94 +63,75 @@ add_section_leave_proc do |date, index|
 		end
 
 		# add Permalink
-		r << add_permalink(date, index)
+		r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
 	end
-
 	r << "</div>\n"
 end
 
-def add_delicious_json(date, index)
-	require 'json'
+def call_delicious_json( url_md5 )
+	json = nil
+	begin
+		timeout(5) do
+			open( "http://badges.del.icio.us/feeds/json/url/data?hash=#{url_md5}" ) do |f|
+				json = JSON.parse( f.read )
+			end
+		end
+	rescue => e
+		@conf.debug( e )
+	end
+	return json
+end
 
+def add_delicious( date, index )
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
-	cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
-	file_name = "#{cache_dir}/#{url_md5}.json"
-	cache_time = 8 * 60 * 60  # 8 hour
-	update = false
-	count = 0
-
-	begin
-		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
-		cached_time = nil
-		cached_time = File::mtime( file_name ) if File::exist?( file_name )
-
-		unless cached_time.nil?
-			if Time.now > cached_time + cache_time
-				update = true
-			end
-		end
-
-		if cached_time.nil? or update
-			begin
-				timeout(10) do
-					open( "http://badges.del.icio.us/feeds/json/url/data?hash=#{url_md5}" ) do |file|
-						File::open( file_name, 'wb' ) do |f|
-							f.write( file.read )
-						end
-					end
-				end
-			rescue TimeoutError
-			rescue
-			end
-		end
-	rescue
-	end
-
-	begin
-		File::open( file_name ) do |f|
-			data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
-			unless data[0].nil?
-				count = data[0]["total_posts"].to_i
-			end
-		end
-	rescue
-	end
+	db_file = "#{@cache_path}/delicious.cache"
 
 	r = ''
-	r << ' | '
 	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
 
-	if count > 0
-		r << %Q| #{count} user|
-		r << 's' if count > 1
+	begin
+		cache_time = 8 * 60 * 60  # 12 hour
+
+		PStore.new(db_file).transaction do |db|
+			entry = db[url_md5]
+			entry = { :count => 0, :update=> Time.at(0) } if entry.nil?
+			
+			if Time.now > entry[:update] + cache_time
+				json = call_delicious_json( url_md5 )
+				entry[:count] = json[0]["total_posts"].to_i unless json[0].nil?
+				entry[:update] = Time.now
+				db[url_md5] = entry
+			end
+
+			if entry[:count] > 0
+				r << %Q| #{entry[:count]} user|
+				r << 's' if entry[:count] > 1
+			end
+		end
+	rescue => e
+		@conf.debug( e )
 	end
+
 	r << '</a>'
+	r << ' | '
 
 	return r
 end
 
 def parse_sbm_yaml(file, date, index)
-	config = YAML.load(Pathname.new(file).expand_path.read)
-
+	config = YAML.load( Pathname.new( file ).expand_path.read )
 	r = ""
-	unless config.nil? then
+
+	unless config.nil?
 		title = config["title"][@conf.lang]
-		r << ' | '
 		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
 		r << %Q|title="#{title}" |
 		r << %Q|alt="#{title}" />|
-		unless config["counter"].nil? then
-			r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;" />|
-		end
+		r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;" />| unless config["counter"].nil?
 		r << '</a>'
+		r << ' | '
 	end
 
-	return r
-end
-
-def add_permalink(date, index)
-	r = " | "
-	r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
 	return r
 end
