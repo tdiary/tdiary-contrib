@@ -49,7 +49,7 @@ def notify_twitter
 	user = @conf['twitter.user']
 	pass = @conf['twitter.pass']
 	twupdater = Twitter::Updater.new(user, pass)
-	twupdater.update( to_utf8( status, 'EUC-JP' ) )
+	twupdater.update( status )
 end
 
 add_update_proc do
