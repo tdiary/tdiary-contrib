@@ -41,10 +41,11 @@ def notify_twitter
 	blogtitle = @conf.html_title
 	url = @conf.base_url + anchor(date)
 
-	format = @conf['twitter.notify.format'] || '%s%s : %s %s'
-	prefix = @conf['twitter.notify.prefix'] || '[blog update] ' # '[diary update] '
+	notify_twitter_init
+
+	format = @conf['twitter.notify.format']
+	prefix = @conf['twitter.notify.prefix']
 	status = format % [prefix, blogtitle, sectitles, url]
-	#STDERR.puts status
 
 	user = @conf['twitter.user']
 	pass = @conf['twitter.pass']
@@ -52,21 +53,48 @@ def notify_twitter
 	twupdater.update( status )
 end
 
+def notify_twitter_init
+	@conf['twitter.notify.prefix'] ||= '[blog update] '
+	@conf['twitter.notify.format'] ||= '%s%s : %s %s'
+end
+
 add_update_proc do
-	notify_twitter if @cgi.params['notify_twitter'][0] == 'true'
+	notify_twitter if @cgi.params['twitter.notify'][0] == 'true'
 end
 
 add_edit_proc do
 	checked = ' checked'
 	if @mode == 'preview' then
-		checked = @cgi.params['notify_twitter'][0] == 'true' ? ' checked' : ''
+		checked = @cgi.params['twitter.notify'][0] == 'true' ? ' checked' : ''
 	end
 	<<-HTML
-	<div class="notify_twitter">
-	<input type="checkbox" name="notify_twitter" value="true"#{checked} tabindex="400">
+	<div class="twitter.notify">
+	<input type="checkbox" name="twitter.notify" value="true"#{checked} tabindex="400">
 	Post the update to Twitter
 	</div>
 	HTML
+end
+
+add_conf_proc( 'notify_twitter', 'Twitter' ) do
+	notify_twitter_init
+
+	if @mode == 'saveconf' then
+	   @conf['twitter.user'] = @cgi.params['twitter.user'][0]
+	   @conf['twitter.pass'] = @cgi.params['twitter.pass'][0]
+	   @conf['twitter.notify.prefix'] = @cgi.params['twitter.notify.prefix'][0]
+	   @conf['twitter.notify.format'] = @cgi.params['twitter.notify.format'][0]
+	end
+
+	<<-HTML
+   <h3 class="subtitle">Account Name</h3>
+   <p><input name="twitter.user" value="#{h @conf['twitter.user']}" /></p>
+   <h3 class="subtitle">Account Password</h3>
+   <p><input name="twitter.pass" value="#{h @conf['twitter.pass']}" /></p>
+   <h3 class="subtitle">Notify prefix</h3>
+   <p><input name="twitter.notify.prefix" value="#{h @conf['twitter.notify.prefix']}" /></p>
+   <h3 class="subtitle">Notify status format</h3>
+   <p><input name="twitter.notify.format" value="#{h @conf['twitter.notify.format']}" /></p>
+   HTML
 end
 
 # vim:ts=3
