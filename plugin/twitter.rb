@@ -7,7 +7,6 @@ require 'time'
 require 'open-uri'
 require 'rexml/document'
 
-@twitter_user = '' # <= Your Username.
 @twitter_statuses = []
 
 if /^(latest|day)$/ =~ @mode then
@@ -15,7 +14,7 @@ if /^(latest|day)$/ =~ @mode then
 		xml = nil
 		timeout( 5 ) do
 			begin
-				xml = open( "http://twitter.com/statuses/user_timeline/#{@twitter_user}.xml" ){|f| f.read}
+				xml = open( "http://twitter.com/statuses/user_timeline/#{@conf['twitter.user']}.xml" ){|f| f.read}
 			rescue Exception
 			end
 		end
@@ -36,7 +35,7 @@ add_body_leave_proc do |date|
 	end
 	if !today_statuses.empty?
 		r = %Q[<div class="section">]
-		r << %Q[<h3><a href="http://twitter.com/#{@twitter_user}">Twitter statuses</a></h3>]
+		r << %Q[<h3><a href="http://twitter.com/#{@conf['twitter.user']}">Twitter statuses</a></h3>]
 		today_statuses.sort{|a, b| b.last<=>a.last}.each do |t, d|
 			r << %Q[<p><strong>#{CGI::escapeHTML( t )}</strong> (#{d.strftime( '%H:%M:%S' )})</p>]
 		end
