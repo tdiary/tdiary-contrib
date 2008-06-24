@@ -90,7 +90,7 @@ Each element looks like (NAME URL) or (NAME URL INDEX-RB UPDATE-RB).")
 (defvar tdiary-csrf-key nil
   "CSRF protection key.")
 
-(defvar tdiary-coding-system 'utf-8)
+(defvar tdiary-coding-system 'utf-8-dos)
 
 (defvar tdiary-title nil
   "Title of diary")
