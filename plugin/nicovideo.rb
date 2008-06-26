@@ -8,6 +8,12 @@
 #    Link to the movie and show thumbnail , description...:
 #    <%= nicovideo 'sm99999999' %>
 #
+#    Link to the movie with original label:
+#    <%= nicovideo 'sm99999999', 'movie title' %>
+#
+#    Link to the movie with original label and link:
+#    <%= nicovideo 'sm99999999', 'movie title', 'http://example.com/video' %>
+#
 #    Show Inline player:
 #    <%= nicovideo_player 'sm99999999' %>
 #
@@ -32,12 +38,12 @@ def nicovideo_call_api( video_id )
 	end
 end
 
-def nicovideo_inline( elem )
-	url = elem.to_a( 'watch_url' )[0].text
+def nicovideo_inline( elem, label = nil, link = nil )
+	url = link || elem.to_a( 'watch_url' )[0].text
 	thumb = elem.to_a( 'thumbnail_url' )[0].text
-	title = elem.to_a( 'title' )[0].text
-	desc = elem.to_a( 'description' )[0].text
-	comment = elem.to_a( 'last_res_body' )[0].text
+	title = label || elem.to_a( 'title' )[0].text
+	desc = label ? nil : elem.to_a( 'description' )[0].text
+	comment = label ? nil : elem.to_a( 'last_res_body' )[0].text
 	length = elem.to_a( 'length' )[0].text
 	view = elem.to_a( 'view_counter' )[0].text
 	comment_num = elem.to_a( 'comment_num' )[0].text
@@ -47,7 +53,7 @@ def nicovideo_inline( elem )
 		comment = ''
 	end
 
-	if feed? then
+	if feed? or label then
 		result = <<-HTML
 			<table border="0" cellpadding="4" cellspacing="0" summary="#{title}"><tr valign="top">
 			<td><a href="#{url}"><img alt="#{title}" src="#{thumb}" width="130" height="100" style="border:solid 1px #333;"></a></td>
@@ -82,12 +88,12 @@ def nicovideo_iframe( video_id )
 	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
 end
 
-def nicovideo( video_id, label = nil )
+def nicovideo( video_id, label = nil, link = nil )
 	begin
-		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements ), 'UTF-8' )
+		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
 	rescue ::Errno::ENOENT
 		"<strong>Sorry, #{video_id} was deleted.</strong>"
-	rescue Timeout::Error,OpenURI::HTTPError,SecurityError
+	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
 		nicovideo_iframe( video_id )
 	end
 end
