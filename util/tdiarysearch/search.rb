@@ -354,7 +354,7 @@ end
 def load_tdiary_textdb(path)
   File.open(path) {|f|
     ver = f.gets.strip
-    raise "unkwnown format: #{ver}" unless ver == 'TDIARY2.00.00'
+    raise "unkwnown format: #{ver}" unless ver == 'TDIARY2.00.00' or ver == 'TDIARY2.01.00'
     f.each('') do |header|
       h = {}
       header.untaint.strip.each do |line|
