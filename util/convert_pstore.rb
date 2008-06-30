@@ -1,10 +1,19 @@
 #
 # convert utf-8 in pstore.
 #
+# usage: convert_pstore.rb file1
+#
+
+$KCODE = 'u'
+
+require 'nkf'
+require "pstore"
+begin
+	require "iconv"
+rescue LoadError
+end
 
 def convert_pstore( file )
-	require "pstore"
-
 	db = PStore.new( file )
 	begin
 		roots = db.transaction{ db.roots }
@@ -31,7 +40,7 @@ def convert_element( data )
 	when Hash, Array
 		data.each_with_index do |e, i|
 			if String === e
-				data[i] = @conf.migrate_to_utf8( e )
+				data[i] = migrate_to_utf8( e )
 			else
 				convert_element( e )
 			end
@@ -40,7 +49,7 @@ def convert_element( data )
 		data.instance_variables.each do |e|
 			var = data.instance_variable_get( e )
 			if String === var
-				data.instance_variable_set( e, @conf.migrate_to_utf8( var ) )
+				data.instance_variable_set( e, migrate_to_utf8( var ) )
 			else
 				convert_element( var )
 			end
@@ -48,4 +57,26 @@ def convert_element( data )
 	end
 end
 
-convert_pstore(ARGV[0])
+def migrate_to_utf8( str )
+	to_native( str, 'EUC-JP' )
+end
+
+def to_native( str, charset = nil )
+	begin
+		Iconv.conv('utf-8', charset || 'utf-8', str)
+	rescue
+		from = case charset
+			when /^utf-8$/i
+				'W'
+			when /^shift_jis/i
+				'S'
+			when /^EUC-JP/i
+				'E'
+			else
+				''
+		end
+		NKF::nkf("-m0 -#{from}w", str)
+	end
+end
+
+convert_pstore( ARGV[0] )
