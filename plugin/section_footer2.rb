@@ -43,7 +43,7 @@ end
 
 add_section_leave_proc do |date, index|
 	r = '<div class="tags">'
-	unless @conf.mobile_agent? then
+	unless @conf.mobile_agent? or bot? then
 		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then
 			r << "Tags: "
