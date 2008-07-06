@@ -91,7 +91,7 @@ def my_hotentry(count = 5)
     r << "\t\t<li>#{entry_link} #{bookmark_link}</li>"
   end
   r << %Q|</ul>|
-  r << %Q|\tPowered by <a href="http://b.hatena.ne.jp/entrylist?url=#{@conf.base_url}&sort=#{@conf['my_hotentry.sort']}">Hatena Bookmark</a>\n|
+  r << %Q|<div class="iddy"><span class="iddy-powered">\tPowered by <a href="http://b.hatena.ne.jp/entrylist?url=#{@conf.base_url}&sort=#{@conf['my_hotentry.sort']}">Hatena Bookmark</a></span></div>\n|
 end
 
 # 人気の日記一覧を更新する
