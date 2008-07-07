@@ -5,6 +5,7 @@
 #
 
 require 'digest/md5'
+require 'rubygems'
 require 'json/ext'
 require 'timeout'
 require 'open-uri'
@@ -42,8 +43,8 @@ def subtitle_link( date, index, subtitle )
 end
 
 add_section_leave_proc do |date, index|
-	r = '<div class="tags">'
-	unless @conf.mobile_agent? or feed? or bot? or iphone? then
+	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot? 
+		r = '<div class="tags">'
 		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then
 			r << "Tags: "
@@ -52,7 +53,7 @@ add_section_leave_proc do |date, index|
 			end
 			r << ' | '
 		end
-		
+
 		# add del.icio.us link
 		r << add_delicious(date, index)
 
@@ -64,8 +65,9 @@ add_section_leave_proc do |date, index|
 
 		# add Permalink
 		r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
+
+		r << "</div>\n"
 	end
-	r << "</div>\n"
 end
 
 def call_delicious_json( url_md5 )
