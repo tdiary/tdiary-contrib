@@ -177,7 +177,7 @@ def lwws_conf_proc
 end
 
 add_body_enter_proc do |date|
-	unless feed?
+	unless @conf.mobile_agent? or feed? or bot? or iphone? then
 		lwws_to_html( date.strftime("%Y%m%d") )
 	end
 end
