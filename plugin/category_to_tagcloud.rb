@@ -48,7 +48,7 @@ def print_html
 	end
 
 	html = %{<ul class="tagcloud">}
-	tags.sort.each do |tag|
+	tags.sort{|a,b| a.downcase <=> b.downcase}.each do |tag|
 		count = @counts[tag]
 		level = ((Math.sqrt(count) - min) * factor).to_i
 		html << %{<li class="tagcloud#{level}#{@elapsed_times[tag]}"><a title="#{tag} - #{count}" href="#{@urls[tag]}">#{tag}</a></li>\n}
@@ -107,7 +107,7 @@ def gen_tag_list
 		count = categorized[key].size
 		ymd = categorized[key].keys.sort.reverse
 		diff = (Time.now - Time.local(ymd[0][0,4], ymd[0][4,2], ymd[0][6,2])) / 86400
-		url = "#{@conf.index}?year=#{Time.now.year};month=#{(Time.now.month - 1) / 3 + 1}Q;category=#{CGI.escape(key)}"
+		url = "#{@conf.index}?category=#{CGI.escape(key)}"
 		add(key, url, count, "#{styleclass(diff.to_i)}")
 	end
 
@@ -142,31 +142,31 @@ add_header_proc do
 end
 
 
-return '' unless category_enable?
-module Category
-	class Tagcloud_Info < Info
-		def years
-			now_year = Time.now.year
-			now_month = Time.now.month
-			r = Hash.new
-
-			months = [
-				['01'],['01','02'],['01','02','03'],['02','03','04'],['03','04','05'],
-				['04','05','06'],['05','06','07'],['06','07','08'],['07','08','09'],
-				['08','09','10'],['09','10','11'],['10','11','12']
-			][now_month - 1]
-
-			r[now_year.to_s] = months
-			case now_month
-			when 1
-				r["#{now_year - 1}"] = ['11','12']
-			when 2
-				r["#{now_year - 1}"] = ['12']
+if category_enable?
+	module Category
+		class Tagcloud_Info < Info
+			def years
+				now_year = Time.now.year
+				now_month = Time.now.month
+				r = Hash.new
+	
+				months = [
+					['01'],['01','02'],['01','02','03'],['02','03','04'],['03','04','05'],
+					['04','05','06'],['05','06','07'],['06','07','08'],['07','08','09'],
+					['08','09','10'],['09','10','11'],['10','11','12']
+				][now_month - 1]
+	
+				r[now_year.to_s] = months
+				case now_month
+				when 1
+					r["#{now_year - 1}"] = ['11','12']
+				when 2
+					r["#{now_year - 1}"] = ['12']
+				end
+				r
 			end
-			r
 		end
 	end
 end
-
 
 ## vim: ts=3
