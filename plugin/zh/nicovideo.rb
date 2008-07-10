@@ -9,6 +9,15 @@ def nicovideo_player_path
 	'http://www.nicovideo.jp'
 end
 
+def nicovideo_feed( i )
+	<<-HTML
+		<table border="0" cellpadding="4" cellspacing="0" summary="#{i[:title]}"><tr valign="top">
+		<td><a href="#{i[:url]}"><img alt="#{i[:title]}" src="#{i[:thumb]}" width="130" height="100" style="border:solid 1px #333;"></a></td>
+		<td width="100%"><a href="#{i[:url]}"><strong>#{i[:title]}</strong></a> (#{i[:length]})</td>
+		</tr></table>
+	HTML
+end
+
 def nicovideo_html( i )
 	<<-HTML
 		<table border="0" cellpadding="4" cellspacing="0" summary="#{i[:title]}" style="margin-left:0em;">

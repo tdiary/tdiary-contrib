@@ -51,12 +51,7 @@ def nicovideo_inline( elem, label = nil, link = nil )
 	i[:mylist] = elem.to_a( 'mylist_counter' )[0].text
 
 	if feed? then
-		result = <<-HTML
-			<table border="0" cellpadding="4" cellspacing="0" summary="#{i[:title]}"><tr valign="top">
-			<td><a href="#{i[:url]}"><img alt="#{i[:title]}" src="#{i[:thumb]}" width="130" height="100" style="border:solid 1px #333;"></a></td>
-			<td width="100%"><a href="#{i[:url]}"><strong>#{i[:title]}</strong></a> (#{i[:length]})<br>#{i[:desc]}</td>
-			</tr></table>
-		HTML
+		result = nicovideo_feed( i )
 	else
 		result = nicovideo_html( i )
 	end
