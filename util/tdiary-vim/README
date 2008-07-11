@@ -43,7 +43,7 @@ tdiary.vim では次のコマンドが使えます。
 * :TDiaryReplace - 指定した日付の日記を読み込んだバッファを開きます
 * :TDiaryUpdate - 日記を更新します
 * :TDiarySelect - 更新する tDiary サイトを選択するためのバッファを開きます
-* :TDiaryTrackbak - TrackBack の excerpt を編修するためのバッファを開きます
+* :TDiaryTrackback - TrackBack の excerpt を編修するためのバッファを開きます
 
 === 日記に追記
 :TDiaryNew すると日付が YYYYMMDD 形式で表示されますので、適宜修正してリターンキーを押してください。日記を書いたら :TDiaryUpdate で更新してください。
