@@ -19,7 +19,7 @@ if respond_to?( :categorized_title_of_day ) then # BlogKit
 		stripped
 	end
 	add_body_leave_proc do |date|
-		category_to_tag_list
+		feed ? '' : category_to_tag_list
 	end
 elsif respond_to?( :category_anchor ) # diary
 	add_section_enter_proc do |date, index|
@@ -39,7 +39,7 @@ elsif respond_to?( :category_anchor ) # diary
 		subtitle_link_original( date, index, s.strip )
 	end
 	add_section_leave_proc do |date, index|
-		category_to_tag_list
+		feed ? '' : category_to_tag_list
 	end
 end
 
