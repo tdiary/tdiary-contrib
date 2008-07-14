@@ -45,6 +45,7 @@ def nicovideo_inline( elem, label = nil, link = nil )
 	i[:title] = label || elem.to_a( 'title' )[0].text
 	i[:desc] = elem.to_a( 'description' )[0].text
 	i[:comment] = @conf.mobile_agent? ? '' : elem.to_a( 'last_res_body' )[0].text
+	i[:date] = elem.to_a( 'first_retrieve' )[0].text
 	i[:length] = elem.to_a( 'length' )[0].text
 	i[:view] = elem.to_a( 'view_counter' )[0].text
 	i[:comment_num] = elem.to_a( 'comment_num' )[0].text

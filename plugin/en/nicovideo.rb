@@ -27,7 +27,8 @@ def nicovideo_html( i )
 		</td>
 		<td width="100%" style="font-size:80%;border-width:0px;">
 		<p><a href="#{i[:url]}" target="_blank" class="video"><strong>#{i[:title]}</strong></a> (#{i[:length].split(/:/).map{|j|'%02d' % j.to_i}.join(':')})</p>
-		<p><strong>#{i[:view].scan(/\d+?(?=\d{3}*$)/).join(",")}</strong> Views<br>
+		<p><strong>#{i[:date][0,10]}</strong> Posted<br>
+		<strong>#{i[:view].scan(/\d+?(?=\d{3}*$)/).join(",")}</strong> Views<br>
 		<strong>#{i[:comment_num].scan(/\d+?(?=\d{3}*$)/).join(",")}</strong> Comments<br>
 		<strong>#{i[:mylist].scan(/\d+?(?=\d{3}*$)/).join(",")}</strong> Mylists</p>
 		</td>
