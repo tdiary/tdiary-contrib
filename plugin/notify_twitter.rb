@@ -68,9 +68,10 @@ add_edit_proc do
 		checked = @cgi.params['twitter.notify'][0] == 'true' ? ' checked' : ''
 	end
 	<<-HTML
-	<div class="twitter.notify">
-	<input type="checkbox" name="twitter.notify" value="true"#{checked} tabindex="400">
+	<div class="twitter.notify"><label for="twitter.notify">
+	<input type="checkbox" id="twitter.notify" name="twitter.notify" value="true"#{checked} tabindex="400">
 	Post the update to Twitter
+	</label>
 	</div>
 	HTML
 end
