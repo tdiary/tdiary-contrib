@@ -8,5 +8,9 @@
 # Distributed under the GPL
 
 def gist( gist_id )
-	%Q|<script src="http://gist.github.com/#{gist_id}.js"></script>|
+	gist_snippet_url = "http://gist.github.com/#{gist_id}"
+	return (<<-EOS).chomp
+<div class="gist"><script src="#{gist_snippet_url}.js"></script>
+<noscript><a href="#{gist_snippet_url}">gist:#{gist_id}</a></noscript></div>
+	EOS
 end
