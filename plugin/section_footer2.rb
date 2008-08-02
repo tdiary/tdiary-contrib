@@ -74,7 +74,7 @@ def call_delicious_json( url_md5 )
 	json = nil
 	begin
 		timeout(5) do
-			open( "http://badges.del.icio.us/feeds/json/url/data?hash=#{url_md5}" ) do |f|
+			open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}" ) do |f|
 				json = JSON.parse( f.read )
 			end
 		end
