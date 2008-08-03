@@ -73,7 +73,7 @@ end
 def call_delicious_json( url_md5 )
 	json = nil
 	begin
-		timeout(5) do
+		timeout(10) do
 			open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}" ) do |f|
 				json = JSON.parse( f.read )
 			end
@@ -89,7 +89,7 @@ def add_delicious( date, index )
 	db_file = "#{@cache_path}/delicious.cache"
 
 	r = ''
-	r << %Q|<a href="http://del.icio.us/url/#{url_md5}"><img src="http://images.del.icio.us/static/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
+	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
 
 	begin
 		cache_time = 8 * 60 * 60  # 12 hour
