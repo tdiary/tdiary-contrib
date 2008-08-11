@@ -23,7 +23,7 @@ def call_pathtraq_json( url, mode )
 	return json
 end
 
-def pathtraq_count
+def pathtraq_counter
 	url = @conf.base_url
 	mode = ['popular', 'hot', 'upcoming'] 
 
