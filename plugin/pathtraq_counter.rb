@@ -1,4 +1,4 @@
-# pathtraq.rb $Revision 1.0 $
+# pathtraq_counter.rb $Revision 1.0 $
 #
 # Copyright (c) 2008 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -13,7 +13,7 @@ def call_pathtraq_json( url, mode )
 	json = nil
 	begin
 		timeout(10) do
-			open( "http://api.pathtraq.com/page_counter?url=#{url}&m=#{mode}" ) do |f|
+			open( "http://api.pathtraq.com/page_counter?api=json&url=#{url}&m=#{mode}" ) do |f|
 				json = JSON.parse( f.read )
 			end
 		end
@@ -31,13 +31,13 @@ def pathtraq_counter
 	begin
 		mode.each do |m|
 			json = call_pathtraq_json( url, m )
-			r << %Q|<li>#{m}: #{json["count"]}</li>\n| unless json.nil?
+			r << %Q|<li>#{m}: #{json["count"]} hits</li>\n| unless json.nil?
 		end
 	rescue => e
 		@conf.debug( e )
 	end
 	r << %Q|</ul>\n|
-	r << %Q|<div class="iddy"><span class="iddy-powered">Powered by <a href="http://pathtraq.com/">pathtraq</a></span></div>\n|
+	r << %Q|<div class="iddy"><span class="iddy-powered">Powered by <a href="http://pathtraq.com/">Pathtraq</a></span></div>\n|
 
 	return r
 end
