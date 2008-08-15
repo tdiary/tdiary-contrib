@@ -2,9 +2,34 @@
 # Copyright (C) 2007 peo <peo@mb.neweb.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
+# modified hsbt. 
+
 require 'net/http'
-require 'rubygems'
-require 'twitter'
+
+module Wassr
+	URL = 'twitter.com'
+	PATH = '/statuses/update.json'
+	SOURCE = 'notify_wassr.rb'
+
+	class Updater
+		def initialize( user, pass )
+			@user = user
+			@pass = pass
+		end
+
+		# this code is based on http://la.ma.la/blog/diary_200704111918.htm
+		def update( status )
+			Net::HTTP.version_1_2
+			req = Net::HTTP::Post.new(PATH)
+			req.basic_auth(@user, @pass)
+			req.body = 'status=' + URI.encode(status, /[^-.!~*'()\w]/n) + '&source=' + SOURCE
+
+			Net::HTTP.start(URL, 80) {|http|
+					res = http.request(req)
+			}
+		end
+	end
+end
 
 def notify_wassr
 	notify_wassr_init
@@ -25,7 +50,7 @@ def notify_wassr
 	status = format % [prefix, blogtitle, sectitles, url]
 
 	begin
-		wsupdater = Twitter::Base.new(@conf['wassr.user'], @conf['wassr.pass'], :api_host => 'wassr.jp')
+		wsupdater = Wassr.new(@conf['wassr.user'], @conf['wassr.pass'] )
 		wsupdater.update( status )
 	rescue => e
 		@conf.debug(e)
