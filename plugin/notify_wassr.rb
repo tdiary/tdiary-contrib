@@ -9,7 +9,7 @@ require 'rubygems'
 require 'json/ext'
 
 module Wassr
-	URL = 'wassr.jp'
+	URL = 'api.wassr.jp'
 	PATH = '/statuses/update.json'
 	SOURCE = 'notify_wassr.rb'
 
