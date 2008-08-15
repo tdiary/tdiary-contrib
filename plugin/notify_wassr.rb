@@ -5,9 +5,11 @@
 # modified hsbt. 
 
 require 'net/http'
+require 'rubygems'
+require 'json/ext'
 
 module Wassr
-	URL = 'twitter.com'
+	URL = 'wassr.jp'
 	PATH = '/statuses/update.json'
 	SOURCE = 'notify_wassr.rb'
 
@@ -24,9 +26,13 @@ module Wassr
 			req.basic_auth(@user, @pass)
 			req.body = 'status=' + URI.encode(status, /[^-.!~*'()\w]/n) + '&source=' + SOURCE
 
-			Net::HTTP.start(URL, 80) {|http|
-					res = http.request(req)
-			}
+			Net::HTTP.start( URL, 80 ) do |http|
+				response = http.request(req)
+				json = JSON.parse(response.body)
+				if json.has_key? 'error' 
+					raise 'update failed.'
+				end
+			end
 		end
 	end
 end
@@ -50,7 +56,7 @@ def notify_wassr
 	status = format % [prefix, blogtitle, sectitles, url]
 
 	begin
-		wsupdater = Wassr.new(@conf['wassr.user'], @conf['wassr.pass'] )
+		wsupdater = Wassr::Updater.new(@conf['wassr.user'], @conf['wassr.pass'] )
 		wsupdater.update( status )
 	rescue => e
 		@conf.debug(e)
