@@ -57,9 +57,8 @@ def notify_wassr
 	status = format % [prefix, sectitle, url]
 
 	begin
-#		wsupdater = Wassr::Updater.new(@conf['wassr.user'], @conf['wassr.pass'] )
-#		wsupdater.update( status )
-		@conf.debug(status)
+		wsupdater = Wassr::Updater.new(@conf['wassr.user'], @conf['wassr.pass'] )
+		wsupdater.update( status )
 	rescue => e
 		@conf.debug( e )
 	end
