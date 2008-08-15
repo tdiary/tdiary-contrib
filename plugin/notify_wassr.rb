@@ -42,38 +42,42 @@ def notify_wassr
 
 	date = @date.strftime('%Y%m%d')
 	diary = @diaries[date]
-	titles = []
+	sectitle = ''
+	index = 0
+	
 	diary.each_section do |sec|
-		titles << sec.subtitle
+		index += 1
+		sectitle = sec.subtitle
 	end
 
-	blogtitle = @conf.html_title
-	sectitles = titles.join(', ')
-	url = @conf.base_url + anchor(date)
-	format = @conf['wassr.notify.format']
+	url = @conf.base_url + anchor("#{date}p%02d" % index)
 	prefix = @conf['wassr.notify.prefix']
+	format = @conf['wassr.notify.format']
 
-	status = format % [prefix, blogtitle, sectitles, url]
+	status = format % [prefix, sectitle, url]
 
 	begin
-		wsupdater = Wassr::Updater.new(@conf['wassr.user'], @conf['wassr.pass'] )
-		wsupdater.update( status )
+#		wsupdater = Wassr::Updater.new(@conf['wassr.user'], @conf['wassr.pass'] )
+#		wsupdater.update( status )
+		@conf.debug(status)
 	rescue => e
-		@conf.debug(e)
+		@conf.debug( e )
 	end
 end
 
 def notify_wassr_init
-	@conf['wassr.notify.prefix'] ||= '[blog update] '
-	@conf['wassr.notify.format'] ||= '%s%s : %s %s'
+	@conf['wassr.notify.prefix'] ||= '[blog update]'
+	@conf['wassr.notify.format'] ||= '%s %s %s'
 end
 
 add_update_proc do
-	notify_wassr if @cgi.params['wassr.notify'][0] == 'true'
+	if @mode == 'append' then
+		notify_wassr if @cgi.params['wassr.notify'][0] == 'true'
+	end
 end
 
 add_edit_proc do
-	checked = ' checked'
+	checked = ''
 	if @mode == 'preview' then
 		checked = @cgi.params['wassr.notify'][0] == 'true' ? ' checked' : ''
 	end
