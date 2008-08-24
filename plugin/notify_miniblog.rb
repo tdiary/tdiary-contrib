@@ -98,7 +98,7 @@ end
 
 add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 	notify_miniblog_init
-
+	
 	if @mode == 'saveconf' then
 		@conf['miniblog.service'] = @cgi.params['miniblog.service'][0]
 	   @conf['miniblog.user'] = @cgi.params['miniblog.user'][0]
@@ -106,26 +106,26 @@ add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 	   @conf['miniblog.notify.prefix'] = @cgi.params['miniblog.notify.prefix'][0]
 	   @conf['miniblog.notify.format'] = @cgi.params['miniblog.notify.format'][0]
 	end
-
+	
 	options = ''
 	@miniblog_list.each_key do |key|
 		options << %Q|<option value="#{h key}"#{" selected" if @conf['miniblog.service'] == key}>#{h key}</option>\n|
 	end
-
+	
 	<<-HTML
 	<h3 class="subtitle">MiniBlog Service</h3>
 	<p><select name="miniblog.service">
 		#{options}
 	</select></p>
-   <h3 class="subtitle">Account Name</h3>
-   <p><input name="miniblog.user" value="#{h @conf['miniblog.user']}" /></p>
-   <h3 class="subtitle">Account Password</h3>
-   <p><input name="miniblog.pass" value="#{h @conf['miniblog.pass']}" /></p>
-   <h3 class="subtitle">Notify prefix</h3>
-   <p><input name="miniblog.notify.prefix" value="#{h @conf['miniblog.notify.prefix']}" /></p>
-   <h3 class="subtitle">Notify status format</h3>
-   <p><input name="miniblog.notify.format" value="#{h @conf['miniblog.notify.format']}" /></p>
-   HTML
+	<h3 class="subtitle">Account Name</h3>
+	<p><input name="miniblog.user" value="#{h @conf['miniblog.user']}" /></p>
+	<h3 class="subtitle">Account Password</h3>
+	<p><input name="miniblog.pass" value="#{h @conf['miniblog.pass']}" /></p>
+	<h3 class="subtitle">Notify prefix</h3>
+	<p><input name="miniblog.notify.prefix" value="#{h @conf['miniblog.notify.prefix']}" /></p>
+	<h3 class="subtitle">Notify status format</h3>
+	<p><input name="miniblog.notify.format" value="#{h @conf['miniblog.notify.format']}" /></p>
+	HTML
 end
 
 # vim:ts=3
