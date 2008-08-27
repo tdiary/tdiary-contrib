@@ -16,8 +16,6 @@ require 'net/http'
 }
 
 module Miniblog
-	SOURCE = 'tdiary/notify_miniblog.rb'
-
 	class Updater
 		def initialize( user, pass, config )
 			@user = user
@@ -30,7 +28,7 @@ module Miniblog
 			Net::HTTP.version_1_2
 			req = Net::HTTP::Post.new(@config.path)
 			req.basic_auth(@user, @pass)
-			req.body = 'status=' + URI.encode(status, /[^-.!~*'()\w]/n) + '&source=' + SOURCE
+			req.body = status
 
 			Net::HTTP.start( @config.host, 80 ) do |http|
 				response = http.request(req)
@@ -55,11 +53,16 @@ def notify_miniblog
 		sectitle = sec.subtitle
 	end
 
-	url = @conf.base_url + anchor("#{date}p%02d" % index)
+	url = URI.encode(@conf.base_url + anchor("#{date}p%02d" % index), /[^-.!~*'()\w]/n)
 	prefix = @conf['miniblog.notify.prefix']
 	format = @conf['miniblog.notify.format']
+	source = 'tdiary/notify_miniblog.rb'
 
-	status = format % [prefix, sectitle, url]
+	status = 'status=' + format % [prefix, sectitle, url] + '&source=' + source
+	if @conf['miniblog.service'] == "HatenaHaiku" then
+		status += '&keyword=id:' + @conf['miniblog.user']
+	end
+
 	config = @miniblog_list[@conf['miniblog.service']]
 
 	begin
