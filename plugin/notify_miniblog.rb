@@ -53,6 +53,8 @@ def notify_miniblog
 		sectitle = sec.subtitle
 	end
 
+	# strip category
+	sectitle.gsub(/\[([^\]]+)\]+/, '').gsub(/^ +/, '')
 	url = URI.encode(@conf.base_url + anchor("#{date}p%02d" % index), /[^-.!~*'()\w]/n)
 	prefix = @conf['miniblog.notify.prefix']
 	format = @conf['miniblog.notify.format']
