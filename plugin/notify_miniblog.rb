@@ -2,14 +2,14 @@
 # Copyright (C) 2007 peo <peo@mb.neweb.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# modified hsbt. 
+# modified hsbt.
 
 require 'net/http'
 
 @miniblog_config = (Struct.const_defined?("MiniBlogConfig") ? Struct::MiniBlogConfig :
 	Struct.new("MiniBlogConfig", :host, :path))
 
-@miniblog_list = { 
+@miniblog_list = {
 	'HatenaHaiku' => @miniblog_config.new('h.hatena.ne.jp', '/api/statuses/update.json'),
 	'Twitter' => @miniblog_config.new('twitter.com', '/statuses/update.json'),
 	'Wassr' => @miniblog_config.new('api.wassr.jp', '/statuses/update.json'),
@@ -47,14 +47,14 @@ def notify_miniblog
 	diary = @diaries[date]
 	sectitle = ''
 	index = 0
-	
+
 	diary.each_section do |sec|
 		index += 1
 		sectitle = sec.subtitle
 	end
 
 	# strip category
-	sectitle.gsub(/\[([^\]]+)\]+/, '').gsub(/^ +/, '')
+	sectitle.gsub!(/\[[^\]]+\] */, '')
 	url = URI.encode(@conf.base_url + anchor("#{date}p%02d" % index), /[^-.!~*'()\w]/n)
 	prefix = @conf['miniblog.notify.prefix']
 	format = @conf['miniblog.notify.format']
@@ -103,7 +103,7 @@ end
 
 add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 	notify_miniblog_init
-	
+
 	if @mode == 'saveconf' then
 		@conf['miniblog.service'] = @cgi.params['miniblog.service'][0]
 	   @conf['miniblog.user'] = @cgi.params['miniblog.user'][0]
@@ -111,12 +111,12 @@ add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 	   @conf['miniblog.notify.prefix'] = @cgi.params['miniblog.notify.prefix'][0]
 	   @conf['miniblog.notify.format'] = @cgi.params['miniblog.notify.format'][0]
 	end
-	
+
 	options = ''
 	@miniblog_list.each_key do |key|
 		options << %Q|<option value="#{h key}"#{" selected" if @conf['miniblog.service'] == key}>#{h key}</option>\n|
 	end
-	
+
 	<<-HTML
 	<h3 class="subtitle">MiniBlog Service</h3>
 	<p><select name="miniblog.service">
