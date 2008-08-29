@@ -5,25 +5,25 @@
 #
 
 if @mode == 'day' and not bot? and not @conf.mobile_agent? then
-   add_body_enter_proc do |date|
+	add_body_enter_proc do |date|
 		<<-SCRIPT
-      <script type="text/javascript">
-      coco =
-      {
-          blogTool               : "tDiary",
-          blogURL                : "#{h @conf.base_url}",
-          blogTitle              : "#{h @conf.html_title}",
-          postURL                : "#{h @conf.base_url + anchor( date.strftime( '%Y%m%d' ) )}",
-          postTitle              : "#{h apply_plugin( @diaries[date.strftime('%Y%m%d')].title, true )}",
-          commentAuthorFieldName : "name",
-          commentAuthorLoggedIn  : false,
-          commentFormName        : "comment-form",
-          commentTextFieldName   : "body",
-          commentButtonName      : "comment"
-      }
-      </script>
-      <script id="cocomment-fetchlet" src="http://www.cocomment.com/js/enabler.js" type="text/javascript">
-      </script>
+		<script type="text/javascript">
+		coco =
+		{
+			 blogTool					: "tDiary",
+			 blogURL						: "#{h @conf.base_url}",
+			 blogTitle					: "#{h @conf.html_title}",
+			 postURL						: "#{h @conf.base_url + anchor( date.strftime( '%Y%m%d' ) )}",
+			 postTitle					: "#{h apply_plugin( @diaries[date.strftime('%Y%m%d')].title, true )}",
+			 commentAuthorFieldName : "name",
+			 commentAuthorLoggedIn	: false,
+			 commentFormName			: "comment-form",
+			 commentTextFieldName	: "body",
+			 commentButtonName		: "comment"
+		}
+		</script>
+		<script id="cocomment-fetchlet" src="http://www.cocomment.com/js/enabler.js" type="text/javascript">
+		</script>
 		SCRIPT
 	end
 end
