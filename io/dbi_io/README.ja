@@ -1,0 +1,39 @@
+!dbi_io
+
+<dbname>   データベース名('tDiaryDB')
+<user>     データベースに接続するユーザ
+<password> データベースに接続するパスワード
+<author>   作者。今後、マルチユーザ対応するときに使います。
+
+!!データベースの作成
+
+!!! PostgreSQLの場合
+
+    $ createdb -h <host> -U <user> -E EUC-JP <dbname>
+    Password: <password>
+    $ psql -h <host> -U <user> -f tdiary_table.sql <dbname>
+    Password: <password>
+    CREATE DATABASE
+
+!!tdiary.confの編集
+
+    #require 'tdiary/pstoreio'
+    #@io_class = TDiary::PStoreIO
+    require 'tdiary/dbi_io'
+    @io_class = TDiary::DbiIO
+    #-- dbi_ioの場合の設定 --
+    @dbi_driver_url = 'dbi:Pg:<dbname>' # URLを設定します。
+    @dbi_user       = '<user>'          # DBのアカウント
+    @dbi_passwd     = '<password>       # DBのパスワード
+    @dbi_author     = '<author>'        # author
+
+!! プラグインのインストール
+リンク元の保存・表示のために、プラグインを以下のいずれかの
+方法でインストールする必要があります
+
+(1) tdiary.confの@option['sp.path']に、このディレクトリに
+    あるpluginのパスを追加し、設定画面からrefererDbiIO.rb
+    を有効にする。
+
+(2) tDiaryのインストール先にあるpluginディレクトリに、
+    plugin/refererDbiIO.rbをコピーする。

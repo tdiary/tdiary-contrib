@@ -1,0 +1,16 @@
+== tDiary contrib/sytle/markdown_style ==
+
+Markdown <http://daringfireball.net/projects/markdown/> style
+
+* How to install
+require 'BlueCloth'. get & install from <http://raa.ruby-lang.org/project/bluecloth/>
+Copy markdown_style.rb into core/tdiary/ directory, where other styles are.
+After that, edit tdiary.conf and specify style as 'Markdown'.
+
+* TextFormattingRules
+Refer <http://daringfireball.net/projects/markdown/syntax>.
+** tDiary original feature
+#   => <h3> & section
+##  => <h4>
+### => <h5>
+{{my '20041004p01','test'}} => tDiary's plugin

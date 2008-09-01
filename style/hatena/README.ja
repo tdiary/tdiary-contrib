@@ -1,0 +1,10 @@
+== tDiary contrib/sytle/hatena_style ==
+
+はてなダイアリー<http://d.hatena.ne.jp/>互換スタイルです。
+
+* インストール方法
+添付の hatena_style.rb を他のスタイルと同様 core/tdiary/ に投入してください。
+その後、 tdiary.conf でスタイルを 'Hatena' と指定すると有効になります
+
+* 記法
+記法に関してははてなダイアリーのヘルプ<http://d.hatena.ne.jp/help>を参照してください。ここに記載されていることのうち、<hatena 〜>以外には対応しています。

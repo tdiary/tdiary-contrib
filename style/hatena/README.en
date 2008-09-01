@@ -1,0 +1,10 @@
+== tDiary contrib/sytle/hatena_style ==
+
+Hatena::Diary <http://d.hatena.ne.jp/> compatible style
+
+* How to install
+Copy hatena_style.rb into core/tdiary/ directory, where other styles are.
+After that, edit tdiary.conf and specify style as 'Hatena'.
+
+* TextFormattingRules
+Refer <http://d.hatena.ne.jp/help>.  All but <hatena ...> expression are supported.

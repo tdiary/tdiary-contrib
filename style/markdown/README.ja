@@ -1,0 +1,13 @@
+== tDiary contrib/sytle/markdown_style ==
+
+Markdown<http://daringfireball.net/projects/markdown/>スタイルです。
+
+* インストール方法
+BlueClothが必要です。<http://raa.ruby-lang.org/project/bluecloth/>から入手してインストールしてください。
+添付の markdown_style.rb を他のスタイルと同様 core/tdiary/ に投入してください。
+その後、 tdiary.conf でスタイルを 'Markdown' と指定すると有効になります
+
+* 記法
+記法に関してはMarkdown文法紹介<http://unmovabletype.org/archives/2004/08/markdown_syntax.html>を参照してください。
+tDiaryでの拡張として#が<h3>に##が<h4>になります。セクションの区切りは#で行います。
+tDiaryのプラグインを呼び出すには{{〜}}で囲みます。(例: {{my '20041004p01','test'}} )
