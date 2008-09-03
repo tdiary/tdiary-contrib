@@ -3,8 +3,8 @@
 #
 # NAME             dbi_io
 #
-# DESCRIPTION      tDiary¸ş¤±DBIÍÑIO¥¯¥é¥¹
-#                  ¾ÜºÙ¤Ï¡¢README.ja¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤
+# DESCRIPTION      tDiaryå‘ã‘DBIç”¨IOã‚¯ãƒ©ã‚¹
+#                  è©³ç´°ã¯ã€README.jaã‚’å‚ç…§ã—ã¦ãã ã•ã„
 #
 # Copyright        (C) 2003 ma2tak <ma2tak@ma2tak.dyndns.org>
 #                  (C) 2004 moonwolf <moonwolf@mooonwolf.com>
@@ -115,7 +115,7 @@ module TDiary
       styled_diary_factory(date, title, body, style)
     end
     
-    # HNF°Ü¹Ô¥Ä¡¼¥ë¤Î¤¿¤á¡¢ºîÀ®
+    # HNFç§»è¡Œãƒ„ãƒ¼ãƒ«ã®ãŸã‚ã€ä½œæˆ
     def restore_diary(date)
       diaries = {}
       restore(date, diaries, false)
@@ -157,7 +157,7 @@ module TDiary
       }
     end
     
-    # ÄÉ²Ã¥á¥½¥Ã¥É for test
+    # è¿½åŠ ãƒ¡ã‚½ãƒƒãƒ‰ for test
     def delete(diaries)
       diaries.each {|date, diary|
         sql = "DELETE FROM diarydata WHERE author=#{@dbi_author} AND diary_id=#{date};"

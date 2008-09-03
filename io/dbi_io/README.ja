@@ -1,13 +1,13 @@
 !dbi_io
 
-<dbname>   �ǡ����١���̾('tDiaryDB')
-<user>     �ǡ����١�������³����桼��
-<password> �ǡ����١�������³����ѥ����
-<author>   ��ԡ����塢�ޥ���桼���б�����Ȥ��˻Ȥ��ޤ���
+<dbname>   データベース名('tDiaryDB')
+<user>     データベースに接続するユーザ
+<password> データベースに接続するパスワード
+<author>   作者。今後、マルチユーザ対応するときに使います。
 
-!!�ǡ����١����κ���
+!!データベースの作成
 
-!!! PostgreSQL�ξ��
+!!! PostgreSQLの場合
 
     $ createdb -h <host> -U <user> -E EUC-JP <dbname>
     Password: <password>
@@ -15,25 +15,25 @@
     Password: <password>
     CREATE DATABASE
 
-!!tdiary.conf���Խ�
+!!tdiary.confの編集
 
     #require 'tdiary/pstoreio'
     #@io_class = TDiary::PStoreIO
     require 'tdiary/dbi_io'
     @io_class = TDiary::DbiIO
-    #-- dbi_io�ξ������� --
-    @dbi_driver_url = 'dbi:Pg:<dbname>' # URL�����ꤷ�ޤ���
-    @dbi_user       = '<user>'          # DB�Υ��������
-    @dbi_passwd     = '<password>       # DB�Υѥ����
+    #-- dbi_ioの場合の設定 --
+    @dbi_driver_url = 'dbi:Pg:<dbname>' # URLを設定します。
+    @dbi_user       = '<user>'          # DBのアカウント
+    @dbi_passwd     = '<password>       # DBのパスワード
     @dbi_author     = '<author>'        # author
 
-!! �ץ饰����Υ��󥹥ȡ���
-��󥯸�����¸��ɽ���Τ���ˡ��ץ饰�����ʲ��Τ����줫��
-��ˡ�ǥ��󥹥ȡ��뤹��ɬ�פ�����ޤ�
+!! プラグインのインストール
+リンク元の保存・表示のために、プラグインを以下のいずれかの
+方法でインストールする必要があります
 
-(1) tdiary.conf��@option['sp.path']�ˡ����Υǥ��쥯�ȥ��
-    ����plugin�Υѥ����ɲä���������̤���refererDbiIO.rb
-    ��ͭ���ˤ��롣
+(1) tdiary.confの@option['sp.path']に、このディレクトリに
+    あるpluginのパスを追加し、設定画面からrefererDbiIO.rb
+    を有効にする。
 
-(2) tDiary�Υ��󥹥ȡ�����ˤ���plugin�ǥ��쥯�ȥ�ˡ�
-    plugin/refererDbiIO.rb�򥳥ԡ����롣
+(2) tDiaryのインストール先にあるpluginディレクトリに、
+    plugin/refererDbiIO.rbをコピーする。
