@@ -1,10 +1,10 @@
 == tDiary contrib/sytle/hatena_style ==
 
-�ϤƤʥ������꡼<http://d.hatena.ne.jp/>�ߴ���������Ǥ���
+はてなダイアリー<http://d.hatena.ne.jp/>互換スタイルです。
 
-* ���󥹥ȡ�����ˡ
-ź�դ� hatena_style.rb ��¾�Υ��������Ʊ�� core/tdiary/ ���������Ƥ���������
-���θ塢 tdiary.conf �ǥ�������� 'Hatena' �Ȼ��ꤹ���ͭ���ˤʤ�ޤ�
+* インストール方法
+添付の hatena_style.rb を他のスタイルと同様 core/tdiary/ に投入してください。
+その後、 tdiary.conf でスタイルを 'Hatena' と指定すると有効になります
 
-* ��ˡ
-��ˡ�˴ؤ��ƤϤϤƤʥ������꡼�Υإ��<http://d.hatena.ne.jp/help>�򻲾Ȥ��Ƥ��������������˵��ܤ���Ƥ��뤳�ȤΤ�����<hatena ��>�ʳ��ˤ��б����Ƥ��ޤ���
+* 記法
+記法に関してははてなダイアリーのヘルプ<http://d.hatena.ne.jp/help>を参照してください。ここに記載されていることのうち、<hatena 〜>以外には対応しています。
