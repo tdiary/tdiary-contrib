@@ -7,7 +7,7 @@ module TDiary::Filter
 	class SpambayesFilter < Filter
 		class TokenList < Bayes::TokenList
 			def initialize
-				super(Bayes::CHARSET::EUC)
+				super(Bayes::CHARSET::UTF8)
 			end
 		end
 
