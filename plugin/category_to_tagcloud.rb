@@ -3,10 +3,10 @@
 #
 # Usage:
 # <% tag_list n %>
-# n: $BI=<(:GBg?t(B(default: nil)
+# n: 表示最大数(default: nil)
 #
 # options configurable through settings:
-#   @options['tagcloud.hidecss'] : css$B$N=PNO(B default: false
+#   @options['tagcloud.hidecss'] : cssの出力 default: false
 #
 # This plugin modifes and includes tagcloud-ruby.
 # http://yatsu.info/articles/2005/08/05/ruby%E3%81%A7tagcloud-tagcloud-ruby
