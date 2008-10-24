@@ -22,6 +22,10 @@ module Exif
           :motorola
         end
 
+        def decode_ubytes(str)
+          str.unpack('C*')
+        end
+
         def decode_ushort(str)
           str[0,2].unpack('n').first
         end
@@ -49,6 +53,10 @@ module Exif
 
         def byte_order
           :intel
+        end
+
+        def decode_ubytes(str)
+          str.unpack('C*')
         end
 
         def decode_ushort(str)

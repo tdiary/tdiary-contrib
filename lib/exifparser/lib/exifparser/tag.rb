@@ -33,7 +33,7 @@ module Exif
         end
 
         def _formatData(data)
-          data[0]
+          decode_ubytes(data)
         end
 
       end
@@ -1639,8 +1639,8 @@ module Exif
 
         def to_s
           case @formatted
-          when [2,0,0,0]
-            "Version 2.0"
+          when [2,2,0,0]
+            "Version 2.2"
           else
             "Unknown"
           end
