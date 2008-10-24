@@ -1726,9 +1726,11 @@ module Exif
       class GPSAltitudeRef < Base
 
         def to_s
-          case @formatted
+          case @formatted[0]
           when 0
             'Sea level'
+          when 1
+            'Sea level(negative value)'
           else
             'Unknown'
           end
@@ -2010,6 +2012,40 @@ module Exif
       class GPSDestDistance < Base
       end
 
+      #
+      # 0x001B
+      #
+      class GPSProcessingMethod < Base
+      end
+
+      #
+      # 0x001C
+      #
+      class GPSAreaInformation < Base
+      end
+
+      #
+      # 0x001D
+      #
+      class GPSDateStamp < Base
+      end
+
+      #
+      # 0x001E
+      #
+      class GPSDifferential < Base
+        def to_s
+          case @formatted
+          when 0
+            'Measurement without differential correction'
+          when 1
+            'Differential correction applied'
+          else
+            'Unknown'
+          end
+        end
+      end
+
     end
 
     ##
@@ -2203,7 +2239,11 @@ module Exif
       0x0017 => GPS::GPSDestBearingRef,
       0x0018 => GPS::GPSDestBearing,
       0x0019 => GPS::GPSDestDistanceRef,
-      0x001A => GPS::GPSDestDistance
+      0x001A => GPS::GPSDestDistance,
+      0x001B => GPS::GPSProcessingMethod,
+      0x001C => GPS::GPSAreaInformation,
+      0x001D => GPS::GPSDateStamp,
+      0x001E => GPS::GPSDifferential
     }
 
     def GPSIFDTable.name
