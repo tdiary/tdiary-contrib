@@ -215,9 +215,10 @@ module Exif
         @scanner.result[ifd].each{ |tag| yield tag }
       else
         [
-          @IfD0,
+          @IFD0,
           @IFD1,
           @Exif,
+          @GPS,
           @Interoperability,
           @MakerNote
         ].flatten.each do |tag|
