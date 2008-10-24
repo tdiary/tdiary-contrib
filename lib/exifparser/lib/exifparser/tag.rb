@@ -286,6 +286,17 @@ module Exif
         "F#{str}"
       end
 
+      #
+      # format Latitude and Longitude
+      #
+      def formatLatLon(f)
+        if f[2].to_f == 0.0
+          sprintf("%d deg %.2f'",f[0],f[1])
+        else
+          sprintf("%d deg %d' %.2f\"",f[0],f[1],f[2])
+        end
+      end
+
       if not $DEBUG
 
       def inspect
@@ -1679,7 +1690,7 @@ module Exif
         end
 
         def to_s
-          @formatted.join(",")
+          formatLatLon @formatted
         end
 
       end
@@ -1715,7 +1726,7 @@ module Exif
         end
 
         def to_s
-          @formatted.join(",")
+          formatLatLon @formatted
         end
 
       end
@@ -1921,7 +1932,7 @@ module Exif
         end
 
         def to_s
-          @formatted.join(",")
+          formatLatLon @formatted
         end
 
       end
@@ -1957,7 +1968,7 @@ module Exif
         end
 
         def to_s
-          @formatted.join(",")
+          formatLatLon @formatted
         end
 
       end
