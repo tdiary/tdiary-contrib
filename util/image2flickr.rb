@@ -249,15 +249,15 @@ class Image2Flickr
     end
   end
 
-  def image(index, title = nil)
+  def image( index, title = nil, thumbnail = nil, size = nil, place = 'photo' )
     replace("flickr", @date, index, title)
   end
 
-  def image_left(index, title = nil)
+  def image_left( index, title = nil, thumbnail = nil, size = nil, place = 'photo' )
     replace("flickr_left", @date, index, title)
   end
 
-  def image_right(index, title = nil)
+  def image_right( index, title = nil, thumbnail = nil, size = nil, place = 'photo' )
     replace("flickr_right", @date, index, title)
   end
 
