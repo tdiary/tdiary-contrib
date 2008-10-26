@@ -253,6 +253,10 @@ class Image2Flickr
     replace("flickr", @date, index, title)
   end
 
+  def image_center( index, title = nil, thumbnail = nil, size = nil, place = 'photo' )
+    replace("flickr", @date, index, title)
+  end
+
   def image_left( index, title = nil, thumbnail = nil, size = nil, place = 'photo' )
     replace("flickr_left", @date, index, title)
   end
