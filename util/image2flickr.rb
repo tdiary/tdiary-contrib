@@ -140,6 +140,10 @@ def main
   files.each do |file|
     i2f.convert(file)
   end
+	
+  # cache のクリア
+  Dir["#{data_path}/cache/*.rb"].each{|f| FileUtils.rm_f( f )}
+  Dir["#{data_path}/cache/*.parser"].each{|f| FileUtils.rm_f( f )}
 end
 
 # flickrへ写真をアップロードし、元ファイル名とphoto_idのペアをYAMLに記録する
