@@ -124,7 +124,7 @@ require 'fileutils'
 # tDiaryのデータフォルダ
 @data_path = '/var/tdiary'
 # tDiaryのイメージフォルダ
-@image_dir = '/var//www/tdiary/images'
+@image_dir = '/var/www/tdiary/images'
 
 
 def main
@@ -132,7 +132,7 @@ def main
   parser = TDiaryParser.new(@data_path)
   i2f = Image2Flickr.new(parser, uploader, @image_dir)
   # tDiaryのimagesフォルダから対象日記を取得
-  files = Dir.glob("#{@image_dir}/*.jpg").map{|file|
+  files = Dir.glob("#{@image_dir}/*.{jpg,png,gif}").map{|file|
     File.basename(file).match(/^(\d{6})/)
     $1
   }.compact.uniq
