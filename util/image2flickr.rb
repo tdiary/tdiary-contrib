@@ -270,7 +270,7 @@ class Image2Flickr
   end
 
   def replace(method, date, index, title)
-    file = Dir.glob("#{@image_dir}/#{date}_#{index}.{jpg,png,gif}").shift
+    file = Dir.glob("#{@image_dir}/#{date}_#{index}.{jp{,e}g,png,gif}").shift
     # タイトルが未指定の場合はファイル名
     title ||= File.basename(file)
     id = @uploader.upload(file, title)
