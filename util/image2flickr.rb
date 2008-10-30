@@ -24,7 +24,7 @@
 #
 #   == 移行手順
 #
-#   1. flickr APIキーの取得
+#   1. Flickr APIキーの取得
 #
 #   flickr.comのAPIサイトにアクセスし、"Apply for a new API Key"にて
 #   新しいAPIキーを生成します。
@@ -42,7 +42,7 @@
 #
 #   3. rflickrライブラリの取得
 #
-#   このマイグレーションツールはflickrへの写真のアップロードに
+#   このマイグレーションツールはFlickrへの写真のアップロードに
 #   rflickrライブラリを使用します。
 #   以下のサイトからrflickrライブラリを取得して、インストールしてください。
 #   http://rubyforge.org/projects/rflickr/
@@ -55,9 +55,9 @@
 #
 #   image2flickr.rbをエディタで開き、以下の4つのパラメータを設定します。
 #
-#   # flickrのAPIキー
+#   # FlickrのAPIキー
 #   @api_key = '123456789012345678901234567890'
-#   # flickr APIのシークレットキー
+#   # Flickr APIのシークレットキー
 #   @secret = '1234567890'
 #   # tDiaryのデータフォルダ
 #   @data_path = '/var/tdiary'
@@ -73,7 +73,7 @@
 #
 #   すると、以下のメッセージが表示されます。
 #   ----
-#   flickrへ写真をアップロードするためのトークンを取得します。
+#   Flickrへ写真をアップロードするためのトークンを取得します。
 #   Webブラウザで下記のURLへアクセスしたら、何かキーを押してください。
 #   http://flickr.com/services/auth/?api_sig=....
 #   ----
@@ -95,10 +95,10 @@
 #
 #   ツールを実行すると、以下の2つのファイルが作成されます。
 #   (1) flickr.token
-#       flickrへ写真をアップロードするためのトークン。
+#       Flickrへ写真をアップロードするためのトークン。
 #   (2) image2flickr.yaml
 #       tDiaryのイメージフォルダに存在するJPEGファイル (ex. 20081025_0.jpg) と
-#       flickrへアップロードしたphoto_idの対応付けを記録したファイル。
+#       Flickrへアップロードしたphoto_idの対応付けを記録したファイル。
 #
 #   これらのファイルは、マイグレーションツールを途中で中断したときのために
 #   用意されています。
@@ -117,9 +117,9 @@ require 'yaml/store'
 require 'tempfile'
 require 'fileutils'
 
-# flickrのAPIキー
+# FlickrのAPIキー
 @api_key = '123456789012345678901234567890'
-# flickr APIのシークレットキー
+# Flickr APIのシークレットキー
 @secret = '1234567890'
 # tDiaryのデータフォルダ
 @data_path = '/var/tdiary'
@@ -132,7 +132,7 @@ def main
   parser = TDiaryParser.new(@data_path)
   i2f = Image2Flickr.new(parser, uploader, @image_dir)
   # tDiaryのimagesフォルダから対象日記を取得
-  files = Dir.glob("#{@image_dir}/*.{jpg,png,gif}").map{|file|
+  files = Dir.glob("#{@image_dir}/*.{jp{,e}g,png,gif}").map{|file|
     File.basename(file).match(/^(\d{6})/)
     $1
   }.compact.uniq
@@ -140,19 +140,19 @@ def main
   files.each do |file|
     i2f.convert(file)
   end
-	
+
   # cache のクリア
   Dir["#{@data_path}/cache/*.rb"].each{|f| FileUtils.rm_f( f )}
   Dir["#{@data_path}/cache/*.parser"].each{|f| FileUtils.rm_f( f )}
 end
 
-# flickrへ写真をアップロードし、元ファイル名とphoto_idのペアをYAMLに記録する
+# Flickrへ写真をアップロードし、元ファイル名とphoto_idのペアをYAMLに記録する
 class FlickrUploder
   def initialize(yaml, token, api_key, secret)
     @flickr = Flickr.new(token, api_key, secret)
     # トークンが無ければ取得する
     unless @flickr.auth.token
-      puts "flickrへ写真をアップロードするためのトークンを取得します。"
+      puts "Flickrへ写真をアップロードするためのトークンを取得します。"
       puts "Webブラウザで下記のURLへアクセスしたら、何かキーを押してください。"
       puts @flickr.auth.login_link
       # キー入力待ち
@@ -169,7 +169,7 @@ class FlickrUploder
     }
   end
 
-  # flickrへ写真をアップロードする
+  # Flickrへ写真をアップロードする
   def upload(file, title)
     id = 0
     @db.transaction {
@@ -178,7 +178,7 @@ class FlickrUploder
         # アップロード済みの場合はスキップ
         STDERR.puts "passed updating #{basename} (#{title}) ..."
         id = @db['photos'][basename]
-        @db.abort 
+        @db.abort
       else
         # 写真をアップロードする
         STDERR.puts "updating #{basename} (#{title}) ..."
@@ -211,7 +211,7 @@ class TDiaryParser
     tmp = Tempfile.new('tmp')
     open(file) do |fin|
       fin.each('') do |headers|
-        date = headers.grep(/^Date:\s*((\d{4}\d{2}\d{2}))/){$1}[0]
+        date = headers.grep(/^Date:\s*(\d{4}\d{2}\d{2})/){$1}[0]
         diary = fin.gets("\n.\n")
         diary = yield(date, diary)
         tmp.print headers
