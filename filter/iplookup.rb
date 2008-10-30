@@ -15,22 +15,23 @@ module TDiary
             if @conf.options.include?('iplookup.ip.list')
                @iplookup_ip_list = @conf.options['iplookup.ip.list']
             else
-               @iplookup_ip_list = "bsb.spamlookup.net\nopm.blitzed.org\nniku.2ch.net"
+               @iplookup_ip_list = "bsb.spamlookup.net\nopm.blitzed.org\n" +
+                                   "niku.2ch.net\ndnsbl.spam-champuru.livedoor.com"
             end
          end
          
          def black_ip?( address )
             chance = 2
             ip = address.gsub(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/, '\4.\3.\2.\1')
-            @iplookup_ip_list.split(/\n/).each do |dnsbl|
+            @iplookup_ip_list.split(/\n+/).each do |dnsbl|
                begin
                   address = Resolv.getaddress( "#{ip}.#{dnsbl}" )
                   return true
-						rescue Resolv::ResolvTimeout
-							if chance > 0
-								chance -= 1
-								retry
-							end
+                  rescue Resolv::ResolvTimeout
+                     if chance > 0
+                        chance -= 1
+                        retry
+                     end
                   rescue Resolv::ResolvError
                   rescue Exception
                end
