@@ -191,7 +191,7 @@ end
 def setup_patterns(query)
   patterns = split_string(query).map {|pat|
     check_pattern pat
-    /#{Regexp.quote(pat)}/ie
+    /#{Regexp.quote(pat)}/iu
   }
   raise WrongQuery, 'no pattern' if patterns.empty?
   raise WrongQuery, 'too many sub patterns' if patterns.length > 8
@@ -206,7 +206,7 @@ def check_pattern(pat)
 end
 
 def split_string(str)
-  str.split(/[\s#{Z_SPACE}]+/oe).reject {|w| w.empty? }
+  str.split(/[\s#{Z_SPACE}]+/ou).reject {|w| w.empty? }
 end
 
 def save_query(query, file)
@@ -380,14 +380,14 @@ def short_html(component)
     end
   when /Comment/
     cmt = component
-    escape((cmt.name + ': ' + cmt.body).slice(/\A.{0,120}/me))
+    escape((cmt.name + ': ' + cmt.body).slice(/\A.{0,120}/mu))
   else
     raise "must not happen: #{component.class}"
   end
 end
 
 def tdiary2text(html)
-  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]em, '').slice(/\A.{0,120}/me)
+  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]em, '').slice(/\A.{0,120}/mu)
 end
 
 Years = {}
