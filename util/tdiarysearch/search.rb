@@ -387,7 +387,7 @@ def short_html(component)
 end
 
 def tdiary2text(html)
-  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]em, '').slice(/\A.{0,120}/mu)
+  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]um, '').slice(/\A.{0,120}/mu)
 end
 
 Years = {}
@@ -401,7 +401,6 @@ end
 
 def initialize_tdiary_plugins(cgi)
   @plugin = TDiary::Plugin.new('conf' => @config,
-                               'mode' => 'month',
                                'secure' => false,
                                'diaries' => {},
                                'cgi' => cgi,
