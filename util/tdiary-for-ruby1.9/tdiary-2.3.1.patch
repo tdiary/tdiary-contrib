@@ -169,7 +169,7 @@
  			@subtitle_procs.taint
  			@section_leave_procs.taint
  			return Safe::safe( secure ? 4 : 1 ) do
-+				src.force_encoding('UTF-8') if RUBY_VERSION >= "1.9"
++				src.force_encoding('UTF-8')
  				eval( src, binding, "(TDiary::Plugin#eval_src)", 1 )
  			end
  		end
