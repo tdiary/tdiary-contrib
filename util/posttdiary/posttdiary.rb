@@ -89,8 +89,8 @@ begin
 		raise usage
 	end
 	raise usage if (image_dir and not image_url) or (not image_dir and image_url)
-	image_dir.sub!( %r[/*$], '/' ) if image_dir
-	image_url.sub!( %r[/*$], '/' ) if image_url
+	image_dir = image_dir.sub( %r[/*$], '/' ) if image_dir
+	image_url = image_url.sub( %r[/*$], '/' ) if image_url
 	url = ARGV.shift
 	if %r|http://([^:/]+)(?::(\d+))?(/.*)| =~ url then
 		host = $1
