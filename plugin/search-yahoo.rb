@@ -50,7 +50,7 @@ def search_result
 	begin
 		uri = URI::parse( @conf.base_url )
 		q = "#{query} site:#{uri.host}"
-		q << " inurl:#{uri.path}" unless uri.path == '/'
+		q << %Q| inurl:"#{uri.path}"| unless uri.path == '/'
 		xml = search_boss_api( u( q.untaint ), start )
 		doc = REXML::Document::new( xml ).root
 		res = doc.elements.to_a( '/ysearchresponse' )[0]
