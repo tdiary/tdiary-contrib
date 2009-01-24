@@ -1,5 +1,5 @@
+#
 # category_to_tag.rb - show categories list in end of each section
-# $Revision: 1.6 $
 #
 # Copyright (C) 2005, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -24,6 +24,7 @@ if respond_to?( :categorized_title_of_day ) then # BlogKit
 elsif respond_to?( :category_anchor ) # diary
 	add_section_enter_proc do |date, index|
 		@category_to_tag_list = {}
+		''
 	end
 	alias subtitle_link_original subtitle_link
 	def subtitle_link( date, index, subtitle )
