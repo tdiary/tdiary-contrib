@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # search-yahoo.rb - site search plugin sample using Yahoo! Search BOSS API.
 #
