@@ -1,4 +1,4 @@
-# section_footer2.rb $Revision 1.0 $
+# section_footer2.rb
 #
 # Copyright (c) 2008 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -26,6 +26,7 @@ end
 
 add_section_enter_proc do |date, index|
 	@category_to_tag_list = {}
+	''
 end
 
 alias subtitle_link_original subtitle_link
