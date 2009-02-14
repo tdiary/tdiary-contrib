@@ -17,11 +17,9 @@ def permalink( date, index, escape = true )
 	uri = @conf.index.dup
 	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
 	uri.gsub!( %r|/\./|, '/' )
-	if escape 
-		uri + CGI::escape(anchor( "#{ymd}p%02d" % index ))
-	else
-		uri + anchor( "#{ymd}p%02d" % index )
-	end
+   link = uri + anchor( "#{ymd}p%02d" % index )
+   link = link.sub( /#/, "%23" ) if escape
+   link
 end
 
 add_section_enter_proc do |date, index|
@@ -88,17 +86,17 @@ end
 def add_delicious( date, index )
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 	db_file = "#{@cache_path}/delicious.cache"
-
+	
 	r = ''
 	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
-
+	
 	begin
 		cache_time = 8 * 60 * 60  # 12 hour
-
+		
 		PStore.new(db_file).transaction do |db|
 			entry = db[url_md5]
 			entry = { :count => 0, :update=> Time.at(0) } if entry.nil?
-			
+
 			if Time.now > entry[:update] + cache_time
 				json = call_delicious_json( url_md5 )
 				entry[:count] = json[0]["total_posts"].to_i unless json[0].nil?

@@ -1,4 +1,5 @@
-# section_footer.rb $Revision 1.0 $
+# -*- coding: utf-8 -*-
+# section_footer.rb
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -9,183 +10,181 @@ require 'open-uri'
 require 'timeout'
 
 def permalink( date, index, escape = true )
-   ymd = date.strftime( "%Y%m%d" )
-   uri = @conf.index.dup
-   uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
-   uri.gsub!( %r|/\./|, '/' )
-   if escape
-      uri + CGI::escape(anchor( "#{ymd}p%02d" % index ))
-   else
-      uri + anchor( "#{ymd}p%02d" % index )
-   end
+	ymd = date.strftime( "%Y%m%d" )
+	uri = @conf.index.dup
+	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
+	uri.gsub!( %r|/\./|, '/' )
+	link = uri + anchor( "#{ymd}p%02d" % index )
+	link = link.sub( /#/, "%23" ) if escape
+	link
 end
 
 add_header_proc do
-   <<-SCRIPT
-   <link rel="stylesheet" href="theme/hatena_bookmark.css" type="text/css" media="all">
-   <script type="text/javascript" src="http://b.hatena.ne.jp/js/BookmarkCommentViewerAllInOne.1.2.js" charset="utf-8"></script>
-   <script type="text/javascript">
-   initCreateRelAfterIcon();
-   BookmarkCommentViewer.options['dateFormat'] = '%y-%m-%d';
-   // BookmarkCommentViewer.options['blankCommentHide'] = true;
-   BookmarkCommentViewer.options['tags'] = false;
-   </script>
-   SCRIPT
+	<<-SCRIPT
+	<link rel="stylesheet" href="theme/hatena_bookmark.css" type="text/css" media="all">
+	<script type="text/javascript" src="http://b.hatena.ne.jp/js/BookmarkCommentViewerAllInOne.1.2.js" charset="utf-8"></script>
+	<script type="text/javascript">
+	initCreateRelAfterIcon();
+	BookmarkCommentViewer.options['dateFormat'] = '%y-%m-%d';
+	// BookmarkCommentViewer.options['blankCommentHide'] = true;
+	BookmarkCommentViewer.options['tags'] = false;
+	</script>
+	SCRIPT
 end
 
 add_section_enter_proc do |date, index|
-   @category_to_tag_list = {}
+	@category_to_tag_list = {}
 end
 
 alias subtitle_link_original subtitle_link
 def subtitle_link( date, index, subtitle )
-   s = ''
-   if subtitle then
-      s = subtitle.sub( /^(\[([^\[]+?)\])+/ ) do
-         $&.scan( /\[(.*?)\]/ ) do |tag|
-            @category_to_tag_list[tag] = false # false when diary
-         end
-         ''
-      end
-   end
-   subtitle_link_original( date, index, s.strip )
+	s = ''
+	if subtitle then
+		s = subtitle.sub( /^(\[([^\[]+?)\])+/ ) do
+			$&.scan( /\[(.*?)\]/ ) do |tag|
+				@category_to_tag_list[tag] = false # false when diary
+			end
+			''
+		end
+	end
+	subtitle_link_original( date, index, s.strip )
 end
 
 add_section_leave_proc do |date, index|
-   r = '<div class="tags">'
+	r = '<div class="tags">'
 
-   unless @conf.mobile_agent? then
-      # カテゴリタグの追加
-      if @category_to_tag_list and not @category_to_tag_list.empty? then
-         r << "Tags: "
-         @category_to_tag_list.each do |tag, blog|
-            if blog
-               r << %Q|<a href="#{@index}?blogcategory=#{h tag}">#{tag}</a> |
-            else
-               r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
-            end
-         end
-      end
+	unless @conf.mobile_agent? then
+		# カテゴリタグの追加
+		if @category_to_tag_list and not @category_to_tag_list.empty? then
+			r << "Tags: "
+			@category_to_tag_list.each do |tag, blog|
+				if blog
+					r << %Q|<a href="#{@index}?blogcategory=#{h tag}">#{tag}</a> |
+				else
+					r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
+				end
+			end
+		end
 
-      # 「このエントリの del.icio.us history (JSON)」
-      r << add_delicious_json(date, index)
+		# 「このエントリの del.icio.us history (JSON)」
+		r << add_delicious_json(date, index)
 
 		# 「このエントリを含む del.icio.us (画像API)」
 		# r << add_delicious(date, index)
 
-      # 「このエントリを含むはてなブックーク」
-      r << add_hatenabm(date, index)
+		# 「このエントリを含むはてなブックーク」
+		r << add_hatenabm(date, index)
 
-      # 「このエントリを含む livedoor クリップ」
-      r << add_ldclip(date, index)
+		# 「このエントリを含む livedoor クリップ」
+		r << add_ldclip(date, index)
 
-      # 「このエントリを含む Buzzurl」
-      r << add_buzzurl(date, index)
+		# 「このエントリを含む Buzzurl」
+		r << add_buzzurl(date, index)
 
-      # 「このエントリを含む Yahoo!ブックマーク」
-      r << add_yahoobm(date, index)
+		# 「このエントリを含む Yahoo!ブックマーク」
+		r << add_yahoobm(date, index)
 
-      # Permalinkの追加
-      r << add_permalink(date, index)
-   end
+		# Permalinkの追加
+		r << add_permalink(date, index)
+	end
 
-   r << "</div>\n"
+	r << "</div>\n"
 end
 
 def add_permalink(date, index)
-   r = " | "
-   r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
-   return r
+	r = " | "
+	r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
+	return r
 end
 
 def add_hatenabm(date, index)
-   r = " | "
-   r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_hatenabm_label}" alt="#{@section_footer_hatenabm_label}" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
-   return r
+	r = " | "
+	r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_hatenabm_label}" alt="#{@section_footer_hatenabm_label}" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
+	return r
 end
 
 def add_ldclip(date, index)
-   r = " | "
-   r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="#{@section_footer_ldclip_label}" title="#{@section_footer_ldclip_label}"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
-   return r
+	r = " | "
+	r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="#{@section_footer_ldclip_label}" title="#{@section_footer_ldclip_label}"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+	return r
 end
 
 def add_buzzurl(date, index)
-   r = " | "
-   r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_buzzurl_label}" alt="#{@section_footer_buzzurl_label}" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
-   return r
+	r = " | "
+	r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_buzzurl_label}" alt="#{@section_footer_buzzurl_label}" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+	return r
 end
 
 def add_delicious(date, index)
-   url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
+	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 
 	r = " | "
-   r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
-   return r
+	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
+	return r
 end
 
 def add_delicious_json(date, index)
 	require 'json'
 
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
-   cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
-   file_name = "#{cache_dir}/#{url_md5}.json"
-   cache_time = 8 * 60 * 60  # 8 hour
-   update = false
-   count = 0
+	cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
+	file_name = "#{cache_dir}/#{url_md5}.json"
+	cache_time = 8 * 60 * 60  # 8 hour
+	update = false
+	count = 0
 
-   r = " | "
-   r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}">|
+	r = " | "
+	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}">|
 
-   begin
-      Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
-      cached_time = nil
-      cached_time = File::mtime( file_name ) if File::exist?( file_name )
+	begin
+		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
+		cached_time = nil
+		cached_time = File::mtime( file_name ) if File::exist?( file_name )
 
-      unless cached_time.nil?
-         if Time.now > cached_time + cache_time
-            update = true
-         end
-      end
+		unless cached_time.nil?
+			if Time.now > cached_time + cache_time
+				update = true
+			end
+		end
 
-      if cached_time.nil? or update
-         begin
-            timeout(10) do
-               open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}}") do |file|
-                  File::open( file_name, 'wb' ) do |f|
-                     f.write( file.read )
-                  end
-               end
-            end
-         rescue TimeoutError
-         rescue
-         end
-      end
-   rescue
-   end
+		if cached_time.nil? or update
+			begin
+				timeout(10) do
+					open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}}") do |file|
+						File::open( file_name, 'wb' ) do |f|
+							f.write( file.read )
+						end
+					end
+				end
+			rescue TimeoutError
+			rescue
+			end
+		end
+	rescue
+	end
 
-   begin
-      File::open( file_name ) do |f|
-            data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
-         unless data[0].nil?
-            count = data[0]["total_posts"].to_i
-         end
-      end
-   rescue
-      return r
-   end
+	begin
+		File::open( file_name ) do |f|
+				data = JSON.parse(@conf.to_native( f.read, 'utf-8' ))
+			unless data[0].nil?
+				count = data[0]["total_posts"].to_i
+			end
+		end
+	rescue
+	end
 
-   if count > 0
-      r << %Q| #{count} users</a>|
-   else
-      r << %Q|</a>|
-   end
+	if count > 0
+		r << %Q| #{count} users</a>|
+	else
+		r << %Q|</a>|
+	end
 
-   return r
+	return r
 end
 
 def add_yahoobm(date, index)
-   r = " | "
+	r = " | "
 	r << %Q|<a href="http://bookmarks.yahoo.co.jp/url?url=#{permalink(date, index)}&opener=bm&ei=UTF-8"><img src="http://i.yimg.jp/images/sicons/ybm16.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_yahoobm_label}" alt="#{@section_footer_yahoobm_label}" width="16" height="16" class="icon" /></a>|
 	return r
 end
+
