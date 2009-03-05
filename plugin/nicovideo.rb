@@ -25,7 +25,7 @@ require 'timeout'
 require 'rexml/document'
 
 def nicovideo_call_api( video_id )
-	uri = "http://www.nicovideo.jp/api/getthumbinfo/#{video_id}"
+	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
 	xml = timeout( feed? ? 10 : 2 ) { open( uri, :proxy => proxy ) {|f| f.read } }
