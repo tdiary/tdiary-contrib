@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
-# estraier-register.rb $Revision: 1.1.2.13 $
+# estraier-register.rb
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
 require "estraierpure"
+
+unless $tdiary_estraier_register_loaded
+$tdiary_estraier_register_loaded ||= true
 
 mode = ""
 if $0 == __FILE__
@@ -291,3 +294,5 @@ HTML
 		end
 	end
 end
+
+end # $tdiary_estraier_register_loaded
