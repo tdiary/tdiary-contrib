@@ -130,7 +130,7 @@ class WrongQuery < StandardError; end
 
 Z_SPACE = "\241\241"   # zen-kaku space
 
-BEGIN { $defout.binmode }
+BEGIN { $stdout.binmode }
 
 def main
   $KCODE = 'u'

@@ -5,7 +5,7 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 $KCODE= 'u'
-BEGIN { $defout.binmode }
+BEGIN { $stdout.binmode }
 
 if FileTest::symlink?( __FILE__ ) then
 	org_path = File::dirname( File::readlink( __FILE__ ) )

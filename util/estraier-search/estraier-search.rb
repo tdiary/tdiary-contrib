@@ -5,7 +5,7 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 $KCODE= 'u'
-BEGIN { $defout.binmode }
+BEGIN { $stdout.binmode }
 
 require "estraierpure"
 require "enumerator"
