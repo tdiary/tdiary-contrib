@@ -73,7 +73,7 @@ def nicovideo( video_id, label = nil, link = nil )
 	end
 end
 
-def nicovideo_player( video_id, size = [544,427] )
+def nicovideo_player( video_id, size = [544,384] )
 	if feed? or @conf.mobile_agent? then
 		nicovideo( video_id )
 	else
