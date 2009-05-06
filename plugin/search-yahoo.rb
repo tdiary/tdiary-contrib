@@ -2,7 +2,7 @@
 #
 # search-yahoo.rb - site search plugin sample using Yahoo! Search BOSS API.
 #
-# Copyright (C) 2008, TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) 2009, TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL.
 #
 # Needed these options below:
@@ -13,7 +13,7 @@
 
 require 'open-uri'
 require 'timeout'
-require 'rexml/document'
+require 'json'
 
 def search_title
 	'全文検索 by Yahoo! Search BOSS'
@@ -35,7 +35,7 @@ def search_boss_api( q, start = 0 )
 	url = 'http://boss.yahooapis.com/ysearch/web/v1/'
 	appid = @conf['search-yahoo.appid']
 
-	url << "#{q}?appid=#{appid}&format=xml&count=50&start=#{start}"
+	url << "#{q}?appid=#{appid}&count=50&start=#{start}"
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
@@ -52,41 +52,43 @@ def search_result
 		uri = URI::parse( @conf.base_url )
 		q = "#{query} site:#{uri.host}"
 		q << %Q| inurl:"#{uri.path}"| unless uri.path == '/'
-		xml = search_boss_api( u( q.untaint ), start )
-		doc = REXML::Document::new( xml ).root
-		res = doc.elements.to_a( '/ysearchresponse' )[0]
-		unless res.attribute( 'responsecode' ).value == '200' then
-			return '<p class="message">ERROR</p>'
-		end
+		json = search_boss_api( u( q.untaint ), start )
 	rescue OpenURI::HTTPError
 		return %Q|<p class="message">#$!</p>|
 	end
 
+	doc = JSON( json )
+	res = doc['ysearchresponse']
+	unless res['responsecode'] == '200' then
+		return '<p class="message">ERROR</p>'
+	end
+
 	r = search_input_form( query )
 	r << '<dl class="search-result">'
-	doc.elements.to_a( '*/result' ).each do |elem|
-		url = elem.elements.to_a( 'url' )[0].text
+	res['resultset_web'].each do |elem|
+		url = elem['url']
 		next unless url =~ @conf['search-yahoo.result_filter']
-		title = elem.elements.to_a( 'title' )[0].text
-		abstract = elem.elements.to_a( 'abstract' )[0].text
+		title = elem['title']
+		abstract = elem['abstract']
 		r << %Q|<dt><a href="#{h url}">#{title}</a></dt>|
 		r << %Q|<dd>#{abstract}</dd>|
 	end
 	r << '</dl>'
 
-	r << '<div class="search-navi">'
-	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
-		if /start=\d+/ =~ p.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の50件</a>&nbsp;|
-		end
-	end
-
-	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
-		if /start=\d+/ =~ n.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の50件&gt;</a>|
-		end
-	end
-	r << '</div>'
+### PENDING ###
+#	r << '<div class="search-navi">'
+#	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
+#		if /start=\d+/ =~ p.text then
+#			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の50件</a>&nbsp;|
+#		end
+#	end
+#
+#	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
+#		if /start=\d+/ =~ n.text then
+#			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の50件&gt;</a>|
+#		end
+#	end
+#	r << '</div>'
 
 	r
 end
