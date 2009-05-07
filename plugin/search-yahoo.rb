@@ -21,13 +21,11 @@ end
 
 def search_input_form( q )
 	r = <<-HTML
-		<div>
-			<form method="GET" action="#{@conf.index}">
+		<form method="GET" action="#{@conf.index}"><div>
 			検索キーワード: 
 			<input name="q" value="#{h q}">
 			<input type="submit" value="OK">
-			</form>
-		</div>
+		</div></form>
 	HTML
 end
 
