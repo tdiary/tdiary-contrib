@@ -2,7 +2,7 @@
 #
 # search-yahoo.rb - site search plugin sample using Yahoo! Search BOSS API.
 #
-# Copyright (C) 2009, TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) 2009, TADA Tadashi <t@tdtds.jp>
 # You can redistribute it and/or modify it under GPL.
 #
 # Needed these options below:
@@ -33,11 +33,11 @@ def search_boss_api( q, start = 0 )
 	url = 'http://boss.yahooapis.com/ysearch/web/v1/'
 	appid = @conf['search-yahoo.appid']
 
-	url << "#{q}?appid=#{appid}&count=50&start=#{start}"
+	url << "#{q}?appid=#{appid}&count=20&start=#{start}"
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 10 ) do
+	timeout( 20 ) do
 		open( url, :proxy => proxy ) {|f| f.read }
 	end
 end
@@ -67,7 +67,7 @@ def search_result
 
 	r = search_input_form( query )
 	r << '<dl class="search-result">'
-	res['resultset_web'].each do |elem|
+	(res['resultset_web']||[]).each do |elem|
 		url = elem['url']
 		next unless url =~ @conf['search-yahoo.result_filter']
 		title = elem['title']
@@ -77,20 +77,19 @@ def search_result
 	end
 	r << '</dl>'
 
-### PENDING ###
-#	r << '<div class="search-navi">'
-#	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
-#		if /start=\d+/ =~ p.text then
-#			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の50件</a>&nbsp;|
-#		end
-#	end
-#
-#	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
-#		if /start=\d+/ =~ n.text then
-#			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の50件&gt;</a>|
-#		end
-#	end
-#	r << '</div>'
+	r << '<div class="search-navi">'
+	(res['prevpage']||[]).each do |p|
+		if /start=\d+/ =~ p then
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の20件</a>&nbsp;|
+		end
+	end
+
+	(res['nextpage']||[]).each do |n|
+		if /start=\d+/ =~ n then
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の20件&gt;</a>|
+		end
+	end
+	r << '</div>'
 
 	r
 end
