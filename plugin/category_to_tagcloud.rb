@@ -119,7 +119,7 @@ end
 
 def tagcloud_css
 	r = ''
-	r = "\t<style type=\"text/css\">\n"
+	r = "\t<style type=\"text/css\"><!--\n"
 	for level in 0..24
 		font = 12 + level
 		r << "\t.tagcloud li.tagcloud#{level} {font-size: #{font}px;}\n"
@@ -129,7 +129,7 @@ def tagcloud_css
 	r << "\t.tagcloud ul {list-style-type:none;}\n"
 	r << "\t.tagcloud li {display:inline;}\n"
 	r << "\t.tagcloud li a {text-decoration:none;}\n"
-	r << "\t</style>\n"
+	r << "\t--></style>\n"
 	r
 end
 
