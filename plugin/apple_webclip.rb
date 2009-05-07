@@ -7,7 +7,7 @@
 
 add_header_proc do
 	if @conf['apple_webclip.url'] and @conf['apple_webclip.url'].size > 0
-		%Q|	<link rel="apple-touch-icon" href="#{h @conf['apple_webclip.url']}"/>\n|
+		%Q|	<link rel="apple-touch-icon" href="#{h @conf['apple_webclip.url']}">\n|
 	else
 		''
 	end
