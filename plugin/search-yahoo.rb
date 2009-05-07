@@ -42,6 +42,10 @@ def search_boss_api( q, start = 0 )
 	end
 end
 
+def search_to_html( str )
+	str.gsub( /<wbr>/, '' ).gsub( /<b>/, '<strong>' ).gsub( /<\/b>/, '</strong>' )
+end
+
 def search_result
 	query = CGI::unescape( @cgi.params['q'][0] )
 	start = CGI::unescape( @cgi.params['start'][0] || '0' ).to_i
@@ -68,8 +72,8 @@ def search_result
 		next unless url =~ @conf['search-yahoo.result_filter']
 		title = elem['title']
 		abstract = elem['abstract']
-		r << %Q|<dt><a href="#{h url}">#{title}</a></dt>|
-		r << %Q|<dd>#{abstract}</dd>|
+		r << %Q|<dt><a href="#{h url}">#{search_to_html title}</a></dt>|
+		r << %Q|<dd>#{search_to_html abstract}</dd>|
 	end
 	r << '</dl>'
 
