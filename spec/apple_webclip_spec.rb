@@ -15,7 +15,7 @@ describe "apple_webclip plugin" do
 		end
 			
 		it "header include url" do 
-			@header_snippet.should == %Q|\t<link rel="apple-touch-icon" href="http://example.com/example.png"/>|
+			@header_snippet.should == %Q|\t<link rel="apple-touch-icon" href="http://example.com/example.png">|
 		end
 	end
 
