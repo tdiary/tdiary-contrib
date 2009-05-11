@@ -13,7 +13,7 @@
 
 require 'open-uri'
 require 'timeout'
-require 'json'
+require 'rexml/document'
 
 def search_title
 	'全文検索 by Yahoo! Search BOSS'
@@ -33,7 +33,7 @@ def search_boss_api( q, start = 0 )
 	url = 'http://boss.yahooapis.com/ysearch/web/v1/'
 	appid = @conf['search-yahoo.appid']
 
-	url << "#{q}?appid=#{appid}&count=20&start=#{start}"
+	url << "#{q}?appid=#{appid}&format=xml&count=20&start=#{start}"
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
@@ -54,38 +54,37 @@ def search_result
 		uri = URI::parse( @conf.base_url )
 		q = "#{query} site:#{uri.host}"
 		q << %Q| inurl:"#{uri.path}"| unless uri.path == '/'
-		json = search_boss_api( u( q.untaint ), start )
+		xml = search_boss_api( u( q.untaint ), start )
+		doc = REXML::Document::new( REXML::Source.new( xml ) ).root
+		res = doc.elements.to_a( '/ysearchresponse' )[0]
+		unless res.attribute( 'responsecode' ).value == '200' then
+			return '<p class="message">ERROR</p>'
+		end
 	rescue OpenURI::HTTPError
 		return %Q|<p class="message">#$!</p>|
 	end
 
-	doc = JSON( json )
-	res = doc['ysearchresponse']
-	unless res['responsecode'] == '200' then
-		return '<p class="message">ERROR</p>'
-	end
-
 	r = search_input_form( query )
 	r << '<dl class="search-result">'
-	(res['resultset_web']||[]).each do |elem|
-		url = elem['url']
+	doc.elements.to_a( '*/result' ).each do |elem|
+		url = elem.elements.to_a( 'url' )[0].text
 		next unless url =~ @conf['search-yahoo.result_filter']
-		title = elem['title']
-		abstract = elem['abstract']
+		title = elem.elements.to_a( 'title' )[0].text
+		abstract = elem.elements.to_a( 'abstract' )[0].text
 		r << %Q|<dt><a href="#{h url}">#{search_to_html title}</a></dt>|
 		r << %Q|<dd>#{search_to_html abstract}</dd>|
 	end
 	r << '</dl>'
 
 	r << '<div class="search-navi">'
-	(res['prevpage']||[]).each do |p|
-		if /start=\d+/ =~ p then
+	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
+		if /start=\d+/ =~ p.text then
 			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の20件</a>&nbsp;|
 		end
 	end
 
-	(res['nextpage']||[]).each do |n|
-		if /start=\d+/ =~ n then
+	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
+		if /start=\d+/ =~ n.text then
 			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の20件&gt;</a>|
 		end
 	end
