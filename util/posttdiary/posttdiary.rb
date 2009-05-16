@@ -112,7 +112,7 @@ begin
 
 	head, body = mail.split( /(?:\r?\n){2}/, 2 )
 
-	if head =~ /Content-Type:\s*Multipart\/Mixed.*boundary=\"(.*?)\"/im then
+	if head =~ %r|Content-Type:\s*Multipart/Mixed.*boundary="?(.*?)"?[\r\n]|im then
 		if not image_dir or not image_url then
 			raise "no --image-path and --image-url options"
 		end
