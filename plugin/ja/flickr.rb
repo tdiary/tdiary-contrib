@@ -5,6 +5,9 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
   if @mode == 'saveconf'
     @conf['flickr.apikey']       = @cgi.params['flickr.apikey'][0]
     @conf['flickr.default_size'] = @cgi.params['flickr.default_size'][0]
+    if @cgi.params['flickr.clear'][0] == "true"
+      flickr_clear_cache
+    end
   end
 
   flickr_bookmarklet = CGI.escapeHTML %Q{javascript:(function(){var w=window;w.page_photo_id||/^\/photos\/[^/]+\/(\d+)\//.test(w.location.pathname)?w.location.href="#{@conf.base_url}#{@update}?#{FLICKER_FORM_PID}="+w.page_photo_id||RegExp.$1:void(0);})()}
@@ -46,5 +49,11 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
     <li>「本文に追加」ボタンを押すと、日記中にこの写真を表示するための記述（プラグイン）が追記されます。</li>
   </ol>
 
+  <h3>キャッシュファイルの削除</h3>
+  <p>Flickrプラグインが使用しているキャッシュを削除します。</p>
+  <p>
+    <input type="checkbox" id="flickr.clear" name="flickr.clear" value="true">
+    <label for="flickr.clear">キャッシュを削除する</label>
+  </p>
 _HTML
 end

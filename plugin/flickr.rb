@@ -100,6 +100,15 @@ def flickr_open(method, photo_id)
   open(file) {|f| yield f }
 end
 
+# delete cache files
+def flickr_clear_cache
+  cache_dir = "#{@cache_path}/flickr"
+  Dir.glob("#{cache_dir}/*.flickr.photos.*") do |cache|
+    # File.unlink(cache)
+    File.rename(cache, "#{cache}.org")
+  end
+end
+
 FLICKER_FORM_PID = 'plugin_flickr_pid'
 add_edit_proc do |date|
   photo_id = @cgi.params[FLICKER_FORM_PID][0] or next
