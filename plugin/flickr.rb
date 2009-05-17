@@ -166,7 +166,7 @@ module Flickr
     end
 
     def base_url
-      'http://flickr.com/services/rest/?'
+      'http://api.flickr.com/services/rest/?'
     end
   end
 
