@@ -124,6 +124,7 @@ def add_delicious(date, index)
 end
 
 def add_delicious_json(date, index)
+	require 'rubygems'
 	require 'json'
 
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))

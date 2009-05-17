@@ -5,12 +5,12 @@
 #
 
 require 'digest/md5'
-require 'rubygems'
-require 'json/ext'
 require 'timeout'
 require 'open-uri'
 require 'yaml'
 require 'pathname'
+require 'rubygems'
+require 'json'
 
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
