@@ -11,6 +11,10 @@
 #
 
 =begin ChangeLog
+2009-05-26 kp
+  * walk.eznavi.jpの場合のクエリを修正
+  * リンク先をgoogle mapに
+  * wgs2tkyを使用しない
 2008-05-22 kp
   * MapDatumがTOKYO以外の場合、WGS-84と類推する
 2008-01-17 kp
@@ -34,6 +38,14 @@
 require 'wgs2tky'
 require 'exifparser'
 
+def tky2wgs lat,lon
+  lat_w = lat - lat*0.00010695 + lon*0.000017464 + 0.0046017
+  lon_w = lon - lat*0.000046038 - lon*0.000083043 + 0.010040
+  lat = lat_w
+  lon = lon_w
+  return lat,lon
+end
+
 def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   if @conf.secure then
     image = "#{@image_date}_#{id}.jpg"
@@ -55,6 +67,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   
   eznavi = 'http://walk.eznavi.jp'
   mapion = 'http://www.mapion.co.jp'
+  google = 'http://maps.google.co.jp'
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
   
@@ -62,6 +75,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   nl = nil
   datum = nil
 
+  alt_org = alt
   if exif
     if @conf['image_gps.add_info']
       alt += ' '+exif['Model'].to_s if exif.tag?('Model')
@@ -70,35 +84,31 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       alt += ' '+exif['FNumber'].to_s if exif.tag?('FNumber')
     end
     begin
-      if(exif['GPSLatitudeRef'].value == 'N' && exif['GPSLongitudeRef'].value == 'E')
-        nl = exif['GPSLatitude'].value if exif.tag?('GPSLatitude')
-        el = exif['GPSLongitude'].value if exif.tag?('GPSLongitude')
-        datum = exif['GPSMapDatum'].value if exif.tag?('GPSMapDatum')
-      end
+      lat = exif['GPSLatitude'].value
+      lat = lat[0].to_f + lat[1].to_f/60 + lat[2].to_f/3600
+      lat = -lat if exif['GPSLatitudeRef'].value == 'S'
+      lon = exif['GPSLongitude'].value
+      lon = lon[0].to_f + lon[1].to_f/60 + lon[2].to_f/3600
+      lon = -lon if exif['GPSLongitudeRef'].value == 'W'
+      datum = exif['GPSMapDatum'].value if exif.tag?('GPSMapDatum')
     rescue
+      lat = nil
     end
   end
 
-  unless el.nil?
-    if @conf.mobile_agent?
-      lat = "#{sprintf("%d.%d.%.2f",*nl)}"
-      lon = "#{sprintf("%d.%d.%.2f",*el)}"
-    else
-      Wgs2Tky.conv!(nl,el) unless datum == /TOKYO/
-      lat ="#{sprintf("%d/%d/%.3f",*nl)}"
-      lon ="#{sprintf("%d/%d/%.3f",*el)}"
-    end
+  unless lat.nil? && @conf.mobile_agent? 
+    lat,lon = tky2wgs(lat,lon) if datum == 'TOKYO'
   end
 
   if thumbnail
     url = %Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
-  elsif el.nil?
+  elsif lat.nil?
     url = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
   else
     if @conf.mobile_agent?
       url = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
     else
-      url = %Q[<a href="#{mapion}/c/f?el=#{lon}&amp;nl=#{lat}&amp;uc=1&amp;grp=all">]
+      url = %Q[<a href="#{google}/maps?q=#{lat},#{lon}+(#{alt_org})">]
     end
     url += %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
   end
