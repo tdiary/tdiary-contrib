@@ -108,7 +108,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     if @conf.mobile_agent?
       url = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
     else
-      url = %Q[<a href="#{google}/maps?q=#{lat},#{lon}+(#{alt_org})">]
+      url = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
     end
     url += %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
   end
