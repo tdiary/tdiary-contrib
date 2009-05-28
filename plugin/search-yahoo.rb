@@ -65,7 +65,7 @@ def search_result
 	end
 
 	r = search_input_form( query )
-	r << '<dl class="search-result">'
+	r << '<div class="autopagerize_page_element"><dl class="search-result">'
 	doc.elements.to_a( '*/result' ).each do |elem|
 		url = elem.elements.to_a( 'url' )[0].text
 		next unless url =~ @conf['search-yahoo.result_filter']
@@ -74,18 +74,18 @@ def search_result
 		r << %Q|<dt><a href="#{h url}">#{search_to_html title}</a></dt>|
 		r << %Q|<dd>#{search_to_html abstract}</dd>|
 	end
-	r << '</dl>'
+	r << '</dl></div>'
 
 	r << '<div class="search-navi">'
 	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
 		if /start=\d+/ =~ p.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">&lt;前の20件</a>&nbsp;|
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&" rel="prev">&lt;前の20件</a>&nbsp;|
 		end
 	end
 
 	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
 		if /start=\d+/ =~ n.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&">次の20件&gt;</a>|
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&" rel="next">次の20件&gt;</a>|
 		end
 	end
 	r << '</div>'
