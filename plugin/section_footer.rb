@@ -124,6 +124,7 @@ def add_delicious(date, index)
 end
 
 def add_delicious_json(date, index)
+	require 'fileutils'
 	require 'rubygems'
 	require 'json'
 
@@ -138,7 +139,7 @@ def add_delicious_json(date, index)
 	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}">|
 
 	begin
-		Dir::mkdir( cache_dir ) unless File::directory?( cache_dir )
+		FileUtils.mkdir_p( cache_dir ) unless File::directory?( cache_dir )
 		cached_time = nil
 		cached_time = File::mtime( file_name ) if File::exist?( file_name )
 
