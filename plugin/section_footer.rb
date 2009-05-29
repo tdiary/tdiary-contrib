@@ -158,8 +158,8 @@ def add_delicious_json(date, index)
 						end
 					end
 				end
-			rescue TimeoutError
-			rescue
+			rescue => e
+				@conf.debug( e )
 			end
 		end
 	rescue
