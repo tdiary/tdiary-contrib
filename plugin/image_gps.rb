@@ -1,4 +1,4 @@
-# image_gps.rb $Revision: 1.6 $
+# image_gps.rb $Revision: 1.7 $
 # 
 # 概要:
 # 画像にGPSによる位置情報が含まれている場合は、対応する地図へのリンクを生成する。
@@ -11,6 +11,8 @@
 #
 
 =begin ChangeLog
+2009-06-01 kp
+  * モバイルモード時も世界測地系とする
 2009-05-26 kp
   * walk.eznavi.jpの場合のクエリを修正
   * リンク先をgoogle mapに
@@ -35,7 +37,6 @@
   * first version
 =end
 
-require 'wgs2tky'
 require 'exifparser'
 
 def tky2wgs lat,lon
@@ -66,16 +67,12 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   end
   
   eznavi = 'http://walk.eznavi.jp'
-  mapion = 'http://www.mapion.co.jp'
   google = 'http://maps.google.co.jp'
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
   
-  el = nil
-  nl = nil
   datum = nil
-
-  alt_org = alt
+  
   if exif
     if @conf['image_gps.add_info']
       alt += ' '+exif['Model'].to_s if exif.tag?('Model')
@@ -96,7 +93,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     end
   end
 
-  unless lat.nil? && @conf.mobile_agent? 
+  unless lat.nil? 
     lat,lon = tky2wgs(lat,lon) if datum == 'TOKYO'
   end
 
@@ -106,7 +103,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     url = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
   else
     if @conf.mobile_agent?
-      url = %Q[<a href="#{eznavi}/map?datum=#{datum=='TOKYO'?'1':'0'}&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
+      url = %Q[<a href="#{eznavi}/map?datum=0&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
     else
       url = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
     end
