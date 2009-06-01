@@ -104,7 +104,9 @@ add_header_proc do
     <<-HTML
     <style type="text/css"><!--
       img.map{
-        position:absolute;
+        position:fixed;
+        top:30px;
+        left:30px;
         display:none;
         outline:5px;
         outline-style:solid;
@@ -114,9 +116,6 @@ add_header_proc do
         position:relative;
       }
       a:hover img.map{
-        position:fixed;
-        top:30px;
-        left:30px;
         display:block;
       }
     --></style>
