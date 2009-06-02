@@ -1,22 +1,36 @@
-
 image_gps.rb
 
-rexif_gps.rbおよびrjpeg.rbは
-rexif(http://www.koka-in.org/~zophos/lib/rexif)
-をもとに作成しました。
+機能
+アップロードした画像に含まれているGPSの位置情報を使用して、
+対応する地図へのリンクを生成します。また、画像ファイルに機種名などの情
+報が含まれている場合、タイトル情報として表示する事が可能です。
 
-wgs2tky.rbはWGS84からTokyoへの変換
-(http://homepage3.nifty.com/Nowral/02_DATUM/02_DATUM.html#WGS2TKY)
-を参考にしました。
+更新情報
+revision 1.7:
+  リンク先をGoogleMapにした。
+  モバイルモード時も世界測地系に変換する。
 
-image_gps.rbはimage.rbおよび、
-mapion.rb(http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?mapion%2Erb)
-をもとに作成しました。
+インストール
+このPluginはimage.rbが導入されていることを前提としています。
+image.rbを有効にしてください。また、image_ex.rbと共存することはできません。
 
-----
+・ExifParserの導入
+image_gps.rbはExifのパーサとして、ExifParserを使用しています。
+tdiary/lib/ExifParser/READMEに従って導入してください。
 
-このパッケージに含まれるimage_gps.rbは、旧バージョンです。
-より高機能になった最新版は以下のURLから入手できます(ただし導入方法が少し
-難しくなっています):
+・Pluginのインストール
+image_gps.rbを適切な場所に配置してください。多言語用リソースは存在しません。
 
-http://mmho.no-ip.org/hiki/hiki.cgi?image_gps.rb
+使用方法
+image.rbと同じです。画像にGPSの情報が含まれている場合は自動的に
+GoogleMAP(http://maps.google.co.jp/ )へのリンクを生成します。
+
+携帯端末でアクセスした場合は、http://walk.eznavi.jp/ へのリンクを生成します。
+auのezナビウォーク対応機種ではezナビウォークを起動するページが表示されます。
+それ以外の端末ではhttp://map.navitime.jp/ へリダイレクトされます。
+
+サムネイル画像が指定されている場合は、そちらが優先されます。
+
+制限事項
+secureモードには対応していません。
+image_ex.rbと同時に使用することはできません。
