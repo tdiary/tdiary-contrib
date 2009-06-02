@@ -78,7 +78,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   
   #static map
   unless lat.nil?
-    img_map = %Q["http://maps.google.com/staticmap?format=jpg&amp;]
+    img_map = %Q["http://maps.google.com/staticmap?format=gif&amp;]
     img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
     img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
   else
