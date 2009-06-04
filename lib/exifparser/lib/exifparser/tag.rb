@@ -113,7 +113,11 @@ module Exif
         end
 
         def _formatData(data)
-          self.respond_to?(:_format0) ? _format0(data) : data
+          if self.respond_to?(:_format0)
+            _format0(data)
+          else
+            data.unpack("C*").collect{|e| e.to_i}
+          end
         end
 
       end
@@ -233,7 +237,18 @@ module Exif
       # it returns more human-readable form.
       #
       def to_s
-        @formatted.to_s
+        if self.is_a? Formatter::Undefined
+          length = @formatted.length
+          data = length > 8 ? @formatted[0, 8] : @formatted
+          ret = ""
+          data.each do |dat|
+            ret += sprintf("%02X ", dat)
+          end
+          ret += %Q[...(#{length} bytes)] if length > data.length
+          return ret
+        else
+          @formatted.to_s
+        end
       end
 
       #
@@ -877,6 +892,8 @@ module Exif
             "Exif Version 2.1"
           when "0220"
             "Exif Version 2.2"
+          when "0221"
+            "Exif Version 2.21"
           else
             "Unknown Exif Version"
           end

@@ -225,6 +225,7 @@ module Exif
         unit, formatter = Tag::Format::Unit[decode_ushort(fin_read_n(2))]
         count = decode_ulong(fin_read_n(4))
         tagdata = fin_read_n(4)
+        next if formatter == nil
         obj = tagclass.new(tag, ifdname, count)
         obj.extend formatter, @byteOrder_module
         obj.pos = curpos_tag
