@@ -38,12 +38,29 @@ module Exif
       # 0x0002 - ISOSetting
       #
       class ISOSetting < Base
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
+        
+        def to_s
+          if @formatted[1] == 0
+            "auto"
+          else
+            @formatted[1].to_s
+          end
+        end
       end
 
       #
       # 0x0003 - ColorMode
       #
       class ColorMode < Base
+        def to_s
+          @formatted
+        end
       end
 
       #
@@ -245,6 +262,21 @@ module Exif
       end
 
       #
+      # 0x0094 - SaturationAdjustment
+      #
+      class SaturationAdjustment < Base
+        def to_s
+          case @formatted
+          when 0
+            "none"
+          when -3
+            "B&W"
+          else
+            @formatted.to_s
+          end
+        end
+      end
+      #
       # 0x0095 - LongtimeExposureNR
       #
       class LongtimeExposureNR < Base
@@ -358,6 +390,12 @@ module Exif
           return pdata
         end
       end
+      
+      #
+      # 0x009c - SceneAssist
+      #
+      class SceneAssist < Base
+      end
 
       #
       # 0x00a7 - ReleaseCount
@@ -369,18 +407,23 @@ module Exif
         end
       end
 
-    #
-    # 0x00a9 - ImageOptimization
-    #
+      #
+      # 0x00a9 - ImageOptimization
+      #
       class ImageOptimization < Base
       end
 
-    #
-    # 0x00aa - Saturation
-    #
+      #
+      # 0x00aa - Saturation
+      #
       class Saturation < Base
       end
 
+      #
+      # 0x00ac -VibrationReduction
+      #
+      class VibrationReduction < Base
+      end
     end
 
 
@@ -408,11 +451,14 @@ module Exif
       0x008D => MakerNote::CameraColorMode,
       0x008F => MakerNote::SceneMode,
       0x0090 => MakerNote::LightSource,
+      0x0094 => MakerNote::SaturationAdjustment,
       0x0095 => MakerNote::LongtimeExposureNR,
       0x0098 => MakerNote::LensParameters,
+      0x009c => MakerNote::SceneAssist,
       0x00a7 => MakerNote::ReleaseCount,
       0x00a9 => MakerNote::ImageOptimization,
-      0x00aa => MakerNote::Saturation
+      0x00aa => MakerNote::Saturation,
+      0x00ac => MakerNote::VibrationReduction
 
     }
 
