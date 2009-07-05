@@ -128,8 +128,8 @@ begin
 				@body = sub_body
 			elsif sub_head =~ %r[
 				^Content-Type:\s*
-				(?:image/ | application/octet-stream).+
-				name=".+(\.[^.]+?)" (?# 1: extension)
+				(?:image/|application/octet-stream).+
+				name="?.+(\.\w{3})"? (?# 1: extension)
 			]imx
 				image_ext = $1.downcase
 				now = Time::now
