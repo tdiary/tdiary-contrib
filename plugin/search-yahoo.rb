@@ -43,7 +43,7 @@ def search_boss_api( q, start = 0 )
 end
 
 def search_to_html( str )
-	str.gsub( /<wbr>/, '' ).gsub( /<b>/, '<strong>' ).gsub( /<\/b>/, '</strong>' )
+	(str || '').gsub( /<wbr>/, '' ).gsub( /<b>/, '<strong>' ).gsub( /<\/b>/, '</strong>' )
 end
 
 def search_result
