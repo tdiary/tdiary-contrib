@@ -4,7 +4,7 @@
 # Copyright (C) 2005 TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-if /^(?:latest|day|month|nyear)$/ =~ @mode then
+if /^(?:latest|day|month|nyear|search)$/ =~ @mode then
 	add_footer_proc do
 		google_analytics_insert_code
 	end
