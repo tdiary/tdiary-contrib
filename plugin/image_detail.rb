@@ -1,4 +1,4 @@
-# image_gps.rb $Revision: 0.8 $
+# image_gps.rb $Revision: 1.0 $
 # 
 # 概要:
 # 
@@ -6,7 +6,7 @@
 # 使い方:
 # 絵日記Plugin(image.rb)とおなじ
 #
-# Copyright (c) 2004,2005 kp <kp@mmho.no-ip.org>
+# Copyright (c) 2009 kp <kp@mmho.no-ip.org>
 # Distributed under the GPL
 #
 
