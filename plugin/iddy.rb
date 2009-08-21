@@ -27,7 +27,7 @@ def iddy( id )
 			xml = iddy_call_api( id, @iddy_key )
 			open( cache, 'wb' ) {|f| f.write( xml ) }
 		rescue Timeout::Error
-			return '<div class="iddy error">No Profile.</div>'
+			return '<div class="iddy error">No data.</div>'
 		end
 	end
 
@@ -75,7 +75,7 @@ def iddy_call_api( id, key )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 10 ) do
+	timeout( 3 ) do
 		open( request, :proxy => proxy ) {|f| f.read }
 	end
 end
