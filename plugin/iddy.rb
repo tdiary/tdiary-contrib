@@ -33,7 +33,7 @@ def iddy( id )
 
 	doc = REXML::Document::new( xml )
 	if doc.elements[1].attribute( 'status' ).to_s == 'fail' then
-		return '<div class="iddy error">idd.jp returns fail.</div>'
+		return '<div class="iddy error">iddy.jp returns fail.</div>'
 	end
 
 	user = doc.elements.to_a( '*/*/user' )[0].elements
