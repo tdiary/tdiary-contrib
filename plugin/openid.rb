@@ -22,7 +22,8 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 			nil,
 			'http://<ID>.openid.ne.jp/user/xrds'),
 		'TypeKey' => @openid_config.new(['http://www.typekey.com/t/openid/', 'http://profile.typekey.com/<ID>/']),
-		'Videntity.org' => @openid_config.new(['http://videntity.org/serverlogin?action=openid', 'http://<ID>.videntity.org/']),
+		# Videntity.org seems to be closed.
+		# 'Videntity.org' => @openid_config.new(['http://videntity.org/serverlogin?action=openid', 'http://<ID>.videntity.org/']),
 		'Vox' => @openid_config.new(['http://www.vox.com/services/openid/server', 'http://<ID>.vox.com/']),
 		'myopenid.com' => @openid_config.new(
 			['http://www.myopenid.com/server', 'http://<ID>.myopenid.com'], # openid
@@ -64,7 +65,7 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 			<meta http-equiv="X-XRDS-Location" content="#{h openid_service.x_xrds_location.sub( /<ID>/, openid_id )}">
 			HTML
 			result.gsub( /^\t{2}/, '' )
-		end
+		end if openid_service
 	end
 end
 
