@@ -1,11 +1,16 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8; -*-
 # estraier-search.rb $Revision: 1.1.2.12 $
 #
 # Copyright (C) 2007 Kazuhiko <kazuhiko@fdiary.net>
 # You can redistribute it and/or modify it under GPL2.
 #
-$KCODE= 'u'
 BEGIN { $stdout.binmode }
+begin
+	Encoding::default_external = 'UTF-8'
+rescue NameError
+	$KCODE = 'n'
+end
 
 require "estraierpure"
 require "enumerator"
@@ -116,7 +121,7 @@ module TDiary
 				@summary.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term)), true, @encoding), "<strong>\\&</strong>")
 			end
 			query = "[SIMILAR]"
-			item.keywords.split(/\t/).enum_slice(2).collect do |k, s|
+			item.keywords.split(/\t/).each_slice(2).collect do |k, s|
 				query << " WITH #{s} #{k}"
 			end
 			@similar = "%s?query=%s" %
@@ -241,7 +246,7 @@ begin
 	if @cgi.mobile_agent? then
 		body = conf.to_mobile( tdiary.eval_rhtml( 'i.' ) )
 		head['charset'] = conf.mobile_encoding
-		head['Content-Length'] = body.size.to_s
+		head['Content-Length'] = body.bytesize.to_s
 	else
 		if @cgi['type'] == 'rss'
 			head['type'] = "application/xml; charset=#{conf.encoding}"
@@ -250,7 +255,7 @@ begin
 			body = tdiary.eval_rhtml
 		end
 		head['charset'] = conf.encoding
-		head['Content-Length'] = body.size.to_s
+		head['Content-Length'] = body.bytesize.to_s
 		head['Pragma'] = 'no-cache'
 		head['Cache-Control'] = 'no-cache'
 	end
