@@ -1,0 +1,7 @@
+url: 'http://twitter.com/home?status=RT @your-twitter-account: %s '
+src: http://kayakaya.net/parts/tdiary/retweet.gif
+title:
+  ja: このエントリをReTweetする
+  =: ReTweet for This entry
+counter:
+usesubtitle: !ruby/regexp /%s/
