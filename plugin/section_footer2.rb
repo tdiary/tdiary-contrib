@@ -30,6 +30,7 @@ end
 alias subtitle_link_original subtitle_link
 def subtitle_link( date, index, subtitle )
 	s = ''
+        @subtitle = subtitle
 	if subtitle then
 		s = subtitle.sub( /^(?:\[[^\[]+?\])+/ ) do
 			$&.scan( /\[(.*?)\]/ ) do |tag|
@@ -124,8 +125,18 @@ def parse_sbm_yaml(file, date, index)
 	r = ""
 
 	unless config.nil?
+
+		url = config["url"]
+		unless config['usesubtitle'].nil?
+			sub = (@subtitle || '').sub( /^(\[([^\]]+)\])+ */, '' )
+			sub = apply_plugin( sub, true ).strip
+			regexp = config["usesubtitle"]
+			url.gsub!(regexp, sub)
+			char_space = ' '
+		end
+
 		title = config["title"][@conf.lang]
-		r << %Q|<a href="#{config["url"]}#{permalink(date, index)}">|
+		r << %Q|<a href="#{url}#{char_space}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
 		r << %Q|title="#{title}" |
 		r << %Q|alt="#{title}" />|
