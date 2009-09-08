@@ -123,7 +123,7 @@ module ::Profile
       # parse profile XML
       def parse_profile(f)
         doc = REXML::Document.new(f)
-        @name = doc.elements['//response/users/user/name'].text
+        @name = doc.elements['//response/users/user/accountname'].text
         @image = doc.elements['//response/users/user/imageurl'].text
         @description = doc.elements['//response/users/user/profile'].text
       end
