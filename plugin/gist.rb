@@ -14,11 +14,3 @@ def gist( gist_id )
 <noscript><a href="#{gist_snippet_url}">gist:#{gist_id}</a></noscript></div>
 	EOS
 end
-
-add_header_proc do
-  <<-SCRIPT
-  <script type="text/javascript"><!--
-  // window.
-  // --></script>
-  SCRIPT
-end
