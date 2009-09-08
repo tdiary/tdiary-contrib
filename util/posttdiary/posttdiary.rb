@@ -205,6 +205,7 @@ begin
 			nextline = true
 		end
 	end
+	subject.strip!
 	if use_subject then
 		title = ''
 		@body = "#{subject}\n#{@body}"
