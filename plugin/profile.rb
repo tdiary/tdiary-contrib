@@ -41,8 +41,8 @@ module ::Profile
       # parse profile XML
       def parse_profile(f)
         doc = REXML::Document.new(f)
-        @name = doc.elements['//user/name'].text
-        @mail = doc.elements['//user/email'].text
+        @name = doc.elements['//user/name'].text if doc.elements['//user/name']
+        @mail = doc.elements['//user/email'].text if doc.elements['//user/email']
         # github uses gravater.com for user icon
         @image = "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@mail)}.jpg"
       end
@@ -66,9 +66,9 @@ module ::Profile
       # parse profile XML
       def parse_profile(f)
         doc = REXML::Document.new(f)
-        @name = doc.elements['//user/name'].text
-        @image = doc.elements['//user/profile_image_url'].text
-        @description = doc.elements['//user/description'].text
+        @name = doc.elements['//user/name'].text if doc.elements['//user/name']
+        @image = doc.elements['//user/profile_image_url'].text if doc.elements['//user/profile_image_url']
+        @description = doc.elements['//user/description'].text if doc.elements['//user/description']
       end
 
       # link for your profile service
@@ -91,9 +91,9 @@ module ::Profile
       # parse profile XML
       def parse_profile(f)
         doc = REXML::Document.new(f)
-        @name = doc.elements['//feed/name'].text
+        @name = doc.elements['//feed/name'].text if doc.elements['//feed/name']
         @image = "http://friendfeed-api.com/v2/picture/#{id}"
-        @description = doc.elements['//feed/description'].text
+        @description = doc.elements['//feed/description'].text if doc.elements['//feed/description']
       end
 
       # link for your profile service
