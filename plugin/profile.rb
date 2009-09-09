@@ -194,6 +194,9 @@ def profile(id, service = :twitter, options = {})
     :github => Profile::Service::GitHub,
     :friendfeed => Profile::Service::FriendFeed,
     :iddy => Profile::Service::Iddy,
+    :gravatar => Profile::Service::Gravatar,
+    :wassr => Profile::Service::Wassr,
+    :hatena => Profile::Service::Hatena,
   }[service.to_s.downcase.to_sym]
 
   # TODO: create cache manager class
