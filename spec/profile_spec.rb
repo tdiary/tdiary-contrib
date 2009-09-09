@@ -4,18 +4,18 @@ require 'profile'
 
 describe "Profile::Service" do
 
-	describe "GitHub" do
-		before :all do
+  describe "GitHub" do
+    before :all do
       # http://develop.github.com/p/general.html
       @profile = Profile::Service::GitHub.new("schacon", :size => 40)
-		end
+    end
 
     it "should include name, mail, image properties" do
       @profile.name.should == "Scott Chacon"
       @profile.mail.should == "schacon@gmail.com"
       @profile.image.should == "http://www.gravatar.com/avatar/9375a9529679f1b42b567a640d775e7d.jpg?s=40"
     end
-	end
+  end
 
   describe "Twitter" do
     before :all do
