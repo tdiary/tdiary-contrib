@@ -14,40 +14,80 @@ require 'timeout'
 require 'rexml/document'
 require 'open-uri'
 require 'digest/md5'
+#require 'yaml/store'
 require 'pstore'
 
 module ::Profile
   module Service
-    # abstract class for profile services
+    # base class for profile services
     class Base
+      # default attributes
       attr_reader :id
       attr_reader :image
       attr_reader :name
       attr_reader :mail
       attr_reader :description
       attr_reader :link
+
+      # class instance variables
+      class << self
+        attr_reader :properties
+        attr_reader :endpoint_proc
+      end
+
+      # set property and xpath pair for parse XML document
+      def self.property(property, path)
+        @properties ||= {}
+        @properties[property] = path
+      end
+
+      # set endpoint proc (this proc is called by initialize method with id)
+      def self.endpoint(&block)
+        @endpoint_proc = block
+      end
+
+      def initialize(id, options = {})
+        @id = id
+        @options = options
+
+        if self.class.endpoint_proc
+          endpoint = self.class.endpoint_proc.call(id)
+          doc = fetch(endpoint)
+          parse(doc)
+        end
+      end
+
+      # get a XML document from endpoint and create REXML::Document instance
+      def fetch(endpoint)
+        timeout(5) do
+          open(endpoint) do |f|
+            doc = REXML::Document.new(f)
+          end
+        end
+      end
+
+      # parse XML document with properties
+      def parse(doc)
+        self.class.properties.each do |property, path|
+          if doc.elements[path]
+            value = doc.elements[path].text
+            instance_variable_set("@#{property}", value)
+          end
+        end
+      end
     end
 
     # github.com
     class GitHub < Base
-      def initialize(id, options = {})
-        @id = id
-        req = "http://github.com/api/v2/xml/user/show/#{id}"
-        timeout(5) do
-          open(req){|f| parse_profile(f) }
-        end
+      property :name, '//user/name'
+      property :mail, '//user/email'
+      endpoint {|id| "http://github.com/api/v2/xml/user/show/#{id}" }
+
+      def image
+        Gravatar.new(@mail, @options).image
+        # "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@mail)}.jpg"
       end
 
-      # parse profile XML
-      def parse_profile(f)
-        doc = REXML::Document.new(f)
-        @name = doc.elements['//user/name'].text if doc.elements['//user/name']
-        @mail = doc.elements['//user/email'].text if doc.elements['//user/email']
-        # github uses gravater.com for user icon
-        @image = "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@mail)}.jpg"
-      end
-
-      # link for your profile service
       def link
         "http://github.com/#{@id}"
       end
@@ -55,23 +95,11 @@ module ::Profile
 
     # twitter.com
     class Twitter < Base
-      def initialize(id, options = {})
-        @id = id
-        req = "http://twitter.com/users/show/#{id}.xml"
-        timeout(5) do
-          open(req){|f| parse_profile(f) }
-        end
-      end
+      property :name, '//user/name'
+      property :image, '//user/profile_image_url'
+      property :description, '//user/description'
+      endpoint {|id| "http://twitter.com/users/show/#{id}.xml" }
 
-      # parse profile XML
-      def parse_profile(f)
-        doc = REXML::Document.new(f)
-        @name = doc.elements['//user/name'].text if doc.elements['//user/name']
-        @image = doc.elements['//user/profile_image_url'].text if doc.elements['//user/profile_image_url']
-        @description = doc.elements['//user/description'].text if doc.elements['//user/description']
-      end
-
-      # link for your profile service
       def link
         "http://twitter.com/#{@id}"
       end
@@ -79,24 +107,14 @@ module ::Profile
 
     # friendfeed.com
     class FriendFeed < Base
-      def initialize(id, options = {})
-        @id = id
-        req = "http://friendfeed-api.com/v2/feed/#{id}"
-        req << "?format=xml&num=0"
-        timeout(5) do
-          open(req){|f| parse_profile(f) }
-        end
+      property :name, '//feed/name'
+      property :description, '//feed/description'
+      endpoint {|id| "http://friendfeed-api.com/v2/feed/#{id}?format=xml&num=0" }
+
+      def image
+        "http://friendfeed-api.com/v2/picture/#{id}"
       end
 
-      # parse profile XML
-      def parse_profile(f)
-        doc = REXML::Document.new(f)
-        @name = doc.elements['//feed/name'].text if doc.elements['//feed/name']
-        @image = "http://friendfeed-api.com/v2/picture/#{id}"
-        @description = doc.elements['//feed/description'].text if doc.elements['//feed/description']
-      end
-
-      # link for your profile service
       def link
         "http://friendfeed.com/#{@id}"
       end
@@ -111,33 +129,28 @@ module ::Profile
       ######################################################################
       API_KEY = '9262ea8ffba962aabb4f1a1d3f1cfa953b11aa23'
 
-      def initialize(id, options = {})
-        @id = id
-        req = "http://iddy.jp/api/user/?apikey=#{API_KEY}"
-        req << "&accountname=#{id}"
-        timeout(5) do
-          open(req){|f| parse_profile(f) }
-        end
-      end
+      property :name, '//response/users/user/accountname'
+      property :image, '//response/users/user/imageurl'
+      property :description, '/response/users/user/profile'
+      endpoint {|id| "http://iddy.jp/api/user/?apikey=#{API_KEY}&accountname=#{id}" }
 
-      # parse profile XML
-      def parse_profile(f)
-        doc = REXML::Document.new(f)
-        @name = doc.elements['//response/users/user/accountname'].text
-        @image = doc.elements['//response/users/user/imageurl'].text
-        @description = doc.elements['//response/users/user/profile'].text
-      end
-
-      # link for your profile service
       def link
         "http://iddy.jp/profile/#{@id}/"
       end
     end
 
+    # gravatar.com
+    class Gravatar < Base
+      def image
+        size = @options[:size] ? "?s=#{@options[:size]}" : ""
+        "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@id.downcase)}.jpg#{size}"
+      end
+    end
   end
 end
 
-def profile(id, service = :twitter)
+PROFILE_VERSION = '20090909'
+def profile(id, service = :twitter, options = {})
   # FIXME: move to user stylesheet
   html = <<-EOS
   <style type="text/css">
@@ -163,25 +176,30 @@ def profile(id, service = :twitter)
     :iddy => Profile::Service::Iddy,
   }[service.to_s.downcase.to_sym]
 
+  # TODO: create cache manager class
+
+  # cache = "#{@cache_path}/profile.yaml"
   cache = "#{@cache_path}/profile.pstore"
   profile = nil
+  # db = YAML::Store.new(cache)
   db = PStore.new(cache)
   db.transaction do
     key = service_class.name
     db[key] ||= {} # initialize db
     updated = db[key][:updated]
-    if updated && (Time::now < updated + 60 * 60)
+    if updated && (Time::now < updated + 60 * 60) && db[key][:version] == PROFILE_VERSION
       # use cache
       profile = db[key][:profile]
     else
       # get latest date and update cache
       begin
-        profile = service_class.new(id)
+        profile = service_class.new(id, options)
       rescue # Timeout::Error
         return html << %Q{ <div class="profile">no profile</div> }
       end
       db[key][:updated] = Time::now
       db[key][:profile] = profile
+      db[key][:version] = PROFILE_VERSION
     end
   end
 
@@ -193,10 +211,3 @@ def profile(id, service = :twitter)
   html << %Q{ </a></div> }
 end
 
-# FIXME: for testing, please rewrite to RSPEC
-if __FILE__ == $0
-  $KCODE = 'u'
-  require 'cgi'
-  @cache_path = '.'
-  p profile('machu', :iddy)
-end

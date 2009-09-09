@@ -7,13 +7,13 @@ describe "Profile::Service" do
 	describe "GitHub" do
 		before :all do
       # http://develop.github.com/p/general.html
-      @profile = Profile::Service::GitHub.new("schacon")
+      @profile = Profile::Service::GitHub.new("schacon", :size => 40)
 		end
 
     it "should include name, mail, image properties" do
       @profile.name.should == "Scott Chacon"
       @profile.mail.should == "schacon@gmail.com"
-      @profile.image.should == "http://www.gravatar.com/avatar/9375a9529679f1b42b567a640d775e7d.jpg"
+      @profile.image.should == "http://www.gravatar.com/avatar/9375a9529679f1b42b567a640d775e7d.jpg?s=40"
     end
 	end
 
@@ -40,6 +40,20 @@ describe "Profile::Service" do
       @profile.name.should == "Bret Taylor"
       @profile.description.should == "Co-founder of FriendFeed, programmer, food lover"
       @profile.image.should == "http://friendfeed-api.com/v2/picture/bret"
+    end
+  end
+
+  describe "Gravatar" do
+    # http://ja.gravatar.com/site/implement/url
+
+    it "should include image property" do
+      profile = Profile::Service::Gravatar.new("iHaveAn@email.com")
+      profile.image.should == "http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg"
+    end
+
+    it "should specify size option" do
+      profile = Profile::Service::Gravatar.new("iHaveAn@email.com", :size => 40)
+      profile.image.should == "http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg?s=40"
     end
   end
 
