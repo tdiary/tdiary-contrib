@@ -146,6 +146,26 @@ module ::Profile
         "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@id.downcase)}.jpg#{size}"
       end
     end
+
+    class Wassr < Base
+      property :image, '//statuses/status/user/profile_image_url'
+      endpoint {|id| "http://api.wassr.jp/statuses/show.xml?id=#{id}" }
+
+      def link
+        "http://wassr.jp/user/#{id}"
+      end
+    end
+
+    class Hatena < Base
+      def image
+        prefix = id[0..1]
+        "http://www.hatena.ne.jp/users/#{prefix}/#{id}/profile.gif"
+      end
+
+      def link
+        "http://www.hatena.ne.jp/#{id}/"
+      end
+    end
   end
 end
 

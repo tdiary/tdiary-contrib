@@ -57,4 +57,22 @@ describe "Profile::Service" do
     end
   end
 
+  describe "Wassr" do
+    before :all do
+      # http://wassr.jp/help/api
+      @profile = Profile::Service::Wassr.new("machu")
+    end
+
+    it "should include image property" do
+      @profile.image.should == "http://wassr.jp/user/machu/profile_img.png.64.1215127012"
+    end
+  end
+
+  describe "Hatena" do
+    it "should include image property" do
+      profile = Profile::Service::Hatena.new("kmachu")
+      profile.image.should == "http://www.hatena.ne.jp/users/km/kmachu/profile.gif"
+    end
+  end
+
 end
