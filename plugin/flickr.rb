@@ -153,6 +153,11 @@ def flickr_slideshow(tag, id = nil)
   %Q|<iframe align="center" src="http://www.flickr.com/slideShow/index.gne?user_id=#{id}&tags=#{tag}" frameBorder="0" width="500" scrolling="no" height="500"></iframe>|
 end
 
+def flickr_slideshow_by_set(set_id)
+  return unless set_id
+  %Q|<iframe align="center" src="http://www.flickr.com/slideShow/index.gne?set_id=#{set_id}" frameBorder="0" width="500" scrolling="no" height="500"></iframe>|
+end
+
 module Flickr
   class Request < Hash
     def initialize(api_key, secret = nil)
