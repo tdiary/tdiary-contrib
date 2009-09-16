@@ -1,6 +1,6 @@
 # section_footer2.rb
 #
-# Copyright (c) 2008 SHIBATA Hiroshi <h-sbt@nifty.com>
+# Copyright (c) 2008 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
 #
 
@@ -9,8 +9,13 @@ require 'timeout'
 require 'open-uri'
 require 'yaml'
 require 'pathname'
-require 'rubygems'
-require 'json'
+
+begin
+	require 'json'
+rescue
+	require 'rubygems'
+	require 'json'
+end
 
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
