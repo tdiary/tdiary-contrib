@@ -13,8 +13,7 @@ require 'pathname'
 begin
 	require 'json'
 rescue
-	require 'rubygems'
-	require 'json'
+	retry if require 'rubygems'
 end
 
 def permalink( date, index, escape = true )
