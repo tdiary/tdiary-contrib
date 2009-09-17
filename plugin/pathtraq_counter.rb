@@ -6,8 +6,11 @@
 
 require 'timeout'
 require 'open-uri'
-require 'rubygems'
-require 'json/ext'
+begin
+	require 'json'
+rescue
+	retry if require 'rubygems'
+end
 
 def call_pathtraq_json( url, mode )
 	json = nil

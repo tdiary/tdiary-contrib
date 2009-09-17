@@ -125,8 +125,11 @@ end
 
 def add_delicious_json(date, index)
 	require 'fileutils'
-	require 'rubygems'
-	require 'json'
+	begin
+		require 'json'
+	rescue
+		retry if require 'rubygems'
+	end
 
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 	cache_dir = "#{@cache_path}/delicious/#{date.strftime( "%Y%m" )}/"
