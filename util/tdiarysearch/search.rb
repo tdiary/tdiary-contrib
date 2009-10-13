@@ -33,7 +33,7 @@ HEADER = unindent <<'EOS'
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
   <html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=<%= TDIARY_ENCODING %>">
     <meta http-equiv="Content-Language" content="ja">
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="theme/base.css" type="text/css" media="all">
@@ -81,7 +81,7 @@ SEARCH_RESULT = unindent <<"EOS"
         end
   %>
   <div class="day">
-  <h2><a href="<%= @config.index %>?date=<%= diary.ymd %>#<%= fragment %>"><%= diary.y_m_d %></a></h2>
+  <h2><a href="<%= url(diary, fragment) %>"><%= diary.y_m_d %></a></h2>
   <div class="body">
   <div class="section">
   <p><%= short_html(component) %></p>
@@ -126,6 +126,8 @@ require 'tdiary'
 require 'tdiary/defaultio'
 require 'erb'
 
+TDIARY_ENCODING = (TDIARY_VERSION >= '2.3.0') ? 'utf-8' : 'euc-jp'
+
 class WrongQuery < StandardError; end
 
 Z_SPACE = "\241\241"   # zen-kaku space
@@ -133,7 +135,7 @@ Z_SPACE = "\241\241"   # zen-kaku space
 BEGIN { $stdout.binmode }
 
 def main
-  $KCODE = 'u'
+  $KCODE = TDIARY_ENCODING
   cgi = CGI.new
   @config = TDiary::Config.new(cgi)
   @config.options['apply_plugin'] = true
@@ -181,7 +183,7 @@ end
 def send_html(cgi, html)
   print cgi.header('status' => '200 OK',
                    'type' => 'text/html',
-                   'charset' => 'utf-8',
+                   'charset' => TDIARY_ENCODING,
                    'Content-Length' => html.length.to_s,
                    'Cache-Control' => 'no-cache',
                    'Pragma' => 'no-cache')
@@ -380,14 +382,15 @@ def short_html(component)
     end
   when /Comment/
     cmt = component
-    escape((cmt.name + ': ' + cmt.body).slice(/\A.{0,120}/mu))
+    shorten(escape((cmt.name + ': ' + cmt.body)))
   else
     raise "must not happen: #{component.class}"
   end
 end
 
 def tdiary2text(html)
-  apply_tdiary_plugins(html).gsub(%r[<[^>]*>]um, '').slice(/\A.{0,120}/mu)
+  re = Regexp.new('<[^>]*>', Regexp::EXTENDED, TDIARY_ENCODING)
+  shorten(apply_tdiary_plugins(html).gsub(re, ''))
 end
 
 Years = {}
@@ -432,6 +435,27 @@ end
 
 def urlencode(str)
   str.gsub(/[^\w-]/n) {|ch| sprintf('%%%02x', ch[0]) }
+end
+
+def shorten(str)
+  re = Regexp.new('\A.{0,120}', Regexp::MULTILINE, TDIARY_ENCODING)
+  str.slice(re)
+end
+
+def url(diary, fragment)
+  if ( html_anchor_enabled? )
+    "#{@config.index}#{diary.ymd}.html\##{fragment}"
+  else
+    "#{@config.index}?date=#{diary.ymd}\##{fragment}"
+  end
+end
+
+def html_anchor_enabled?
+  if ( @html_anchor.nil? )
+    @html_anchor = @config.options2['sp.selected'].include?( 'html_anchor.rb' )
+  end
+
+  return @html_anchor
 end
 
 #
