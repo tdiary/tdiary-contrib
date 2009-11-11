@@ -27,3 +27,7 @@ end
 def rubykaigi2009( role = 'attendee' )
 	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://rubykaigi.org/2009/"><img src="http://rubykaigi.org/images/goodies/badges/#{role}.gif" width="160" height="160" alt="RubyKaigi2009#{h role.capitalize}" style="border-width: 0px;"></a></div>|
 end
+
+def sappororubykaigi02( role = 'attendee' )
+	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://regional.rubykaigi.org/sapporo02/"><img src="http://ruby-sapporo.org/sappororubykaigi02/#{role}.gif" width="160" height="90" alt="SapporoRubyKaigi02#{h role.capitalize}" style="border-width: 0px;"></a></div>|
+end
