@@ -83,7 +83,7 @@ def call_delicious_json( url_md5 )
 			end
 		end
 	rescue => e
-		@conf.debug( e )
+		@logger.debug( e )
 	end
 	return json
 end
@@ -115,7 +115,7 @@ def add_delicious( date, index )
 			end
 		end
 	rescue => e
-		@conf.debug( e )
+		@logger.debug( e )
 	end
 
 	r << '</a>'

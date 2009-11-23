@@ -162,7 +162,7 @@ def add_delicious_json(date, index)
 					end
 				end
 			rescue => e
-				@conf.debug( e )
+				@logger.debug( e )
 			end
 		end
 	rescue

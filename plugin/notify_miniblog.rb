@@ -71,7 +71,7 @@ def notify_miniblog
 		miniblog_updater = Miniblog::Updater.new(@conf['miniblog.user'], @conf['miniblog.pass'], config)
 		miniblog_updater.update( status )
 	rescue => e
-		@conf.debug( e )
+		@logger.debug( e )
 	end
 end
 

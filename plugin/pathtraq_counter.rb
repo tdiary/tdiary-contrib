@@ -21,7 +21,7 @@ def call_pathtraq_json( url, mode )
 			end
 		end
 	rescue => e
-		@conf.debug( e )
+		@logger.debug( e )
 	end
 	return json
 end
@@ -37,7 +37,7 @@ def pathtraq_counter
 			r << %Q|<li>#{m}: #{json["count"]} hits</li>\n| unless json.nil?
 		end
 	rescue => e
-		@conf.debug( e )
+		@logger.debug( e )
 	end
 	r << %Q|</ul>\n|
 	r << %Q|<div class="iddy"><span class="iddy-powered">Powered by <a href="http://pathtraq.com/">Pathtraq</a></span></div>\n|
