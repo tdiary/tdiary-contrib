@@ -193,7 +193,7 @@ end
 def setup_patterns(query)
   patterns = split_string(query).map {|pat|
     check_pattern pat
-    /#{Regexp.quote(pat)}/iu
+    Regexp.new( Regexp.quote(pat), Regexp::IGNORECASE, TDIARY_ENCODING )
   }
   raise WrongQuery, 'no pattern' if patterns.empty?
   raise WrongQuery, 'too many sub patterns' if patterns.length > 8
