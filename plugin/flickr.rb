@@ -103,7 +103,7 @@ end
 # delete cache files
 def flickr_clear_cache
   cache_dir = "#{@cache_path}/flickr"
-  Dir.glob("#{cache_dir}/*.flickr.photos.*") do |cache|
+  Dir.glob("#{cache_dir}/*.flickr.photos.{getInfo,getSizes}") do |cache|
     # File.unlink(cache)
     File.rename(cache, "#{cache}.org")
   end
