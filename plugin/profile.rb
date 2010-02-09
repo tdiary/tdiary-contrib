@@ -217,7 +217,7 @@ def profile(id, service = :twitter, options = {})
       # get latest date and update cache
       begin
         profile = service_class.new(id, options)
-      rescue # Timeout::Error
+      rescue Timeout::Error
         return html << %Q{ <div class="profile">no profile</div> }
       end
       db[key][:updated] = Time::now
