@@ -1,5 +1,5 @@
 url: 'http://twitter.com/home?status=Reading: %s '
-src: http://kayakaya.net/parts/tdiary/twitter-03.png
+src: http://twitter-badges.s3.amazonaws.com/t_mini-a.png
 title:
   ja: このエントリをTweetする
   =: Tweet this entry
