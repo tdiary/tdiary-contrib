@@ -37,10 +37,10 @@ end
 
 def yahoo_map(lat, lon, size = 'medium', layer = 3)
    # define map size
-   height = {'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
-   width = {'small' => '320px', 'medium' => '480px', 'large' => '640px'}
+   height = {'iphone' => '240px', 'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
+   width = {'iphone' => '240px', 'small' => '320px', 'medium' => '480px', 'large' => '640px'}
    if @conf.iphone? then
-      size = 'small'
+      size = 'iphone'
    end
 
    # generate id from latitude and longtitude because cobination is uniq.
