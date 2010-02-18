@@ -40,6 +40,10 @@ def yahoo_map(lat, lon, options = {})
    options[:layer] ||= 3
    options[:size] ||= 'medium'
 
+   if feed? or @conf.mobile_agent? then
+      return %Q|<p><a href="http://map.yahoo.co.jp/pl?type=scroll&lat=#{lat}&lon=#{lon}&z=17&mode=map&pointer=on&datum=wgs&fa=ks&home=on&hlat=#{lat}&hlon=#{lon}&layout=&ei=utf-8&p=">Link to Yahoo! Japan Map </a></p>|
+   end
+
    # define map size
    height = {'iphone' => '240px', 'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
    width = {'iphone' => '240px', 'small' => '320px', 'medium' => '480px', 'large' => '640px'}
