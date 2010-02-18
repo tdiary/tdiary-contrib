@@ -11,7 +11,7 @@ def ustream( id, type = :recorded )
 	end
 
 	# insert recorded video
-	if @conf.mobile_agent? or @conf.iphone? then
+	if @conf.mobile_agent? or @conf.iphone? or feed? then
 		return %Q|<a href="http://www.ustream.tv/recorded/#{id}">Link to Ustream ##{id}</a></p><p>|
 	end
 
