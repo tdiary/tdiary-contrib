@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # yahoo_map.rb - embeded Yahoo! Japan Map for tDiary
 #
@@ -35,18 +36,23 @@ def init_ymap
    @ymap_container = Array.new
 end
 
-def yahoo_map(lat, lon, size = 'medium', layer = 3)
+def yahoo_map(lat, lon, options = {})
+   options[:layer] ||= 3
+   options[:size] ||= 'medium'
+
    # define map size
    height = {'iphone' => '240px', 'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
    width = {'iphone' => '240px', 'small' => '320px', 'medium' => '480px', 'large' => '640px'}
    if @conf.iphone? then
       size = 'iphone'
+   else
+      size = options[:size]
    end
 
    # generate id from latitude and longtitude because cobination is uniq.
    ymapid = "ymapid" + lat.to_s + lon.to_s + layer.to_s
    ymapid.gsub!(/\./,'')
-   ymap_info = {:ymapid => ymapid, :lat => lat, :lon => lon, :layer => layer}
+   ymap_info = {:ymapid => ymapid, :lat => lat, :lon => lon, :layer => options[:layer]}
 
    @ymap_container << ymap_info
 
@@ -57,13 +63,15 @@ end
 def insert_ymap_js
    if @ymap_container.size > 0 then
       unless feed? then
-         r = %Q|<script type="text/javascript">\n|
+         r = ""
+         r << %Q|<script type="text/javascript">\n|
          r << %Q|function defineYmapIds() {\n|
          @ymap_container.each do |ymap_info|
-            r << %Q|#{ymap_info[:ymapid]} = new YahooMapsCtrl("#{ymap_info[:ymapid]}", "#{ymap_info[:lat]}, #{ymap_info[:lon]}", #{ymap_info[:layer]}, YMapMode.MAP, YDatumType.WGS84);\n|
+            r << %Q|var obj#{ymap_info[:ymapid]} = new YahooMapsCtrl("#{ymap_info[:ymapid]}", "#{ymap_info[:lat]}, #{ymap_info[:lon]}", #{ymap_info[:layer]}, YMapMode.MAP, YDatumType.WGS84);\n|
          end
          r << %Q|}\n|
-         r << %Q|if (window.addEventListener) window.addEventListener('load', defineYmapIds , false);\n|
+         r << %Q|if (window.addEventListener) window.addEventListener('load', defineYmapIds , false); // for Firefox\n|
+         r << %Q|if (window.attachEvent) window.attachEvent('onload', defineYmapIds); //for IE\n|
          r << %Q|</script>|
          return r
       end
