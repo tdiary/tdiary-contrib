@@ -1,12 +1,12 @@
 #
 # youtube.rb: YouTube plugin for tDiary
 #
-# Copyright (C) 2007 by TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) 2010 by TADA Tadashi <t@tdtds.jp>
 #
 # usage: <%= youtube 'VIDEO_ID' %>
 #
 def youtube( video_id )
-	if @conf.mobile_agent? then
+	if @conf.mobile_agent? or @conf.iphone? or feed? then
 		%Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{video_id}">YouTube (#{video_id})</a></div>|
 	elsif defined?( :iphone? ) and iphone?
 		%Q|<div class="youtube"><a href="youtube:#{video_id}">YouTube (#{video_id})</a></div>|
