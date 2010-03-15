@@ -1,7 +1,7 @@
 #
 # everytrail.rb: plugin embedding trip map on everytrail.com.
 #
-# Copyright (C) 2008 TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) 2010 TADA Tadashi <t@tdtds.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
 
