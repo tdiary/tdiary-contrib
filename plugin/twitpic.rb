@@ -6,5 +6,5 @@
 #
 
 def twitpic( image_id, label = 'image on Twitpic', place = 'photo' )
-	%Q|<a class="twitpic" href="http://twitpic.com/#{h image_id}" title="#{h label}"><img class="#{h place}", src="http://twitpic.com/show/thumb/#{h image_id}.jpg" width="150" height="150" alt="#{h label}"></a>|
+	%Q|<a class="twitpic" href="http://twitpic.com/#{h image_id}" title="#{h label}"><img class="#{h place}" src="http://twitpic.com/show/thumb/#{h image_id}.jpg" width="150" height="150" alt="#{h label}"></a>|
 end
