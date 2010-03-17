@@ -170,8 +170,7 @@ module ::Profile
 end
 
 PROFILE_VERSION = '20090909'
-def profile(id, service = :twitter, options = {})
-  # FIXME: move to user stylesheet
+add_header_proc do
   html = <<-EOS
   <style type="text/css">
     div.profile {
@@ -188,6 +187,10 @@ def profile(id, service = :twitter, options = {})
     }
   </style>
   EOS
+end
+
+def profile(id, service = :twitter, options = {})
+  html = ''
 
   service_class = {
     :twitter => Profile::Service::Twitter,
@@ -227,7 +230,7 @@ def profile(id, service = :twitter, options = {})
   end
 
   html << %Q{ <div class="profile"><a href="#{CGI.escapeHTML profile.link}"> }
-  html << %Q{ <span class="profile-image"><img src="#{CGI.escapeHTML profile.image}"></span> } if profile.image
+  html << %Q{ <span class="profile-image"><img src="#{CGI.escapeHTML profile.image}" alt="profile image"></span> } if profile.image
   html << %Q{ <span class="profile-name">#{CGI.escapeHTML profile.name}</span> } if profile.name
   html << %Q{ <span class="profile-mail">#{CGI.escapeHTML profile.mail}</span> } if profile.mail
   html << %Q{ <span class="profile-description">#{CGI.escapeHTML profile.description}</span> } if profile.description
