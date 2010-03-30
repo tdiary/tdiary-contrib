@@ -170,24 +170,6 @@ module ::Profile
 end
 
 PROFILE_VERSION = '20090909'
-add_header_proc do
-  html = <<-EOS
-  <style type="text/css">
-    div.profile {
-      margin: 1em;
-      text-align: center;
-      border: solid 1px #999;
-    }
-    div.profile img {
-      border: none;
-    }
-    div.profile span {
-      font-size: 0.9em;
-      display: block;
-    }
-  </style>
-  EOS
-end
 
 def profile(id, service = :twitter, options = {})
   html = ''

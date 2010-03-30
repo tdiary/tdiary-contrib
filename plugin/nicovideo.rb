@@ -24,6 +24,27 @@ require 'open-uri'
 require 'timeout'
 require 'rexml/document'
 
+def nicovideo_player_js
+	<<-HTML
+	<script type="text/javascript"><!--
+	function nicovideoPlayer( video_id ) {
+		document.getElementById( "thumbnail-" + video_id ).style.display = "none";
+		document.getElementById( "player-" + video_id ).style.display = "inline";
+		return false;
+	}
+	function nicovideoThumbnail( video_id ) {
+		document.getElementById( "thumbnail-" + video_id ).style.display = "inline";
+		document.getElementById( "player-" + video_id ).style.display = "none";
+		return false;
+	}
+	//--></script>
+	HTML
+end
+
+add_header_proc do
+	nicovideo_player_js
+end
+
 def nicovideo_call_api( video_id )
 	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
 	proxy = @conf['proxy']
@@ -63,16 +84,6 @@ def nicovideo_iframe( video_id )
 	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
 end
 
-def nicovideo( video_id, label = nil, link = nil )
-	begin
-		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
-	rescue ::Errno::ENOENT
-		"<strong>Sorry, #{video_id} was deleted.</strong>"
-	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
-		nicovideo_iframe( video_id )
-	end
-end
-
 def nicovideo_player( video_id, size = [544,384] )
 	if feed? or @conf.mobile_agent? or @conf.iphone? then
 		nicovideo( video_id )
@@ -84,3 +95,41 @@ def nicovideo_player( video_id, size = [544,384] )
 		%Q|<script type="text/javascript" src="#{nicovideo_player_path}/thumb_watch/#{video_id}#{s}"></script>|
 	end
 end
+
+def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
+	begin
+		r = ''
+		r << %Q|<div id="thumbnail-#{video_id}">|
+		thumb = @conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
+		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
+		r << thumb
+		r << '</div>'
+		if feed? or @conf.mobile_agent? then
+			r.gsub!( /<a .*?>/, '' )
+			r.gsub!( /<\/a>/, '' )
+		else
+			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;">|
+			r << %Q|<a name="player-#{video_id}">|
+			r << nicovideo_player( video_id, [544,384] )
+			r << %Q|</a>|
+			r << %Q|<div class="nicovideo-player-close"><a href="#" onclick="return nicovideoThumbnail( '#{video_id}' )">Close Player</a></div>|
+			r << %Q|</div>|
+		end
+		r
+	rescue ::Errno::ENOENT
+		"<strong>Sorry, #{video_id} was deleted.</strong>"
+	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
+		nicovideo_iframe( video_id )
+	end
+end
+
+#def nicovideo( video_id, label = nil, link = nil )
+#	begin
+#		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
+#	rescue ::Errno::ENOENT
+#		"<strong>Sorry, #{video_id} was deleted.</strong>"
+#	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
+#		nicovideo_iframe( video_id )
+#	end
+#end
+
