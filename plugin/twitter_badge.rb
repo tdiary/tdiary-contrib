@@ -15,7 +15,7 @@ def twitter_badge( account, opt = {} )
 		:top => (opt[:top] || 136).to_i,
 		:delay => (opt[:delay] || 5).to_i * 1000,
 	}
-	@twitter_badge_setting.inspect # do nothing in this method.
+	'' # do nothing in this method.
 end
 
 add_footer_proc do
