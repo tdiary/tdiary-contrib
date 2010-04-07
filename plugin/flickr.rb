@@ -36,8 +36,10 @@ def flickr(photo_id, size = nil, place = 'flickr')
     body = %Q|<a href="#{photo[:src]}">#{photo[:title]}</a>|
   else
     body = %Q|<a href="#{photo[:page]}"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
+   unless @conf.iphone?
     body << %Q| width="#{photo[:width]}"| if photo[:width]
     body << %Q| height="#{photo[:height]}"| if photo[:height]
+   end
     body << %Q|></a>|
   end
 
