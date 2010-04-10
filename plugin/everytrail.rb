@@ -5,13 +5,23 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
+def everytrail_adjust_size( size )
+	s = size.collect {|i| i.to_i }
+	s[0] = 400 if s[0] == 0
+	s[0] = 300 if @conf.iphone?
+	s[1] = 300 if s[1] == 0
+	s
+end
+
 def everytrail( trip_id, label = nil, size = [400,300] )
-	size.collect! {|i| i.to_i }
-	size[0] = 400 if size[0] == 0
-	size[0] = 300 if @conf.iphone?
-	size[1] = 300 if size[1] == 0
 	l = label ? %Q|<a href="http://www.everytrail.com/view_trip.php?trip_id=#{h trip_id}">#{h label}</a>| : ''
 	%Q|<div class="everytrail"><iframe src="http://www.everytrail.com/iframe2.php?trip_id=#{h trip_id}&width=#{size[0]}&height=#{size[1]}" marginheight=0 marginwidth=0 frameborder=0 scrolling=no width=#{size[0]} height=#{size[1]}>#{l}</iframe></div>|
+end
+
+def everytrail_flash( trip_id, label = nil, size = [400,300] )
+	size = everytrail_adjust_size( size )
+	l = label ? %Q|<a href="http://www.everytrail.com/view_trip.php?trip_id=#{h trip_id}">#{h label}</a>| : ''
+	%Q|<div class="everytrail"><object width="#{size[0]}" height="#{size[1]}" codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab"><param name="movie" value="http://www.everytrail.com/swf/widget.swf"/><param name="FlashVars" value="units=metric&mode=0&key=ABQIAAAAggE6oX7o-2CFkLBRN20X9BTCaWgBOrVzmDbJc0e41WeTNzCWNBSYkdZ8D6iOk2yqQd-kgDCXfoqiUQ&tripId=#{trip_id}"><embed src="http://www.everytrail.com/swf/widget.swf" quality="high" width="#{size[0]}" height="#{size[1]}" FlashVars="units=metric&mode=0&key=ABQIAAAAggE6oX7o-2CFkLBRN20X9BTCaWgBOrVzmDbJc0e41WeTNzCWNBSYkdZ8D6iOk2yqQd-kgDCXfoqiUQ&tripId=#{trip_id}" play="true"  quality="high" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer"></embed></object></div>|
 end
 
 def everytrail_widget( trip_id, latitude = nil, longtitude = nil, label = nil, size = [400, 300] )
