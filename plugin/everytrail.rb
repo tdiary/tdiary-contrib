@@ -8,12 +8,15 @@
 def everytrail_adjust_size( size )
 	s = size.collect {|i| i.to_i }
 	s[0] = 400 if s[0] == 0
-	s[0] = 300 if @conf.iphone?
 	s[1] = 300 if s[1] == 0
+	if @conf.iphone? then
+		s = [300, 300 * s[1] / s[0]]
+	end
 	s
 end
 
 def everytrail( trip_id, label = nil, size = [400,300] )
+	size = everytrail_adjust_size( size )
 	l = label ? %Q|<a href="http://www.everytrail.com/view_trip.php?trip_id=#{h trip_id}">#{h label}</a>| : ''
 	%Q|<div class="everytrail"><iframe src="http://www.everytrail.com/iframe2.php?trip_id=#{h trip_id}&width=#{size[0]}&height=#{size[1]}" marginheight=0 marginwidth=0 frameborder=0 scrolling=no width=#{size[0]} height=#{size[1]}>#{l}</iframe></div>|
 end
@@ -29,9 +32,7 @@ def everytrail_widget( trip_id, latitude = nil, longtitude = nil, label = nil, s
       return ''
    end
 
-   size.collect! {|i| i.to_i }
-   size[0] = 400 if size[0] == 0
-   size[1] = 300 if size[1] == 0
+	size = everytrail_adjust_size( size )
    r = label ? %Q|<h3><a href="http://www.everytrail.com/view_trip.php?trip_id=#{h trip_id}">#{h label}</a></h3>| : ''
    lat_param = latitude ? "&startLat=#{latitude}" : ''
    lon_param = longtitude ? "&startLon=#{longtitude}" : ''
