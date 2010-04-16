@@ -360,7 +360,7 @@ class Hatena::Block
         else
           buffer = ''
           until lines.empty?
-            break if /\A(\-|\+|\:|\>[\<\>\|])/ =~ lines[0]
+            break if /\A(\-|\+|\:|\>[\<\>\|])/ =~ lines[0] and not buffer.empty?
             buffer.concat lines.shift
             break if buffer[-3..-1] == "\n\n\n"
           end
