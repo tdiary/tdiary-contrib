@@ -286,96 +286,25 @@ class Hatena::Block
     elsif str[0] == ?*
       t,b = *str.split(/\n/,2)
       @title = Hatena::Title.new(t)
-      @body  = Hatena::Block.new(b)
+      @body  = Hatena::BlockAndorInline.new(b, false)
       @to_s  = t + "\n" + (b||'')
     else
       @to_s  = str
       @title = Hatena::Title.new('') # dummy
-      @body  = self
-      @elems = Array.new
-      lines  = str.concat("\n").scan(/.*\n/)
-      until lines.empty?
-        case
-        when lines[0][0] == ?-
-          buffer = ''
-          until lines.empty?
-            break unless lines[0][0] == ?-
-            buffer.concat lines.shift
-          end
-          @elems.push Hatena::Itemize.new(buffer)
-        when lines[0][0] == ?+
-          buffer = ''
-          until lines.empty?
-            break unless lines[0][0] == ?+
-            buffer.concat lines.shift
-          end
-          @elems.push Hatena::Enumerate.new(buffer)
-        when lines[0][0] == ?:
-          buffer = ''
-          until lines.empty?
-            break unless lines[0][0] == ?:
-            break unless lines[0].rindex(?:) != 0
-            buffer.concat lines.shift
-          end
-          @elems.push Hatena::Description.new(buffer)
-        when lines[0] == ">>\n"
-          buffer = ''
-          nest = 0
-          until lines.empty?
-            nest += 1 if lines[0] == ">>\n"
-            nest -= 1 if lines[0] == "<<\n"
-            buffer.concat lines.shift
-            break if nest <= 0
-          end
-          @elems.push Hatena::Quote.new(buffer)
-        when lines[0] == ">|\n"
-          buffer = ''
-          until lines.empty?
-            str1 = lines.shift
-            buffer.concat str1
-            break if /\|<$/ =~ str1
-          end
-          @elems.push Hatena::Verbatim.new(buffer)
-        when lines[0] == ">||\n"
-          buffer = ''
-          until lines.empty?
-            str1 = lines.shift
-            buffer.concat str1
-            break if /\|\|<$/ =~ str1
-          end
-          @elems.push Hatena::SuperVerbatim.new(buffer)
-        when lines[0][0,5] == '><!--'
-          # comment, throwing away
-          until lines.empty?
-            break if /--><$/ =~ lines.shift
-          end
-        when lines[0][0,2] == '><'
-          buffer = ''
-          until lines.empty?
-            str1 = lines.shift
-            buffer.concat str1
-            break if /><$/ =~ str1
-          end
-          @elems.push Hatena::UnParagraph.new(buffer)
-        else
-          buffer = ''
-          until lines.empty?
-            break if /\A(\-|\+|\:|\>[\<\>\|])/ =~ lines[0]
-            buffer.concat lines.shift
-            break if buffer[-3..-1] == "\n\n\n"
-          end
-          @elems.push Hatena::Paragraph.new(buffer)
-        end
-      end
+      @body  = Hatena::BlockAndorInline.new(str, false)
     end
   end
 
   def convert(mode, date=nil, i=nil, opt=nil, author=nil)
-    if @body == self
-      @elems.inject('') {|r, i| r << i.convert(mode) + "\n" }
+    if title_is_dummy?
+      @body.convert(mode)
     else
       @title.convert(mode, date, i, opt, author) + "\n" + @body.convert(mode)
     end
+  end
+
+  def title_is_dummy?
+    @to_s[0] == ?*
   end
 end
 
@@ -429,6 +358,108 @@ class Hatena::Title
   end
 end
 
+# Sequence of block level elements and/or inline level elements
+# or sequence of block level elements only.
+class Hatena::BlockAndorInline
+  def initialize(str, allowinline = true)
+    @elems = Array.new
+    pbuffer = '' # paragraph buffer
+    flush_pbuffer = lambda{
+      next if pbuffer.empty?
+      if allowinline
+        @elems.push Hatena::Inline.new(pbuffer)
+      else
+        @elems.push Hatena::Paragraph.new(pbuffer)
+      end
+      pbuffer.replace('')
+    }
+    lines  = str.concat("\n").scan(/.*\n/)
+    until lines.empty?
+      case
+      when lines[0][0] == ?-
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          break unless lines[0][0] == ?-
+          buffer.concat lines.shift
+        end
+        @elems.push Hatena::Itemize.new(buffer)
+      when lines[0][0] == ?+
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          break unless lines[0][0] == ?+
+          buffer.concat lines.shift
+        end
+        @elems.push Hatena::Enumerate.new(buffer)
+      when lines[0][0] == ?:
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          break unless lines[0][0] == ?:
+          break unless lines[0].rindex(?:) != 0
+          buffer.concat lines.shift
+        end
+        @elems.push Hatena::Description.new(buffer)
+      when lines[0] == ">>\n"
+        flush_pbuffer.call
+        buffer = ''
+        nest = 0
+        until lines.empty?
+          nest += 1 if lines[0] == ">>\n"
+          nest -= 1 if lines[0] == "<<\n"
+          buffer.concat lines.shift
+          break if nest <= 0
+        end
+        @elems.push Hatena::Quote.new(buffer)
+      when lines[0] == ">|\n"
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          str1 = lines.shift
+          buffer.concat str1
+          break if /\|<$/ =~ str1
+        end
+        @elems.push Hatena::Verbatim.new(buffer)
+      when lines[0] == ">||\n"
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          str1 = lines.shift
+          buffer.concat str1
+          break if /\|\|<$/ =~ str1
+        end
+        @elems.push Hatena::SuperVerbatim.new(buffer)
+      when lines[0][0,5] == '><!--'
+        flush_pbuffer.call
+        # comment, throwing away
+        until lines.empty?
+          break if /--><$/ =~ lines.shift
+        end
+      when lines[0][0,2] == '><'
+        flush_pbuffer.call
+        buffer = ''
+        until lines.empty?
+          str1 = lines.shift
+          buffer.concat str1
+          break if /><$/ =~ str1
+        end
+        @elems.push Hatena::UnParagraph.new(buffer)
+      else
+        pbuffer.concat lines.shift
+        if pbuffer[-3..-1] == "\n\n\n"
+          flush_pbuffer.call 
+        end
+      end
+    end
+    flush_pbuffer.call 
+  end
+
+  def convert(mode)
+    @elems.inject('') {|r, i| r << i.convert(mode) + "\n" }
+  end
+end
+
 # Itemize
 # extension to Hatena: nest can be more than 3 level.
 class Hatena::Itemize
@@ -443,14 +474,14 @@ class Hatena::Itemize
           break unless lines[0][0] == ?-
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Block.new(buffer)
+        @elems.push Hatena::BlockAndorInline.new(buffer)
         buffer = ''
       when lines[0][0] == ?+
         until lines.empty?
           break unless lines[0][0] == ?+
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Block.new(buffer)
+        @elems.push Hatena::BlockAndorInline.new(buffer)
         buffer = ''
       when lines[0][0] == ?:
         until lines.empty?
@@ -458,7 +489,7 @@ class Hatena::Itemize
           break unless lines[0].rindex(?:) != 0
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Blcok.new(buffer)
+        @elems.push Hatena::BlcokAndorInline.new(buffer)
         buffer = ''
       else
         @elems.push Hatena::Inline.new(buffer) unless buffer.empty?
@@ -496,14 +527,14 @@ class Hatena::Enumerate
           break unless lines[0][0] == ?-
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Block.new(buffer)
+        @elems.push Hatena::BlockAndorInline.new(buffer)
         buffer = ''
       when lines[0][0] == ?+
         until lines.empty?
           break unless lines[0][0] == ?+
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Block.new(buffer)
+        @elems.push Hatena::BlockAndorInline.new(buffer)
         buffer = ''
       when lines[0][0] == ?:
         until lines.empty?
@@ -511,7 +542,7 @@ class Hatena::Enumerate
           break unless lines[0].rindex(?:) != 0
           buffer.concat lines.shift
         end
-        @elems.push Hatena::Blcok.new(buffer)
+        @elems.push Hatena::BlcokAndorInline.new(buffer)
         buffer = ''
       else
         @elems.push Hatena::Inline.new(buffer) unless buffer.empty?
