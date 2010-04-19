@@ -293,17 +293,10 @@ class Hatena::Block
       @title = Hatena::Title.new('') # dummy
       @body  = self
       @elems = Array.new
-      pbuffer = '' # paragraph buffer
-      flush_pbuffer = lambda{
-        next if pbuffer.empty?
-        @elems.push Hatena::Paragraph.new(pbuffer)
-        pbuffer.replace('')
-      }
       lines  = str.concat("\n").scan(/.*\n/)
       until lines.empty?
         case
         when lines[0][0] == ?-
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             break unless lines[0][0] == ?-
@@ -311,7 +304,6 @@ class Hatena::Block
           end
           @elems.push Hatena::Itemize.new(buffer)
         when lines[0][0] == ?+
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             break unless lines[0][0] == ?+
@@ -319,7 +311,6 @@ class Hatena::Block
           end
           @elems.push Hatena::Enumerate.new(buffer)
         when lines[0][0] == ?:
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             break unless lines[0][0] == ?:
@@ -328,7 +319,6 @@ class Hatena::Block
           end
           @elems.push Hatena::Description.new(buffer)
         when lines[0] == ">>\n"
-          flush_pbuffer.call
           buffer = ''
           nest = 0
           until lines.empty?
@@ -339,7 +329,6 @@ class Hatena::Block
           end
           @elems.push Hatena::Quote.new(buffer)
         when lines[0] == ">|\n"
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             str1 = lines.shift
@@ -348,7 +337,6 @@ class Hatena::Block
           end
           @elems.push Hatena::Verbatim.new(buffer)
         when lines[0] == ">||\n"
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             str1 = lines.shift
@@ -357,13 +345,11 @@ class Hatena::Block
           end
           @elems.push Hatena::SuperVerbatim.new(buffer)
         when lines[0][0,5] == '><!--'
-          flush_pbuffer.call
           # comment, throwing away
           until lines.empty?
             break if /--><$/ =~ lines.shift
           end
         when lines[0][0,2] == '><'
-          flush_pbuffer.call
           buffer = ''
           until lines.empty?
             str1 = lines.shift
@@ -372,13 +358,15 @@ class Hatena::Block
           end
           @elems.push Hatena::UnParagraph.new(buffer)
         else
-          pbuffer.concat lines.shift
-          if pbuffer[-3..-1] == "\n\n\n"
-            flush_pbuffer.call
+          buffer = ''
+          until lines.empty?
+            break if /\A(\-|\+|\:|\>[\<\>\|])/ =~ lines[0]
+            buffer.concat lines.shift
+            break if buffer[-3..-1] == "\n\n\n"
           end
+          @elems.push Hatena::Paragraph.new(buffer)
         end
       end
-      flush_pbuffer.call
     end
   end
 
