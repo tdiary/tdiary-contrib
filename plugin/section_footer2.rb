@@ -21,9 +21,9 @@ def permalink( date, index, escape = true )
 	uri = @conf.index.dup
 	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
 	uri.gsub!( %r|/\./|, '/' )
-   link = uri + anchor( "#{ymd}p%02d" % index )
-   link = link.sub( /#/, "%23" ) if escape
-   link
+	link = uri + anchor( "#{ymd}p%02d" % index )
+	link = link.sub( /#/, "%23" ) if escape
+	link
 end
 
 add_section_enter_proc do |date, index|
@@ -34,7 +34,7 @@ end
 alias subtitle_link_original subtitle_link
 def subtitle_link( date, index, subtitle )
 	s = ''
-        @subtitle = subtitle
+	@subtitle = subtitle
 	if subtitle then
 		s = subtitle.sub( /^(?:\[[^\[]+?\])+/ ) do
 			$&.scan( /\[(.*?)\]/ ) do |tag|
@@ -47,7 +47,7 @@ def subtitle_link( date, index, subtitle )
 end
 
 add_section_leave_proc do |date, index|
-	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot? 
+	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot?
 		r = '<div class="tags">'
 		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then
@@ -58,7 +58,7 @@ add_section_leave_proc do |date, index|
 			r << ' | '
 		end
 
-		# add del.icio.us link
+		# add Delicious link
 		r << add_delicious(date, index)
 
 		# add SBM link
@@ -91,13 +91,13 @@ end
 def add_delicious( date, index )
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 	db_file = "#{@cache_path}/delicious.cache"
-	
+
 	r = ''
 	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" style="border: none;vertical-align: middle;" alt="#{@section_footer2_delicious_label}" title="#{@section_footer2_delicious_label}">|
-	
+
 	begin
 		cache_time = 8 * 60 * 60  # 12 hour
-		
+
 		PStore.new(db_file).transaction do |db|
 			entry = db[url_md5]
 			entry = { :count => 0, :update=> Time.at(0) } if entry.nil?
@@ -132,7 +132,7 @@ def parse_sbm_yaml(file, date, index)
 
 		url = config["url"]
 		unless config['usesubtitle'].nil?
-			sub = (@subtitle || '').sub( /^(\[([^\]]+)\])+ */, '' )
+			sub = (@subtitle || '').sub( /\A(?:\[[^\]]*\])+ */, '' )
 			sub = apply_plugin( sub, true ).strip
 			regexp = config["usesubtitle"]
 			url.gsub!(regexp, sub)
