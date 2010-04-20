@@ -98,9 +98,9 @@ module Hatena
 
   # get a text of hatena-style, and convert it into parse tree.
   def Diary.parse(str, author)
-    str.gsub(/\r(?=\n)/,'')\
-       .gsub(/\r/,"\n")\
-       .gsub(/^\*/,'**')\
+    str.gsub(/\r(?!\n)/,"\n")\
+       .delete("\r")\
+       .sub(/^\*/,'**')\
        .split(/^\*/)\
        .inject([]) {|r, i| i.empty? ? r : r << Hatena::Section.new(i, author) }
   end
@@ -148,8 +148,8 @@ module Hatena
       fp.read
     end
     a = str.gsub(/\\s/,' ')                       \
-           .gsub(/\\([^\|])/,'\1')                \
-           .scan(/(?:[^\|]|\\\|)*[^\\](?=\||\z)/)
+           .gsub(/\\(?!\|)/,'')                   \
+           .scan(/(?:[^|]|\\\|)*[^\\](?=\||\z)/)
     db.transaction do
       db['trie'] = Trie.new(a)
     end
@@ -228,8 +228,8 @@ class Hatena::Section
   def initialize(str, author)
     t = Time.now
     @author = author.freeze
-    @src    =  str.gsub(/^\*t\*/, '*%d*' % t.to_i)\
-               .gsub(/<(ins|del)>/, '<\1 datetime="%s">' % t.xmlschema)
+    @src    = str.sub(/^\*t\*/, '*%d*' % t.to_i)\
+                 .gsub(/<(ins|del)>/, '<\1 datetime="%s">' % t.xmlschema)
     @tree   = Hatena::Block.new(@src)
   end
 
@@ -278,7 +278,7 @@ end
 class Hatena::Block
   attr_reader :to_s, :title, :body
 
-  def initialize(str) # Too long.  Needs refactoring.
+  def initialize(str) # Too long. Needs refactoring.
     if str.nil?
       @title = Hatena::Title.new('')  # dummy
       @body  = Hatena::Inline.new('') # dummy
@@ -313,10 +313,10 @@ class Hatena::Title
   attr_reader :to_s, :categories, :strip
 
   def initialize(str)
-    if m = /\A\*(\d+)\*/.match(str)
+    if m = /\A\*([0-9]+)\*/.match(str)
       @time     = Time.at(Integer(m[1]))
       @to_s     = m.post_match.freeze
-    elsif m = /\A\*(\w+)\*/.match(str)
+    elsif m = /\A\*([a-zA-Z0-9_]+)\*/.match(str)
       @name     = m[1]
       @to_s     = m.post_match.freeze
     else
@@ -373,7 +373,7 @@ class Hatena::BlockAndorInline
       end
       pbuffer.replace('')
     }
-    lines  = str.concat("\n").scan(/.*\n/)
+    lines = str.concat("\n").scan(/.*\n/)
     until lines.empty?
       case
       when lines[0][0] == ?-
@@ -448,15 +448,15 @@ class Hatena::BlockAndorInline
       else
         pbuffer.concat lines.shift
         if pbuffer[-3..-1] == "\n\n\n"
-          flush_pbuffer.call 
+          flush_pbuffer.call
         end
       end
     end
-    flush_pbuffer.call 
+    flush_pbuffer.call
   end
 
   def convert(mode)
-    @elems.inject('') {|r, i| r << i.convert(mode) + "\n" }
+    @elems.inject('') {|r, i| r << i.convert(mode) << "\n" }
   end
 end
 
@@ -465,7 +465,7 @@ end
 class Hatena::Itemize
   def initialize(str)
     @elems = Array.new
-    lines  = str.gsub(/^\-/,'').scan(/.*\n/)
+    lines  = str.sub(/^-/,'').scan(/.*\n/)
     buffer = ''
     until lines.empty?
       case
@@ -518,7 +518,7 @@ end
 class Hatena::Enumerate
   def initialize(str)
     @elems = Array.new
-    lines  = str.gsub(/^\+/,'').scan(/.*\n/)
+    lines  = str.sub(/^\+/,'').scan(/.*\n/)
     buffer = ''
     until lines.empty?
       case
@@ -718,22 +718,24 @@ class Hatena::Inline
         @elems.push Hatena::AmazonSearch.new(Regexp.last_match[1], true)
       when /\A\[google:(.*?)\]/m
         @elems.push Hatena::Google.new(Regexp.last_match[1], true)
-      when /\A\[(?:(g:(?:.*?)):)?keyword:(.*?)\]/m, /\A\[\[(.*?)\]\]/m
-        m = Regexp.last_match
-        @elems.push Hatena::Keyword.new(m[1], m[2], true)
-      when /\A\[(?:(g:(?:.*?)|a|d):)?id:(.*?)\]/m, /\A(?:(g:(?:.*?)|a|d):)?id:((?:[\w\d_]+)(?::(?:\d+|about))?)/n
-        m = Regexp.last_match
-        @elems.push Hatena::ID.new(m[1], m[2], true)
-      when /\A\[(ISBN|ASIN|isbn|asin):(.*?)(:image(:(small|large))?)?\]/m, /(ISBN|ASIN|isbn|asin):([\-0-9A-Za-z]+)(:image(:(small|large))?)?/
-        @elems.push Hatena::Amazon.new(Regexp.last_match[2], true)
+      when /\A\[(?:(#{gid_regex}):)?keyword:(.*?)\]/m, /\A\[\[(.*?)\]\]/m
+        group, keyword = Regexp.last_match.captures
+        @elems.push Hatena::Keyword.new(group, keyword, true)
+      when /\A\[(?:(#{gid_regex}|[ad]):)?id:([a-zA-Z][-a-zA-Z0-9_]{1,30}[a-zA-Z0-9])\]/m,
+           /\A(?:(#{gid_regex}|[ad]):)?id:([a-zA-Z][-a-zA-Z0-9_]{1,30}[a-zA-Z0-9](?::(?:[0-9]+|about))?)/
+        sid, id = Regexp.last_match.captures
+        @elems.push Hatena::ID.new(sid, id, true)
+      when /\A\[(?i:ISBN|ASIN):(.*?)(?::image(?::(?:small|large))?)?\]/m,
+           /(?i:ISBN|ASIN):([-0-9A-Za-z]+)(?::image(?::(?:small|large))?)?/
+        @elems.push Hatena::Amazon.new(Regexp.last_match[1], true)
       when /\A\[tex:(.*?)\]/m
         @elems.push Hatena::TeX.new(Regexp.last_match[1])
-      when /\Ag:[\w\d_]+/n
-        @elems.push Hatena::Group.new(Regexp.last_match[0], true)
-      when /\A\[((?:https?|ftp|mailto).*?)\]/m, /\A(#{URI.regexp})/o
+      when /\A#{gid_regex}/
+        @elems.push Hatena::Group.new(Regexp.last_match.to_s, true)
+      when /\A\[((?i:https?|ftp|mailto):.+?)\]/m, /\A(#{URI.regexp})/o
         @elems.push Hatena::URI.new(Regexp.last_match[1])
       else
-        /.+?(?=[\[\]\(\)\<\>]|https?|ftp|mailto|id|ISBN|ASIN|a:|d:|g:|$)/m =~ str
+        /.+?(?=[\[\]()<>]|(?i:https?|ftp|mailto|id|ISBN|ASIN)|[adg]:|$)/m =~ str
         if inside_a
           @elems.push Hatena::CDATA.new(Regexp.last_match.to_s)
         else
@@ -752,6 +754,10 @@ class Hatena::Inline
   # tag_regex was quoted from http://www.din.or.jp/~ohzaki/perl.htm#HTML_Tag
   def tag_regex
     /<[^"'<>]*(?:"[^"]*"[^"'<>]*|'[^']*'[^"'<>]*)*(?:>|(?=<)|$)/
+  end
+
+  def gid_regex
+    /g:[a-zA-Z][a-zA-Z0-9]{2,23}/
   end
 end
 
@@ -793,10 +799,10 @@ class Hatena::TAG
       case m[1]
       when /\Agoogle:(.*)/
         @elems.push Hatena::Google.new(Regexp.last_match[1], false)
-      when /\Aid:(.*)/
+      when /\Aid:([a-zA-Z][-a-zA-Z0-9_]{1,30}[a-zA-Z0-9])/
         @elems.push Hatena::ID.new(Regexp.last_match[1], false)
-      when /\A(ISBN|ASIN|isbn|asin):(.*)/
-        @elems.push Hatena::Amazon.new(Regexp.last_match[2], false)
+      when /\A(?:ISBN|ASIN):(.*)/i
+        @elems.push Hatena::Amazon.new(Regexp.last_match[1], false)
       when /\Akeyword:(.*)/
         @elems.push Hatena::Keyword.new(Regexp.last_match[1], false)
       else
@@ -838,7 +844,7 @@ class Hatena::Google
   end
 
   def convert(mode)
-    uri = 'http://www.google.com/search?q=%s&ie=euc-jp&oe=euc-jp' % URI.escape(@str)
+    uri = 'http://www.google.com/search?q=%s&ie=euc-jp&oe=euc-jp' % URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
@@ -883,7 +889,7 @@ class Hatena::Keyword
   end
 
   def convert(mode)
-    uri = '%skeyword/%s' % [@group, URI.escape(@str)]
+    uri = '%skeyword/%s' % [@group, URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
@@ -934,7 +940,7 @@ class Hatena::Amazon
 
   def convert(mode)
     if @tag_p
-      sprintf('<%%=isbn_image "%s", "isbn:%s"%%>', @str, @str.gsub(/\-/, '')) # %=
+      sprintf('<%%=isbn_image "%s", "isbn:%s"%%>', @str, @str.delete('-')) # %=
     else
       sprintf('http://www.amazon.co.jp/exec/obidos/ASIN/%s/%s',
               @str,
@@ -952,7 +958,7 @@ class Hatena::AmazonSearch
   end
 
   def convert(mode)
-    uri = 'http://www.amazon.co.jp/exec/obidos/external-search?mode=blended&amp;tag=%s&amp;encoding-string-jp=%%c6%%fc%%cb%%dc%%b8%%ec&amp;keyword=%s' % [Hatena.conf['amazon.aid'] || '', URI.escape(@str)]
+    uri = 'http://www.amazon.co.jp/exec/obidos/external-search?mode=blended&amp;tag=%s&amp;encoding-string-jp=%%c6%%fc%%cb%%dc%%b8%%ec&amp;keyword=%s' % [Hatena.conf['amazon.aid'] || '', URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
