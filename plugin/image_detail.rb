@@ -1,4 +1,5 @@
-# image_gps.rb $Revision: 1.0 $
+# -*- coding: utf-8 -*-
+# image_gps.rb $Revision: 1.1 $
 # 
 # 概要:
 # 
@@ -6,11 +7,15 @@
 # 使い方:
 # 絵日記Plugin(image.rb)とおなじ
 #
-# Copyright (c) 2009 kp <kp@mmho.no-ip.org>
+# Copyright (c) 2009,2010 kp <kp@mmho.no-ip.org>
 # Distributed under the GPL
 #
 
 =begin ChangeLog
+2010-04-21 kp
+  * スマートフォン対応
+  * Google Maps API Keyが設定されていない場合はStaticMAPを生成しない
+  * リンク先をGoogleMapに統一
 2009-06-03 kp
   * first version
   * fork from image_gps2.rb
@@ -70,13 +75,17 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     detail += "<li>露出時間:#{exif['ExposureTime'].to_s}" if exif.tag?('ExposureTime')
     detail += "<li>露出補正:#{exif['ExposureBiasValue'].to_s}" if exif.tag?('ExposureBiasValue')
     unless lat.nil?
-      img_map = %Q["http://maps.google.com/staticmap?format=gif&amp;]
-      img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
-      img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
-      detail += %Q[<li><a href="#{google}/maps?q=#{lat},#{lon}">]
-      detail += "#{exif['GPSLatitude'].to_s},#{exif['GPSLatitudeRef'].value}"
-      detail += " #{exif['GPSLongitude'].to_s},#{exif['GPSLongitudeRef'].value}"
-      detail += %Q[<img class="map" src=#{img_map}></a>]
+      unless (@conf['image_gps.google_maps_api_key'] == '' || @conf.iphone?)
+        img_map = %Q["http://maps.google.com/staticmap?format=gif&amp;]
+        img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
+        img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
+      end
+      map_link = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
+      map_link += "#{exif['GPSLatitude'].to_s},#{exif['GPSLatitudeRef'].value}"
+      map_link += " #{exif['GPSLongitude'].to_s},#{exif['GPSLongitudeRef'].value}"
+      map_link += %Q[<img class="map" src=#{img_map}>] if img_map
+      map_link += "</a>"
+      detail += "<li>"+map_link
     end
     detail += "</ul>"
   end
@@ -84,14 +93,13 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   img = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}>]
   img_t = %Q[<img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}" #{size}>]
   
-  #static map
   url  = ''
   if @conf.mobile_agent?
-    url += %Q[<a href=#{img_map}>] unless lat.nil?
+    url += %Q[<a href=#{google}/maps/m?q=#{lat},#{lon}>] unless lat.nil?
     url += thumbnail ? img_t : img
     url += %Q[</a>] unless lat.nil?
   else
-    url += %Q[<div class="photo_detail">#{alt}] if detail
+    url += %Q[<div class="photo_detail"><p>#{alt}</p>] if detail
     url += %Q[<a href="#{@image_url}/#{image}">]
     url += thumbnail ? img_t : img
     url +=%Q[</a>]
