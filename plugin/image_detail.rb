@@ -15,7 +15,7 @@
 2010-04-21 kp
   * スマートフォン対応
   * Google Maps API Keyが設定されていない場合はStaticMAPを生成しない
-  * リンク先をGoogleMapに統一
+  * リンク先をGoogle Mapsに統一
 2009-06-03 kp
   * first version
   * fork from image_gps2.rb
@@ -41,17 +41,16 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   end
   if size then
     if size.kind_of?(Array)
-      size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
-      
+      size = %Q[ width="#{size[0]}" height="#{size[1]}"]
     else
-      size = " width=\"#{size.to_i}\""
+      size = %Q[ width="#{size.to_i}"]
     end
   else
     size = ""
   end
-  
+
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
-  
+
   google = "http://maps.google.co.jp"
 
   if exif
@@ -92,7 +91,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 
   img = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}>]
   img_t = %Q[<img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}" #{size}>]
-  
+
   url  = ''
   if @conf.mobile_agent?
     url += %Q[<a href=#{google}/maps/m?q=#{lat},#{lon}>] unless lat.nil?
@@ -131,7 +130,7 @@ add_conf_proc('image_gps','image_gpsの設定','etc') do
     @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
     @conf['image_gps.google_maps_api_key'] = @cgi.params['image_gps.google_maps_api_key'][0]
   end
-  
+
   <<-HTML
     <p>
     <h3>撮影条件の表示</h3>

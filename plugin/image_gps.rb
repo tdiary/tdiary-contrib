@@ -13,27 +13,27 @@
 
 =begin ChangeLog
 2010-04-21 kp
-  * リンク先をgoogleに統一
+  * リンク先をGoogleに統一
 2009-06-01 kp
   * モバイルモード時も世界測地系とする
 2009-05-26 kp
   * walk.eznavi.jpの場合のクエリを修正
-  * リンク先をgoogle mapに
+  * リンク先をGoogle Mapsに
   * wgs2tkyを使用しない
 2008-05-22 kp
   * MapDatumがTOKYO以外の場合、WGS-84と類推する
 2008-01-17 kp
   * いろいろ変更
 2006-03-28 kp
-  * cooperation with ALPSLAB clip
+  * cooperation with ALPSLAB clip!
 2006-03-27 kp
   * use exifparser
 2005-07-25 kp
-  * correct link url when access with mobile.
+  * correct link URL when access with mobile.
 2005-07-19 kp
   * MapDatum macth to WGS84
 2005-05-25 kp
-  * correct url link to mapion.
+  * correct URL link to Mapion.
 2005-05-24 kp
   * create link to http://walk.eznavi.jp when access with mobile.
 2004-11-30 kp
@@ -60,22 +60,21 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   end
   if size then
     if size.kind_of?(Array)
-      size = " width=\"#{size[0]}\" height=\"#{size[1]}\""
-      
+      size = %Q[ width="#{size[0]}" height="#{size[1]}"]
     else
-      size = " width=\"#{size.to_i}\""
+      size = %Q[ width="#{size.to_i}"]
     end
   else
     size = ""
   end
-  
+
   #m_map = 'http://m.google.com/maps'
   map = 'http://maps.google.co.jp'
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
-  
+
   datum = nil
-  
+
   if exif
     if @conf['image_gps.add_info']
       alt += ' '+exif['Model'].to_s if exif.tag?('Model')
@@ -96,7 +95,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     end
   end
 
-  unless lat.nil? 
+  unless lat.nil?
     lat,lon = tky2wgs(lat,lon) if datum == 'TOKYO'
   end
 
@@ -119,7 +118,7 @@ add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
     @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
   end
-  
+
   <<-HTML
     <p>
     <h3>撮影条件の表示</h3>
