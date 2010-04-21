@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # image_gps.rb $Revision: 1.7 $
 # 
 # 概要:
@@ -6,11 +7,13 @@
 # 使い方:
 # 絵日記Plugin(image.rb)とおなじ
 #
-# Copyright (c) 2004,2005 kp <kp@mmho.no-ip.org>
+# Copyright (c) 2004,2010 kp <kp@mmho.no-ip.org>
 # Distributed under the GPL
 #
 
 =begin ChangeLog
+2010-04-21 kp
+  * リンク先をgoogleに統一
 2009-06-01 kp
   * モバイルモード時も世界測地系とする
 2009-05-26 kp
@@ -66,8 +69,8 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     size = ""
   end
   
-  eznavi = 'http://walk.eznavi.jp'
-  google = 'http://maps.google.co.jp'
+  #m_map = 'http://m.google.com/maps'
+  map = 'http://maps.google.co.jp'
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
   
@@ -103,9 +106,9 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     url = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
   else
     if @conf.mobile_agent?
-      url = %Q[<a href="#{eznavi}/map?datum=0&amp;unit=0&amp;lat=+#{lat}&amp;lon=+#{lon}">]
+      url = %Q[<a href="#{map}/maps/m?q=#{lat},#{lon}">]
     else
-      url = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
+      url = %Q[<a href="#{map}/maps?q=#{lat},#{lon}">]
     end
     url += %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
   end
