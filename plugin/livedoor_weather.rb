@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 # livedoor_weather.rb
 #
 # insert weather information using livedoor weather web service.
 #
-# Copyright (C) 2007 SHIBATA Hiroshi <h-sbt@nifty.com>
+# Copyright (C) 2007 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
 #
 
@@ -129,7 +130,8 @@ def lwws_to_html( date )
 		result << %Q|</div>|
 
 		return result
-	rescue Errno::ENOENT
+	rescue => e
+		@logger.error( e )
 		return ''
 	end
 end
