@@ -31,7 +31,7 @@ add_section_enter_proc do |date, index|
 	''
 end
 
-alias subtitle_link_original subtitle_link
+alias section_footer2_subtitle_link_original subtitle_link unless defined?( section_footer2_subtitle_link_original )
 def subtitle_link( date, index, subtitle )
 	s = ''
 	@subtitle = subtitle
@@ -43,7 +43,7 @@ def subtitle_link( date, index, subtitle )
 			''
 		end
 	end
-	subtitle_link_original( date, index, s.strip )
+	section_footer2_subtitle_link_original( date, index, s.strip )
 end
 
 add_section_leave_proc do |date, index|
