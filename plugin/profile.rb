@@ -127,7 +127,7 @@ module ::Profile
       # If you will modify or release another version of this code,
       # please get your own application key from iddy.jp and replace below.
       ######################################################################
-      API_KEY = '9262ea8ffba962aabb4f1a1d3f1cfa953b11aa23'
+      API_KEY = '9262ea8ffba962aabb4f1a1d3f1cfa953b11aa23' unless defined? API_KEY
 
       property :name, '//response/users/user/accountname'
       property :image, '//response/users/user/imageurl'
