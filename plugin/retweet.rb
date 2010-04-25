@@ -28,6 +28,24 @@ unless defined?(permalink)
   end
 end
 
+unless defined?(subtitle)
+  def subtitle( date, index, escape = true )
+    sn = 1
+    diary = @diaries[date.strftime( '%Y%m%d' )]
+    diary && diary.each_section do |section|
+      if sn == index then
+        old_apply_plugin = @options['apply_plugin']
+        @options['apply_plugin'] = true
+        title = apply_plugin( section.subtitle_to_html, true )
+        @options['apply_plugin'] = old_apply_plugin
+        title.gsub!( /"/, '\"' ) if escape
+        return title
+      end
+      sn += 1
+    end
+  end
+end
+
 # load tospy script and initialize
 add_header_proc do
 	r = ''
@@ -44,6 +62,7 @@ add_section_enter_proc do |date, index|
   <<-"EOS"
   <div class="topsy_widget_data" style="float: right; margin-left: 1em;"> <!-- {
     "url": "#{permalink(date, index)}",
+    "title": "#{subtitle(date, index)}",
     "style": "big"
   } --></div>
   EOS
@@ -56,7 +75,7 @@ add_section_leave_proc do |date, index|
 	  <img src="http://www.machu.jp/diary/twitter_logo_small.png" height="16" width="62" alt="Twitter">: 
     <div class="topsy_widget_data" style="float: right; margin-left: 1em;"> <!-- {
       "url": "#{permalink(date, index)}",
-      "title": "#{@subtitle || ''}",
+      "title": "#{subtitle(date, index)}",
       "style": "small"
     } --></div>
   </div>
