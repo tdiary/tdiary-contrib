@@ -72,7 +72,8 @@ def lwws_get( date_status , update = false)
 		end
 	rescue Timeout::Error
 		return
-	rescue NoMethodError
+	rescue => e
+		@logger.error( e )
 		return
 	end
 end
@@ -130,6 +131,8 @@ def lwws_to_html( date )
 		result << %Q|</div>|
 
 		return result
+	rescue Errno::ENOENT
+		return ''
 	rescue => e
 		@logger.error( e )
 		return ''
