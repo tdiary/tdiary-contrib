@@ -56,6 +56,7 @@ add_section_leave_proc do |date, index|
 	  <img src="http://www.machu.jp/diary/twitter_logo_small.png" height="16" width="62" alt="Twitter">: 
     <div class="topsy_widget_data" style="float: right; margin-left: 1em;"> <!-- {
       "url": "#{permalink(date, index)}",
+      "title": "#{@subtitle || ''}",
       "style": "small"
     } --></div>
   </div>
