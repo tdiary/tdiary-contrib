@@ -10,7 +10,7 @@
 # settings for Topsy Retweet Button.
 # see: http://labs.topsy.com/button/retweet-button/#global_settings
 #
-# your Twitter nickname
+# your Twitter username
 @topsy_nick = "your_twitter_account"
 # retweet button color
 #@topsy_theme = "blue"
@@ -22,7 +22,7 @@ unless defined?(permalink)
     ymd = date.strftime( "%Y%m%d" )
     uri = @conf.index.dup
     uri.sub!( %r|\A(?!https?://)|i, @conf.base_url )
-    uri.tr!( ".", "/" )
+    uri.gsub!( "/./", "/" )
     link = uri + anchor( "#{ymd}p%02d" % index )
     link.sub!( "#", "%23" ) if escape
     link
