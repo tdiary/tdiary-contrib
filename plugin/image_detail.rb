@@ -74,7 +74,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     detail += "<li>露出時間:#{exif['ExposureTime'].to_s}" if exif.tag?('ExposureTime')
     detail += "<li>露出補正:#{exif['ExposureBiasValue'].to_s}" if exif.tag?('ExposureBiasValue')
     unless lat.nil?
-      unless (@conf['image_gps.google_maps_api_key'] == '' || @conf.iphone?)
+      unless (@conf['image_gps.google_maps_api_key'] == '' || @conf.smartphone?)
         img_map = %Q["http://maps.google.com/staticmap?format=gif&amp;]
         img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
         img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
