@@ -22,7 +22,7 @@ unless defined?(permalink)
     ymd = date.strftime( "%Y%m%d" )
     uri = @conf.index.dup
     uri.sub!( %r|\A(?!https?://)|i, @conf.base_url )
-    uri.gsub!( "/./", "/" )
+    uri.gsub!( %r|/\.(?=/)|, "" ) # /././ -> /
     link = uri + anchor( "#{ymd}p%02d" % index )
     link.sub!( "#", "%23" ) if escape
     link
