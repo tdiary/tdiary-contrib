@@ -35,32 +35,22 @@ module Exif
       end
 
       #
-      # 0x0002 - ISOSetting
+      # 0x0001 - Data Version
       #
-      class ISOSetting < Base
-        def processData
-          @formatted = []
-          partition_data(@count) do |data|
-            @formatted.push _formatData(data)
-          end
-        end
-        
-        def to_s
-          if @formatted[1] == 0
-            "auto"
-          else
-            @formatted[1].to_s
-          end
-        end
+      class DataVersion < Base
       end
+
+      
+      #
+      # 0x0002 - ISOUsed
+      #
+#     class ISOUsed < Base
+#     end
 
       #
       # 0x0003 - ColorMode
       #
       class ColorMode < Base
-        def to_s
-          @formatted
-        end
       end
 
       #
@@ -206,6 +196,41 @@ module Exif
         end
 
       end
+      
+      #
+      # 0x0022 ActiveD_Lighting
+      #
+      class ActiveD_Lighting < Base
+
+        def to_s
+          case @formatted
+          when 0
+            "Off"
+          when 1
+            "Low"
+          when 3
+            "Normal"
+          when 5
+            "Hight"
+          when 7
+            "Extra High"
+          when 65535
+            "Auto"
+          else
+            ""
+          end
+        end
+
+      end
+
+      #
+      # 0x0023 - PictureControl
+      #
+      class PictureControl < Base
+        def to_s
+          @formatted[4,20].pack('C*')
+        end
+      end
 
       #
       # 0x0080 - ImageAdjustment
@@ -223,6 +248,40 @@ module Exif
       # 0x0082 - Adapter
       #
       class Adapter < Base
+      end
+
+      #
+      # 0x0083 - LensType
+      #
+      class LensType < Base
+        def to_s
+          data = @formatted[0]
+          isVR = (data[3] == 1 ? "Yes":"No")
+          isG  = (data[2] == 1 ? "Yes":"No")
+          isD  = (data[1] == 1 ? "Yes":"No")
+          isMF = (data[0] == 1 ? "Yes":"No")
+          "VR:#{isVR}, G:#{isG}, D:#{isD}, MF:#{isMF}"
+        end
+      end
+
+      #
+      # 0x0084 - LensSpecification
+      #
+      class LensSpecification < Base
+        def processData
+          @formatted = []
+          partition_data(@count) do |data|
+            @formatted.push _formatData(data)
+          end
+        end
+
+        def to_s
+          if @formatted[0] != @formatted[1]
+            "#{@formatted[0]}-#{@formatted[1]}mm, F#{@formatted[2].to_f}-#{@formatted[3].to_f}"
+          else
+            "#{@formatted[0]}mm, F#{@formatted[2].to_f} (Prime Lens)"
+          end
+        end
       end
 
       #
@@ -261,21 +320,6 @@ module Exif
       class LightSource < Base
       end
 
-      #
-      # 0x0094 - SaturationAdjustment
-      #
-      class SaturationAdjustment < Base
-        def to_s
-          case @formatted
-          when 0
-            "none"
-          when -3
-            "B&W"
-          else
-            @formatted.to_s
-          end
-        end
-      end
       #
       # 0x0095 - LongtimeExposureNR
       #
@@ -390,12 +434,6 @@ module Exif
           return pdata
         end
       end
-      
-      #
-      # 0x009c - SceneAssist
-      #
-      class SceneAssist < Base
-      end
 
       #
       # 0x00a7 - ReleaseCount
@@ -407,28 +445,24 @@ module Exif
         end
       end
 
-      #
-      # 0x00a9 - ImageOptimization
-      #
+    #
+    # 0x00a9 - ImageOptimization
+    #
       class ImageOptimization < Base
       end
 
-      #
-      # 0x00aa - Saturation
-      #
+    #
+    # 0x00aa - Saturation
+    #
       class Saturation < Base
       end
 
-      #
-      # 0x00ac -VibrationReduction
-      #
-      class VibrationReduction < Base
-      end
     end
 
 
     Nikon2IFDTable = {
-      0x0002 => MakerNote::ISOSetting,
+      0x0001 => MakerNote::DataVersion,
+#     0x0002 => MakerNote::ISOUsed,
       0x0003 => MakerNote::ColorMode,
       0x0004 => MakerNote::ImageQuality,
       0x0005 => MakerNote::Whitebalance,
@@ -442,23 +476,24 @@ module Exif
       0x0010 => MakerNote::DataDump,
       0x0012 => MakerNote::SpeedlightBias,
       0x001d => MakerNote::NikonCameraSerialNumber,
+      0x0022 => MakerNote::ActiveD_Lighting,
+      0x0023 => MakerNote::PictureControl,
       0x0080 => MakerNote::ImageAdjustment,
       0x0081 => MakerNote::ToneCompensation,
       0x0082 => MakerNote::Adapter,
+      0x0083 => MakerNote::LensType,
+      0x0084 => MakerNote::LensSpecification,
       0x0085 => MakerNote::ManualForcusDistance,
       0x0086 => MakerNote::DigitalZoom,
       0x0088 => MakerNote::AFFocusPosition,
       0x008D => MakerNote::CameraColorMode,
       0x008F => MakerNote::SceneMode,
       0x0090 => MakerNote::LightSource,
-      0x0094 => MakerNote::SaturationAdjustment,
       0x0095 => MakerNote::LongtimeExposureNR,
       0x0098 => MakerNote::LensParameters,
-      0x009c => MakerNote::SceneAssist,
       0x00a7 => MakerNote::ReleaseCount,
       0x00a9 => MakerNote::ImageOptimization,
-      0x00aa => MakerNote::Saturation,
-      0x00ac => MakerNote::VibrationReduction
+      0x00aa => MakerNote::Saturation
 
     }
 
