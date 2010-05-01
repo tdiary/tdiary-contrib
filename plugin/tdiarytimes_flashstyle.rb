@@ -12,8 +12,8 @@
 # Abstract：
 # --------------------------------------------------------------------
 # 日記を登録した時間帯をタイムライン上に記録します。記録されたエントリは
-# 日時の経過と共にフェードアウトしていきます。このような MTBlogTimes や 
-# tdiarytimes.rb と同等の機能を FLASH で実現します。
+# 日時の経過と共にフェードアウトしていきます。このような MTBlogTimes や
+# tdiarytimes.rb と同等の機能を Flash で実現します。
 # ruby-gd のインストール作業も必要ないため、すぐに使用出来ます。
 #
 #
@@ -24,7 +24,7 @@
 # プラグインは、プラグインフォルダに入れてください。
 # tdiarytimes*.swf を tdiary.rb と同じフォルダにアップロードします。
 # ヘッダ、フッタ部に記述した <%= tdiarytimes_flashstyle %> の部分に、
-# FLASH アプレットが表示されます。
+# Flash アプレットが表示されます。
 # tdiarytimes.log は日記登録時に .swf と同じフォルダに作成されます。
 #
 # ※ tdiarytimes_textstyle.rb との互換性はありません。
@@ -43,14 +43,14 @@
 =begin ChangeLog
 2004.05.02 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.2
-		タイムラインが曜日別の FLASH を追加
+		タイムラインが曜日別の Flash を追加
 2004.05.02 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.1
-		タイムラインが円形で、時刻盤が曜日表示の FLASH を追加
+		タイムラインが円形で、時刻盤が曜日表示の Flash を追加
 		ログファイルが存在しない時にエラーが出る不具合を修正
 2004.04.28 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.0
-		タイムラインが円形の FLASH を追加
+		タイムラインが円形の Flash を追加
 2004.04.27 phonondrive  <tdiary@phonondrive.com>
    * version 1.0.1
 		時刻目盛テキストの色が変更されない不具合を修正
@@ -65,10 +65,10 @@
 
 def tdiarytimes_flashstyle
 	if @conf['tdiarytimes_f.templete'] == nil or @conf['tdiarytimes_f.templete'] == ""
-		r = %Q|使用を開始するには、<a href="./#{@update}?conf=tdiarytimes_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarytimes-flashstyle)|
+		%Q|使用を開始するには、<a href="./#{@update}?conf=tdiarytimes_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarytimes-flashstyle)|
 	else
 		logname = ((@conf['tdiarytimes_f.log_path'] != "" and @conf['tdiarytimes_f.log_path'] != nil) ? @conf['tdiarytimes_f.log_path'] : "tdiarytimes.log")
-		r = @conf['tdiarytimes_f.templete'].gsub(/\&uid/,"\&uid=#{File.mtime(logname.untaint).to_i}")
+		@conf['tdiarygraph_f.templete'].sub(/&amp;uid/, "\\&=#{File.mtime(logname.untaint).to_i}")
 	end
 end
 
@@ -76,7 +76,7 @@ end
 # 日記登録時の処理
 # --------------------------------------------------------------------
 
-if /^(append|replace)$/ =~ @mode and @cgi.params['hide'][0] != 'true' then
+if /\A(?:append|replace)\z/ =~ @mode and @cgi.params['hide'][0] != 'true' then
 
 	logname = ((@conf['tdiarytimes_f.log_path'] != "" and @conf['tdiarytimes_f.log_path'] != nil) ? @conf['tdiarytimes_f.log_path'] : "tdiarytimes.log")
 	entr_lifetime = ((@conf['tdiarytimes_f.entr_lifetime'] != "" and @conf['tdiarytimes_f.entr_lifetime'] != nil) ? @conf['tdiarytimes_f.entr_lifetime'].to_i * 60 * 60 * 24 : 30 * 24 * 60 * 60)
@@ -90,7 +90,7 @@ if /^(append|replace)$/ =~ @mode and @cgi.params['hide'][0] != 'true' then
 
 	if (Time.now.to_i - logs.max.to_i) > entr_interval.to_i
 		logs << "#{Time.now.to_i}"
-		open(logname,"w"){|io|
+		open(logname, "w"){|io|
 			io.write(logs.find_all{|item| (Time.now.to_i - item.to_i) < entr_lifetime.to_i }.join(','))
 		}
 	end
@@ -113,7 +113,7 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle の設定' ) do
 		argv = Array.new
 
 		@conf['tdiarytimes_f.uid'] = @cgi.params['uid'][0]
-		argv << "#{Time.now.to_i}&uid" if @conf['tdiarytimes_f.uid'] == "1"
+		argv << "#{Time.now.to_i}&amp;uid" if @conf['tdiarytimes_f.uid'] == "1"
 
 		@conf['tdiarytimes_f.type'] = @cgi.params['type'][0]
 		@conf['tdiarytimes_f.filename'] = @cgi.params['filename'][0]
@@ -160,12 +160,12 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle の設定' ) do
 			width = @cgi.params['width'][0]
 			height = @cgi.params['height'][0]
 		elsif @cgi.params['type'][0]
-			filename = "tdiarytimes#{@cgi.params['type'][0].gsub('-','')}.swf"
+			filename = "tdiarytimes#{@cgi.params['type'][0].gsub(/-+/, '')}.swf"
 			width = @cgi.params['type'][0].split('-').first.split('x')[0]
 			height = @cgi.params['type'][0].split('-').first.split('x')[1]
 		end
 
-		if argv.size > 0 then argvs = "?#{argv.join('&')}" end
+		if argv.size > 0 then argvs = "?#{argv.join('&amp;')}" end
 
 		@conf['tdiarytimes_f.templete'] = tdiarytimes_flashstyle_templete(filename, argvs, width, height)
 	end
@@ -178,7 +178,7 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle の設定' ) do
 		<h3 class="subtitle">プレビュー</h3>
 		#{tdiarytimes_flashstyle_preview}
 		<hr>
-		<h3 class="subtitle">表示する FLASH アプレットの選択</h3>
+		<h3 class="subtitle">表示する Flash アプレットの選択</h3>
 		<p><select name="type">
 		<option value="0"#{if @conf['tdiarytimes_f.type'] == "0" then " selected" end}>プリセットを使用しない</option>
 		<option value="125x30"#{if @conf['tdiarytimes_f.type'] == "125x30" then " selected" end}>tdiarytimes125x30.swf, 125x30</option>
@@ -189,9 +189,9 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle の設定' ) do
 		<option value="125x125-s"#{if @conf['tdiarytimes_f.type'] == "125x125-s" then " selected" end}>tdiarytimes125x125s.swf, 125x125 (曜日別)</option>
 		</select></p>
 		<h3 class="subtitle">プリセットを使用しない場合は、以下で指定して下さい。</h3>
-		<p>FLASH のファイル名<br><input name="filename" value="#{@conf['tdiarytimes_f.filename'].to_s}" size="40"></p>
-		<p>FLASH の表示幅<br><input name="width" value="#{@conf['tdiarytimes_f.width'].to_s}" size="20"></p>
-		<p>FLASH の表示高さ<br><input name="height" value="#{@conf['tdiarytimes_f.height'].to_s}" size="20"></p>
+		<p>Flash のファイル名<br><input name="filename" value="#{@conf['tdiarytimes_f.filename'].to_s}" size="40"></p>
+		<p>Flash の表示幅<br><input name="width" value="#{@conf['tdiarytimes_f.width'].to_s}" size="20"></p>
+		<p>Flash の表示高さ<br><input name="height" value="#{@conf['tdiarytimes_f.height'].to_s}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">タイトルテキスト</h3>
 		<p>タイトルテキストの表示有無 (表示)<br><select name="text_visible">
@@ -222,14 +222,14 @@ add_conf_proc( 'tdiarytimes_f', 'tdiarytimes-flashstyle の設定' ) do
 		<p>本プラグインが作成するログファイル名 (tdiarytimes.log)<br><input name="log_path" value="#{@conf['tdiarytimes_f.log_path'].to_s}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">ユニークID を使用したファイル取得</h3>
-		<p>ファイル取得のリクエストにユニークID (例えば ?#{Time.now.to_i}) を含めることにより、古いファイルがブラウザにキャッシュされたままになるのを防ぎます。FLASH のユニークID はプリファレンス設定時に、ログファイルのユニークID はエントリ登録時に更新されます。</p>
+		<p>ファイル取得のリクエストにユニークID (例えば ?#{Time.now.to_i}) を含めることにより、古いファイルがブラウザにキャッシュされたままになるのを防ぎます。Flash のユニークID はプリファレンス設定時に、ログファイルのユニークID はエントリ登録時に更新されます。</p>
 		<p>ユニークID の付加 (付加する)<br><select name="uid">
 		<option value="1"#{if @conf['tdiarytimes_f.uid'] != "0" then " selected" end}>付加する</option>
 		<option value="0"#{if @conf['tdiarytimes_f.uid'] == "0" then " selected" end}>付加しない</option>
 		</select></p>
 		<hr>
 		<h3 class="subtitle">プレビュー</h3>
-		<p>表示したい FLASH ファイル (.swf) が tdiary.rb と同じフォルダにアップロードされている必要があります。また、ログファイルが FLASH ファイルと同じフォルダに作成されていない場合にはグラフが表示されません。</p>
+		<p>表示したい SWF ファイル (.swf) が tdiary.rb と同じフォルダにアップロードされている必要があります。また、ログファイルが SWF ファイルと同じフォルダに作成されていない場合にはグラフが表示されません。</p>
 		<p>プレビュー (非表示)<br><select name="preview">
 		<option value="0"#{if @conf['tdiarytimes_f.preview'] != "1" then " selected" end}>非表示</option>
 		<option value="1"#{if @conf['tdiarytimes_f.preview'] == "1" then " selected" end}>表示</option>
@@ -242,22 +242,22 @@ end
 def tdiarytimes_flashstyle_preview
 	unless @conf.mobile_agent?
 	<<-r
-		<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "プレビュー表示を有効にすると、ここに FLASH が表示されます。" end}</p>
+		<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>
 	r
 	end
 end
 
-def tdiarytimes_flashstyle_templete( filename="tdiarytimes234x30.swf",  argvs="", width="234", height="30" )
+def tdiarytimes_flashstyle_templete( filename="tdiarytimes234x30.swf", argvs="", width="234", height="30" )
 	<<-r
-		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{width}" height="#{height}" id="tdiarytimes" align="middle">
-		<param name="allowScriptAccess" value="sameDomain" />
-		<param name="movie" value="#{filename}#{argvs}" />
-		<param name="play" value="false" />
-		<param name="loop" value="false" />
-		<param name="quality" value="high" />
-		<param name="wmode" value="transparent" />
-		<param name="bgcolor" value="#ffffff" />
-		<embed src="#{filename}#{argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{width}" height="#{height}" name="tdiarytimes" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab" width="#{width}" height="#{height}" id="tdiarytimes" align="middle">
+		<param name="allowScriptAccess" value="sameDomain">
+		<param name="movie" value="#{filename}#{argvs}">
+		<param name="play" value="false">
+		<param name="loop" value="false">
+		<param name="quality" value="high">
+		<param name="wmode" value="transparent">
+		<param name="bgcolor" value="#ffffff">
+		<embed src="#{filename}#{argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{width}" height="#{height}" name="tdiarytimes" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer">
 		</object>
 	r
 end

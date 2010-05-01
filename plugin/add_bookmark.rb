@@ -3,48 +3,51 @@
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
 # You can redistribute it and/or modify it under GPL2.
 
+require 'uri'
+
 def bookmark_init
-	@conf['add.bookmark.delicious'] ||= ""
-	@conf['add.bookmark.hatena'] ||= ""
-	@conf['add.bookmark.livedoor'] ||= ""
-	@conf['add.bookmark.buzzurl'] ||= ""
+	@conf['add.bookmark.delicious'] ||= ''
+	@conf['add.bookmark.hatena'] ||= ''
+	@conf['add.bookmark.livedoor'] ||= ''
+	@conf['add.bookmark.buzzurl'] ||= ''
 end
 
 add_subtitle_proc do |date, index, subtitle|
 	bookmark_init
-	
+
 	if @conf.mobile_agent? then
 		caption = %Q|#{subtitle}|
 	else
 		caption = %Q|#{subtitle} |
 
 		section_url = @conf.base_url + anchor(date.strftime('%Y%m%d')) + '#p' + ('%02d' % index)
-		
-		if @conf['add.bookmark.delicious'] == "t" then
-			caption += %Q|<a href="http://del.icio.us/post/v4?url=#{h(section_url)}">|
-			caption += %Q|<img src="http://images.del.icio.us/static/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@caption_delicious}" title="#{@caption_delicious}" />|
+
+		if @conf['add.bookmark.delicious'] == 't' then
+			escaped_url = URI.escape(section_url, /[^-.!~*'()\w]/n)
+			caption += %Q|<a href="http://delicious.com/save?url=#{escaped_url}" onclick="window.open('http://delicious.com/save?v=5;noui;jump=close;url=#{escaped_url};title='+encodeURIComponent(document.title), 'delicious', 'toolbar=no,width=550,height=550'); return false">|
+			caption += %Q|<img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: 0 none;vertical-align: middle;" alt="#{@caption_delicious}">|
 			caption += %Q|</a> |
 		end
 
-		if @conf['add.bookmark.hatena'] == "t" then
+		if @conf['add.bookmark.hatena'] == 't' then
 			caption += %Q|<a href="http://b.hatena.ne.jp/append?#{h(section_url)}">|
-			caption += %Q|<img src="http://b.hatena.ne.jp/images/append.gif" width="16" height="12" style="border: none;vertical-align: middle;" alt="#{@caption_hatena}" title="#{@caption_hatena}" />|
-			caption += %Q|</a> |
-		end
-			
-		if @conf['add.bookmark.livedoor'] == "t" then
-			caption += %Q|<a href="http://clip.livedoor.com/redirect?link=#{h(section_url)}" class="ldclip-redirect">|
-			caption += %Q|<img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="#{@caption_livedoor}" title="#{@caption_livedoor}" />|
+			caption += %Q|<img src="http://b.hatena.ne.jp/images/append.gif" width="16" height="12" style="border: 0 none;vertical-align: middle;" alt="#{@caption_hatena}" title="#{@caption_hatena}">|
 			caption += %Q|</a> |
 		end
 
-		if @conf['add.bookmark.buzzurl'] == "t" then
+		if @conf['add.bookmark.livedoor'] == 't' then
+			caption += %Q|<a href="http://clip.livedoor.com/redirect?link=#{h(section_url)}" class="ldclip-redirect">|
+			caption += %Q|<img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: 0 none;vertical-align: middle;" alt="#{@caption_livedoor}" title="#{@caption_livedoor}">|
+			caption += %Q|</a> |
+		end
+
+		if @conf['add.bookmark.buzzurl'] == 't' then
 			caption += %Q|<a href="http://buzzurl.jp/entry/#{h(section_url)}">|
-			caption += %Q|<img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" width="16" height="12" style="border: none;vertical-align: middle;" title="#{@caption_buzzurl}" alt="#{@caption_buzzurl}" class="icon" />|
+			caption += %Q|<img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" width="16" height="12" style="border: 0 none;vertical-align: middle;" title="#{@caption_buzzurl}" alt="#{@caption_buzzurl}" class="icon">|
 			caption += %Q|</a> |
 		end
 	end
-	
+
 	<<-HTML
 	#{caption}
 	HTML
@@ -69,7 +72,7 @@ def add_bookmark_conf_proc
 	r << %Q|<h3 class="subtitle">#{@add_bookmark_label}</h3><p>#{@add_bookmark_desc}</p><ul>|
 
 	bookmark_categories.each_with_index do |idx,view|
-		checked = "t" == @conf[idx] ? ' checked' : ''
+		checked = 't' == @conf[idx] ? ' checked' : ''
 		label = @bookmark_label[view]
 		r << %Q|<li><label for="#{idx}"><input id=#{idx} name=#{idx} type="checkbox" value="t"#{checked}>#{label}</label></li>|
 	end

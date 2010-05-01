@@ -23,5 +23,5 @@ def wikiloc( trip_id, measures = "off", maptype = "M", size = [500,400] )
 	size.collect! {|i| i.to_i }
 	size[0] = 500 if size[0] == 0
 	size[1] = 400 if size[1] == 0
-	%Q|<iframe frameBorder="0" src="http://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=#{h trip_id}&measures=#{h measures}&title=on&near=on&images=on&maptype=#{maptype}" width="#{size[0]}px" height="#{size[1]}px"></iframe>|
+	%Q|<iframe frameBorder="0" src="http://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&amp;id=#{h trip_id}&amp;measures=#{h measures}&amp;title=on&amp;near=on&amp;images=on&amp;maptype=#{maptype}" width="#{size[0]}px" height="#{size[1]}px"></iframe>|
 end

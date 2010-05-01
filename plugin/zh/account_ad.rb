@@ -12,9 +12,9 @@ if @mode == 'conf' || @mode == 'saveconf'
       account_ad_init
       <<-HTML
       <h3 class="subtitle">Account Name</h3>
-      <p><input name="account.name" value="#{h(@conf['account.name'])}" size="8" /></p>
+      <p><input name="account.name" value="#{h(@conf['account.name'])}" size="8"></p>
       <h3 class="subtitle">Account Service</h3>
-      <p><input name="account.service" value="#{h(@conf['account.service'])}" size="40" /></p>
+      <p><input name="account.service" value="#{h(@conf['account.service'])}" size="40"></p>
       HTML
    end
 end

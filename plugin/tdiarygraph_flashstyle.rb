@@ -12,7 +12,7 @@
 # Abstract：
 # --------------------------------------------------------------------
 # counter.rb のカウンタログ (counter.log) をグラフ化した
-# FLASH アプレットを表示します。
+# Flash アプレットを表示します。
 #
 #
 # Usage：
@@ -20,11 +20,11 @@
 # プラグインは、プラグインフォルダに入れてください。
 # tdiarygraph*.swf を tdiary.rb と同じフォルダにアップロードします。
 # ヘッダ、フッタ部に記述した <%= tdiarygraph_flashstyle %> の部分に、
-# FLASH アプレットが表示されます。
+# Flash アプレットが表示されます。
 # counter.log は日記登録時に .swf と同じフォルダにコピーされます。
 #
 # ※ counter.rb を使用しており、かつカウンタログ (counter.log) の出力を
-# オンにしている必要があります。 
+# オンにしている必要があります。
 #
 #
 # Options：
@@ -50,7 +50,7 @@
 2004.04.27 phonondrive  <tdiary@phonondrive.com>
    * version 1.3.0
 		キャッシュ対策としてユニークIDを付加してファイル取得するオプションを追加
-		対応 FLASH ファイルを e 系列に変更
+		対応 Flash ファイルを e 系列に変更
 		フォントを _sans から 04b03b に変更
 			04b03b.ttf, copyright (c) 1998-2001 YUJI OSHIMOTO
 			http://www.04.jp.org/
@@ -58,18 +58,18 @@
    * version 1.2.1
 		レポート書式で改行タグが機能しない不具合を修正
 		背景の枠線を表示しないオプションを追加
-		対応 FLASH ファイルを d 系列に変更
+		対応 Flash ファイルを d 系列に変更
 2004.04.09 phonondrive  <tdiary@phonondrive.com>
    * version 1.2.0
 		ログファイルが転送されない不具合を修正
 		作成するログのデフォルト名を変更 (tdiarygraph.log → counter.log)
 		線幅を絶対値で指定出来るオプションを追加
 		レポート書式のカスタマイズオプションを追加
-		対応 FLASH ファイルを c 系列に変更
+		対応 Flash ファイルを c 系列に変更
 2004.04.05 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.1
 		線の太さを変更するオプションを追加
-		対応 FLASH ファイルに b 系列を追加
+		対応 Flash ファイルに b 系列を追加
 2004.04.05 phonondrive  <tdiary@phonondrive.com>
    * version 1.1.0
 		Ruby 1.6.x に対応 (1.6.7 で動作確認)
@@ -87,10 +87,10 @@
 
 def tdiarygraph_flashstyle
 	if @conf['tdiarygraph_f.templete'] == nil or @conf['tdiarygraph_f.templete'] == ""
-		r = %Q|使用を開始するには、<a href="./#{h @update}?conf=tdiarygraph_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarygraph-flashstyle)|
+		%Q|使用を開始するには、<a href="./#{h @update}?conf=tdiarygraph_f">プリファレンス画面</a>にて一度設定を完了して下さい。(tdiarygraph-flashstyle)|
 	else
 		logname = ((@conf['tdiarygraph_f.log_path'] != "" and @conf['tdiarygraph_f.log_path'] != nil) ? @conf['tdiarygraph_f.log_path'] : "counter.log")
-		r = @conf['tdiarygraph_f.templete'].gsub(/\&uid/,"\&uid=#{File.mtime(logname.untaint).to_i}")
+		@conf['tdiarygraph_f.templete'].sub(/&amp;uid/, "\\&=#{File.mtime(logname.untaint).to_i}")
 	end
 end
 
@@ -99,7 +99,7 @@ end
 # 日記登録時の処理 (counter.log のコピー)
 # --------------------------------------------------------------------
 
-if /^(append|replace)$/ =~ @mode and @cgi.params['hide'][0] != 'true' then
+if /\A(?:append|replace)\z/ =~ @mode and @cgi.params['hide'][0] != 'true' then
 	logname = ((@conf['tdiarygraph_f.log_path'] != "" and @conf['tdiarygraph_f.log_path'] != nil) ? @conf['tdiarygraph_f.log_path'] : "counter.log")
 
 	open("#{@cache_path}/counter/counter.log"){|input|
@@ -126,7 +126,7 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		argv = Array.new
 
 		@conf['tdiarygraph_f.uid'] = @cgi.params['uid'][0]
-		argv << "#{Time.now.to_i}&uid" if @conf['tdiarygraph_f.uid'] == "1"
+		argv << "#{Time.now.to_i}&amp;uid" if @conf['tdiarygraph_f.uid'] == "1"
 
 		@conf['tdiarygraph_f.type'] = @cgi.params['type'][0]
 		@conf['tdiarygraph_f.filename'] = @cgi.params['filename'][0]
@@ -178,12 +178,12 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 			width = @cgi.params['width'][0]
 			height = @cgi.params['height'][0]
 		elsif @cgi.params['type'][0]
-			filename = "tdiarygraph#{@cgi.params['type'][0].gsub('-','')}.swf"
+			filename = "tdiarygraph#{@cgi.params['type'][0].gsub(/-+/, '')}.swf"
 			width = @cgi.params['type'][0].split('-').first.split('x')[0]
 			height = @cgi.params['type'][0].split('-').first.split('x')[1]
 		end
 
-		if argv.size > 0 then argvs = "?#{argv.join('&')}" end
+		if argv.size > 0 then argvs = "?#{argv.join('&amp;')}" end
 
 		@conf['tdiarygraph_f.templete'] = tdiarygraph_flashstyle_templete(filename, argvs, width, height)
 	end
@@ -196,7 +196,7 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		<h3 class="subtitle">プレビュー</h3>
 		#{tdiarygraph_flashstyle_preview}
 		<hr>
-		<h3 class="subtitle">表示する FLASH アプレットの選択</h3>
+		<h3 class="subtitle">表示する Flash アプレットの選択</h3>
 		<p><select name="type">
 		<option value="0"#{" selected" if @conf['tdiarygraph_f.type'] == "0"}>プリセットを使用しない</option>
 		<option value="468x60-e"#{" selected" if @conf['tdiarygraph_f.type'] == "468x60-e" or @conf['tdiarygraph_f.type'] == nil or @conf['tdiarygraph_f.type'] == ""}>tdiarygraph468x60e.swf, 468x60</option>
@@ -206,9 +206,9 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		<option value="120x90-e"#{" selected" if @conf['tdiarygraph_f.type'] == "120x90-e"}>tdiarygraph120x90e.swf, 120x90</option>
 		</select></p>
 		<h3 class="subtitle">プリセットを使用しない場合は、以下で指定して下さい。</h3>
-		<p>FLASH のファイル名<br><input name="filename" value="#{h @conf['tdiarygraph_f.filename']}" size="40"></p>
-		<p>FLASH の表示幅<br><input name="width" value="#{h @conf['tdiarygraph_f.width']}" size="20"></p>
-		<p>FLASH の表示高さ<br><input name="height" value="#{h @conf['tdiarygraph_f.height']}" size="20"></p>
+		<p>Flash のファイル名<br><input name="filename" value="#{h @conf['tdiarygraph_f.filename']}" size="40"></p>
+		<p>Flash の表示幅<br><input name="width" value="#{h @conf['tdiarygraph_f.width']}" size="20"></p>
+		<p>Flash の表示高さ<br><input name="height" value="#{h @conf['tdiarygraph_f.height']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">アクセスログデータ</h3>
 		<p>本プラグインが作成する counter.log の複製のファイル名 (counter.log)<br><input name="log_path" value="#{h @conf['tdiarygraph_f.log_path']}" size="20"></p>
@@ -247,14 +247,14 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 		<p>棒グラフの線幅を相対的に微調整します。(0) 設定した値に対して線幅がリニアに変更されるわけではありません。<br><br><input name="bold" value="#{h @conf['tdiarygraph_f.bold']}" size="20"></p>
 		<hr>
 		<h3 class="subtitle">ユニークID を使用したファイル取得</h3>
-		<p>ファイル取得のリクエストにユニークID (例えば ?#{Time.now.to_i}) を含めることにより、古いファイルがブラウザにキャッシュされたままになるのを防ぎます。FLASH のユニークID はプリファレンス設定時に、ログファイルのユニークID はエントリ登録時に更新されます。</p>
+		<p>ファイル取得のリクエストにユニークID (例えば ?#{Time.now.to_i}) を含めることにより、古いファイルがブラウザにキャッシュされたままになるのを防ぎます。Flash のユニークID はプリファレンス設定時に、ログファイルのユニークID はエントリ登録時に更新されます。</p>
 		<p>ユニークID の付加 (付加する)<br><select name="uid">
 		<option value="1"#{" selected" if @conf['tdiarygraph_f.uid'] != "0"}>付加する</option>
 		<option value="0"#{" selected" if @conf['tdiarygraph_f.uid'] == "0"}>付加しない</option>
 		</select></p>
 		<hr>
 		<h3 class="subtitle">プレビュー</h3>
-		<p>表示したい FLASH ファイル (.swf) が tdiary.rb と同じフォルダにアップロードされている必要があります。また、カウンタログファイルが FLASH ファイルと同じフォルダに転送されていない場合にはグラフが表示されません。</p>
+		<p>表示したい SWF ファイル (.swf) が tdiary.rb と同じフォルダにアップロードされている必要があります。また、カウンタログファイルが SWF ファイルと同じフォルダに転送されていない場合にはグラフが表示されません。</p>
 		<p>プレビュー (非表示)<br><select name="preview">
 		<option value="0"#{" selected" if @conf['tdiarygraph_f.preview'] != "1"}>非表示</option>
 		<option value="1"#{" selected" if @conf['tdiarygraph_f.preview'] == "1"}>表示</option>
@@ -267,23 +267,23 @@ end
 def tdiarygraph_flashstyle_preview
 	unless @conf.mobile_agent?
 	<<-r
-		<p>#{if @conf['tdiarygraph_f.preview'] == "1" then "#{tdiarygraph_flashstyle}" else "プレビュー表示を有効にすると、ここに FLASH が表示されます。" end}</p>
+		<p>#{if @conf['tdiarygraph_f.preview'] == "1" then "#{tdiarygraph_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>
 	r
 	end
 end
 
 
-def tdiarygraph_flashstyle_templete( filename="tdiarygraph468x60e.swf",  argvs="", width="468", height="60" )
+def tdiarygraph_flashstyle_templete( filename="tdiarygraph468x60e.swf", argvs="", width="468", height="60" )
 	<<-r
-		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="#{h width}" height="#{h height}" id="tdiarygraph" align="middle">
-		<param name="allowScriptAccess" value="sameDomain" />
-		<param name="movie" value="#{h filename}#{h argvs}" />
-		<param name="play" value="false" />
-		<param name="loop" value="false" />
-		<param name="quality" value="high" />
-		<param name="wmode" value="transparent" />
-		<param name="bgcolor" value="#ffffff" />
-		<embed src="#{h filename}#{h argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{h width}" height="#{h height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.adobe.com/pub/shockwave/cabs/flash/swflash.cab" width="#{h width}" height="#{h height}" id="tdiarygraph" align="middle">
+		<param name="allowScriptAccess" value="sameDomain">
+		<param name="movie" value="#{h filename}#{h argvs}">
+		<param name="play" value="false">
+		<param name="loop" value="false">
+		<param name="quality" value="high">
+		<param name="wmode" value="transparent">
+		<param name="bgcolor" value="#ffffff">
+		<embed src="#{h filename}#{h argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{h width}" height="#{h height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer">
 		</object>
 	r
 end

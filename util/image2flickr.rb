@@ -76,7 +76,7 @@
 #   ----
 #   Flickrへ写真をアップロードするためのトークンを取得します。
 #   Webブラウザで下記のURLへアクセスしたら、何かキーを押してください。
-#   http://flickr.com/services/auth/?api_sig=....
+#   http://www.flickr.com/services/auth/?api_sig=....
 #   ----
 #
 #   指定されたURLへWebブラウザでアクセスし、トークンの発行を許可してください。

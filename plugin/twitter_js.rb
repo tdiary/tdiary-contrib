@@ -2,17 +2,17 @@
 # Copyright (C) 2007 Michitaka Ohno <elpeo@mars.dti.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
-if /^(?:latest|day)$/ =~ @mode then
+if /\A(?:latest|day)\z/ =~ @mode then
 	if @conf['twitter.user'] then
 		twitter_user = @conf['twitter.user']
 		add_header_proc do
 			result = <<-HTML
 			<script type="text/javascript"><!--
 			function twitter_cb(a){
-				var f=function(n){return (n<10?"0":"")+n};
-				for(var i=0;i<a.length;i++){
+				var f=function(n){return (n<10?'0':'')+n};
+				for(var i=0,l=a.length;i<l;i++){
 					var d=new Date(a[i]['created_at'].replace('+0000','UTC'));
-					var id="twitter_statuses_"+f(d.getFullYear())+f(d.getMonth()+1)+f(d.getDate());
+					var id='twitter_statuses_'+f(d.getFullYear())+f(d.getMonth()+1)+f(d.getDate());
 					var e=document.getElementById(id);
 					if(!e) continue;
 					if(!e.innerHTML) e.innerHTML='<h3><a href="http://twitter.com/#{h twitter_user}">Twitter statuses</a></h3>';
@@ -20,9 +20,9 @@ if /^(?:latest|day)$/ =~ @mode then
 				}
 			}
 			function twitter_js(){
-				var e=document.createElement("script");
-				e.type="text/javascript";
-				e.src="http://twitter.com/statuses/user_timeline/#{h twitter_user}.json?callback=twitter_cb&amp;count=20";
+				var e=document.createElement('script');
+				e.type='text/javascript';
+				e.src='http://twitter.com/statuses/user_timeline/#{h twitter_user}.json?callback=twitter_cb&amp;count=20';
 				document.documentElement.appendChild(e);
 			}
 			if(window.addEventListener){
@@ -49,11 +49,11 @@ end
 add_conf_proc( 'twitter_js', 'Twitter' ) do
 
 	if @mode == 'saveconf' then
-	   @conf['twitter.user'] = @cgi.params['twitter.user'][0]
+		@conf['twitter.user'] = @cgi.params['twitter.user'][0]
 	end
 
 	<<-HTML
    <h3 class="subtitle">Account Name</h3>
-   <p><input name="twitter.user" value="#{h @conf['twitter.user']}" /></p>
-   HTML
+   <p><input name="twitter.user" value="#{h @conf['twitter.user']}"></p>
+	HTML
 end

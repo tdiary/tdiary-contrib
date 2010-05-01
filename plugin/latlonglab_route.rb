@@ -19,7 +19,7 @@ def route( id, w = 480, h = 480 )
 
   <<-HTML
   <div class="latlonglab-route">
-  <script type="text/javascript" encoding="UTF-8" src="http://latlonglab.yahoo.co.jp/route/paste?id=#{id}&width=#{w}&height=#{h}"></script>
+  <script type="text/javascript" charset="UTF-8" src="http://latlonglab.yahoo.co.jp/route/paste?id=#{id}&amp;width=#{w}&amp;height=#{h}"></script>
   </div>
   HTML
 end

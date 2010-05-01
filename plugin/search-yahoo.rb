@@ -22,7 +22,7 @@ end
 def search_input_form( q )
 	r = <<-HTML
 		<form method="GET" action="#{@conf.index}"><div>
-			検索キーワード: 
+			検索キーワード:
 			<input name="q" value="#{h q}">
 			<input type="submit" value="OK">
 		</div></form>
@@ -43,7 +43,7 @@ def search_boss_api( q, start = 0 )
 end
 
 def search_to_html( str )
-	(str || '').gsub( /<wbr>/, '' ).gsub( /<b>/, '<strong>' ).gsub( /<\/b>/, '</strong>' )
+	(str || '').gsub( /(?:<wbr(?:[ \t\r\n][^>]*)?>)+/, '' ).gsub( %r{<(/?)b[ \t\n\r]*>}, '<\\1strong>' )
 end
 
 def search_result
@@ -79,13 +79,13 @@ def search_result
 	r << '<div class="search-navi">'
 	doc.elements.to_a( '/ysearchresponse/prevpage' ).each do |p|
 		if /start=\d+/ =~ p.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&" rel="prev">&lt;前の20件</a>&nbsp;|
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;#$&" rel="prev">&lt;前の20件</a>&nbsp;|
 		end
 	end
 
 	doc.elements.to_a( '/ysearchresponse/nextpage' ).each do |n|
 		if /start=\d+/ =~ n.text then
-			r << %Q|<a href="#{@conf.index}?q=#{u query}&#$&" rel="next">次の20件&gt;</a>|
+			r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;#$&" rel="next">次の20件&gt;</a>|
 		end
 	end
 	r << '</div>'

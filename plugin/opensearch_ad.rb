@@ -4,15 +4,15 @@
 # Distributed under the GPL
 #
 
-if /^(latest|day)$/ =~ @mode then
+if /\A(?:latest|day)\z/ =~ @mode then
 	if @conf['opensearch.xml'] and @conf['opensearch.title'] then
 		opensearch_xml = @conf['opensearch.xml']
 		opensearch_title = @conf['opensearch.title']
-		
-		add_header_proc do	
+
+		add_header_proc do
 			result = <<-HTML
 			<link type="application/opensearchdescription+xml" rel="search" title="#{h(opensearch_title)}" href="#{h(opensearch_xml)}">
-   	   HTML
+			HTML
 			result.gsub( /^\t\t/, '' )
 		end
 	end
@@ -26,8 +26,8 @@ add_conf_proc( 'opensearch_ad', 'OpenSearch Auto-Discovery' ) do
 
 	<<-HTML
 	<h3 class="subtitle">Tilte for OpenSearch</h3>
-	<p><input name="opensearch.title" value="#{h(@conf['opensearch.title'])}" size="80" /></p>
- 	<h3 class="subtitle">URI for OpenSearch description XML</h3>
- 	<p><input name="opensearch.xml" value="#{h(@conf['opensearch.xml'])}" size="80" /></p>
- 	HTML
+	<p><input name="opensearch.title" value="#{h(@conf['opensearch.title'])}" size="80"></p>
+	<h3 class="subtitle">URI for OpenSearch description XML</h3>
+	<p><input name="opensearch.xml" value="#{h(@conf['opensearch.xml'])}" size="80"></p>
+	HTML
 end

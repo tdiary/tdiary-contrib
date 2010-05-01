@@ -12,7 +12,7 @@ def youtube( video_id, size = [425,350] )
 		%Q|<div class="youtube"><a href="youtube:#{video_id}">YouTube (#{video_id})</a></div>|
 	else
 		<<-TAG
-		<object class="youtube" width="#{size[0]}" height="#{size[1]}"><param name="movie" value="http://www.youtube.com/v/#{video_id}"></param><embed src="http://www.youtube.com/v/#{video_id}" type="application/x-shockwave-flash" width="#{size[0]}" height="#{size[1]}"></embed></object>
+		<object class="youtube" width="#{size[0]}" height="#{size[1]}"><param name="movie" value="http://www.youtube.com/v/#{video_id}"><embed src="http://www.youtube.com/v/#{video_id}" type="application/x-shockwave-flash" width="#{size[0]}" height="#{size[1]}"></embed></object>
 		TAG
 	end
 end

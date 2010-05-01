@@ -81,7 +81,7 @@ add_conf_proc('volatile', "揮発性日記", 'update') do
     <h3>公開する日記の件数</h3>
     <dl>
       <dt>公開したい日記の件数を入力してください。</dt>
-      <dd><input name="volatile.limit" value="#{@conf['volatile.limit'] || '10'}" /></dd>
+      <dd><input name="volatile.limit" value="#{@conf['volatile.limit'] || '10'}"></dd>
     </dl>
   HTML
   r

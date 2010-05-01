@@ -12,10 +12,10 @@ require 'timeout'
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
 	uri = @conf.index.dup
-	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
-	uri.gsub!( %r|/\./|, '/' )
+	uri.sub!( %r|\A(?!https?://)|i, @conf.base_url )
+	uri.gsub!( %r|/\.(?=/)|, "" ) # /././ -> /
 	link = uri + anchor( "#{ymd}p%02d" % index )
-	link = link.sub( /#/, "%23" ) if escape
+	link.sub!( "#", "%23" ) if escape
 	link
 end
 
@@ -66,10 +66,10 @@ add_section_leave_proc do |date, index|
 			end
 		end
 
-		# 「このエントリの del.icio.us history (JSON)」
+		# 「このエントリの Delicious history (JSON)」
 		r << add_delicious_json(date, index)
 
-		# 「このエントリを含む del.icio.us (画像API)」
+		# 「このエントリを含む Delicious (画像API)」
 		# r << add_delicious(date, index)
 
 		# 「このエントリを含むはてなブックーク」
@@ -99,19 +99,19 @@ end
 
 def add_hatenabm(date, index)
 	r = " | "
-	r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_hatenabm_label}" alt="#{@section_footer_hatenabm_label}" width="16" height="12" /> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
+	r << %Q|<a href="http://b.hatena.ne.jp/entry/#{permalink(date, index)}"><img src="http://d.hatena.ne.jp/images/b_entry.gif" style="border: 0 none;vertical-align: middle;" title="#{@section_footer_hatenabm_label}" alt="#{@section_footer_hatenabm_label}" width="16" height="12"> <img src="http://b.hatena.ne.jp/entry/image/normal/#{permalink(date, index)}" style="border: 0 none;vertical-align: middle;"></a> <img src="http://r.hatena.ne.jp/images/popup.gif" style="border: 0 none;vertical-align: middle;" onclick="iconImageClickHandler(this, '#{permalink(date, index, false)}', event);" alt="">|
 	return r
 end
 
 def add_ldclip(date, index)
 	r = " | "
-	r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: none;vertical-align: middle;" alt="#{@section_footer_ldclip_label}" title="#{@section_footer_ldclip_label}"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+	r << %Q|<a href="http://clip.livedoor.com/page/#{permalink(date, index)}"><img src="http://parts.blog.livedoor.jp/img/cmn/clip_16_16_w.gif" width="16" height="16" style="border: 0 none;vertical-align: middle;" alt="#{@section_footer_ldclip_label}" title="#{@section_footer_ldclip_label}"> <img src="http://image.clip.livedoor.com/counter/#{permalink(date, index)}" style="border: 0 none;vertical-align: middle;"></a>|
 	return r
 end
 
 def add_buzzurl(date, index)
 	r = " | "
-	r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_buzzurl_label}" alt="#{@section_footer_buzzurl_label}" width="16" height="12" class="icon" /> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: none;vertical-align: middle;" /></a>|
+	r << %Q|<a href="http://buzzurl.jp/entry/#{permalink(date, index)}"><img src="http://buzzurl.jp/static/image/api/icon/add_icon_mini_10.gif" style="border: 0 none;vertical-align: middle;" title="#{@section_footer_buzzurl_label}" alt="#{@section_footer_buzzurl_label}" width="16" height="12" class="icon"> <img src="http://buzzurl.jp/api/counter/#{permalink(date, index)}" style="border: 0 none;vertical-align: middle;"></a>|
 	return r
 end
 
@@ -119,7 +119,7 @@ def add_delicious(date, index)
 	url_md5 = Digest::MD5.hexdigest(permalink(date, index, false))
 
 	r = " | "
-	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border:none;margin:0" /></a>|
+	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: 0 none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}"> <img src="http://del.icio.us/feeds/img/savedcount/#{url_md5}?aggregate" style="border: 0 none;margin: 0;"></a>|
 	return r
 end
 
@@ -139,7 +139,7 @@ def add_delicious_json(date, index)
 	count = 0
 
 	r = " | "
-	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}">|
+	r << %Q|<a href="http://delicious.com/url/#{url_md5}"><img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: 0 none;vertical-align: middle;" alt="#{@section_footer_delicious_label}" title="#{@section_footer_delicious_label}">|
 
 	begin
 		FileUtils.mkdir_p( cache_dir ) unless File::directory?( cache_dir )
@@ -189,7 +189,7 @@ end
 
 def add_yahoobm(date, index)
 	r = " | "
-	r << %Q|<a href="http://bookmarks.yahoo.co.jp/url?url=#{permalink(date, index)}&opener=bm&ei=UTF-8"><img src="http://i.yimg.jp/images/sicons/ybm16.gif" style="border: none;vertical-align: middle;" title="#{@section_footer_yahoobm_label}" alt="#{@section_footer_yahoobm_label}" width="16" height="16" class="icon" /></a>|
+	r << %Q|<a href="http://bookmarks.yahoo.co.jp/url?url=#{permalink(date, index)}&amp;opener=bm&amp;ei=UTF-8"><img src="http://i.yimg.jp/images/sicons/ybm16.gif" style="border: 0 none;vertical-align: middle;" title="#{@section_footer_yahoobm_label}" alt="#{@section_footer_yahoobm_label}" width="16" height="16" class="icon"></a>|
 	return r
 end
 

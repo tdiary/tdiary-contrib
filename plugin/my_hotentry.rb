@@ -12,7 +12,7 @@ require 'rexml/document'
 require 'pstore'
 require 'timeout'
 
-# 人気の日記のソート順（新着順: eid,  注目順: hot, 人気順: count）
+# 人気の日記のソート順（新着順: eid, 注目順: hot, 人気順: count）
 @conf ||= {}
 @conf['my_hotentry.sort'] ||= 'hot'
 
@@ -61,7 +61,7 @@ class MyHotEntry
         url = item.elements['link'].text
         title = item.elements['title'].text
         # リンク先のタイトルからサイト名と日付を取り除く
-        title.sub!(/( - )?#{options[:html_title]}( - )?/, '')
+        title.sub!(/(?: - )?#{options[:html_title]}(?: - )?/, '')
         title.sub!(/\(\d{4}-\d{2}-\d{2}\)/, '')
         db[:entries].push({ :url => url, :title => title })
       end
@@ -91,7 +91,7 @@ def my_hotentry(count = 5)
     r << "\t\t<li>#{entry_link} #{bookmark_link}</li>"
   end
   r << %Q|</ul>|
-  r << %Q|<div class="iddy"><span class="iddy-powered">\tPowered by <a href="http://b.hatena.ne.jp/entrylist?url=#{@conf.base_url}&sort=#{@conf['my_hotentry.sort']}">Hatena Bookmark</a></span></div>\n|
+  r << %Q|<div class="iddy"><span class="iddy-powered">\tPowered by <a href="http://b.hatena.ne.jp/entrylist?url=#{@conf.base_url}&amp;sort=#{@conf['my_hotentry.sort']}">Hatena Bookmark</a></span></div>\n|
 end
 
 # 人気の日記一覧を更新する

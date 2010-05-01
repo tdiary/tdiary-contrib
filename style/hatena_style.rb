@@ -100,7 +100,7 @@ module Hatena
   def Diary.parse(str, author)
     str.gsub(/\r(?!\n)/,"\n")\
        .delete("\r")\
-       .sub(/^\*/,'**')\
+       .gsub(/^\*/,'**')\
        .split(/^\*/)\
        .inject([]) {|r, i| i.empty? ? r : r << Hatena::Section.new(i, author) }
   end
@@ -228,7 +228,7 @@ class Hatena::Section
   def initialize(str, author)
     t = Time.now
     @author = author.freeze
-    @src    = str.sub(/^\*t\*/, '*%d*' % t.to_i)\
+    @src    = str.gsub(/^\*t\*/, '*%d*' % t.to_i)\
                  .gsub(/<(ins|del)>/, '<\1 datetime="%s">' % t.xmlschema)
     @tree   = Hatena::Block.new(@src)
   end
@@ -465,7 +465,7 @@ end
 class Hatena::Itemize
   def initialize(str)
     @elems = Array.new
-    lines  = str.sub(/^-/,'').scan(/.*\n/)
+    lines  = str.gsub(/^-/,'').scan(/.*\n/)
     buffer = ''
     until lines.empty?
       case
@@ -518,7 +518,7 @@ end
 class Hatena::Enumerate
   def initialize(str)
     @elems = Array.new
-    lines  = str.sub(/^\+/,'').scan(/.*\n/)
+    lines  = str.gsub(/^\+/,'').scan(/.*\n/)
     buffer = ''
     until lines.empty?
       case
@@ -844,7 +844,7 @@ class Hatena::Google
   end
 
   def convert(mode)
-    uri = 'http://www.google.com/search?q=%s&ie=euc-jp&oe=euc-jp' % URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)
+    uri = 'http://www.google.com/search?q=%s&amp;ie=euc-jp&amp;oe=euc-jp' % URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)
     return uri unless @tag_p
     template=nil
     if mode == :CHTML

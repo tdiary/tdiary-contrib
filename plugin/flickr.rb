@@ -116,11 +116,11 @@ add_edit_proc do |date|
   photo_id = @cgi.params[FLICKER_FORM_PID][0] or next
 
   # this code was from image.rb
-  case @conf.style.sub( /^blog/i, '' )
-  when /^wiki|markdown$/i
+  case @conf.style.downcase.sub( /\Ablog/, '' )
+  when "wiki", "markdown"
     ptag1 = "{{"
     ptag2 = "}}"
-  when /^rd$/i
+  when "rd"
     ptag1 = "((%"
     ptag2 = "%))"
   else
@@ -139,8 +139,7 @@ add_edit_proc do |date|
     #{flickr_image}
     <input type="button" onclick="flickr_edit_insert(&quot;#{ptag}&quot;)" value="#{@flickr_label_form_add}">
   </div>
-  <script type="text/javascript">
-  <!--
+  <script type="text/javascript"><!--
   function flickr_edit_insert(photo_id) {
     window.document.forms[0].body.value += photo_id;
   }
@@ -152,7 +151,7 @@ end
 def flickr_slideshow(tag, id = nil)
   id ||= @conf['flickr.id']
   return unless id
-  %Q|<iframe align="center" src="http://www.flickr.com/slideShow/index.gne?user_id=#{id}&tags=#{tag}" frameBorder="0" width="500" scrolling="no" height="500"></iframe>|
+  %Q|<iframe align="center" src="http://www.flickr.com/slideShow/index.gne?user_id=#{id}&amp;tags=#{tag}" frameBorder="0" width="500" scrolling="no" height="500"></iframe>|
 end
 
 def flickr_slideshow_by_set(set_id)
@@ -188,7 +187,7 @@ module Flickr
 
   class RequestAuth < Request
     def base_url
-      'http://flickr.com/services/auth/?'
+      'http://www.flickr.com/services/auth/?'
     end
   end
 end

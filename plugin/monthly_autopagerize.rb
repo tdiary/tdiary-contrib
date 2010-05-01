@@ -7,7 +7,7 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
-if /^month$/ =~ @mode then
+if @mode == 'month' then
 	add_header_proc do
 		stream = @conf['monthly_autopagerize.stream'] || 0
 		result = String.new
@@ -23,9 +23,9 @@ if /^month$/ =~ @mode then
 		next_month = ym[ym.index( now )+1]
 
 		case stream
-		when 0
-			rel_prev_month = 'next'
-			rel_next_month = 'prev'
+		#when 0
+		#	rel_prev_month = 'next'
+		#	rel_next_month = 'prev'
 		when 1
 			rel_prev_month = 'prev'
 			rel_next_month = 'next'
@@ -52,8 +52,8 @@ add_conf_proc( 'monthly_autopagerize', 'Monthly AutoPagerize' ) do
 	<<-HTML
 		<h3>Stream of Monthly AutoPagerize</h3>
 		<p><select name="monthly_autopagerize.stream">
-			<option value="0"#{" selected" if @conf['monthly_autopagerize.stream'] == 0}>To Past</option>
-			<option value="1"#{" selected" if @conf['monthly_autopagerize.stream'] == 1}>To Future</option>
+			<option value="0"#{' selected' if @conf['monthly_autopagerize.stream'] == 0}>To Past</option>
+			<option value="1"#{' selected' if @conf['monthly_autopagerize.stream'] == 1}>To Future</option>
 		</select></p>
 	HTML
 end

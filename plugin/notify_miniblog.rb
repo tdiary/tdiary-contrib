@@ -106,10 +106,10 @@ add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 
 	if @mode == 'saveconf' then
 		@conf['miniblog.service'] = @cgi.params['miniblog.service'][0]
-	   @conf['miniblog.user'] = @cgi.params['miniblog.user'][0]
-	   @conf['miniblog.pass'] = @cgi.params['miniblog.pass'][0]
-	   @conf['miniblog.notify.prefix'] = @cgi.params['miniblog.notify.prefix'][0]
-	   @conf['miniblog.notify.format'] = @cgi.params['miniblog.notify.format'][0]
+		@conf['miniblog.user'] = @cgi.params['miniblog.user'][0]
+		@conf['miniblog.pass'] = @cgi.params['miniblog.pass'][0]
+		@conf['miniblog.notify.prefix'] = @cgi.params['miniblog.notify.prefix'][0]
+		@conf['miniblog.notify.format'] = @cgi.params['miniblog.notify.format'][0]
 	end
 
 	options = ''
@@ -123,13 +123,13 @@ add_conf_proc( 'notify_miniblog', 'MiniBlog' ) do
 		#{options}
 	</select></p>
 	<h3 class="subtitle">Account Name</h3>
-	<p><input name="miniblog.user" value="#{h @conf['miniblog.user']}" /></p>
+	<p><input name="miniblog.user" value="#{h @conf['miniblog.user']}"></p>
 	<h3 class="subtitle">Account Password</h3>
-	<p><input name="miniblog.pass" value="#{h @conf['miniblog.pass']}" /></p>
+	<p><input name="miniblog.pass" value="#{h @conf['miniblog.pass']}"></p>
 	<h3 class="subtitle">Notify prefix</h3>
-	<p><input name="miniblog.notify.prefix" value="#{h @conf['miniblog.notify.prefix']}" /></p>
+	<p><input name="miniblog.notify.prefix" value="#{h @conf['miniblog.notify.prefix']}"></p>
 	<h3 class="subtitle">Notify status format</h3>
-	<p><input name="miniblog.notify.format" value="#{h @conf['miniblog.notify.format']}" /></p>
+	<p><input name="miniblog.notify.format" value="#{h @conf['miniblog.notify.format']}"></p>
 	HTML
 end
 

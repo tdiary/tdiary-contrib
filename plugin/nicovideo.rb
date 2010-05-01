@@ -1,11 +1,11 @@
 #
-# nicovideo.rb - tdiary plugin for Nico Nico Video
+# nicovideo.rb - tDiary plugin for Nico Nico Video
 #
-# Copyright (C) TADA Tadashi <sho@spc.gr.jp>
+# Copyright (C) TADA Tadashi <t@tdtds.jp>
 # Distributed under GPL.
 #
 # usage:
-#    Link to the movie and show thumbnail , description...:
+#    Link to the movie and show thumbnail, description...:
 #    <%= nicovideo 'sm99999999' %>
 #
 #    Link to the movie with original label:
@@ -81,18 +81,18 @@ def nicovideo_inline( elem, label = nil, link = nil )
 end
 
 def nicovideo_iframe( video_id )
-	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:solid 1px #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
+	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:1px solid #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
 end
 
 def nicovideo_player( video_id, size = [544,384] )
 	if feed? or @conf.mobile_agent? or @conf.iphone? then
 		nicovideo( video_id )
 	else
-		s = ''
+		q = ''
 		if size then
-			s = "?w=#{h size[0]}&h=#{h size[1]}"
+			q = "?w=#{h size[0]}&amp;h=#{h size[1]}"
 		end
-		%Q|<script type="text/javascript" src="#{nicovideo_player_path}/thumb_watch/#{video_id}#{s}"></script>|
+		%Q|<script type="text/javascript" src="#{nicovideo_player_path}/thumb_watch/#{video_id}#{q}"></script>|
 	end
 end
 
@@ -105,8 +105,8 @@ def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
 		r << thumb
 		r << '</div>'
 		if feed? or @conf.mobile_agent? then
-			r.gsub!( /<a .*?>/, '' )
-			r.gsub!( /<\/a>/, '' )
+			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
+			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
 		else
 			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;">|
 			r << %Q|<a name="player-#{video_id}">|

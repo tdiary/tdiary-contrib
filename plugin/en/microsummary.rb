@@ -12,7 +12,7 @@ if @mode == 'conf' || @mode == 'saveconf'
       microsummary_init
       <<-HTML
       <h3 class="subtitle">URI for microsummary generator XML</h3>
-      <p><input name="generator.xml" value="#{CGI::escapeHTML(@conf['generator.xml'])}" size="60" /></p>
+      <p><input name="generator.xml" value="#{CGI::escapeHTML(@conf['generator.xml'])}" size="60"></p>
       HTML
    end
 end

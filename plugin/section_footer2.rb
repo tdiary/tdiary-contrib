@@ -19,10 +19,10 @@ end
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
 	uri = @conf.index.dup
-	uri[0, 0] = @conf.base_url unless %r|^https?://|i =~ uri
-	uri.gsub!( %r|/\./|, '/' )
+	uri.sub!( %r|\A(?!https?://)|i, @conf.base_url )
+	uri.gsub!( %r|/\.(?=/)|, "" ) # /././ -> /
 	link = uri + anchor( "#{ymd}p%02d" % index )
-	link = link.sub( /#/, "%23" ) if escape
+	link.sub!( "#", "%23" ) if escape
 	link
 end
 
@@ -143,8 +143,8 @@ def parse_sbm_yaml(file, date, index)
 		r << %Q|<a href="#{url}#{char_space}#{permalink(date, index)}">|
 		r << %Q|<img src="#{config["src"]}" style="border: none;vertical-align: middle;" |
 		r << %Q|title="#{title}" |
-		r << %Q|alt="#{title}" />|
-		r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;" />| unless config["counter"].nil?
+		r << %Q|alt="#{title}">|
+		r << %Q| <img src="#{config["counter"]}#{permalink(date, index)}" style="border: none;vertical-align: middle;">| unless config["counter"].nil?
 		r << '</a>'
 		r << ' | '
 	end

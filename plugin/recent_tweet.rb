@@ -1,5 +1,5 @@
 #
-# recemt_tweet.rb: twitter status plugin for tDiary
+# recemt_tweet.rb: Twitter status plugin for tDiary
 #
 # Copyright (C) 2007 by Nishimoto Masaki <gaju@gaju.jp>
 # Distributed under GPL.
@@ -30,14 +30,14 @@ def recent_tweet( id, count )
 		if doc then
 			html = '<div class="recent-tweet">'
 			html << '<p class="recent-tweet-title">'
-			html << %Q|<a href="http://twitter.com/#{id}">| << 'What am I doing...</a>'
+			html << '<a href="http://twitter.com/' << id << '">What am I doing...</a>'
 			html << '</p>'
 			html << '<ul class="recent-tweet-body">'
 			i = 0
 			doc.elements.each( 'statuses/status' ) do |status|
 				created_at = Time.parse( status.elements.to_a( 'created_at' )[0].text )
 				text = status.elements.to_a( 'text' )[0].text
-				if /^\@(.*)?/.match( text ) == nil and i < count then
+				if /^@/.match( text ) == nil and i < count then
 					html << '<li class="recent-tweet-status">'
 					if Time.now > created_at + 60*60*23 then
 						time = created_at.localtime.strftime( '%b %d %H:%M' )

@@ -1,9 +1,9 @@
 # prettify.rb
 
-if /^(?:latest|day|month|nyear)$/ =~ @mode then
+if /\A(?:latest|day|month|nyear)\z/ =~ @mode then
 	add_header_proc do
 		<<-HTML
-		<link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript" src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 		<script type="text/javascript"><!--
 			function google_prettify(){
@@ -18,9 +18,9 @@ if /^(?:latest|day|month|nyear)$/ =~ @mode then
 				prettyPrint();
 			}
 			if(window.addEventListener){
-				window.addEventListener('load',google_prettify,false);
+				window.addEventListener("load",google_prettify,false);
 			}else if(window.attachEvent){
-				window.attachEvent('onload',google_prettify);
+				window.attachEvent("onload",google_prettify);
 			}else{
 				window.onload=google_prettify;
 			}

@@ -1,4 +1,4 @@
-# google_video.rb: Google Video plugin for tDiary
+# google_video.rb: Google Videos plugin for tDiary
 #
 # usage: <%= google_video 'DOC_ID' %>
 #        <%= google_video 'DOC_ID', 'WIDTHxHEIGHT', %>
@@ -21,22 +21,22 @@
 # Acknowledgements:
 #  * Thanks to omo for extra_options and add_config_proc.
 
-@google_video_conf_label = "Google Video"
+@google_video_conf_label = "Google Videos"
 @google_video_default_width = 425
 @google_video_default_height = 320
 @google_video_default_size = "#{@google_video_default_width}x#{@google_video_default_height}"
 @google_video_modes = ['embedded', 'simple', 'mini', 'clickToPlay']
 
 def google_video_extra_options(opt)
-	playerMode =  opt['google_video.playerMode']
+	playerMode = opt['google_video.playerMode']
 	autoPlay = opt['google_video.autoPlay']
-	loop =  opt['google_video.loop']
-	showShareButtons =  opt['google_video.showShareButtons']
+	looop = opt['google_video.loop']
+	showShareButtons = opt['google_video.showShareButtons']
 	ret = ""
-	ret += "&playerMode=#{playerMode}" if playerMode
-	ret += "&autoPlay=#{autoPlay}" if autoPlay
-	ret += "&loop=#{loop}" if loop
-	ret += "&showShareButtons=#{showShareButtons}" if showShareButtons
+	ret << "&amp;playerMode=#{playerMode}" if playerMode
+	ret << "&amp;autoPlay=#{autoPlay}" if autoPlay
+	ret << "&amp;loop=#{looop}" if looop
+	ret << "&amp;showShareButtons=#{showShareButtons}" if showShareButtons
 	ret
 end
 
@@ -49,9 +49,9 @@ def google_video( doc_id, player_size=nil)
 			[@google_video_default_width, @google_video_default_height]
 	end
 
-	url = "http://video.google.com/googleplayer.swf?docId=#{doc_id}&hl=en"
+	url = "http://video.google.com/googleplayer.swf?docId=#{doc_id}&amp;hl=en"
 	url += google_video_extra_options(@conf)
-	%|<object class="googlevideo" width="#{width}" height="#{height}"><param name="movie" value="#{url}"></param><embed src="#{url}" type="application/x-shockwave-flash" width="#{width}" height="#{height}"></embed></object>|
+	%|<object class="googlevideo" width="#{width}" height="#{height}"><param name="movie" value="#{url}"><embed src="#{url}" type="application/x-shockwave-flash" width="#{width}" height="#{height}"></embed></object>|
 end
 
 def google_video_conf_proc
@@ -66,19 +66,18 @@ def google_video_conf_proc
 	<<-HTML
    <h3>Player size</h3>
    <p>Specify player pixcel size w/ 'width x height' string(e.g. '425x320').</p>
-   <p><input name="google_video.size" value="#{CGI::escapeHTML(@conf['google_video.size'] || @google_video_default_size)}" /></p>
-   </ul>
+   <p><input name="google_video.size" value="#{CGI::escapeHTML(@conf['google_video.size'] || @google_video_default_size)}"></p>
    <h3>Player Mode</h3>
    <p><select name="google_video.playerMode">
          <option value="embedded"#{if @conf['google_video.playerMode'] == 'embedded' then ' selected' end}>embedded(default)</option>
          <option value="simple"#{if @conf['google_video.playerMode'] == 'simple' then ' selected' end}>simple</option>
          <option value="mini"#{if @conf['google_video.playerMode'] == 'mini' then ' selected' end}>mini</option>
          <option value="clickToPlay"#{if @conf['google_video.playerMode'] == 'clickToPlay' then ' selected' end}>clickToPlay</option>
-   </select>
+   </select></p>
    <h3>Other Options</h3>
-   <p><input type="checkbox" name="google_video.autoPlay" value="true" #{if @conf['google_video.autoPlay'] then ' checked' end}> autoPlay </input></p>
-   <p><input type="checkbox" name="google_video.loop" value="true" #{if @conf['google_video.loop'] then ' chec' end}> loop </input></>
-   <p><input type="checkbox" name="google_video.showShareButtons" value="true" #{if @conf['google_video.showShareButtons'] then ' checked' end}> showShareButtons </input></p>
+   <p><input type="checkbox" name="google_video.autoPlay" value="true" #{if @conf['google_video.autoPlay'] then ' checked' end}> autoPlay</p>
+   <p><input type="checkbox" name="google_video.loop" value="true" #{if @conf['google_video.loop'] then ' chec' end}> loop</p>
+   <p><input type="checkbox" name="google_video.showShareButtons" value="true" #{if @conf['google_video.showShareButtons'] then ' checked' end}> showShareButtons</p>
 	HTML
 end
 
