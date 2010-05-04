@@ -39,7 +39,7 @@ def delicious_parse_xml(xml)
 #{post.attribute("description").to_s}
 </a></li>
     EOS
-    posts << post.gsub(/[\n\r]+/, '')
+    posts << post.delete("\r\n")
   end
 
   return posts

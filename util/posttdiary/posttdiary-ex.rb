@@ -165,7 +165,7 @@ def usage( detailed_help )
   else
 	text.gsub!( /\![^\r\n]*[\r\n]+/, '' )
   end
-  text.gsub( /\t/, '' )
+  text.delete( "\t" )
 end
 
 #--- override functions in the original tdiary.rb
@@ -583,7 +583,7 @@ def parse_mail( head, body , image_dir )
 		bound = "--" + $1
 		body_sub = body.split( Regexp.compile( Regexp.escape( bound ) ) )
 		body_sub.each do |b|
-			sub_head, sub_body = b.split( /\r*\n\r*\n/, 2 )
+			sub_head, sub_body = b.split( /(?:\r\n){2}|\r\r|\n\n/, 2 )
 			sub_body = "" unless sub_body
 
 			next unless sub_head =~ /Content-Type/i
@@ -904,7 +904,7 @@ begin
 	mail = NKF::nkf( '-m0 -wXd', ARGF.read )
 	raise "posttdiary-ex: no mail text." if not mail or mail.length == 0
 	
-	head, body = mail.split( /\r*\n\r*\n/, 2 )
+	head, body = mail.split( /(?:\r\n){2}|\r\r|\n\n/, 2 )
 	body = "" unless body
 	addr, subject, tmpimglist, orglist, @body = parse_mail( head, body, image_dir )
 

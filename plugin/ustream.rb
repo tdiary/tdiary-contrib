@@ -15,5 +15,8 @@ def ustream( id, type = :recorded )
 		return %Q|<a href="http://www.ustream.tv/recorded/#{id}">Link to Ustream ##{id}</a></p><p>|
 	end
 
-	return %Q|<object class="ustream" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="386" id="utv787024" name="utv_n_101164"><param name="flashvars" value="loc=%2F&amp;autoplay=false&amp;vid=#{id}"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="src" value="http://www.ustream.tv/flash/video/#{id}"><embed flashvars="loc=%2F&amp;autoplay=false&amp;vid=#{id}" width="480" height="386" allowfullscreen="true" allowscriptaccess="always" id="utv787024" name="utv_n_101164" src="http://www.ustream.tv/flash/video/#{id}" type="application/x-shockwave-flash"></object>|
+	# flashvars+="locale=(ja_JP|en_US)"
+	utv_id = "utv#{rand(1000000)}"
+	utv_name = "utv_n_#{rand(1000000)}"
+	%Q|<object class="ustream" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="386" id="#{utv_id}" name="#{utv_name}"><param name="flashvars" value="autoplay=false"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="src" value="http://www.ustream.tv/flash/video/#{id}"><embed flashvars="autoplay=false" width="480" height="386" allowfullscreen="true" allowscriptaccess="always" id="#{utv_id}" name="#{utv_name}" src="http://www.ustream.tv/flash/video/#{id}" type="application/x-shockwave-flash"></embed></object>|
 end

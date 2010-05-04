@@ -178,7 +178,7 @@ add_conf_proc( 'tdiarygraph_f', 'tdiarygraph-flashstyle の設定' ) do
 			width = @cgi.params['width'][0]
 			height = @cgi.params['height'][0]
 		elsif @cgi.params['type'][0]
-			filename = "tdiarygraph#{@cgi.params['type'][0].gsub(/-+/, '')}.swf"
+			filename = "tdiarygraph#{@cgi.params['type'][0].delete('-')}.swf"
 			width = @cgi.params['type'][0].split('-').first.split('x')[0]
 			height = @cgi.params['type'][0].split('-').first.split('x')[1]
 		end
@@ -283,7 +283,7 @@ def tdiarygraph_flashstyle_templete( filename="tdiarygraph468x60e.swf", argvs=""
 		<param name="quality" value="high">
 		<param name="wmode" value="transparent">
 		<param name="bgcolor" value="#ffffff">
-		<embed src="#{h filename}#{h argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{h width}" height="#{h height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer">
+		<embed src="#{h filename}#{h argvs}" play="false" loop="false" quality="high" wmode="transparent" bgcolor="#ffffff" width="#{h width}" height="#{h height}" name="tdiarygraph" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer"></embed>
 		</object>
 	r
 end

@@ -115,7 +115,7 @@ module TDiary
 			@date_str = Date.parse(@date).strftime(@conf.date_format)
 			@last_modified = item.attr('@mdate')
 			@title = _(item.attr('@title'))
-			@summary = _(item.snippet).gsub(/\t.*/, "").gsub(/\n\n/, " ... ").gsub(/\n/, "")
+			@summary = _(item.snippet).gsub(/\t.*/, "").gsub(/\n\n/, " ... ").delete("\n")
 			for term in @query.split
 				@title.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term)), true, @encoding), "<strong>\\&</strong>")
 				@summary.gsub!(Regexp.new(Regexp.quote(CGI.escapeHTML(term)), true, @encoding), "<strong>\\&</strong>")
