@@ -8,7 +8,7 @@
 #
 def google_adsense( layout = nil, slot = nil )
 	google_adsense_init( layout )
-	google_ad_client = "pub-9233795419081332"
+	google_ad_client = "pub-3317603667498586"
 	google_ad_size = [
 		[468, 60],	# 0
 		[120, 600],	# 1
