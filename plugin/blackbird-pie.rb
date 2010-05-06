@@ -93,5 +93,4 @@ def blackbird_pie( src )
 	</div>
 	<!-- end of tweet -->
 	HTML
-	apply_plugin( r )
 end
