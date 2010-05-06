@@ -14,6 +14,7 @@ require 'pstore'
 require 'open-uri'
 require 'timeout'
 require 'rexml/document'
+require 'time'
 
 def twitter_statuses_show_api( tweet_id )
 	url = "http://api.twitter.com/1/statuses/show/#{tweet_id}.xml"
@@ -66,7 +67,7 @@ def blackbird_pie( src )
 	profile_background_color = '#' + doc.elements['//user/profile_background_color'].text
 	avatar = doc.elements['//user/profile_image_url'].text
 	source = doc.elements['//source'].text
-	timestamp = doc.elements['//created_at'].text.gsub( / \+.*/, '' )
+	timestamp = Time.parse( doc.elements['//created_at'].text ).to_s
 	content = doc.elements['//text'].text
 	content.gsub!( %r|(http://\S+)| ){ %Q|<a href="#{$1}">#{$1}</a>| }
 	content.gsub!( /@([a-z0-9_-]{1,15})/ ){ %Q|<a href="http://twitter.com/#{$1}">@#{$1}</a>| }
