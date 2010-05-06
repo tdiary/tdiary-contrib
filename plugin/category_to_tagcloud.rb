@@ -32,7 +32,7 @@ def print_html
 		tag = tags[0]
 		url = @urls[tag]
 		elapsed_time = @elapsed_times[tag]
-		return %{<ul class="tagcloud"><li class="tagcloud24#{elapsed_time}"><a title="#{tag}" href="#{url}" rel="category tag">#{tag}</a></li></ul>\n}
+		return %{<ul class="tagcloud"><li class="tagcloud24#{elapsed_time}"><a title="#{tag}" href="#{url}">#{tag}</a></li></ul>\n}
 	end
 
 	min = Math.sqrt(@counts[tags.last])
