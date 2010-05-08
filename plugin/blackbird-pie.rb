@@ -99,3 +99,8 @@ def blackbird_pie( src )
 	<!-- end of tweet -->
 	HTML
 end
+
+def twitter_quote( src )
+	blackbird_pie( src )
+end
+
