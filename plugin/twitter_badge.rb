@@ -19,21 +19,24 @@ def twitter_badge( account, opt = {} )
 end
 
 add_footer_proc do
-	t = @twitter_badge_setting
-	return '' unless t
-	<<-TEXT
-	<!-- Twitter follow badge by go2web20 -->
-	<script src="http://files.go2web20.net/twitterbadge/1.0/badge.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript"><!--
-	tfb.account = '#{t[:account]}';
-	tfb.label = '#{t[:label]}';
-	tfb.color = '#{t[:color]}';
-	tfb.side = '#{t[:side]}';
-	tfb.top = #{t[:top]};
-	setTimeout( tfb.showbadge, #{t[:delay]} );
-	//-->
-	</script>
-	<!-- end of Twitter follow badge -->
-	TEXT
+	if @twitter_badge_setting then
+		t = @twitter_badge_setting
+		<<-TEXT
+		<!-- twitter follow badge by go2web20 -->
+		<script src="http://files.go2web20.net/twitterbadge/1.0/badge.js" type="text/javascript"></script>
+		<script type='text/javascript' charset='utf-8'><!--
+		tfb.account = '#{t[:account]}';
+		tfb.label = '#{t[:label]}';
+		tfb.color = '#{t[:color]}';
+		tfb.side = '#{t[:side]}';
+		tfb.top = #{t[:top]};
+		setTimeout( tfb.showbadge, #{t[:delay]} );
+		//-->
+		</script>
+		<!-- end of twitter follow badge -->
+		TEXT
+	else
+		''
+	end
 end
 
