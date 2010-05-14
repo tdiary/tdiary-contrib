@@ -22,9 +22,9 @@ add_footer_proc do
 	if @twitter_badge_setting then
 		t = @twitter_badge_setting
 		<<-TEXT
-		<!-- twitter follow badge by go2web20 -->
-		<script src="http://files.go2web20.net/twitterbadge/1.0/badge.js" type="text/javascript"></script>
-		<script type='text/javascript' charset='utf-8'><!--
+		<!-- Twitter follow badge by go2web20 -->
+		<script src="http://files.go2web20.net/twitterbadge/1.0/badge.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript"><!--
 		tfb.account = '#{t[:account]}';
 		tfb.label = '#{t[:label]}';
 		tfb.color = '#{t[:color]}';
@@ -33,7 +33,7 @@ add_footer_proc do
 		setTimeout( tfb.showbadge, #{t[:delay]} );
 		//-->
 		</script>
-		<!-- end of twitter follow badge -->
+		<!-- end of Twitter follow badge -->
 		TEXT
 	else
 		''

@@ -29,10 +29,6 @@ def twitter_statuses_show_api( tweet_id )
 end
 
 
-def bbp( src )
-	blackbird_pie( src )
-end
-
 def blackbird_pie( src )
 	if %r|http://twitter.com/[^/]{1,15}/status(?:es)?/([0-9]+)| =~ src.to_s.downcase
 		src = $1
@@ -100,7 +96,6 @@ def blackbird_pie( src )
 	HTML
 end
 
-def twitter_quote( src )
-	blackbird_pie( src )
-end
+alias :bbp :blackbird_pie
+alias :twitter_quote :blackbird_pie
 
