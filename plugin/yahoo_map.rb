@@ -10,7 +10,7 @@ add_header_proc do
    init_ymap
    if @conf['yahoo_jp.appid'] and @conf['yahoo_jp.appid'].size > 0
       %Q|<script type="text/javascript"
-       src="http://map.yahooapis.jp/MapsService/js/V2/?appid= #{h @conf['yahoo_jp.appid']}"></script>|
+       src="http://map.yahooapis.jp/MapsService/js/V2/?appid=#{h @conf['yahoo_jp.appid']}"></script>|
    else
       ''
    end
@@ -36,6 +36,11 @@ def init_ymap
    @ymap_container = Array.new
 end
 
+def generate_ymapid(lat, lon, layer)
+   ymapid = "ymapid" + lat.to_s + lon.to_s + layer.to_s
+   ymapid.gsub!(/\./,'')
+end
+
 def yahoo_map(lat, lon, options = {})
    options[:layer] ||= 3
    options[:size] ||= 'medium'
@@ -53,9 +58,7 @@ def yahoo_map(lat, lon, options = {})
       size = options[:size]
    end
 
-   # generate id from latitude and longtitude because cobination is uniq.
-   ymapid = "ymapid" + lat.to_s + lon.to_s + layer.to_s
-   ymapid.gsub!(/\./,'')
+   ymapid = generate_ymapid(lat, lon, options[:layer])
    ymap_info = {:ymapid => ymapid, :lat => lat, :lon => lon, :layer => options[:layer]}
 
    @ymap_container << ymap_info
