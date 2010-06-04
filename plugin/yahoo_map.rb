@@ -13,6 +13,7 @@ add_header_proc do
       r << %Q|<script type="text/javascript"|
       r << %Q| src="http://map.yahooapis.jp/MapsService/js/V2/?appid=#{h @conf['yahoo_jp.appid']}"></script>|
    end
+   r
 end
 
 add_conf_proc( 'yahoo_jp_appid', 'Yahoo! JAPAN Application ID' ) do
@@ -67,22 +68,18 @@ end
 
 def insert_ymap_js
    r = ''
-   if @ymap_container.size > 0 then
-      unless feed? then
-         r << %Q|<script type="text/javascript">\n|
-         r << %Q|function defineYmapIds() {\n|
-         @ymap_container.each do |ymap_info|
-            r << %Q|  var obj#{ymap_info[:ymapid]} = new YahooMapsCtrl("#{ymap_info[:ymapid]}", "#{ymap_info[:lat]}, #{ymap_info[:lon]}", #{ymap_info[:layer]}, YMapMode.MAP, YDatumType.WGS84);\n|
-         end
-         r << %Q|}\n|
-         r << %Q|if (window.addEventListener) window.addEventListener("load", defineYmapIds, false); // for DOM level 2 compliant Web browsers\n|
-         r << %Q|else if (window.attachEvent) window.attachEvent("onload", defineYmapIds); // for IE\n|
-         r << %Q|</script>|
-      #else
-      #   return
+   if @ymap_container.size > 0 and not feed? then
+      r << %Q|<script type="text/javascript">\n|
+      r << %Q|function defineYmapIds() {\n|
+      @ymap_container.each do |ymap_info|
+         r << %Q|  var obj#{ymap_info[:ymapid]} = new YahooMapsCtrl("#{ymap_info[:ymapid]}", "#{ymap_info[:lat]}, #{ymap_info[:lon]}", #{ymap_info[:layer]}, YMapMode.MAP, YDatumType.WGS84);\n|
       end
+      r << %Q|}\n|
+      r << %Q|if (window.addEventListener) window.addEventListener("load", defineYmapIds, false); // for DOM level 2 compliant Web browsers\n|
+      r << %Q|else if (window.attachEvent) window.attachEvent("onload", defineYmapIds); // for IE\n|
+      r << %Q|</script>|
    end
-   return r
+   r
 end
 # Local Variables:
 # mode: ruby
