@@ -13,7 +13,6 @@ add_header_proc do
       r << %Q|<script type="text/javascript"|
       r << %Q| src="http://map.yahooapis.jp/MapsService/js/V2/?appid=#{h @conf['yahoo_jp.appid']}"></script>|
    end
-   return r
 end
 
 add_conf_proc( 'yahoo_jp_appid', 'Yahoo! JAPAN Application ID' ) do
