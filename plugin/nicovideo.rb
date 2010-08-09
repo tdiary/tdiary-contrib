@@ -104,7 +104,7 @@ def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
 		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
 		r << '</div>'
-		if feed? or @conf.mobile_agent? then
+		if feed? or @conf.mobile_agent? or @conf.iphone? then
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
 		else
