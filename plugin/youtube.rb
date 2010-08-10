@@ -6,13 +6,15 @@
 # usage: <%= youtube 'VIDEO_ID' %>
 #
 def youtube( video_id, size = [425,350] )
-	if @conf.mobile_agent? or @conf.iphone? or feed? then
+	if @conf.mobile_agent? or feed? then
 		%Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{video_id}">YouTube (#{video_id})</a></div>|
-	elsif defined?( :iphone? ) and iphone?
-		%Q|<div class="youtube"><a href="youtube:#{video_id}">YouTube (#{video_id})</a></div>|
 	else
+		if @conf.smartphone?
+			size = [240, 194]
+		end
 		<<-TAG
-		<object class="youtube" width="#{size[0]}" height="#{size[1]}"><param name="movie" value="http://www.youtube.com/v/#{video_id}"><embed src="http://www.youtube.com/v/#{video_id}" type="application/x-shockwave-flash" width="#{size[0]}" height="#{size[1]}"></embed></object>
+		<iframe class="youtube-player" type="text/html" width="#{size[0]}" height="#{size[1]}" src="http://www.youtube.com/embed/#{video_id}" frameborder="0">
+		</iframe>
 		TAG
 	end
 end
