@@ -13,7 +13,6 @@ add_header_proc do
       r << %Q|<script type="text/javascript"|
       r << %Q| src="http://map.yahooapis.jp/MapsService/js/V2/?appid=#{h @conf['yahoo_jp.appid']}"></script>|
    end
-   r
 end
 
 add_conf_proc( 'yahoo_jp_appid', 'Yahoo! JAPAN Application ID' ) do
@@ -79,7 +78,6 @@ def insert_ymap_js
       r << %Q|else if (window.attachEvent) window.attachEvent("onload", defineYmapIds); // for IE\n|
       r << %Q|</script>|
    end
-   r
 end
 # Local Variables:
 # mode: ruby
