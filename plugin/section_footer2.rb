@@ -26,6 +26,31 @@ def permalink( date, index, escape = true )
 	link
 end
 
+unless defined?(subtitle)
+  def subtitle( date, index, escape = true )
+    diary = @diaries[date.strftime( "%Y%m%d" )]
+    return "" unless diary
+    sn = 1
+    diary.each_section do |section|
+      if sn == index
+        old_apply_plugin = @options["apply_plugin"]
+        @options["apply_plugin"] = true
+        title = apply_plugin( section.subtitle_to_html, true )
+        @options["apply_plugin"] = old_apply_plugin
+        title.gsub!( /(?=")/, "\\" ) if escape
+        return title
+      end
+      sn += 1
+    end
+  end
+end
+
+add_header_proc do
+  <<-"EOS"
+  <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+  EOS
+end
+
 add_section_enter_proc do |date, index|
 	@category_to_tag_list = {}
 	''
@@ -66,6 +91,9 @@ add_section_leave_proc do |date, index|
 		Dir.glob( yaml_dir + "*.yaml" ) do |file|
 			r << parse_sbm_yaml(file, date, index)
 		end
+
+		# add Twitter link
+		r << add_twitter(date, index)
 
 		# add Permalink
 		r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
@@ -122,6 +150,16 @@ def add_delicious( date, index )
 	r << ' | '
 
 	return r
+end
+
+def add_twitter(date, index)
+	r = <<-"EOS"
+	<a href="http://twitter.com/share" class="twitter-share-button"
+		data-url="#{permalink(date, index, false).gsub(/#.*$/, '')}"
+		data-text="#{subtitle(date, index)}"
+		data-via="#{@conf['twitter.user']}"
+	>tweet</a> | 
+	EOS
 end
 
 def parse_sbm_yaml(file, date, index)
