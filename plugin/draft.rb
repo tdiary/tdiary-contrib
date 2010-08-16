@@ -6,7 +6,7 @@
 # Distributed under the GPL
 #
 add_header_proc do
-	if /^(form|edit|preview|showcomment)$/ =~ @mode then
+	if /\A(form|edit|preview|showcomment)\z/ === @mode then
 		%Q[<script src="js/draft.js" type="text/javascript"></script>]
 	else
 		''

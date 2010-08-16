@@ -28,12 +28,11 @@ Draft.prototype = {
       // 改行と空白文字を無視して比較（プレビュー時に末尾へ改行が付加されるため)
       if (item.value == "" || DraftUtils.trim(item.value) == DraftUtils.trim(text)) {
         return false;
-      } else {
-        return true;
       }
+      return true;
     });
     this.save(text, true);
-    // console.log('Draft.initialized');
+    // console.log("Draft.initialized");
   },
 
   // ローカルストレージに下書きを保存する
@@ -44,7 +43,7 @@ Draft.prototype = {
       this.items.pop();
     }
     this.items.push({
-      date: new Date().toString(),
+      date: new Date().getTime(),
       value: text
     });
     // 最大でmaxCount件数の履歴を保持
@@ -66,42 +65,40 @@ Draft.prototype = {
   // タイトルは textarea の先頭1行目 + 更新日時
   titles: function() {
     return this.items.map(function(item) {
-      var date = DraftUtils.dateToString(item.date);
-      var title;
-      if (!item.value) {
-        title = "No-Name";
-      } else if (item.value.indexOf("\n") == -1) {
-        title = item.value;
-      } else {
-        title = item.value.substring(0, item.value.indexOf("\n"));
+      var date = new Date(item.date);
+      date = DraftUtils.dateToString(date);
+      var title = "No-Name";
+      if (item.value && typeof item.value == "string") {
+        title = item.value.match(/.*/)[0];
       }
       return title + " (" + date + ")";
     }, this);
-  },
+  }
 
 };
 
 // ユーティリティ関数
 var DraftUtils = {
-  // 日付を yyyy-mm-dd HH:MM:SS 形式に変換する
+  // 日付を YYYY-mm-dd HH:MM:SS 形式に変換する
   dateToString: function(date) {
-      var d = new Date(date);
+      var d = date || new Date();
       var year = d.getFullYear();
-      var month = d.getMonth() + 1;
-      if (month < 10) { month = "0" + month }
-      var date = d.getDate();
-      if (date < 10) { date = "0" + date }
-      var hour = d.getHours();
-      if (hour < 10) { hour = "0" + hour }
-      var min = d.getMinutes();
-      if (min < 10) { min = "0" + min }
-      var sec = d.getSeconds();
-      if (sec < 10) { sec = "0" + sec }
+      var month = zp(d.getMonth() + 1);
+      date = zp(d.getDate());
+      var hour = zp(d.getHours());
+      var min = zp(d.getMinutes());
+      var sec = zp(d.getSeconds());
       return year + "-" + month + "-" + date + " " + hour + ":" + min + ":" + sec;
+
+      function zp(s, l) {
+        s = String(s); l = l || 2;
+        while (s.length < l) { s = "0" + s; }
+        return s;
+      }
   },
   // 文字列から改行と空白文字を取り除く
   trim: function(str) {
-    return str.replace(/\n+/g, "").replace(/\s+/g, "");
+    return str.replace(/\s+/g, "");
   }
 };
 
@@ -110,9 +107,9 @@ var DraftUtils = {
 // ---------------------------------------
 
 // 保存対象のテキストエリア
-var textarea = $('[name=body]');
+var textarea = $("[name=body]");
 // 下書き一覧を表示するセレクトボックス
-var select = $('[name=drafts]');
+var select = $("[name=drafts]");
 // 自動保存の間隔（ミリ秒）
 var autoSaveInterval = 5 * 1000;
 
@@ -122,31 +119,31 @@ var draft = new Draft(localStorage, textarea.val());
 saveDraft = function() {
   draft.save(textarea.val());
   showSelectForm(true);
-}
+};
 // 下書き読み込み
 loadDraft = function() {
   textarea.val(draft.load(select.val()));
   showSelectForm(false);
-}
+};
 // 下書き選択用のセレクトボックスを描画
 showSelectForm = function(keepIndex) {
   var index = select.val();
   select.empty();
   jQuery.each(draft.titles(), function(i, title) {
-    select.append($("<option>").attr("value", i).text(title));
+    select.append($("<option/>").attr("value", i).text(title));
     select.val(i);
   });
   if (keepIndex) {
     select.val(index);
   }
-}
+};
 
 // DOMイベント設定
-$('#draft_load').click(loadDraft);
+$("#draft_load").click(loadDraft);
 setInterval(saveDraft, autoSaveInterval);
 textarea.change(saveDraft);
 
 showSelectForm(false);
-// console.log('ready');
+// console.log("ready");
 
 });
