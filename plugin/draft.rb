@@ -1,6 +1,9 @@
 # -*- coding: utf-8; -*-
 #
-# default HTML header
+# draft.rb: save draft data to Web Storage automatically
+#
+# Copyright (c) MATSUOKA Kohei <http://www.machu.jp/>
+# Distributed under the GPL
 #
 add_header_proc do
 	if /^(form|edit|preview|showcomment)$/ =~ @mode then
