@@ -38,7 +38,7 @@ Draft.prototype = {
       this.items.pop();
     }
     this.items.push({
-      date: new Date(),
+      date: new Date().toString(),
       value: text
     });
     // 最大でmaxCount件数の履歴を保持
