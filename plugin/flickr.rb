@@ -27,6 +27,7 @@ def flickr(photo_id, size = nil, place = 'flickr')
     return '[ERROR] flickr.rb: API Key is not specified.'
   end
   size ||= @conf['flickr.default_size'] || 'small'
+  size = 'small' if @conf.iphone?
   photo = flickr_photo_info(photo_id.to_s, size)
   unless photo
     return '[ERROR] flickr.rb: failed to get photo.'
