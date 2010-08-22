@@ -8,25 +8,6 @@ $(function() {
 
 if (!localStorage) { return; }
 
-// for compatibility (ex: IE8)
-// from https://developer.mozilla.org/En/Core_JavaScript_1.5_Reference/Objects/Array/Map
-if (!Array.prototype.map) {
-  Array.prototype.map = function(fun /*, thisp*/) {
-    var len = this.length >>> 0;
-    if (typeof fun != "function")
-      throw new TypeError();
-
-    var res = new Array(len);
-    var thisp = arguments[1];
-    for (var i = 0; i < len; i++) {
-      if (i in this)
-      res[i] = fun.call(thisp, this[i], i, this);
-    }
-
-    return res;
-  };
-}
-
 var Draft = function(storage, text) {
   // 保存先のストレージ
   this.storage = storage;
@@ -43,7 +24,7 @@ Draft.prototype = {
   initialize: function(text) {
     this.items = this.storage.drafts ? JSON.parse(this.storage.drafts) : new Array();
     // 下書きに空の日記・テキストエリアと同じ日記が存在すれば削除する
-    this.items = jQuery.grep(this.items, function(item, index) {
+    this.items = $.grep(this.items, function(item, index) {
       // 改行と空白文字を無視して比較（プレビュー時に末尾へ改行が付加されるため)
       if (item.value == "" || DraftUtils.trim(item.value) == DraftUtils.trim(text)) {
         return false;
@@ -83,7 +64,7 @@ Draft.prototype = {
   // 下書きのタイトル一覧の配列を返す（表示用）
   // タイトルは textarea の先頭1行目 + 更新日時
   titles: function() {
-    return this.items.map(function(item) {
+    return $.map(this.items, function(item) {
       var date = new Date(item.date);
       date = DraftUtils.dateToString(date);
       var title = "No-Name";
@@ -91,7 +72,7 @@ Draft.prototype = {
         title = item.value.match(/.*/)[0];
       }
       return title + " (" + date + ")";
-    }, this);
+    });
   }
 
 };
@@ -148,7 +129,7 @@ loadDraft = function() {
 showSelectForm = function(keepIndex) {
   var index = select.val();
   select.empty();
-  jQuery.each(draft.titles(), function(i, title) {
+  $.each(draft.titles(), function(i, title) {
     select.append($("<option/>").attr("value", i).text(title));
     select.val(i);
   });
