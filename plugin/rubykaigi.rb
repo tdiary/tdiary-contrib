@@ -15,7 +15,8 @@ def rubykaigi2010( role = 'attendee' )
 		'sponsor' => 'sponsor',
 		'staff' => 'staff',
 		'speaker' => 'speaker',
-		'attendee' => 'attendee'
+		'attendee' => 'attendee',
+		'away' => 'away'
 	})
 	%Q|<a href="http://rubykaigi.org/2010/" style="display:block;margin:8px auto;text-align:center;"><img src="http://rubykaigi.org/2010/badge/#{badges[role]}.png" width="160" height="201" alt="RubyKaigi2010 #{h badges[role].capitalize}" style="border-width: 0px;"></a>|
 end
