@@ -11,9 +11,10 @@
 # @options['search-yahoo.result_filter'] : your dialy's URL format of DAY mode into Regexp.
 #
 
-require 'open-uri'
 require 'timeout'
 require 'rexml/document'
+require 'net/http'
+Net::HTTP.version_1_2
 
 def search_title
 	'全文検索 by Yahoo! Search BOSS'
@@ -37,9 +38,23 @@ def search_boss_api( q, start = 0 )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 20 ) do
-		open( url, :proxy => proxy ) {|f| f.read }
+	
+	proxy_host, proxy_port = nil
+	if proxy
+		proxy_host = proxy_uri.host
+		proxy_port = proxy_uri.port
 	end
+	proxy_class = Net::HTTP::Proxy(proxy_host, proxy_port)
+
+	query = URI.parse(url)
+	req = Net::HTTP::Get.new(query.request_uri)
+	http = proxy_class.new(query.host, query.port)
+	http.open_timeout = 20
+	http.read_timeout = 20
+	res = http.start do
+		http.request(req)
+	end
+	res.body
 end
 
 def search_to_html( str )
