@@ -20,7 +20,14 @@ add_header_proc do
 					container: 'h3'
 				}
 			}
-		};\n|
+		};
+		(function() {
+			var NodeInsert = function(evt) {
+				Hatena.Star.EntryLoader.loadNewEntries(evt.target);
+			};
+			window.addEventListener('AutoPagerize_DOMNodeInserted', NodeInsert, false);
+			window.addEventListener('AutoPatchWork.DOMNodeInserted', NodeInsert, false);
+		})();\n|
 		if @conf['hatena_star.token'] then
 			hatena_star << %Q|\t\tHatena.Star.Token = '#{CGI::escapeHTML @conf["hatena_star.token"]}';\n|
 		end
