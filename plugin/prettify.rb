@@ -6,23 +6,12 @@ if /\A(?:latest|day|month|nyear)\z/ =~ @mode then
 		<link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript" src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 		<script type="text/javascript"><!--
-			function google_prettify(){
-				var divs=document.getElementsByTagName("div");
-				for(var i=divs.length;i-- >0;){
-					if(divs[i].className!="body")continue;
-					var pres=divs[i].getElementsByTagName("pre");
-					for(var j=pres.length;j-- >0;){
-						pres[j].className="prettyprint";
-					}
-				}
-				prettyPrint();
-			}
 			if(window.addEventListener){
-				window.addEventListener("load",google_prettify,false);
+				window.addEventListener("load", prettyPrint, false);
 			}else if(window.attachEvent){
-				window.attachEvent("onload",google_prettify);
+				window.attachEvent("onload", prettyPrint);
 			}else{
-				window.onload=google_prettify;
+				window.onload=prettyPrint;
 			}
 		// --></script>
 		HTML
