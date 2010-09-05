@@ -11,8 +11,7 @@ require 'net/http'
 
 @miniblog_list = {
 	'HatenaHaiku' => @miniblog_config.new('h.hatena.ne.jp', '/api/statuses/update.json'),
-	'Twitter' => @miniblog_config.new('twitter.com', '/statuses/update.json'),
-	'Wassr' => @miniblog_config.new('api.wassr.jp', '/statuses/update.json'),
+	'Wassr' => @miniblog_config.new('api.wassr.jp', '/statuses/update.json')
 }
 
 module Miniblog
