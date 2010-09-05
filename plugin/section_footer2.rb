@@ -157,7 +157,7 @@ def add_twitter(date, index)
 	r = <<-"EOS"
 	<a href="http://twitter.com/share" class="twitter-share-button"
 		data-url="#{permalink(date, index, false).gsub(/#.*$/, '')}"
-		data-text="#{subtitle(date, index)}"
+		data-text="#{CGI.escapeHTML(subtitle(date, index))}"
 		data-via="#{@conf['twitter.user']}"
 	>tweet</a> | 
 	EOS
