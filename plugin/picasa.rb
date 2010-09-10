@@ -101,7 +101,7 @@ $( function() {
 end
 
 def picasa( src, alt = "photo", place = 'picasa' )
-	src.sub( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
+	src.sub!( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
 	
 	if @cgi.mobile_agent?
 		body = %Q|<a href="#{src}">#{alt}</a>|
