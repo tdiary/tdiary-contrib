@@ -100,13 +100,13 @@ $( function() {
 	SCRIPT
 end
 
-def picasa( src, alt = "photo", place = 'picasa' )
+def picasa( src, alt = "photo", place = 'photo' )
 	src.sub!( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
 	
 	if @cgi.mobile_agent?
 		body = %Q|<a href="#{src}">#{alt}</a>|
 	else
-		body = %Q|<img title="#{alt}" alt="#{alt}" src="#{src}" class="#{place}">|
+		body = %Q|<img title="#{alt}" alt="#{alt}" src="#{src}" class="#{place} picasa">|
 	end
 	body
 end
