@@ -4,7 +4,7 @@
 #   picasa( src[, title[, place]] )
 #     - src: The url of the photo to show.
 #     - title: title of photo. (optional)
-#     - place: class name of img element. default is 'picasa'.
+#     - place: class name of img element. default is 'photo'.
 #
 #   picasa_left( src[, title] )
 #
