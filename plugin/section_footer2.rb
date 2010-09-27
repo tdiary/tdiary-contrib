@@ -42,6 +42,7 @@ unless defined?(subtitle)
       end
       sn += 1
     end
+    ''
   end
 end
 
