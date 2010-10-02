@@ -1,0 +1,85 @@
+/* css for tDiary Image Gallery */
+/* for List mode */
+table.imagelist {
+  margin: 0 auto;
+  text-align: center;
+}
+
+table.imagelist p.imagetitle {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+table.imagelist td {
+  width: 33%;
+}
+ 
+table.imageview td {
+  width: 50%;
+}
+
+table.imagelist p.imagedate {
+  margin-top: 0px;
+}
+
+table.imageview {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.imageview td {
+  text-align: center;
+}
+
+p.exiftitle {
+  text-align: left;
+}
+
+table.imageview li {
+  text-align: left;
+}
+
+img.imagebody {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #fff;
+  padding: 4px;
+  margin: 0 auto;
+}
+
+p.infobar {
+  text-align: center;
+}
+
+div.categorylink {
+  font-size: small;
+  text-align: right;
+  margin-right: 0.3em;
+}
+
+
+/* for SlideShow mode */
+.content {
+  margin: 0 20px;
+}
+
+.content a {
+  color: #fff;
+}
+
+
+.content p.linkage {
+  margin-top: 2em;
+  text-align: right;
+  font-size: 1.7em;
+  color: #ddd;
+}
+
+.content p.linkage a { color: #fff; }
+
+#myGallery
+{
+  text-align: left;
+  margin: 0 auto;
+}
+

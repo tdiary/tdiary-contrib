@@ -1,0 +1,8 @@
+#
+# tDiary configuration file
+#
+
+@options['image-gallery.show_exif'] = true
+@options['image-gallery.column'] = 4
+@options['image-gallery.line'] = 10
+@options['image-gallery.width'] = "160"

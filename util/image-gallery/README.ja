@@ -1,0 +1,27 @@
+tDiary Image Gallery Ver 2.0.0 -- README.ja --
+
+  Copyright (c) 2005-2010 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+  You can redistribute it and/or modify it under GPL2.
+===================
+
+■概要
+  image or image_ex プラグインで日記に貼り付けた画像ファイルの一覧表示ページを生成する、
+　tDiaryの拡張機能（プラグイン & Ruby CGI）です。
+
+■使い方の詳細は…
+　以下のサイトをご覧下さい。
+  ・配布サイト
+　　　http://www1.whi.m-net.ne.jp/n-kashi/image-gallery.html
+  ・作者の日記のサポート・ページ
+　　　http://exception.rash.jp/diary/?date=20010101
+
+■サンプルは…
+　・作者の日記
+　　　http://exception.rash.jp/diary/
+　・Image Gallery Listモード
+      http://exception.rash.jp/diary/image-gallery.rb
+　・Image Gallery SideShowモード
+      http://exception.rash.jp/diary/image-gallery.rb?mode=slide
+　・Image Gallery Viewerモード
+      http://exception.rash.jp/diary/image-gallery.rb?mode=viewer;key=20090222_0
+

@@ -1,0 +1,52 @@
+v1.0:
+  * Initial release
+
+v1.0.1:
+  * Fixed bug in jd.gallery.js that prevented more than 10 images in
+    carousel.
+  * Fixed bug in resizer.php that prevented filenames with extensions in
+    uppercase.
+
+v1.2:
+  * Fixed thumbGenerator name
+  * Fixed jumping thumbnails bug
+  * In options:
+    - Added useExternalCarousel (boolean, with carouselElement as an element)
+    - Added populateFrom option (element)
+    - Added showCarouselLabel option (boolean)
+    - Added activateCarouselScroller (boolean)
+    - Added slideInfoZoneSlide (boolean)
+  * Switched to mootools 1.11
+  * Added plugin support for digitarald's history manager
+  * Made a version compatible with name-spaced mootools (to be used with prototype, jquery or others)
+
+v2.0:
+  * Code got cleaner, with some refactored functions. Should still be 80% backward-compatible.
+  * Gallery Set (to select which gallery you want to see and switch between galleries) mode.
+     > (replaces the buggy picture wall in earlier betas).
+  * Changed populate functions (more modular)
+  * Added Flush and recreate functions for slides and carousel
+  * Added transitions engine
+  * Real preloader for the slides.
+  * Preloader for the carousel thanks to Tomocchino's preloader class.
+  * In options:
+  	- Added options related to new features
+        - Added thumbIdleOpacity (float)
+  	- Allowed carouselElement to be an ID of the element (string)
+  	- Added thumbCloseCarousel (boolean)
+  	- Added carouselHorizontal (boolean) to prevent spliting the carousel in multiple lines if it's horizontal (default: true)
+  * Transitions (change the effect using defaultTransition option):
+    - Old default is fade.
+    - Real Cross-Fading for transparent PNGs: crossfade.
+    - Fading to background: fadebg.
+    - Some example of a neat fade&slide effect: fadeslideleft.
+    - Continuous scrolling :
+      + continuoushorizontal
+      + continuousvertical
+
+ v2.1beta1:
+   * Compatible with mootools 1.2
+   * Fixed carouselHorizontal
+   * Fixed external carousel bug
+   * Update History manager from Digitarald
+   * Added plugin support for digitarald's ReMooz (demozoom.html to see it)
