@@ -27,29 +27,38 @@ def permalink( date, index, escape = true )
 end
 
 unless defined?(subtitle)
-  def subtitle( date, index, escape = true )
-    diary = @diaries[date.strftime( "%Y%m%d" )]
-    return "" unless diary
-    sn = 1
-    diary.each_section do |section|
-      if sn == index
-        old_apply_plugin = @options["apply_plugin"]
-        @options["apply_plugin"] = true
-        title = apply_plugin( section.subtitle_to_html, true )
-        @options["apply_plugin"] = old_apply_plugin
-        title.gsub!( /(?=")/, "\\" ) if escape
-        return title
-      end
-      sn += 1
-    end
-    ''
-  end
+	def subtitle( date, index, escape = true )
+		diary = @diaries[date.strftime( "%Y%m%d" )]
+		return "" unless diary
+		sn = 1
+		diary.each_section do |section|
+			if sn == index
+				old_apply_plugin = @options["apply_plugin"]
+				@options["apply_plugin"] = true
+				title = apply_plugin( section.subtitle_to_html, true )
+				@options["apply_plugin"] = old_apply_plugin
+				title.gsub!( /(?=")/, "\\" ) if escape
+				return title
+			end
+			sn += 1
+		end
+		''
+	end
 end
 
 add_header_proc do
   <<-"EOS"
   <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
   <style type="text/css">iframe.twitter-share-button.twitter-count-horizontal {margin-bottom: -6px; }</style>
+  <script src="http://connect.facebook.net/en_US/all.js"></script>
+  <script>
+  FB.init({
+    appId  : '',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+  </script>
   EOS
 end
 
@@ -93,6 +102,9 @@ add_section_leave_proc do |date, index|
 		Dir.glob( yaml_dir + "*.yaml" ) do |file|
 			r << parse_sbm_yaml(file, date, index)
 		end
+
+		# add Facebook Like!
+		r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
 
 		# add Twitter link
 		r << add_twitter(date, index)
@@ -191,3 +203,11 @@ def parse_sbm_yaml(file, date, index)
 
 	return r
 end
+
+# Local Variables:
+# mode: ruby
+# indent-tabs-mode: t
+# tab-width: 3
+# ruby-indent-level: 3
+# End:
+# vim: ts=3
