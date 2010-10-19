@@ -59,6 +59,7 @@ add_header_proc do
     xfbml  : true  // parse XFBML
   });
   </script>
+  <style type="text/css">iframe.fb_ltr {margin-bottom: -2px; margin-right: 4px;}</style>
   EOS
 end
 
@@ -105,6 +106,7 @@ add_section_leave_proc do |date, index|
 
 		# add Facebook Like!
 		r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
+		r << %Q|<fb:share-button href="#{permalink(date, index, false)}" type="button_count"></fb:share-button>|
 
 		# add Twitter link
 		r << add_twitter(date, index)
