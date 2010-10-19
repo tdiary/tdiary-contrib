@@ -50,7 +50,7 @@ add_header_proc do
   <<-"EOS"
   <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
   <style type="text/css">iframe.twitter-share-button.twitter-count-horizontal {margin-bottom: -6px; }</style>
-  <script src="http://connect.facebook.net/en_US/all.js"></script>
+  <script src="http://connect.facebook.net/#{@section_footer2_locale}/all.js"></script>
   <script>
   FB.init({
     appId  : '',
