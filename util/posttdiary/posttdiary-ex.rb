@@ -1,20 +1,25 @@
 #!/usr/bin/env ruby
-$KCODE= 'u'
 #
-# posttdiary-ex: update tDiary via e-mail. $Revision: 1.6.2.4 $
+# posttdiary-ex: update tDiary via e-mail. $Revision: 1.2 $
 #
 # Copyright (C) 2002, All right reserved by TADA Tadashi <sho@spc.gr.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
-# 2007.9.22: v.1.66: Modified by K.Sakurai (http://ks.nwr.jp)
+# 2010.10.19: v.1.71: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
-#   * Based on posttdiary.rb v1.2 by TADA.
+#   * Based on posttdiary.rb & tdiary.rb by TADA.
 #   * Some codes partially imported from Enikki Plugin Ex. : 
 #     http://shimoi.s26.xrea.com/hiki/hiki.cgi?TdiaryEnikkiEx
 #   * Thanks to taketori for image size detection method.
 #   * Thanks to NOB for debugging.
 #   * Thanks to tamo (http://tamo.tdiary.net) for image-POSTing codes & testing.
 #
+
+# language setup for tdiary.conf (for both @data_path & @tdiary_dirname)
+@tdencoding = 'UTF-8'
+# @tdencoding = 'US-ASCII'
+# @tdencoding = 'EUC-JP'
+# @tdencoding = 'Big5'
 
 #----------------------------------------------
 
@@ -165,7 +170,7 @@ def usage( detailed_help )
   else
 	text.gsub!( /\![^\r\n]*[\r\n]+/, '' )
   end
-  text.delete( "\t" )
+  text.delete( /\t/ )
 end
 
 #--- override functions in the original tdiary.rb
@@ -182,14 +187,22 @@ def load_cgi_conf
 	raise TDiaryError, 'posttdiary-ex: No @data_path variable.' unless @data_path
 	@data_path = add_delimiter( @data_path )
 	raise TDiaryError, 'posttdiary-ex: Do not set @data_path as same as tDiary system directory.' if @data_path == @tdiary_dirname
-	
+	def_vars1 = ''
+	def_vars2 = ''
 	variables = [:author_name, :author_mail, :index_page, :hour_offset]
+	variables.each do |var|
+		def_vars1 << "#{var} = nil\n"
+		def_vars2 << "@#{var} = #{var} unless #{var} == nil\n"
+	end
+
 	begin
 		cgi_conf = File::open( "#{@data_path}tdiary.conf" ){|f| f.read }
 		cgi_conf.untaint unless @secure
-		eval( cgi_conf, binding, "(cgi_conf)", 1 )
-		variables.each do |var| eval "@#{var} = #{var} if #{var} != nil" end
-	rescue IOError, Errno::ENOENT
+		cgi_conf.force_encoding( @tdencoding )
+		b = binding.taint
+		eval( cgi_conf, b, "(cgi_conf)", 1 )
+		eval( def_vars2, b )
+		rescue IOError, Errno::ENOENT
 	end
 end
 
@@ -210,7 +223,9 @@ def read_tdiary_conf( dfname )
 	@secure = false
 	@options = {}
 	# evaluate tdiary.conf  (load_cgi_conf() would be called as well, via tdiary.conf)
-	eval( File::open( @tdiary_dirname + @tdiary_conf_file ){|f| f.read }.untaint, binding, "(tdiary.conf)", 1 )
+
+	f = File::open( @tdiary_dirname + @tdiary_conf_file ){|f| f.read }.untaint.force_encoding(@tdencoding)
+	eval( f, binding, "(tdiary.conf)", 1 )
 
 	Dir.chdir( orgdir )
 	true;
@@ -295,6 +310,7 @@ end
 def check_image_size( name, geo )
 	cmdstr = @magickpath + "identify"
 	check_command( cmdstr )
+	return false if !FileTest::exist?( name )
 	begin
 		imgsize = %x[#{cmdstr} '#{name}'].sub(/#{name}/, '').split[1][/\d+x\d+/]
 		i = imgsize.split(/x/)
@@ -322,11 +338,12 @@ def read_exif_comment( fullpath_imgname )
 	require 'nkf'
 	v = ""
 	check_command( @exifpath )
+	return "" if !FileTest::exist?( fullpath_imgname )
 	open( "| #{@exifpath} -t \"User Comment\" #{fullpath_imgname}", "r" ) do |f|
 		s = f.readlines
 		s.each do |t|
 			t.gsub!( /.*Value:/, '' )
-			v = NKF::nkf( '-m0 -wXd', t ).gsub!( /^\s+/, '' ).chomp! if $&
+			v = NKF::nkf( '-m0 -Xwd', t ).gsub!( /^\s+/, '' ).chomp! if $&
 		end
 	end
 	v = '' if v =~ /^\(null\)$/i
@@ -342,6 +359,7 @@ def read_exif_orientation( fullpath_imgname )
 	val = 1
 	v = ''
 	check_command( @exifpath )
+	return 1 if !FileTest::exist?( fullpath_imgname )
 	open( "| #{@exifpath} -t \"Orientation\" #{fullpath_imgname}", "r" ) do |f|
 		s = f.readlines
 		s.each do |t|
@@ -739,17 +757,17 @@ begin
 		parser.each do |opt, arg|
 			case opt
 			when '--read-conffile'
-				conf_df_name = arg
+				conf_df_name = arg.dup
 			when '--image-path'
-				image_dir = arg
+				image_dir = arg.dup
 			when '--image-url'
-				image_url = arg
+				image_url = arg.dup
 			when '--use-subject'
 				use_subject = true
 			when '--make-thumbnail'
-				thumbnail_size = arg
+				thumbnail_size = arg.dup
 			when '--image-geometry'
-				image_geometry = arg
+				image_geometry = arg.dup
 			when '--use-image-ex'
 				use_image_ex = true
 			when '--hour-offset'
@@ -761,16 +779,16 @@ begin
 				exit 0
 
 			when '--convert-path'
-				convertpath_specified = arg
+				convertpath_specified = arg.dup
 			when '--exif-path'
-				exifpath_specified = arg
+				exifpath_specified = arg.dup
 				read_exif = true
 			when '--remote-mode'
 				remote_mode = true
 			when '--remote-image-path'
-				remote_image_dir = add_delimiter(arg)
+				remote_image_dir = add_delimiter(arg.dup)
 			when '--remote-yearly-dir'
-				remote_yearly_dir = (arg =~ /[1yt]/i)
+				remote_yearly_dir = (arg.dup =~ /[1yt]/i)
 			when '--preserve-local-images'
 				preserve_local_images = true
 			when '--upload-only'
@@ -779,7 +797,7 @@ begin
 			when '--group-id'
 				if arg =~ /\D/ then
 					require 'etc'
-					group_id = Etc.getgrnam( arg )['gid']
+					group_id = Etc.getgrnam( arg.dup )['gid']
 				else
 					group_id = arg.to_i
 				end
@@ -787,9 +805,9 @@ begin
 			when '--add-div'
 				add_div_imgnum_specified = arg.to_i
 			when '--threshold-size'
-				threshold_size = arg
+				threshold_size = arg.dup
 			when '--image-format'
-				image_format_specified = arg
+				image_format_specified = arg.dup
 			when '--use-original-name'
 				use_original_name = true
 			when '--wiki-style'
@@ -805,7 +823,7 @@ begin
 				filter_mode = true
 			when '--write-to-file'
 				filter_mode = true
-				writeout_filename = arg
+				writeout_filename = arg.dup
 			when '--date-margin'
 				date_margin = arg.to_i
 			when '--rotate'
@@ -881,7 +899,7 @@ begin
 	@exifpath = add_delimiter( @exifpath ) + "exif" if test( ?d , @exifpath )
 
 	if filter_mode == false then
-		url = ARGV.shift
+		url = ARGV.shift.dup
 		if %r|http://([^:/]*):?(\d*)(/.*)| =~ url then
 			host = $1
 			port = $2.to_i
@@ -891,8 +909,8 @@ begin
 		else
 			raise 'posttdiary-ex: invalid url for update.rb.'
 		end
-		user = ARGV.shift
-		pass = ARGV.shift
+		user = ARGV.shift.dup
+		pass = ARGV.shift.dup
 	end
 	
 	require 'base64'
@@ -901,7 +919,7 @@ begin
 	require 'shell'
 	Net::HTTP.version_1_2
 
-	mail = NKF::nkf( '-m0 -wXd', ARGF.read )
+	mail = NKF::nkf( '-m0 -Xwd', ARGF.read )
 	raise "posttdiary-ex: no mail text." if not mail or mail.length == 0
 	
 	head, body = mail.split( /(?:\r\n){2}|\r\r|\n\n/, 2 )
@@ -993,7 +1011,7 @@ begin
 		image_ext = $1.downcase
 		image_name = now.strftime( "%Y%m%d" ) + "_" + nextnum.to_s + image_ext
 		nextnum += 1
-		sh.move( tmpimgname , image_dir + image_name )
+		sh.rename( tmpimgname , image_dir + image_name )
 		exif_comment[image_name] = (read_exif ? read_exif_comment(image_dir + image_name) : "" )
 		exif_orientation[image_name] = (read_exif ? read_exif_orientation(image_dir + image_name) : "" )
 		image_orgname[image_name] = orglist[i]
@@ -1111,7 +1129,7 @@ begin
 		auth = ["#{user}:#{pass}"].pack( 'm' ).strip
 		Net::HTTP.start( host, port ) do |http|
 			protection_key = nil
-			res, = http.get( cgi,
+			res = http.get( cgi,
 	                               'Authorization' => "Basic #{auth}",
 	                               'Referer' => url )
 			if %r|<input type="hidden" name="csrf_protection_key" value="([^"]+)">| =~ res.body then
@@ -1127,7 +1145,7 @@ begin
 					File.delete( image_dir + thumbnailname ) if !preserve_local_images and test( ?f , image_dir + thumbnailname )
 				end
 			end
-			response, = http.post( cgi, data, 'Authorization' => "Basic #{auth}", 'Referer' => url )
+			response = http.post( cgi, data, 'Authorization' => "Basic #{auth}", 'Referer' => url )
 		end
 	end
 
