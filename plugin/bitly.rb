@@ -15,15 +15,18 @@
 require 'json'
 require 'open-uri'
 
-def bitly( long_uri )
-	return nil if !long_uri or long_uri.empty?
+def bitly( long_url )
+	return nil if !long_url or long_url.empty?
+
+	@bitly_cache ||= {} # cached only on memory
+	return @bitly_cache[long_url] if @bitly_cache[long_url]
 
 	login = @conf['bitly.login']
 	key = @conf['bitly.key']
 
-	query = "/v3/shorten?longUrl=#{CGI::escape long_uri}&login=#{login}&apiKey=#{key}&format=json"
+	query = "/v3/shorten?longUrl=#{CGI::escape long_url}&login=#{login}&apiKey=#{key}&format=json"
    begin
-      JSON::parse( open( "http://api.bit.ly#{query}", &:read ) )['data']['url']
+      @bitly_cache[long_url] = JSON::parse( open( "http://api.bit.ly#{query}", &:read ) )['data']['url']
    rescue TypeError # biy.ly returns an error.
       nil
    end
