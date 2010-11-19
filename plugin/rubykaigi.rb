@@ -8,6 +8,10 @@
 # Distributed under GPL.
 #
 
+def sappororubykaigi03( role = 'attendee' )
+  %Q|<a href="http://regional.rubykaigi.org/sapporo03/" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/sapporo03/badge_#{role}.gif" alt="badge_#{role}.gif"></a>|
+end
+
 def rubykaigi2010( role = 'attendee' )
 	badges = Hash::new( 'attendee' ).update({
 		'committer' => 'committer',
