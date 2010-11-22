@@ -34,9 +34,9 @@ def flickr(photo_id, size = nil, place = 'flickr')
   end
 
   if @cgi.mobile_agent?
-    body = %Q|<a href="#{photo[:src]}">#{photo[:title]}</a>|
+    body = %Q|<a href="#{photo[:src]}" class="flickr">#{photo[:title]}</a>|
   else
-    body = %Q|<a href="#{photo[:page]}"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
+    body = %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
    unless @conf.iphone?
     body << %Q| width="#{photo[:width]}"| if photo[:width]
     body << %Q| height="#{photo[:height]}"| if photo[:height]
