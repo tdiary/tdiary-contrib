@@ -48,6 +48,8 @@ end
 
 add_header_proc do
   <<-"EOS"
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <style type="text/css">iframe.hatena-bookmark-button-frame {margin-bottom: -7px; }</style>
   <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
   <style type="text/css">iframe.twitter-share-button.twitter-count-horizontal {margin-bottom: -6px; }</style>
   <script src="http://connect.facebook.net/#{@section_footer2_locale}/all.js"></script>
@@ -97,6 +99,9 @@ add_section_leave_proc do |date, index|
 
 		# add Delicious link
 		r << add_delicious(date, index)
+
+		# add Hatena link
+		r << add_hatena(date, index)
 
 		# add SBM link
 		yaml_dir = "#{@cache_path}/yaml/"
@@ -166,6 +171,10 @@ def add_delicious( date, index )
 	r << ' | '
 
 	return r
+end
+
+def add_hatena( date, index )
+       %Q!<a href="http://b.hatena.ne.jp/entry/#{permalink( date, index )}" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" width="20" height="20" style="border: none;" /></a> | !
 end
 
 def add_twitter(date, index)
