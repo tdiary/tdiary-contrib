@@ -30,7 +30,7 @@ end
 
 
 def blackbird_pie( src )
-	if %r|http://twitter.com/[^/]{1,15}/status(?:es)?/([0-9]+)| =~ src.to_s.downcase
+	if %r|http://twitter.com/(?:#!/)?[^/]{1,15}/status(?:es)?/([0-9]+)| =~ src.to_s.downcase
 		src = $1
 	end
 
