@@ -20,6 +20,12 @@ end
 
 def google_map_common(params)
    init_gmap_data
+   if feed?
+     require 'cgi'
+     query = params[:lat] && params[:lon] ? "#{params[:lat]},#{params[:lon]}" : params[:address]
+     url = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
+     return %Q|<a href="#{url}">#{url}</a>|
+   end
    return 'not support this environment.' if @conf.mobile_agent?
    
    params[:zoom]    ||=  10
@@ -40,7 +46,9 @@ end
 
 
 add_header_proc do
-   %Q|<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=#{!@conf.iphone?.nil?}"></script>\n|
+   if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
+      %Q|<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=#{!@conf.iphone?.nil?}"></script>\n|
+   end
 end
 
 
@@ -48,7 +56,7 @@ end
 add_body_leave_proc do |date|
    init_gmap_data
    gmap_scripts = ''
-   if @gmap_data.any?
+   if !feed? && @gmap_data.any?
       gmap_scripts = %Q|<script type="text/javascript">\n<!--\n|
       while @gmap_data.any?
          data = @gmap_data.shift
@@ -92,9 +100,7 @@ def google_map_script(hash)
    str << %Q|      content: '<span style="color: #000000;">#{hash[:html]}</span>',\n|
    str << %Q|      size: new google.maps.Size(350, 200)\n|
    str << %Q|  });\n|
-   str << %Q|  google.maps.event.addListener(marker, 'click', function() {\n|
-   str << %Q|    infowindow.open(gMap, marker);\n|
-   str << %Q|  });\n|
+   str << %Q|  infowindow.open(gMap, marker);\n|
    end # :html
    end # :title
    str << %Q|});\n|
@@ -131,9 +137,7 @@ def google_geomap_script(hash)
    str << %Q|            content: '<span style="color: #000000;">#{hash[:html]}</span>',\n|
    str << %Q|            size: new google.maps.Size(350, 200)\n|
    str << %Q|        });\n|
-   str << %Q|        google.maps.event.addListener(marker, 'click', function() {\n|
-   str << %Q|          infowindow.open(gMap, marker);\n|
-   str << %Q|        });\n|
+   str << %Q|        infowindow.open(gMap, marker);\n|
    end # :html
    end # :title
    str << %Q|      }else{\n|
