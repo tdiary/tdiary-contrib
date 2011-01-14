@@ -40,16 +40,13 @@ def kousei_api( sentence )
 	xml
 end
 
-def kousei_result( result_set )
+def create_result_table( results )
 	html = <<-HTML
-<h3>文章校正結果</h3>
 <table>
 <tr><th>対象表記</th><th>候補文字</th><th>詳細情報</th></tr>
-HTML
-
+	HTML
 	ranges = []
-	doc = REXML::Document::new( result_set )
-	REXML::XPath.each( doc, "//Result" ) do |result|
+	results.each do |result|
 		ranges << [REXML::XPath.match( result, "StartPos/text()").to_s, REXML::XPath.match( result, "Length/text()" ).to_s ]
 		surface = REXML::XPath.match( result, "Surface/text()" ).to_s
 		shiteki = REXML::XPath.match( result, "ShitekiWord/text()" ).to_s
@@ -86,6 +83,22 @@ $( function() {
 </script>
 SQRIPT
 	html << script
+end
+
+def kousei_result( result_set )
+	html = <<-HTML
+<h3>文章校正結果</h3>
+HTML
+
+	ranges = []
+	doc = REXML::Document::new( result_set )
+	results = REXML::XPath.match( doc, "//Result" )
+	if results.empty?
+		html << "<p>指摘項目は見つかりませんでした。</p>"
+	else
+		html << create_result_table( results )
+	end
+	
 end
 
 add_edit_proc do
