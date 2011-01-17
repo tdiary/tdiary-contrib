@@ -1,4 +1,4 @@
-# yshop.rb $Revision: 2 $
+# yshop.rb $Revision: 3 $
 # Copyright (C) 2008 Michitaka Ohno <elpeo@mars.dti.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
@@ -25,7 +25,13 @@ include ERB::Util
 TOPLEVEL_CLASS
 
 def yshop_get( param, store )
-	param = {:jan => param.to_s} unless Hash === param
+	if Hash === param then
+		param = param.dup
+	elsif /^(\d{8}|\d{13})$/ === param then
+		param = {:jan => $1}
+	else
+		param = {:query => param.to_s}
+	end
 	param[:store_id] = store if store
 	cache = "#{@cache_path}/yshop"
 	Dir::mkdir( cache ) unless File::directory?( cache )

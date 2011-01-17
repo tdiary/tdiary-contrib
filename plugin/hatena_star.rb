@@ -22,6 +22,10 @@ add_header_proc do
 			}
 		};
 		(function() {
+			if (!window.addEventListener) {
+				return;
+			}
+
 			var NodeInsert = function(evt) {
 				Hatena.Star.EntryLoader.loadNewEntries(evt.target);
 			};
