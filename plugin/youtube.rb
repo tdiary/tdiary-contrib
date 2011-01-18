@@ -22,3 +22,12 @@ def youtube( video_id, size = [425,350] )
 		TAG
 	end
 end
+
+def youtube_custom( video_id, size = [416,337] )
+  <<-TAG
+  <object width="#{size[0]}" height="#{size[1]}">
+  <param name="movie" value="http://www.youtube.com/cp/#{video_id}"></param>
+  <embed src="http://www.youtube.com/cp/#{video_id}" type="application/x-shockwave-flash" width="#{size[0]}" height="#{size[1]}"></embed>
+  </object>
+  TAG
+end
