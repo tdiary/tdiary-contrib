@@ -1,0 +1,11 @@
+はてなダイアリーの「日記モード・見出し別ページ」のように、「1見出しが1ページになる日記形式、日付ごとにコメント・トラックバックを表示」になるようにします。
+
+* tdiary以下のファイル3つ：tdiary以下に入れます（wikiとtdiary記法に対応しています）
+* misc/plugin/section_link.rb を設定画面から有効にします
+* mod_rewriteを使って拡張子を書き換えているひとは、misc/plugin/section_link_anchor.rbも有効にします
+** mod_rewriteを書き換えます
+
+ <IfModule mod_rewrite.c>
+   RewriteEngine on
+   RewriteRule ^([0-9\-]+)_?([0-9]*)\.html$ ?date=$1&section=$2 [L]
+ </IfModule>
