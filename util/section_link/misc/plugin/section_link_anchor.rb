@@ -8,7 +8,7 @@
 # sample .htaccess:
 # <IfModule mod_rewrite.c>
 #    RewriteEngine on
-#    RewriteRule ^([0-9\-]+)_?([0-9]*)\.html$ ?date=$1&section=$2 [L]
+#    RewriteRule ^([0-9\-]+)p?([0-9]*)\.html$ ?date=$1&section=$2 [L]
 # </IfModule>
 
 def anchor( s )
@@ -17,7 +17,7 @@ def anchor( s )
 			s1 = $1
 			s2 = $2
 			if $2 =~ /^p/
-				"#{s1}_#{s2.gsub(/p/, '')}.html"
+				"#{s1}p#{s2.gsub(/p/, '')}.html"
 			else
 				"#{s1}.html##{s2}"
 			end
