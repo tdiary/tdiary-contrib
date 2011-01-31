@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# You can redistribute it and/or modify it under the same license as tDiary.
+# Copyright (C) 2011, KADO Masanori <kdmsnr@gmail.com>
+# You can redistribute it and/or modify it under GPL.
 #
 # display book info in http://tatsu-zine.com/ like amazon.rb
 # USAGE: {{tatsu_zine 1}}
@@ -30,7 +31,6 @@ def tatsu_zine( id, doc = nil )
 	end
 
 	domain = "http://tatsu-zine.com"
-	image = "#{domain}/images/books/#{id}/cover_s.jpg"
 	link = "#{domain}/books/#{id}"
 	require 'open-uri'
 	doc ||= open(link)
@@ -43,6 +43,9 @@ def tatsu_zine( id, doc = nil )
 	description =
 		REXML::XPath.match( xml, "#{section}/div[@class='description']" ).
 		first.to_s.gsub(/<\/?[^>]*>/, "").gsub(/β版/, '')
+	image = domain +
+		REXML::XPath.match( xml, "/html/body/div/div[3]/section/div/img").
+		first.attributes["src"]
 
 	result = <<-EOS
 	<a class="amazon-detail" href="#{h link}"><div class="amazon-detail">
