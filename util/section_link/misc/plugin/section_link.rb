@@ -34,6 +34,31 @@ def title_tag
 	end
 end
 
+if @cgi.params["section"].join('') != ""
+	add_section_leave_proc do
+		diary = @diaries[@date.strftime("%Y%m%d")]
+
+		i = 1
+		sections = []
+		diary.each_section do |s|
+			unless i == @cgi.params["section"][0].to_i
+				sections << [i, s]
+			end
+			i += 1
+		end
+
+		unless sections.empty?
+			"<hr>\n<ol>\n" +
+			sections.map{|i, s|
+				[i, my(@date.strftime("%Y%m%d") + "p" + sprintf("%02d", i),
+					apply_plugin(s.stripped_subtitle_to_html, true))]
+			}.map{|i, s|
+				"<li value='#{i}'>#{s}</li>"
+			}.join("\n") + "\n</ol>\n"
+		end
+	end
+end
+
 # Local Variables:
 # mode: ruby
 # indent-tabs-mode: t
