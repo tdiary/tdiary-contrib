@@ -16,6 +16,7 @@ rescue
 	retry if require 'rubygems'
 end
 
+
 def permalink( date, index, escape = true )
 	ymd = date.strftime( "%Y%m%d" )
 	uri = @conf.index.dup
@@ -46,6 +47,13 @@ unless defined?(subtitle)
 	end
 end
 
+def init_buttons_status
+	@installed_buttons = ['yaml', 'delicious', 'hatena', 'facebook', 'twitter']
+	if @conf['section_footer2.isDisplay'].nil?
+	 	@conf['section_footer2.isDisplay'] = ''
+	end
+end
+
 add_header_proc do
   <<-"EOS"
   <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
@@ -67,6 +75,7 @@ end
 
 add_section_enter_proc do |date, index|
 	@category_to_tag_list = {}
+	init_buttons_status
 	''
 end
 
@@ -97,24 +106,8 @@ add_section_leave_proc do |date, index|
 			r << ' | '
 		end
 
-		# add Delicious link
-		r << add_delicious(date, index)
-
-		# add Hatena link
-		r << add_hatena(date, index)
-
-		# add SBM link
-		yaml_dir = "#{@cache_path}/yaml/"
-		Dir.glob( yaml_dir + "*.yaml" ) do |file|
-			r << parse_sbm_yaml(file, date, index)
-		end
-
-		# add Facebook Like!
-		r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
-		r << %Q|<fb:share-button href="#{permalink(date, index, false)}" type="button_count"></fb:share-button>|
-
-		# add Twitter link
-		r << add_twitter(date, index)
+		# add button
+		r << add_button_by_service(date, index)
 
 		# add Permalink
 		r << %Q|<a href="#{permalink(date, index, false)}">Permalink</a> |
@@ -177,6 +170,13 @@ def add_hatena( date, index )
        %Q!<a href="http://b.hatena.ne.jp/entry/#{permalink( date, index )}" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" width="20" height="20" style="border: none;" /></a> | !
 end
 
+def add_facebook(date, index)
+# add Facebook Like!
+	r = ''
+	r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
+	r << %Q|<fb:share-button href="#{permalink(date, index, false)}" type="button_count"></fb:share-button>\| |
+end
+
 def add_twitter(date, index)
 	r = <<-"EOS"
 	<a href="http://twitter.com/share" class="twitter-share-button"
@@ -185,6 +185,30 @@ def add_twitter(date, index)
 		data-via="#{@conf['twitter.user']}"
 	>tweet</a> | 
 	EOS
+end
+
+def add_yaml(date, index)
+	r = ''
+	yaml_dir = "#{@cache_path}/yaml/"
+	Dir.glob( yaml_dir + "*.yaml" ) do |file|
+		r << parse_sbm_yaml(file, date, index)
+	end
+	return r
+end
+
+def add_button_by_service(date, index)
+
+	r = ''
+
+	@installed_buttons.each do |button|
+		if @conf['section_footer2.isDisplay'].include?(button) then
+			method = "add_" + button + "(date, index)"
+			unless method.nil? then
+ 				r << instance_eval(method)
+ 			end
+ 		end
+	end
+	return r
 end
 
 def parse_sbm_yaml(file, date, index)
@@ -213,6 +237,29 @@ def parse_sbm_yaml(file, date, index)
 	end
 
 	return r
+end
+
+add_conf_proc('section_footer2', 'Section Footer Button') do
+
+	if @mode == 'saveconf' then
+		@conf['section_footer2.isDisplay'] = ''
+		@cgi.params['section_footer2.isDisplay'].each do |item|
+			@conf['section_footer2.isDisplay'] << item + '\n'
+		end
+	end
+
+	r = '<h3>表示するボタンをチェックしてください(YAMLをチェックすると各自でインストールしたYAMLのボタンをすべて表示します)</h3>'
+	r << '<p>'
+	init_buttons_status
+	@installed_buttons.each do |button|
+		if @conf['section_footer2.isDisplay'].include?(button) then
+			item_checked = "checked"
+		else
+			item_checked = ''
+		end
+		r << %Q|<input name="section_footer2.isDisplay" value="#{button}" #{item_checked} type="checkbox" />#{button}|
+	end
+	r << '</p>'
 end
 
 # Local Variables:
