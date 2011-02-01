@@ -7,5 +7,5 @@
 
  <IfModule mod_rewrite.c>
    RewriteEngine on
-   RewriteRule ^([0-9\-]+)_?([0-9]*)\.html$ ?date=$1&section=$2 [L]
+   RewriteRule ^([0-9\-]+)p?([0-9]*)\.html$ ?date=$1&section=$2 [L]
  </IfModule>
