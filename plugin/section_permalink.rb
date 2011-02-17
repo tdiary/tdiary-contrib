@@ -40,12 +40,13 @@ def title_tag
 end
 
 add_header_proc do
-	unless @cgi.params['p'][0].nil?
+	if !@cgi.params['p'][0].nil? and
+			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
 		index = @cgi.params['p'][0]
 <<-EOS
 <script>
 $(document).ready(function() {
-  var anc = $("a[name=p#{index}]");
+  var anc = $("a[name=p#{h(index)}]");
   anc.parent().css("background-color", "yellow");
   var dest = anc.offset().top;
   $("body").animate({scrollTop: dest});
