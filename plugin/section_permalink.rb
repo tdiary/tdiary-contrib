@@ -37,6 +37,8 @@ def title_tag
 	else
 		_orig_title_tag
 	end
+rescue
+	_orig_title_tag
 end
 
 add_header_proc do
