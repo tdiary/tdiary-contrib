@@ -30,10 +30,14 @@ def title_tag
 	if @cgi.params['p'][0].to_s != "" and
 			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
 		sections = diary.instance_variable_get(:@sections)
-		site_title = " - #{_orig_title_tag.gsub( /<.*?>/, '')}"
-		title =
-			sections[@cgi.params['p'][0].to_i - 1].stripped_subtitle_to_html
-		return "<title>#{apply_plugin(title, true).gsub(/[\r\n]/, '')}#{h site_title }</title>"
+
+		title = "<title>"
+		section = sections[@cgi.params['p'][0].to_i - 1].stripped_subtitle_to_html
+		title << apply_plugin(section, true).chomp
+		title << " - #{h @html_title}"
+		title << "(#{@date.strftime( '%Y-%m-%d' )})" if @date
+		title << "</title>"
+		return title
 	else
 		_orig_title_tag
 	end
