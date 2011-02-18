@@ -27,7 +27,7 @@ end
 # Change HTML title to section name
 alias :_orig_title_tag :title_tag
 def title_tag
-	if !@cgi.params['p'][0].nil? and
+	if @cgi.params['p'][0].to_s != "" and
 			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
 		sections = diary.instance_variable_get(:@sections)
 		site_title = " - #{_orig_title_tag.gsub( /<.*?>/, '')}"
@@ -40,7 +40,7 @@ def title_tag
 end
 
 add_header_proc do
-	if !@cgi.params['p'][0].nil? and
+	if @cgi.params['p'][0].to_s != "" and
 			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
 		index = @cgi.params['p'][0]
 <<-EOS
