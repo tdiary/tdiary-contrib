@@ -9,10 +9,8 @@ add_header_proc do
 HTML
 end
 
-if @mode == 'day'
-	add_body_leave_proc do
-		@conf['facebook_comments.PLUGIN_CODE']
-	end
+def facebook_comments
+	@conf['facebook_comments.PLUGIN_CODE']
 end
 
 add_conf_proc( 'Facebook Comments', 'Facebook Comments', 'etc' ) do
@@ -26,6 +24,8 @@ add_conf_proc( 'Facebook Comments', 'Facebook Comments', 'etc' ) do
 	end
 
 	<<-HTML
+   <p>Plese insert <code>&lt;%= facebook_comments %&gt;</code> anywhere you like.</p>
+
    <h3>YOUR_FACEBOOK_USER_ID</h3>
    <p><input size="88" name="facebook_comments.YOUR_FACEBOOK_USER_ID" value="#{h @conf['facebook_comments.YOUR_FACEBOOK_USER_ID']}"></p>
 
