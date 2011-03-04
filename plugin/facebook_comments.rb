@@ -9,8 +9,10 @@ add_header_proc do
 HTML
 end
 
-add_body_leave_proc do
-	@conf['facebook_comments.PLUGIN_CODE']
+if @mode == 'day'
+	add_body_leave_proc do
+		@conf['facebook_comments.PLUGIN_CODE']
+	end
 end
 
 add_conf_proc( 'Facebook Comments', 'Facebook Comments', 'etc' ) do
