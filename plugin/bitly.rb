@@ -13,7 +13,7 @@
 #
 
 require 'json'
-require 'open-uri'
+require 'net/http'
 
 def bitly( long_url )
 	return nil if !long_url or long_url.empty?
@@ -24,10 +24,16 @@ def bitly( long_url )
 	login = @conf['bitly.login']
 	key = @conf['bitly.key']
 
+	# proxy
+	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
+	px_port = 80 if px_host and !px_port
+
 	query = "/v3/shorten?longUrl=#{CGI::escape long_url}&login=#{login}&apiKey=#{key}&format=json"
-   begin
-      @bitly_cache[long_url] = JSON::parse( open( "http://api.bit.ly#{query}", &:read ) )['data']['url']
-   rescue TypeError # biy.ly returns an error.
-      nil
-   end
+	begin
+		Net::HTTP.version_1_2
+		res = Net::HTTP::Proxy(px_host, px_port).get('api.bit.ly', "#{query}")
+		@bitly_cache[long_url] = JSON::parse(res, &:read)['data']['url']
+	rescue TypeError => te# biy.ly returns an error.
+		nil
+	end
 end

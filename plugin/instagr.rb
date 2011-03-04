@@ -16,7 +16,7 @@
 
 require 'cgi'
 require 'json'
-require 'open-uri'
+require 'net/http'
 
 def instagr( short_url, size = :medium)
 	return %Q|<p>Argument is empty.. #{short_url}</p>| if !short_url or short_url.empty?
@@ -27,13 +27,16 @@ def instagr( short_url, size = :medium)
 	maxwidth = maxwidth_data[ size ] ? maxwidth_data[ size ] : maxwidth_data[:medium]
 	
 	# proxy
-	proxy = @conf['proxy'] ? "http://#{@conf['proxy']}" : nil
+	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
+	px_port = 80 if px_host and !px_port
 	
 	# query
 	query = "?url=#{CGI::escape(short_url)}&maxwidth=#{maxwidth}"
 	
 	begin
-		json_data = JSON::parse( open( "http://instagr.am/api/v1/oembed#{query}", :proxy => proxy, &:read ) )
+		Net::HTTP.version_1_2
+		res = Net::HTTP::Proxy(px_host, px_port).get('instagr.am', "/api/v1/oembed/#{query}")
+		json_data = JSON::parse( res, &:read )
 		width  = option[:width]  ? option[:width]  : json_data["width"]
 		height = option[:height] ? option[:height] : json_data["height"]
 		
