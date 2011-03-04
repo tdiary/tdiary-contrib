@@ -14,7 +14,7 @@ add_conf_proc( 'zenback', 'zenback', 'etc' ) do
 
 <<-HTML
    <h3>Script Code</h3>
-   <p><input size="88" name="zenback.script" value="#{@conf['zenback.script']}"></p>
+   <p><input size="88" name="zenback.script" value="#{h @conf['zenback.script']}"></p>
 HTML
 end
 
