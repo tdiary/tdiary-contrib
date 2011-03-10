@@ -9,8 +9,17 @@ add_header_proc do
 HTML
 end
 
-def facebook_comments
-	@conf['facebook_comments.PLUGIN_CODE']
+def facebook_comments(href = '')
+<<-HTML
+<div id="fb-root"></div><script src="http://connect.facebook.net/ja_JP/all.js#appId=#{@conf['facebook_comments.YOUR_APPLICATION_ID']}&amp;xfbml=1"></script><fb:comments href="#{href}" num_posts="#{@conf['facebook_comments.num_posts']}" width="#{@conf['facebook_comments.width']}"></fb:comments>
+HTML
+end
+
+add_body_leave_proc do |date|
+	if @mode == 'day'
+		href = @conf.base_url + anchor( @date.strftime('%Y%m%d') )
+		facebook_comments(href)
+	end
 end
 
 add_conf_proc( 'Facebook Comments', 'Facebook Comments', 'etc' ) do
@@ -19,21 +28,24 @@ add_conf_proc( 'Facebook Comments', 'Facebook Comments', 'etc' ) do
 			@cgi.params['facebook_comments.YOUR_FACEBOOK_USER_ID'][0]
 		@conf['facebook_comments.YOUR_APPLICATION_ID'] =
 			@cgi.params['facebook_comments.YOUR_APPLICATION_ID'][0]
-		@conf['facebook_comments.PLUGIN_CODE'] =
-			@cgi.params['facebook_comments.PLUGIN_CODE'][0]
+		@conf['facebook_comments.num_posts'] =
+			@cgi.params['facebook_comments.num_posts'][0]
+		@conf['facebook_comments.width'] =
+			@cgi.params['facebook_comments.width'][0]
 	end
 
 	<<-HTML
-   <p>Plese insert <code>&lt;%= facebook_comments %&gt;</code> anywhere you like.</p>
-
    <h3>YOUR_FACEBOOK_USER_ID</h3>
    <p><input size="88" name="facebook_comments.YOUR_FACEBOOK_USER_ID" value="#{h @conf['facebook_comments.YOUR_FACEBOOK_USER_ID']}"></p>
 
    <h3>YOUR_APPLICATION_ID</h3>
    <p><input size="88" name="facebook_comments.YOUR_APPLICATION_ID" value="#{h @conf['facebook_comments.YOUR_APPLICATION_ID']}"></p>
 
-   <h3>PLUGIN_CODE</h3>
-   <p><textarea style="width:60%;height:100px;" name="facebook_comments.PLUGIN_CODE">#{h @conf['facebook_comments.PLUGIN_CODE']}</textarea></p>
+   <h3>num posts</h3>
+   <p><input size="20" name="facebook_comments.num_posts" value="#{h @conf['facebook_comments.num_posts']}"></p>
+
+   <h3>width</h3>
+   <p><input size="20" name="facebook_comments.width" value="#{h @conf['facebook_comments.width']}"></p>
 HTML
 end
 
