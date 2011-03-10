@@ -11,7 +11,7 @@ end
 
 def facebook_comments(href = '')
 <<-HTML
-<div id="fb-root"></div><script src="http://connect.facebook.net/ja_JP/all.js#appId=#{@conf['facebook_comments.YOUR_APPLICATION_ID']}&amp;xfbml=1"></script><fb:comments href="#{href}" num_posts="#{@conf['facebook_comments.num_posts']}" width="#{@conf['facebook_comments.width']}"></fb:comments>
+<div id="fb-root"></div><script src="http://connect.facebook.net/ja_JP/all.js#appId=#{h @conf['facebook_comments.YOUR_APPLICATION_ID']}&amp;xfbml=1"></script><fb:comments href="#{h href}" num_posts="#{h @conf['facebook_comments.num_posts']}" width="#{h @conf['facebook_comments.width']}"></fb:comments>
 HTML
 end
 
