@@ -18,9 +18,11 @@
 # Copyright (c) MATSUOKA Kohei <http://www.machu.jp/>
 # Distributed under the GPL
 #
-require 'open-uri'
+require 'net/http'
 require 'digest/md5'
 require 'rexml/document'
+
+Net::HTTP.version_1_2
 
 def flickr(photo_id, size = nil, place = 'flickr')
   unless @conf['flickr.apikey'] || @conf['flickr.apikey'].empty?
@@ -92,7 +94,7 @@ def flickr_open(method, photo_id)
     begin
       timeout(5) do
         open(file, 'w') {|fout|
-          req.open.each {|line| fout.puts line }
+          fout.puts req.open
         }
       end
     rescue TimeoutError => e
@@ -167,13 +169,16 @@ module Flickr
       @secret = secret
     end
 
-    def open(*param, &block)
-      Kernel::open(query, *param, &block)
+    def open
+      Net::HTTP.start('www.flickr.com') {|http|
+        response = http.get(query)
+        response.body
+      }
     end
 
     def query
       sign = @secret ? "&api_sig=#{signature}" : ''
-      base_url + sort.map{|key, val| "#{key}=#{val}" }.join('&') + sign
+      base_path + sort.map{|key, val| "#{key}=#{val}" }.join('&') + sign
     end
 
     def signature
@@ -181,14 +186,14 @@ module Flickr
       Digest::MD5.hexdigest("#{@secret}#{data}")
     end
 
-    def base_url
-      'http://api.flickr.com/services/rest/?'
+    def base_path
+      '/services/rest/?'
     end
   end
 
   class RequestAuth < Request
-    def base_url
-      'http://www.flickr.com/services/auth/?'
+    def base_path
+      '/services/auth/?'
     end
   end
 end
