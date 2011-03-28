@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 # Copyright (C) 2011, KADO Masanori <kdmsnr@gmail.com>
 # You can redistribute it and/or modify it under GPL.
-if @mode == 'day'
+def insert_zenback
+	@conf['zenback.script'] || ''
+end
+
+def method_missing(method_name, *args)
 	add_body_leave_proc do
-		@conf['zenback.script'] || ''
+		insert_zenback
+	end
+end
+if @mode == 'day'
+	add_comment_leave_proc do
+		insert_zenback
 	end
 end
 
