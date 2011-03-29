@@ -5,14 +5,15 @@ def insert_zenback
 	@conf['zenback.script'] || ''
 end
 
-def method_missing(method_name, *args)
-	add_body_leave_proc do
-		insert_zenback
-	end
-end
 if @mode == 'day'
-	add_comment_leave_proc do
-		insert_zenback
+	if defined? add_comment_leave_proc
+		add_comment_leave_proc do
+			insert_zenback
+		end
+	else 
+		add_body_leave_proc do
+			insert_zenback
+		end
 	end
 end
 
