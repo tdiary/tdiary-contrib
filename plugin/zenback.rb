@@ -2,6 +2,7 @@
 # Copyright (C) 2011, KADO Masanori <kdmsnr@gmail.com>
 # You can redistribute it and/or modify it under GPL.
 def insert_zenback
+	return if feed?
 	@conf['zenback.script'] || ''
 end
 
@@ -10,7 +11,7 @@ if @mode == 'day'
 		add_comment_leave_proc do
 			insert_zenback
 		end
-	else 
+	else
 		add_body_leave_proc do
 			insert_zenback
 		end
@@ -35,4 +36,3 @@ end
 # ruby-indent-level: 3
 # End:
 # vim: ts=3
-
