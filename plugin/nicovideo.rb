@@ -20,7 +20,7 @@
 #    Show Inline player with size:
 #    <%= nicovideo_player 'sm99999999', [400,300] %>
 #
-require 'open-uri'
+require 'net/http'
 require 'timeout'
 require 'rexml/document'
 
@@ -49,7 +49,11 @@ def nicovideo_call_api( video_id )
 	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	xml = timeout( feed? ? 10 : 2 ) { open( uri, :proxy => proxy ) {|f| f.read } }
+	xml = timeout( feed? ? 10 : 2 ) {
+		px_host, px_port = (@conf['proxy'] || '').split( /:/ )
+		px_port = 80 if px_host and !px_port
+		Net::HTTP::Proxy( px_host, px_port ).get_response( URI::parse( uri ) ).body
+	}
 	doc = REXML::Document::new( xml ).root
 	res = doc.elements.to_a( '/nicovideo_thumb_response' )[0]
 	if res.attributes['status'] == 'ok' then
