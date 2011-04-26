@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
+
 $:.unshift(File.dirname(__FILE__))
 require 'spec_helper'
 require 'tmpdir'
 require 'fileutils'
-
 
 describe "MyHotEntry" do
 	def cache_filename

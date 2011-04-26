@@ -91,22 +91,6 @@ describe "openid plugin w/" do
 
 	end
 
-	describe "Videntity.org" do
-		before do
-			plugin = setup_open_id_plugin('Videntity.org', 'tdtds')
-			@header_snippet = plugin.header_proc
-		end
-
-		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.server',
-				:href => 'http://videntity.org/serverlogin?action=openid')}
-
-		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.delegate',
-				:href => 'http://tdtds.videntity.org/')}
-
-	end
-
 	describe "Vox" do
 		before do
 			plugin = setup_open_id_plugin('Vox', 'tdtds')
@@ -250,23 +234,28 @@ describe "openid plugin w/" do
 				:href => 'https://wassr.jp/user/tdtds')}
 	end
 
-	def include_link_tag_with(options)
-		msg = "include #{options[:rel]} link tag"
-		expected = %|<link rel="#{options[:rel]}"| if options[:rel]
-		expected <<= %| href="#{options[:href]}">| if options[:href]
-			Spec::Matchers::SimpleMatcher.new(msg) do |actual|
+	RSpec::Matchers.define :include_link_tag_with do |options|
+    description do
+      "include #{options[:rel]} link tag"
+    end
+
+		match do |actual|
+      expected = %|<link rel="#{options[:rel]}"| if options[:rel]
+      expected <<= %| href="#{options[:href]}">| if options[:href]
 			actual.include?( expected )
 		end
 	end
 
-	def include_xrds_meta_tag_with(options)
-		msg = "include XRDS meta tag"
-		expected = (<<-"EOS").chomp
+	RSpec::Matchers.define :include_xrds_meta_tag_with do |options|
+    description do
+      "include XRDS meta tag"
+    end
+
+		match do |actual|
+      expected = (<<-"EOS").chomp
 <meta http-equiv="X-XRDS-Location" content="#{options[:content]}">
       EOS
-		Spec::Matchers::SimpleMatcher.new(msg) do |actual|
-				actual.include?( expected )
+			actual.include?( expected )
 		end
 	end
-
 end

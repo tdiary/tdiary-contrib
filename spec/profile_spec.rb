@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 $:.unshift(File.dirname(__FILE__))
 require 'spec_helper'
 require 'profile'

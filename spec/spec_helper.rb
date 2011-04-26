@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "plugin")))
-require 'rubygems'
-require 'spec'
-require 'spec/fixture'
+
 require 'erb'
 
 # FIXME PluginFake in under construction.
 class PluginFake
-	include ERB::Util
+  include ERB::Util
 
 	attr_reader :conf
 	attr_accessor :mode, :date
@@ -54,7 +53,7 @@ class PluginFake
 		end
 		r.join.chomp
 	end
-	
+
 	def footer_proc
 		r = []
 		@footer_procs.each do |proc|
@@ -66,7 +65,7 @@ class PluginFake
 	def add_body_enter_proc( block = Proc::new )
 		@body_enter_procs << block
 	end
-	
+
 	def body_enter_proc( date )
 		r = []
 		@body_enter_procs.each do |proc|
@@ -78,7 +77,7 @@ class PluginFake
 	def add_body_leave_proc( block = Proc::new )
 		@body_leave_procs << block
 	end
-	
+
 	def body_leave_proc( date )
 		r = []
 		@body_leave_procs.each do |proc|
@@ -132,7 +131,15 @@ class PluginFake
 		def bot?
 			@bot =~ @cgi.user_agent
 		end
+
+    def smartphone?
+      @cgi.iphone?
+    end
 	end
+
+  def feed?
+    false
+  end
 
 	def iphone?
 		@conf.cgi.iphone?
@@ -161,7 +168,6 @@ class CGIFake
 		self.user_agent =~ /iP(?:hone|od)/
 	end
 end
-
 
 def fake_plugin( name_sym, cgi=nil, base=nil, &block )
 	plugin = PluginFake.new
