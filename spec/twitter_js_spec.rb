@@ -15,12 +15,12 @@ describe "twitter_js plugin" do
 		before do
 			@plugin = setup_twitter_js_plugin("day", "123456789")
 		end
-		
+
 		it "for header" do
 			snippet = @plugin.header_proc
 			snippet.should == expected_html_header_snippet("123456789")
 		end
-		
+
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
 			snippet.should == expected_html_body_snippet
@@ -31,12 +31,12 @@ describe "twitter_js plugin" do
 		before do
 			@plugin = setup_twitter_js_plugin("latest", "123456789")
 		end
-		
+
 		it "for header" do
 			snippet = @plugin.header_proc
 			snippet.should == expected_html_header_snippet("123456789")
 		end
-		
+
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
 			snippet.should == expected_html_body_snippet
@@ -47,12 +47,12 @@ describe "twitter_js plugin" do
 		before do
 			@plugin = setup_twitter_js_plugin("edit", "123456789")
 		end
-		
+
 		it "for header" do
 			snippet = @plugin.header_proc
 			snippet.should be_empty
 		end
-		
+
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
 			snippet.should be_empty
@@ -63,14 +63,14 @@ describe "twitter_js plugin" do
 		before do
 			@plugin = setup_twitter_js_plugin("edit", "")
 		end
-		
+
 		it "for header" do
 			snippet = @plugin.header_proc
 			snippet.should be_empty
 		end
-		
+
 		it "for body leave" do
-			snippet = @plugin.body_leave_proc(Time.parse(""))
+			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
 			snippet.should be_empty
 		end
 	end
@@ -79,10 +79,10 @@ describe "twitter_js plugin" do
 		expected = <<-EXPECTED
 		<script type="text/javascript"><!--
 		function twitter_cb(a){
-			var f=function(n){return (n<10?"0":"")+n};
-			for(var i=0;i<a.length;i++){
+			var f=function(n){return (n<10?'0':'')+n};
+			for(var i=0,l=a.length;i<l;i++){
 				var d=new Date(a[i]['created_at'].replace('+0000','UTC'));
-				var id="twitter_statuses_"+f(d.getFullYear())+f(d.getMonth()+1)+f(d.getDate());
+				var id='twitter_statuses_'+f(d.getFullYear())+f(d.getMonth()+1)+f(d.getDate());
 				var e=document.getElementById(id);
 				if(!e) continue;
 				if(!e.innerHTML) e.innerHTML='<h3><a href="http://twitter.com/#{user_id}">Twitter statuses</a></h3>';
@@ -90,9 +90,9 @@ describe "twitter_js plugin" do
 			}
 		}
 		function twitter_js(){
-			var e=document.createElement("script");
-			e.type="text/javascript";
-			e.src="http://twitter.com/statuses/user_timeline/#{user_id}.json?callback=twitter_cb&amp;count=20";
+			var e=document.createElement('script');
+			e.type='text/javascript';
+			e.src='http://twitter.com/statuses/user_timeline/#{user_id}.json?callback=twitter_cb&amp;count=20';
 			document.documentElement.appendChild(e);
 		}
 		if(window.addEventListener){

@@ -8,7 +8,7 @@ describe "gist plugin" do
 		plugin = fake_plugin(:gist)
 		snippet = plugin.gist(DUMMY_GIST_ID)
 		expected = (<<-EOS).chomp
-<div class="gist"><script src="http://gist.github.com/1234567890.js"></script>
+<div class="gist_plugin"><script src="http://gist.github.com/1234567890.js"></script>
 <noscript><a href="http://gist.github.com/1234567890">gist:1234567890</a></noscript></div>
 		EOS
 		snippet.should == expected

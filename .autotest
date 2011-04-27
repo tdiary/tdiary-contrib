@@ -1,5 +1,0 @@
-Autotest.add_hook :initialize do |at|
-  at.add_mapping(%r!^plugin/(.*)\.rb$!) {|_, m|
-		at.files_matching %r!^spec/#{m[1]}_spec\.rb$!
-  }
-end

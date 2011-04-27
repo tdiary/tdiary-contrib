@@ -40,7 +40,7 @@ describe "Profile::Service" do
 
     it "should include name, description, image properties" do
       @profile.name.should == "Bret Taylor"
-      @profile.description.should == "Co-founder of FriendFeed, programmer, food lover"
+      @profile.description.should == "CTO of Facebook. Previously co-founder and CEO of FriendFeed. Programmer, food lover."
       @profile.image.should == "http://friendfeed-api.com/v2/picture/bret"
     end
   end

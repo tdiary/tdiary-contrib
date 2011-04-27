@@ -13,7 +13,7 @@ describe "google_analytics plugin" do
 		before do
 			@plugin = setup_google_analytics_plugin('53836-1', 'latest')
 		end
-		
+
 		it "for footer" do
 			snippet = @plugin.footer_proc
 			snippet.should == expected_html_footer_snippet
@@ -24,7 +24,7 @@ describe "google_analytics plugin" do
 		before do
 			@plugin = setup_google_analytics_plugin('53836-1', 'conf')
 		end
-		
+
 		it "for footer" do
 			snippet = @plugin.footer_proc
 			snippet.should be_empty
@@ -35,7 +35,7 @@ describe "google_analytics plugin" do
 		before do
 			@plugin = setup_google_analytics_plugin(nil, 'latest')
 		end
-		
+
 		it "for footer" do
 			snippet = @plugin.footer_proc
 			snippet.should be_empty
@@ -45,13 +45,14 @@ describe "google_analytics plugin" do
 	def expected_html_footer_snippet
 		expected = <<-SCRIPT
 		<script type="text/javascript"><!--
-		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.") ;
-		document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js" type="text/javascript"%3E%3C/script%3E')) ;
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape('%3Cscript src="' + gaJsHost + 'google-analytics.com/ga.js" type="text/javascript"%3E%3C/script%3E'));
 		// --></script>
 		<script type="text/javascript"><!--
-		var pageTracker = _gat._getTracker("UA-53836-1");
-		pageTracker._initData();
-		pageTracker._trackPageview();
+		try {
+			var pageTracker = _gat._getTracker("UA-53836-1");
+			pageTracker._trackPageview();
+		} catch (err) {}
 		// --></script>
 		SCRIPT
 		expected.gsub( /^\t/, '' ).chomp

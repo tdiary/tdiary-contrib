@@ -128,13 +128,13 @@ class PluginFake
 			@cgi.mobile_agent?
 		end
 
-		def bot?
-			@bot =~ @cgi.user_agent
-		end
-
     def smartphone?
       @cgi.iphone?
     end
+
+		def bot?
+			@bot =~ @cgi.user_agent
+		end
 	end
 
   def feed?

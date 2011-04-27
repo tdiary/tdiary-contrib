@@ -6,8 +6,8 @@ describe "youtube plugin" do
 
   {
     'DoCoMo' => %|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>|,
-    'iPhone' => %|<div class="youtube"><a href="youtube:#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>|,
-    'Mozilla' => %|\t\t<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/#{DUMMY_YOUTUBE_VIDEO_ID}"></param><embed src="http://www.youtube.com/v/#{DUMMY_YOUTUBE_VIDEO_ID}" type="application/x-shockwave-flash" width="425" height="350"></embed></object>|
+    'iPhone' => %|\t\t<iframe class="youtube-player" type="text/html" width="240" height="194" src="http://www.youtube.com/embed/#{DUMMY_YOUTUBE_VIDEO_ID}" frameborder="0">\n\t\t</iframe>\n\t\t<div class="youtube"><a href="http://www.youtube.com/watch?v=#{DUMMY_YOUTUBE_VIDEO_ID}">YouTube (#{DUMMY_YOUTUBE_VIDEO_ID})</a></div>\n|,
+    'Mozilla' => %|\t\t<iframe class="youtube-player" type="text/html" width="425" height="350" src="http://www.youtube.com/embed/#{DUMMY_YOUTUBE_VIDEO_ID}" frameborder="0">\n\t\t</iframe>\n|
   }.each do |k,v|
     it 'should render object tag in :user_agent' do
       plugin = fake_plugin(:youtube)
