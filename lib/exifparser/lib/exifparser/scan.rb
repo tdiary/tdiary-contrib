@@ -33,7 +33,7 @@ module Exif
       # check soi (start of image)
       #
       @fin.pos = 0
-      unless @fin.readchar == "FF".hex and  @fin.readchar == "D8".hex
+      if @fin.read(2) != "\xFF\xD8"
         raise RuntimeError, 'not JPEG format'
       end
 
@@ -197,7 +197,7 @@ module Exif
         end.value
         @fin.pos = @tiffHeader0 + thumbStart
         # check JPEG soi maker
-        unless @fin.readchar == "FF".hex and  @fin.readchar == "D8".hex
+        if @fin.read(2) != "\xFF\xD8"
           raise RuntimeError, 'not JPEG format'
         end
         @fin.pos = @fin.pos - 2
@@ -248,11 +248,11 @@ module Exif
     end
 
     def get_marker
-      (@fin.readchar) << 8 | (@fin.readchar)
+      (@fin.read(1).unpack("C*")[0]) << 8 | (@fin.read(1).unpack("C*")[0])
     end
 
     def get_marker_datasize
-      (@fin.readchar) << 8 | (@fin.readchar)
+      (@fin.read(1).unpack("C*")[0]) << 8 | (@fin.read(1).unpack("C*")[0])
     end
 
     def exif_identifier
@@ -266,7 +266,7 @@ module Exif
 
     def eoi
       @fin.seek(-2, IO::SEEK_END)
-      [@fin.readchar, @fin.readchar].pack("C*")
+      @fin.read(2)
     end
 
   end
