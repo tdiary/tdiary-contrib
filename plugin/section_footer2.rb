@@ -174,7 +174,6 @@ def add_facebook(date, index)
 # add Facebook Like!
 	r = ''
 	r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
-	r << %Q|<fb:share-button href="#{permalink(date, index, false)}" type="button_count"></fb:share-button>\| |
 end
 
 def add_twitter(date, index)
