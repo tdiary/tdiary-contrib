@@ -4,6 +4,23 @@
 # Copyright (C) 2011 hajime miyauchi <hajime.miyauchi@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
 #
+# tDiaryのデータを日別でGitに登録するプラグインです
+# 
+# 1. プラグインディレクトリ(例: plugin)にgit-register.rbを設置。
+# 2. プラグインディレクトリにja/git-register.rb、en/git-register.rbを設置。
+# 3. tdiary.confにリポジトリを指定(リポジトリの場所を/var/git-respoと仮定)
+#    @options["git.repository_dir"] = "/var/git-repos"
+# 4. リポジトリを作成(Apacheの起動ユーザをapacheと仮定)
+#    $ mkdir /var/git-repos
+#    $ cd /var/git-repos
+#    $ git init
+#    $ git config user.name "自分の名前"
+#    $ git config user.email "メールアドレス"
+#    $ chown apache.apache -R /var/git-repos
+# 5. リポジトリに一括commit(tDiaryのインストールディレクトリを/var/www/tdiaryと仮定)
+#    $ cd /var/www/tdiary
+#    $ ruby --encoding=UTF-8 git-register.rb
+#
 
 mode = ""
 if $0 == __FILE__
