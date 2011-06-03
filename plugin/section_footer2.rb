@@ -12,7 +12,7 @@ require 'pathname'
 
 begin
 	require 'json'
-rescue
+rescue LoadError
 	retry if require 'rubygems'
 end
 
@@ -48,7 +48,7 @@ unless defined?(subtitle)
 end
 
 def init_buttons_status
-	@installed_buttons = ['yaml', 'delicious', 'hatena', 'facebook', 'twitter']
+	@installed_buttons = ['yaml', 'delicious', 'hatena', 'facebook', 'twitter', 'plusone']
 	if @conf['section_footer2.isDisplay'].nil?
 	 	@conf['section_footer2.isDisplay'] = ''
 	end
@@ -70,6 +70,12 @@ add_header_proc do
   });
   </script>
   <style type="text/css">iframe.fb_ltr {margin-bottom: -2px; margin-right: 4px;}</style>
+  <![if !IE ]>
+  <script type="text/javascript" src="http://apis.google.com/js/plusone.js">
+  {lang: '#{@section_footer2_locale}'}
+  </script>
+  <![endif]>
+  <style type="text/css">.tags > div > iframe {margin-bottom: -6px; }</style>
   EOS
 end
 
@@ -173,7 +179,7 @@ end
 def add_facebook(date, index)
 # add Facebook Like!
 	r = ''
-	r << %Q|<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like>|
+	r << %Q!<fb:like href="#{permalink(date, index, false)}" layout="button_count"></fb:like> | !
 end
 
 def add_twitter(date, index)
@@ -184,6 +190,10 @@ def add_twitter(date, index)
 		data-via="#{@conf['twitter.user']}"
 	>tweet</a> | 
 	EOS
+end
+
+def add_plusone(date, index)
+	%Q!<g:plusone size="medium" href="#{permalink(date, index, false)}"></g:plusone> | !
 end
 
 def add_yaml(date, index)
