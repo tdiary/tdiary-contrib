@@ -5,6 +5,10 @@
 # section_permalink.rb
 # - enables section permalink and shows section title
 
+def section_mode?
+	@mode == 'day' and @cgi.params['p'][0].to_s != ""
+end
+
 # Change permalink
 def anchor( s )
 	if /^([\-\d]+)#?([pct]\d*)?$/ =~ s then
@@ -27,8 +31,7 @@ end
 # Change HTML title to section name
 alias :_orig_title_tag :title_tag
 def title_tag
-	if @cgi.params['p'][0].to_s != "" and
-			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
+	if section_mode? and diary = @diaries[@date.strftime('%Y%m%d')]
 		sections = diary.instance_variable_get(:@sections)
 
 		title = "<title>"
@@ -46,8 +49,7 @@ rescue
 end
 
 add_header_proc do
-	if @cgi.params['p'][0].to_s != "" and
-			@mode == 'day' and diary = @diaries[@date.strftime('%Y%m%d')]
+	if section_mode? and diary = @diaries[@date.strftime('%Y%m%d')]
 		index = @cgi.params['p'][0]
 <<-EOS
 <script>

@@ -6,7 +6,7 @@ def insert_zenback
 	@conf['zenback.script'] || ''
 end
 
-if @mode == 'day'
+if @mode == 'day' and (respond_to?(:section_mode?) ? section_mode? : true)
 	if defined? add_comment_leave_proc
 		add_comment_leave_proc do
 			insert_zenback
