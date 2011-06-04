@@ -8,6 +8,9 @@
 # Needed these options below:
 #
 # @options["search-google-custom.id"] : Your Google Custome Search ID
+# @options["search-google-custom.cof"] : 広告の表示場所（9:右，10:一番上と右，11:一番上と下）
+# @options["search-google-custom.width"] : 検索結果のフレームの幅
+# @options["search-google-custom.height"] : 検索結果のフレームの高さ
 #
 
 def search_title
@@ -19,11 +22,13 @@ add_footer_proc do
 end
 
 def search_input_form( q )
+	cof = @conf["search-google-custom.cof"] || 9
+	
 	r = <<-HTML
 		<form action="#{@conf.index}" id="cse-search-box">
 			<div>
 				<input type="hidden" name="cx" value="#{@conf["search-google-custom.id"]}">
-				<input type="hidden" name="cof" value="FORID:9">
+				<input type="hidden" name="cof" value="FORID:#{cof}">
 				<input type="hidden" name="ie" value="UTF-8">
 				<label for="q">検索キーワード:</label><input type="text" name="q" value="#{h q}">
 				<input type="submit" name="sa" value="OK">
@@ -33,13 +38,16 @@ def search_input_form( q )
 end
 
 def search_result
+	w = @conf["search-google-custom.width"] || 600
+	h = @conf["search-google-custom.height"] || 1300
+	
 	r = <<-HTML
 		<div id="cse-search-results"></div>
 			<script type="text/javascript">
 				var googleSearchIframeName = "cse-search-results";
 				var googleSearchFormName = "cse-search-box";
-				var googleSearchFrameWidth = 600;
-				var googleSearchFrameHeight = 1300;
+				var googleSearchFrameWidth = #{w};
+				var googleSearchFrameHeight = #{h};
 				var googleSearchDomain = "www.google.com";
 				var googleSearchPath = "/cse";
 			</script>
