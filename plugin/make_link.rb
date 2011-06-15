@@ -22,11 +22,18 @@ $('#make-link-button').click(function() {
     data: {
       q: 'select * from html where url = "' + url + '" and xpath = "//head/title"',
       format: 'xml',
+      charset: 'utf-8'
     }
-  }).responseXML.getElementsByTagName('title')[0].textContent;
+  }).responseXML.getElementsByTagName('title')[0].textContent
+    .replace(/\\n/g, ''); // FIXME: need to convert to UTF-8
+
   var link = "[[" + title + "|" + url + "]]";
 
-  inj_c(link); // needs category.rb
+  if (typeof(inj_c) == 'function') {
+    inj_c(link); // old category.rb
+  } else {
+    $('#body').insertAtCaret(link);
+  }
 
   return false;
 });
