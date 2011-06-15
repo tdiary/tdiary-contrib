@@ -61,10 +61,10 @@ $(function() {
     }
   };
 
-
   if ($tDiary.style == 'blogkit') { // blogkit
     $('.day').each(function() {
-      var url = $(this).children('h2').find('a:first').get(0).href;
+      var link = $(this).children('h2').find('a:first').get(0);
+      var url = link ? link.href : document.URL;
       var title = $(this).children('h2').find('.title').text();
       var socialbuttons = $(this).find('.socialbuttons');
 
