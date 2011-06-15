@@ -9,11 +9,17 @@
 # screen name of the user to attribute the tweet to 
 @conf['socialbutton.twitter.via'] ||= ''
 
+def blogkit?
+	respond_to?(:categorized_title_of_day)
+end
+
 def socialbutton_js_settings
 	enable_js('jquery.socialbutton.js')
 	enable_js('socialbutton.js')
 
+	add_js_setting('$tDiary.style', "'blogkit'") if blogkit?
 	add_js_setting('$tDiary.plugin.socialbutton')
+
 	# convert array to json
 	add_js_setting('$tDiary.plugin.socialbutton.enables', 
 						%Q|["#{@conf['socialbutton.enables'].split(',').join('", "')}"]|)
@@ -26,8 +32,11 @@ def socialbutton_js_settings
 	add_js_setting('$tDiary.plugin.socialbutton.options', options)
 end
 
-add_section_leave_proc do |date, index|
-	%Q|<div class="socialbuttons"></div>|
+socialbutton_footer = Proc.new { %Q|<div class="socialbuttons"></div>| }
+if blogkit?
+	add_body_leave_proc(socialbutton_footer)
+else
+	add_section_leave_proc(socialbutton_footer)
 end
 
 add_conf_proc('socialbutton', @socialbutton_label_conf) do

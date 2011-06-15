@@ -17,6 +17,8 @@
  *    twitter: { via: 'machu' }
  * };
  *
+ * if you use tdiary-blogkit, set below
+ * $tDiary.style = 'blogkit'
  */
 
 $(function() {
@@ -59,17 +61,26 @@ $(function() {
     }
   };
 
-  $('.section').each(function() {
-    var url = $(this).children('h3').children('a').get(0).href;
-    var title = $(this).children('h3').children('a').attr('title');
-    var socialbuttons = $(this).find('.socialbuttons');
-    /*
-    var socialbuttons = $('<div class="socialbuttons"></div>')
-      .css("float", "right")
-      .css("margin-left", "1em")
-      .appendTo($(this).find('.tags'));
-     */
 
+  if ($tDiary.style == 'blogkit') { // blogkit
+    $('.day').each(function() {
+      var url = $(this).children('h2').find('a:first').get(0).href;
+      var title = $(this).children('h2').find('.title').text();
+      var socialbuttons = $(this).find('.socialbuttons');
+
+      append_buttion(url, title, socialbuttons);
+    });
+  } else { // diary
+    $('.section').each(function() {
+      var url = $(this).children('h3').children('a').get(0).href;
+      var title = $(this).children('h3').children('a').attr('title');
+      var socialbuttons = $(this).find('.socialbuttons');
+
+      append_buttion(url, title, socialbuttons);
+    });
+  }
+
+  function append_buttion(url, title, socialbuttons) {
     $.each(config.enables, function(i, service) {
       var options = callbacks[service](url, title);
       $.extend(options, config.options[service]);
@@ -79,5 +90,5 @@ $(function() {
         .appendTo(socialbuttons)
         .socialbutton(service, options);
     });
-  });
+  }
 });
