@@ -82,7 +82,7 @@ $(function() {
 
   function append_buttion(url, title, socialbuttons) {
     $.each(config.enables, function(i, service) {
-      var options = callbacks[service](url, title);
+      var options = callbacks[service](url, title.replace(/"/g, '&quot;'));
       $.extend(options, config.options[service]);
       $('<div class="socialbutton"></div>')
         .css("float", "left")
