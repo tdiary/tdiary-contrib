@@ -33,7 +33,8 @@ $(function() {
       return {
         url: url,
         text: title,
-        button: 'horizontal'
+        button: 'horizontal',
+        lang: $('html').attr('lang').substr(0,2)
       };
     },
 
@@ -48,7 +49,8 @@ $(function() {
     facebook_like: function(url, title) {
       return {
         url: url,
-        button: 'button_count'
+        button: 'button_count',
+        locale: $('html').attr('lang').replace('-', '_')
       };
     },
 
