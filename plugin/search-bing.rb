@@ -91,7 +91,8 @@ def search_result
 		r << %Q|<dd>#{search_to_html desc}</dd>|
 	end
 	r << '</dl>'
-
+	
+	r << '<div class="search-navi">'
 	total = doc.elements.to_a( 'web:Web/web:Total' )[0].text.to_i
 	total = 1000 if total > 1000
 	offset = doc.elements.to_a( 'web:Web/web:Offset' )[0].text.to_i
