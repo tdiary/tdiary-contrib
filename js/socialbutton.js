@@ -33,7 +33,8 @@ $(function() {
       return {
         url: url,
         text: title,
-        button: 'horizontal'
+        button: 'horizontal',
+        lang: $('html').attr('lang').substr(0,2)
       };
     },
 
@@ -48,7 +49,8 @@ $(function() {
     facebook_like: function(url, title) {
       return {
         url: url,
-        button: 'button_count'
+        button: 'button_count',
+        locale: $('html').attr('lang').replace('-', '_')
       };
     },
 
@@ -82,7 +84,7 @@ $(function() {
 
   function append_buttion(url, title, socialbuttons) {
     $.each(config.enables, function(i, service) {
-      var options = callbacks[service](url, title);
+      var options = callbacks[service](url, title.replace(/"/g, '&quot;'));
       $.extend(options, config.options[service]);
       $('<div class="socialbutton"></div>')
         .css("float", "left")

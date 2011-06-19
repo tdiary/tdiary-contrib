@@ -10,3 +10,7 @@ def jquery_tag
 	jquery_tag_original.gsub(/\.min/, '')
 end
 
+# js cache clear by seconds.
+def script_tag_query_string
+	"?#{TDIARY_VERSION}#{Time::now.strftime('%Y%m%d%H%M%S')}"
+end
