@@ -17,8 +17,6 @@
  *    twitter: { via: 'machu' }
  * };
  *
- * if you use tdiary-blogkit, set below
- * $tDiary.style = 'blogkit'
  */
 
 $(function() {
@@ -64,7 +62,7 @@ $(function() {
 
   function socialbutton(target) {
     $('.socialbuttons').css('height', '1em')
-    if ($tDiary.style == 'blogkit') { // blogkit
+    if ($tDiary.blogkit) { // blogkit
       $('.day', target).each(function() {
         var link = $(this).children('h2').find('a:first').get(0);
         var url = link ? link.href : document.URL;
