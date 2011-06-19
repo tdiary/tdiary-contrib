@@ -5,7 +5,7 @@
 #
 
 # enable social button names
-@conf['socialbutton.enables'] ||= ''
+@conf['socialbutton.enables'] ||= 'twitter,hatena,facebook_like'
 # screen name of the user to attribute the tweet to 
 @conf['socialbutton.twitter.via'] ||= ''
 
