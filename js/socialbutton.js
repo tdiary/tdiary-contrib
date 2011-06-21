@@ -95,9 +95,16 @@ $(function() {
   }
 
   // for AutoPagerize
-  $(window).bind('AutoPagerize_DOMNodeInserted AutoPatchWork.DOMNodeInserted', function(event) {
+  $(window).bind('AutoPagerize_DOMNodeInserted', function(event) {
     socialbutton(event.target);
   });
+
+  // for AuthPatchWork
+  // NOTE: jQuery.bind() cannot handle an event that include a dot charactor.
+  // see http://todayspython.blogspot.com/2011/06/autopager-autopagerize.html
+  window.addEventListener('AutoPatchWork.DOMNodeInserted', function(event) {
+    socialbutton(event.target);
+  }, false);
 
   socialbutton(document);
 });
