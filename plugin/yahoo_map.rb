@@ -10,8 +10,8 @@ add_header_proc do
    init_ymap
    r = ''
    if @conf['yahoo_jp.appid'] and @conf['yahoo_jp.appid'].size > 0
-      r << %Q|<script type="text/javascript"|
-      r << %Q| src="http://map.yahooapis.jp/MapsService/js/V2/?appid=#{h @conf['yahoo_jp.appid']}"></script>|
+      r << %Q|<script type="text/javascript" charset="utf-8"|
+      r << %Q| src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=#{h @conf['yahoo_jp.appid']}"></script>|
    end
 end
 
@@ -35,13 +35,13 @@ def init_ymap
    @ymap_container = Array.new
 end
 
-def generate_ymapid(lat, lon, layer)
-   ymapid = 'ymapid' << lat.to_s << lon.to_s << layer.to_s
+def generate_ymapid(lat, lon, layer, size)
+   ymapid = 'ymapid' << lat.to_s << lon.to_s << layer.to_s << size
    ymapid.delete('.')
 end
 
 def yahoo_map(lat, lon, options = {})
-   options[:layer] ||= 3
+   options[:layer] ||= 17
    options[:size] ||= 'medium'
 
    if feed? or @conf.mobile_agent? then
@@ -57,7 +57,7 @@ def yahoo_map(lat, lon, options = {})
       size = options[:size]
    end
 
-   ymapid = generate_ymapid(lat, lon, options[:layer])
+   ymapid = generate_ymapid(lat, lon, options[:layer], options[:size])
    ymap_info = {:ymapid => ymapid, :lat => lat, :lon => lon, :layer => options[:layer]}
 
    @ymap_container << ymap_info
@@ -71,7 +71,16 @@ def insert_ymap_js
       r << %Q|<script type="text/javascript">\n|
       r << %Q|function defineYmapIds() {\n|
       @ymap_container.each do |ymap_info|
-         r << %Q|  var obj#{ymap_info[:ymapid]} = new YahooMapsCtrl("#{ymap_info[:ymapid]}", "#{ymap_info[:lat]}, #{ymap_info[:lon]}", #{ymap_info[:layer]}, YMapMode.MAP, YDatumType.WGS84);\n|
+         r << %Q|  var obj#{ymap_info[:ymapid]} = new Y.Map("#{ymap_info[:ymapid]}");\n|
+         r << %Q|  obj#{ymap_info[:ymapid]}.drawMap(new Y.LatLng(#{ymap_info[:lat]}, #{ymap_info[:lon]}), #{ymap_info[:layer]}, Y.LayerSetId.NORMAL);\n|
+         r << %Q|  objCenterMarkControl = new Y.CenterMarkControl();\n|
+         r << %Q|  objLayerSetControl = new Y.LayerSetControl();\n|
+         r << %Q|  objScaleControl = new Y.ScaleControl();\n|
+         r << %Q|  objZoomControl = new Y.SliderZoomControlVertical();\n|
+         r << %Q|  obj#{ymap_info[:ymapid]}.addControl(objCenterMarkControl);\n|
+         r << %Q|  obj#{ymap_info[:ymapid]}.addControl(objLayerSetControl);\n|
+         r << %Q|  obj#{ymap_info[:ymapid]}.addControl(objScaleControl);\n|
+         r << %Q|  obj#{ymap_info[:ymapid]}.addControl(objZoomControl);\n|
       end
       r << %Q|}\n|
       r << %Q|if (window.addEventListener) window.addEventListener("load", defineYmapIds, false); // for DOM level 2 compliant Web browsers\n|
