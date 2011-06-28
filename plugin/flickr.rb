@@ -24,11 +24,21 @@ require 'rexml/document'
 
 Net::HTTP.version_1_2
 
+@conf['flickr.apikey'] ||= 'f7e7fb8cc34e52db3e5af5e1727d0c0b'
+@conf['flickr.default_size'] ||= 'medium'
+
+if /\A(form|edit|preview|showcomment)\z/ === @mode then
+	enable_js('flickr.js')
+	add_js_setting('$tDiary.plugin.flickr')
+	add_js_setting('$tDiary.plugin.flickr.apiKey', %Q|'#{@conf['flickr.apikey']}'|)
+	add_js_setting('$tDiary.plugin.flickr.userId', %Q|'#{@conf['flickr.user_id']}'|)
+end
+
 def flickr(photo_id, size = nil, place = 'flickr')
-  unless @conf['flickr.apikey'] || @conf['flickr.apikey'].empty?
+  if @conf['flickr.apikey'] == nil || @conf['flickr.apikey'].empty?
     return '[ERROR] flickr.rb: API Key is not specified.'
   end
-  size ||= @conf['flickr.default_size'] || 'small'
+  size ||= @conf['flickr.default_size']
   size = 'small' if @conf.iphone?
   photo = flickr_photo_info(photo_id.to_s, size)
   unless photo
@@ -116,38 +126,39 @@ end
 
 FLICKER_FORM_PID = 'plugin_flickr_pid'
 add_edit_proc do |date|
-  photo_id = @cgi.params[FLICKER_FORM_PID][0] or next
-
-  # this code was from image.rb
-  case @conf.style.downcase.sub( /\Ablog/, '' )
-  when "wiki", "markdown"
-    ptag1 = "{{"
-    ptag2 = "}}"
-  when "rd"
-    ptag1 = "((%"
-    ptag2 = "%))"
-  else
-    ptag1 = "&lt;%="
-    ptag2 = "%&gt;"
-  end
-
-  ptag = %Q|#{ptag1}flickr #{photo_id}#{ptag2}|
-  photo = flickr_photo_info(photo_id.to_s, 'thumbnail')
-  flickr_image = %Q|<img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}">|
-
   <<-FORM
-  <h3 class="subtitle">Flickr</h3>
-  <input type="hidden" name="#{FLICKER_FORM_PID}" value="#{photo_id}">
-  <div class="field title">
-    #{flickr_image}
-    <input type="button" onclick="flickr_edit_insert(&quot;#{ptag}&quot;)" value="#{@flickr_label_form_add}">
+  <div id="flickr_form" style="margin: 1em 0">
+    <div>
+      Flickr: <input type="text" id="flickr_search_text">
+      <select id="flickr_search_count">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+        <option value="50">50</option>
+      </select>
+		件
+      <input id="flickr_search" type="button" value="Get flickr photos"></input>
+    </div>
+    <div id="flickr_photo_size">
+	   Photo size:
+      <input type="radio" id="flickr_photo_size_square" name="flickr_photo_size" value="square">
+      <label for="flickr_photo_size_square">square</label>
+      <input type="radio" id="flickr_photo_size_thumbnail" name="flickr_photo_size" value="thumbnail">
+      <label for="flickr_photo_size_thumbnail">thumbnail</label>
+      <input type="radio" id="flickr_photo_size_small" name="flickr_photo_size" value="small">
+      <label for="flickr_photo_size_small">small</label>
+      <input type="radio" id="flickr_photo_size_medium" name="flickr_photo_size" value="medium" checked="true">
+      <label for="flickr_photo_size_medium">medium</label>
+      <input type="radio" id="flickr_photo_size_medium640" name="flickr_photo_size" value="medium 640">
+      <label for="flickr_photo_size_medium640">medium 640</label>
+      <input type="radio" id="flickr_photo_size_large" name="flickr_photo_size" value="large">
+      <label for="flickr_photo_size_large">large</label>
+    </div>
+    <div id="flickr_photos" style="margin: 1em">
+      <!-- <img src="dummy" height="100" width="100" title="dummy"> -->
+    </div>
   </div>
-  <script type="text/javascript"><!--
-  function flickr_edit_insert(photo_id) {
-    window.document.forms[0].body.value += photo_id;
-  }
-  //-->
-  </script>
   FORM
 end
 

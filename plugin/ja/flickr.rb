@@ -1,10 +1,10 @@
 # flickr.rb Japanese resources
-@flickr_label_form_add = '本文に追加'
 
 add_conf_proc('flickr', 'Flickr プラグイン') do
+
   if @mode == 'saveconf'
-    @conf['flickr.apikey']       = @cgi.params['flickr.apikey'][0]
     @conf['flickr.default_size'] = @cgi.params['flickr.default_size'][0]
+    @conf['flickr.user_id'] = @cgi.params['flickr.user_id'][0]
     if @cgi.params['flickr.clear'][0] == "true"
       flickr_clear_cache
     end
@@ -34,10 +34,13 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
   </select>
   </p>
 
-  <h3>Flickr API Key</h3>
-  <p>Flickr API に接続するための API Key を入力してください。 API Key は <a href="http://www.flickr.com/services/api/keys/apply/" title="Flickr Services">Flickr Services</a> で取得できます。</p>
-  <p><input type="text" name="flickr.apikey" size="50" value="#{@conf['flickr.apikey']}"></p>
-  <p>Flickr API Key が無いとこのプラグインは使えません。</p>
+  <!-- TODO: Loading... --->
+  <h3>FlickrのユーザID</h3>
+  <p>Flickr上でのあなたのユーザIDを入力してください。</p>
+  <p><input type="text" name="flickr.user_id" size="20" value="#{@conf['flickr.user_id']}"></p>
+  <div style="margin-left: 2em">
+    <p>※ Flickr ID は「19594487@N00」のような文字列です。分からないときは <a href="http://idgettr.com/">idgettr.com</a> で調べることができます。</p>
+  </div>
 
   <h3>Bookmarklet</h3>
   <p>写真をかんたんに tDiary の日記へ載せるための Bookmarklet です。Bookmarklet を登録しなくても Flickr プラグインは使えますが、登録すればより便利になります。</p>
