@@ -18,7 +18,7 @@ def anchor( s )
 			s1 = $1
 			s2 = $2
 			if $2 =~ /^p/
-				"#{s1}#{s2}.html"
+				"#{s1}#{s2}.html##{s2}"
 			else
 				"#{s1}.html##{s2}"
 			end

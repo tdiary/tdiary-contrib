@@ -16,7 +16,7 @@ def anchor( s )
 			s1 = $1
 			s2 = $2
 			if $2 =~ /^p/
-				"?date=#{s1}&p=#{s2.gsub(/p/, '')}"
+				"?date=#{s1}&p=#{s2.gsub(/p/, '')}##{s2}"
 			else
 				"?date=#{s1}.html##{s2}"
 			end
