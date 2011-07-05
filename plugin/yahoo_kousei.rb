@@ -40,65 +40,24 @@ def kousei_api( sentence )
 	xml
 end
 
-def create_result_table( results )
-	html = <<-HTML
-<table>
-<tr><th>対象表記</th><th>候補文字</th><th>詳細情報</th></tr>
-	HTML
-	ranges = []
-	results.each do |result|
-		ranges << [REXML::XPath.match( result, "StartPos/text()").to_s, REXML::XPath.match( result, "Length/text()" ).to_s ]
-		surface = REXML::XPath.match( result, "Surface/text()" ).to_s
-		shiteki = REXML::XPath.match( result, "ShitekiWord/text()" ).to_s
-		info = REXML::XPath.match( result, "ShitekiInfo/text()" ).to_s
-		html << %Q|<tr class="plugin_yahoo_search_result_raw"><td>#{surface}</td><td>#{shiteki}</td><td>#{info}</td></tr>|
-	end
-	
-	html << "</table>"
-
-	ranges.map!{|r| "[" + r.join( "," ) + "]" }
-
-	script = <<-SQRIPT
-<script type="text/javascript">
-$( function() {
-	var ranges = [
-		#{ranges.join( ", " )}
-	]
-	$( ".plugin_yahoo_search_result_raw" ).each( function( index ) {
-		$(this).click( function() {
-			var o = $( "textarea[name='body']" ).get( 0 );
-			o.focus();
-			if ( jQuery.browser.msie ) {
-				var range = document.selection.createRange();
-				range.collapse();
-				range.moveStart( "character", ranges[index][0] );
-				range.moveEnd( "character", ranges[index][1] );
-				range.select();
-			} else {
-				o.setSelectionRange( ranges[index][0] , ranges[index][0] + ranges[index][1] );
-			}
-		} );
-	} );
-} );
-</script>
-SQRIPT
-	html << script
-end
-
 def kousei_result( result_set )
 	html = <<-HTML
-<h3>文章校正結果</h3>
-HTML
+	<h3>文章校正結果</h3>
+	HTML
 
-	ranges = []
 	doc = REXML::Document::new( result_set )
 	results = REXML::XPath.match( doc, "//Result" )
 	if results.empty?
 		html << "<p>指摘項目は見つかりませんでした。</p>"
 	else
-		html << create_result_table( results )
+		html << '<table>'
+		html << '<tr><th>対象表記</th><th>候補文字</th><th>詳細情報</th><th>場所</th></tr>'
+		doc.elements.each( '//ResultSet/Result' ) do |r|
+			html << %Q|<tr class="plugin_yahoo_search_result_raw"><td>#{r.elements['Surface'].text}</td><td>#{r.elements['ShitekiWord'].text}</td><td>#{r.elements['ShitekiInfo'].text}</td><td>#{r.elements['StartPos'].text},#{r.elements['Length'].text}</td></tr>|
+		end
+		html << '</table>'
 	end
-	
+	html
 end
 
 add_edit_proc do
@@ -115,3 +74,4 @@ add_edit_proc do
 	end
 end
 
+enable_js( 'yahoo_kousei.js' )
