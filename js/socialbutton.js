@@ -57,6 +57,14 @@ $(function() {
         title: title,
         button: 'article-clipper-jp'
       };
+    },
+    
+    google_plusone: function(url, title) {
+      return {
+        href: url,
+        size: 'medium',
+        lang: $('html').attr('lang')
+      };
     }
   };
 

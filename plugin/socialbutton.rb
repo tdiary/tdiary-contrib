@@ -43,7 +43,7 @@ add_conf_proc('socialbutton', @socialbutton_label_conf) do
 		<h3>#{@socialbutton_label_enables}</h3>
 		<ul>
 	HTML
-	['twitter', 'hatena', 'evernote', 'facebook_like'].each do |service|
+	['twitter', 'hatena', 'evernote', 'facebook_like', 'google_plusone'].each do |service|
 		checked = @conf['socialbutton.enables'].index(service) ? 'checked' : ''
 		id = "socialbutton.enables.#{service}"
 		result << %Q|<li><input id="#{id}" name="socialbutton.enables" type="checkbox" value="#{service}" #{checked}>|

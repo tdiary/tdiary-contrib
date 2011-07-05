@@ -7,7 +7,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  * 
- * Version: 1.7.3
+ * Version: 1.8.0
  */
 
 /**
@@ -145,6 +145,21 @@
  *     height: 15
  * });
  * 
+ * 
+ * Google +1 Button
+ * http://www.google.com/webmasters/+1/button/
+ * 
+ * $('#google').socialbutton('google_plusone');
+ * 
+ * $('#google').socialbutton('google_plusone', {
+ *     lang: 'ja',
+ *     parsetags: 'explicit',
+ *     callback: 'some_callback_function',
+ *     count: true,
+ *     href: 'http://itra.jp/',
+ *     size: 'standard'
+ * });
+ * 
  */
 (function($) {
 
@@ -251,6 +266,14 @@ $.fn.socialbutton = function(service, options) {
 			url: document.URL,
 			height: 13,
 			padding: 7
+		},
+		google_plusone: {
+			lang: '', // en-US
+			parsetags: '', // none(onload), explicit
+			callback: '',
+			count: true, // true, false
+			href: '',
+			size: '' // small, standard, medium, tall
 		}
 	};
 
@@ -293,6 +316,10 @@ $.fn.socialbutton = function(service, options) {
 
 			case 'hatena_oldstyle':
 				socialbutton_hatena_oldstyle(this, options, defaults.hatena_oldstyle, index, max_index);
+				break;
+
+			case 'google_plusone':
+				socialbutton_google_plusone(this, options, defaults.google_plusone, index, max_index);
 				break;
 
 			default:
@@ -649,6 +676,63 @@ function socialbutton_hatena_oldstyle(target, options, defaults, index, max_inde
 			+ '</span>';
 
 	$(target).html(tag);
+}
+
+function socialbutton_google_plusone(target, options, defaults, index, max_index)
+{
+	if ($.browser.msie && parseInt($.browser.version, 10) < 8) {
+		return;
+	}
+
+	var lang = options.lang || defaults.lang;
+	var parsetags = options.parsetags || defaults.parsetags;
+
+	var callback = options.callback || defaults.callback;
+	var count = options.count != undefined ? options.count : defaults.count;
+	var href = options.href || defaults.href;
+	var size = options.size || defaults.size;
+
+	switch (size) {
+		case 'small':
+		case 'standard':
+		case 'medium':
+			break;
+
+		case 'tall':
+			count = true;
+			break;
+
+		default:
+			size = 'standard';
+			count = true;
+	}
+
+	var tag = $('<div>')
+	.attr({
+		'data-callback': callback,
+		'data-count': count ? 'true' : 'false',
+		'data-href': href,
+		'data-size': size
+	}).addClass('g-plusone');
+	$(target).append(tag);
+
+	if (index == max_index) {
+
+		var script_params = '';
+
+		if (lang != '') {
+			script_params += 'lang: "' + htmlspecialchars(lang) + '"';
+		}
+		if (parsetags != '') {
+			script_params += script_params != '' ? ',' : '';
+			script_params += 'parsetags: "' + htmlspecialchars(parsetags) + "'";
+		}
+		if (script_params != '') {
+			script_params = '{' + script_params + '}';
+		}
+
+		$('body').append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js">' + script_params + '</script>');
+	}
 }
 
 function merge_attributes(attr)
