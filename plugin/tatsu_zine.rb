@@ -62,6 +62,8 @@ EOS
 
 	tatsu_zine_cache_set( id, result ) unless @conf.secure
 	result
+rescue
+	link
 end
 
 # Local Variables:
