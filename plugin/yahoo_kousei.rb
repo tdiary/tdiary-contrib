@@ -74,4 +74,6 @@ add_edit_proc do
 	end
 end
 
-enable_js( 'yahoo_kousei.js' )
+if /\A(form|edit|preview|showcomment)\z/ === @mode then
+	enable_js( 'yahoo_kousei.js' )
+end
