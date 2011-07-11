@@ -52,7 +52,7 @@ add_header_proc do
 	if section_mode? and diary = @diaries[@date.strftime('%Y%m%d')]
 		index = @cgi.params['p'][0]
 <<-EOS
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
   var anc = $("a[name=p#{h(index)}]");
   anc.parent().css("background-color", "yellow");
