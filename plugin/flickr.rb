@@ -22,8 +22,6 @@ require 'net/http'
 require 'digest/md5'
 require 'rexml/document'
 
-Net::HTTP.version_1_2
-
 @conf['flickr.apikey'] ||= 'f7e7fb8cc34e52db3e5af5e1727d0c0b'
 @conf['flickr.default_size'] ||= 'medium'
 
@@ -181,6 +179,7 @@ module Flickr
     end
 
     def open
+      Net::HTTP.version_1_2
       Net::HTTP.start('www.flickr.com') {|http|
         response = http.get(query)
         response.body
