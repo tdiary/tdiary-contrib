@@ -70,12 +70,10 @@ add_header_proc do
   });
   </script>
   <style type="text/css">iframe.fb_ltr {margin-bottom: -2px; margin-right: 4px;}</style>
-  <![if !IE ]>
   <script type="text/javascript" src="http://apis.google.com/js/plusone.js">
   {lang: '#{@section_footer2_locale}'}
   </script>
-  <![endif]>
-  <style type="text/css">.tags > div > iframe {margin-bottom: -6px; }</style>
+  <style type="text/css">.tags > div > iframe {margin-bottom: -6px !important; }</style>
   EOS
 end
 
