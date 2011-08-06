@@ -110,9 +110,15 @@ $(function() {
   // for AuthPatchWork
   // NOTE: jQuery.bind() cannot handle an event that include a dot charactor.
   // see http://todayspython.blogspot.com/2011/06/autopager-autopagerize.html
-  window.addEventListener('AutoPatchWork.DOMNodeInserted', function(event) {
-    socialbutton(event.target);
-  }, false);
+  if (window.addEventListener) {
+    window.addEventListener('AutoPatchWork.DOMNodeInserted', function(event) {
+      socialbutton(event.target);
+    }, false);
+  } else if (window.attachEvent) {
+    window.attachEvent('onAutoPatchWork.DOMNodeInserted', function(event) {
+      socialbutton(event.target);
+    });
+  }
 
   socialbutton(document);
 });
