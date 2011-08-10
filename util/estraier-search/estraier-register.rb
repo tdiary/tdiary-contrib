@@ -231,7 +231,7 @@ end
 if mode == "CMD"
 	begin
 		require 'cgi'
-		if TDiary::Config.instance_method(:initialize).arity > 0
+		if TDiary::Config.instance_method(:initialize).arity != 0
 			# for tDiary 2.1 or later
 			cgi = CGI.new
 			conf = TDiary::Config::new(cgi)
