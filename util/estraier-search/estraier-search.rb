@@ -230,7 +230,7 @@ end
 
 begin
 	@cgi = CGI::new
-	if ::TDiary::Config.instance_method(:initialize).arity > 0
+	if ::TDiary::Config.instance_method(:initialize).arity != 0
 		# for tDiary 2.1 or later
 		conf = ::TDiary::Config::new(@cgi)
 	else
