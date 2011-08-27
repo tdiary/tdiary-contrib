@@ -731,7 +731,11 @@ function socialbutton_google_plusone(target, options, defaults, index, max_index
 			script_params = '{' + script_params + '}';
 		}
 
-		$('body').append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js">' + script_params + '</script>');
+		if (typeof gapi === "undefined" || typeof gapi.plusone === "undefined") {
+			$('body').append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js">' + script_params + '</script>');
+		} else {
+			gapi.plusone.go();
+		}
 	}
 }
 
