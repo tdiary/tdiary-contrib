@@ -35,10 +35,11 @@ def google_map_common(params)
    params[:height]  ||= 240
    params[:address] ||= nil
    params[:type]    ||= :ROADMAP
+   params[:overview]||= false
    
    dom_id = "#{@date.strftime("%Y%m")}_#{@gmap_count}"
    params.merge!(:id => dom_id)
-   params.merge!(:width => 320, :height => 240) if @conf.iphone?
+   params.merge!(:width => 240, :height => 180) if @conf.iphone?
    @gmap_data << params
    @gmap_count += 1
    %Q|<div class="gmap" id="#{dom_id}" style="width : #{params[:width]}px; height : #{params[:height]}px;"></div>|
@@ -47,7 +48,7 @@ end
 
 add_header_proc do
    if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
-      %Q|<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=#{!@conf.iphone?.nil?}"></script>\n|
+      %Q|<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=#{!@conf.smartphone?.nil?}"></script>\n|
    end
 end
 
@@ -82,6 +83,10 @@ def google_map_script(hash)
    str << %Q|  var mapdiv = document.getElementById("#{hash[:id]}");\n|
    str << %Q|  var myOptions = {\n|
    str << %Q|        zoom: #{hash[:zoom]},\n|
+   str << %Q|        overviewMapControl: #{hash[:overview]},\n|
+   str << %Q|        overviewMapControlOptions: {\n|
+   str << %Q|            opened: #{hash[:overview]}\n|
+   str << %Q|        },\n|
    str << %Q|        center: new google.maps.LatLng(#{hash[:lat]}, #{hash[:lon]}),\n|
    str << %Q|        mapTypeId: google.maps.MapTypeId.#{hash[:type]},\n|
    str << %Q|        scaleControl: true\n|
@@ -119,6 +124,10 @@ def google_geomap_script(hash)
    str << %Q|        var mapdiv = document.getElementById("#{hash[:id]}");\n|
    str << %Q|        var myOptions = {\n|
    str << %Q|          zoom: #{hash[:zoom]},\n|
+   str << %Q|          overviewMapControl: #{hash[:overview]},\n|
+   str << %Q|          overviewMapControlOptions: {\n|
+   str << %Q|            opened: #{hash[:overview]}\n|
+   str << %Q|          },\n|
    str << %Q|          center: geoLat,\n|
    str << %Q|          mapTypeId: google.maps.MapTypeId.#{hash[:type]},\n|
    str << %Q|          scaleControl: true\n|
