@@ -469,12 +469,12 @@ end
 
 begin
   @cgi = CGI::new
-  if TDiary::Config.instance_method(:initialize).arity > 0
-    # for tDiary 2.1 or later
-    conf = TDiary::Config::new(@cgi)
-  else
+  if TDiary::Config.instance_method(:initialize).arity == 0
     # for tDiary 2.0 or earlier
     conf = TDiary::Config::new
+  else
+    # for tDiary 2.1 or later
+    conf = TDiary::Config::new(@cgi)
   end
   tdiary = TDiary::TDiaryGallery::new( @cgi, 'gallery.rhtml', conf )
 
