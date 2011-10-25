@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby1.9
+#!/usr/bin/env ruby
 # -*- coding: utf-8; -*-
 # estraier-search.rb $Revision: 1.1.2.12 $
 #
