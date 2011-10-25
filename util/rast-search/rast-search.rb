@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # rast-search.rb $Revision: 1.6.2.2 $
 #
 # Copyright (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
@@ -205,7 +206,7 @@ end
 
 begin
 	@cgi = CGI::new
-	if ::TDiary::Config.instance_method(:initialize).arity > 0
+	if ::TDiary::Config.instance_method(:initialize).arity != 0
 		# for tDiary 2.1 or later
 		conf = ::TDiary::Config::new(@cgi)
 	else

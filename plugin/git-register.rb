@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # git-register.rb
 #
 # Copyright (C) 2011 hajime miyauchi <hajime.miyauchi@gmail.com>
@@ -164,7 +165,7 @@ end
 if mode == "CMD"
 	begin
 		require 'cgi'
-		if TDiary::Config.instance_method(:initialize).arity > 0
+		if TDiary::Config.instance_method(:initialize).arity != 0
 			# for tDiary 2.1 or later
 			cgi = CGI.new
 			conf = TDiary::Config::new(cgi)
