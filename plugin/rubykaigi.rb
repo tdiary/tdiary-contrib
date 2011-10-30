@@ -9,6 +9,16 @@
 # Distributed under GPL.
 #
 
+def kansairubykaigi04( role = 'attendee' )
+	badges = {
+		'attendee' => "attendee_taiyou",
+		'speaker' => "speaker_shika",
+		'staff' => "staff_daibutsu"
+	}
+
+   %Q|<a href="http://regional.rubykaigi.org/kansai04" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/kansai04/#{badges[role]}.png" alt="KansaiRubyKaigi04 #{h role.capitalize}"></a>|
+end
+
 def rubykaigi2011( role = 'attendee', size = 'large' )
 	badges = Hash::new( 'attendee' ).update({
 		'committer' => 'committer',
