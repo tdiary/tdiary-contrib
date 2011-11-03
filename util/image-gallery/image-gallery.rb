@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-# image-gallery.rb $Revision: 2.0.0 $
+# image-gallery.rb $Revision: 2.0.1 $
 #
-# Copyright (c) 2005-2010 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2011 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
 if FileTest::symlink?( __FILE__ ) then
@@ -37,7 +37,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.0"
+      @img_version = "2.0.1"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
