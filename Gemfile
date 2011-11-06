@@ -1,6 +1,7 @@
 source :rubygems
 
-gem 'rake', '0.9.2'
+gem 'rake'
 gem 'rspec'
 gem 'fuubar'
 gem 'rcov', :platforms => :ruby_18
+gem 'simplecov', :platforms => :ruby_19

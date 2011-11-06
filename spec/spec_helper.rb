@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "plugin")))
 
+if ENV['COVERAGE'] == 'simplecov'
+	require 'simplecov'
+	SimpleCov.start do
+		add_filter '/spec/'
+		add_filter '/vendor/'
+	end
+end
+
 require 'erb'
 # FIXME PluginFake in under construction.
 class PluginFake
@@ -205,3 +213,11 @@ def anchor( s )
 		""
 	end
 end
+
+# Local Variables:
+# mode: ruby
+# indent-tabs-mode: t
+# tab-width: 3
+# ruby-indent-level: 3
+# End:
+# vim: ts=3
