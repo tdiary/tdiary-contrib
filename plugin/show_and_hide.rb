@@ -52,7 +52,7 @@ def show_and_hide_id(contents)
 end
 
 def show_and_hide_contents(contents, id)
-   %Q|<div class="show_and_hide" id="#{id}">#{h(contents)}</div>|
+   %Q|<pre class="show_and_hide" id="#{id}">#{h(contents)}</div>|
    
 end
 
