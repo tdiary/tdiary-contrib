@@ -43,7 +43,7 @@ def tatsu_zine( id, doc = nil )
 	author = doc.match(%r|<p class="author">(.*)</p>|).to_a[1]
 
 	result = <<-EOS
-	<a class="amazon-detail" href="#{h link}"><div class="amazon-detail">
+	<a class="amazon-detail" href="#{h link}"><span class="amazon-detail">
 		<img class="amazon-detail left" src="#{h image}"
 		height="150" width="100"
 		alt="#{h title}">
@@ -52,7 +52,7 @@ def tatsu_zine( id, doc = nil )
 			<span class="amazon-author">#{h author}</span><br>
 			<span class="amazon-price">#{h price}</span>
 		</span><br style="clear: left">
-	</div></a>
+	</span></a>
 EOS
 
 	tatsu_zine_cache_set( id, result ) unless @conf.secure
@@ -72,7 +72,7 @@ if __FILE__ == $0
 
 		def test_tatsu_zine
 			expect = <<-EOS
-	<a class="amazon-detail" href="http://tatsu-zine.com/books/winrubybuild"><div class="amazon-detail">
+	<a class="amazon-detail" href="http://tatsu-zine.com/books/winrubybuild"><span class="amazon-detail">
 		<img class="amazon-detail left" src="http://tatsu-zine.com/images/books/1/cover_s.jpg"
 		height="150" width="100"
 		alt="Ruby環境構築講座 Windows編">
@@ -81,7 +81,7 @@ if __FILE__ == $0
 			<span class="amazon-author">arton</span><br>
 			<span class="amazon-price">1,000円(税込)</span>
 		</span><br style="clear: left">
-	</div></a>
+	</span></a>
 EOS
 			assert_equal expect, tatsu_zine('winrubybuild')
 		end
