@@ -36,9 +36,7 @@ def tatsu_zine( id, doc = nil )
 	doc ||= open( link ).read
 	title = doc.match(%r|<meta property="og:title" content="(.*)">|).to_a[1]
 	image = doc.match(%r|<meta property="og:image" content="(.*)">|).to_a[1]
-	price = doc.match(%r|<p class="price">[\r
-]?(.*?)[\r
-]?</p>|m).to_a[1].
+	price = doc.match(%r|<p class="price">[\r\n]?(.*?)[\r\n]?</p>|m).to_a[1].
 		gsub(/\s/, '')
 	author = doc.match(%r|<p class="author">(.*)</p>|).to_a[1]
 
