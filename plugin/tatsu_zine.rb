@@ -55,8 +55,7 @@ EOS
 
 	tatsu_zine_cache_set( id, result ) unless @conf.secure
 	result
-rescue => e
-		p e
+rescue
 	link
 end
 
