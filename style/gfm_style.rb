@@ -172,7 +172,7 @@ module TDiary
       body.each do |l|
         case l
         when /^\#[^\#]/
-          @sections << MarkdownSection::new( section, author ) if section
+          @sections << GfmSection::new( section, author ) if section
           section = l
         else
           section = '' unless section
@@ -181,7 +181,7 @@ module TDiary
       end
       if section
         section << "\n" unless section=~/\n\n\z/
-        @sections << MarkdownSection::new( section, author )
+        @sections << GfmSection::new( section, author )
       end
       @last_modified = Time::now
       self
@@ -194,7 +194,7 @@ module TDiary
     end
 
     def add_section(subtitle, body)
-      sec = MarkdownSection::new("\n")
+      sec = GfmSection::new("\n")
       sec.subtitle = subtitle
       sec.body     = body
       @sections << sec
