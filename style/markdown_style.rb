@@ -22,7 +22,7 @@ module TDiary
       @subtitle, @body = fragment.split( /\n/, 2 )
       @subtitle.sub!(/^\#\s*/,'')
       @body ||= ''
-      
+
       @categories = get_categories
       @stripped_subtitle = strip_subtitle
 
@@ -105,7 +105,7 @@ module TDiary
     end
 
     private
-    
+
     def to_html(string)
       parser = BlueCloth.new( string )
       r = parser.to_html
