@@ -107,8 +107,7 @@ module TDiary
     private
 
     def to_html(string)
-      parser = BlueCloth.new( string )
-      r = parser.to_html
+      r = BlueCloth.new( string ).to_html
       r.gsub!(/<h(\d)/) { "<h#{$1.to_i + 2}" }
       r.gsub!(/<\/h(\d)/) { "</h#{$1.to_i + 2}" }
       r.gsub!(/\{\{(.+?)\}\}/) {
