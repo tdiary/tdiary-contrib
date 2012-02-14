@@ -30,7 +30,7 @@ module TDiary
       @subtitle, @body = fragment.split( /\n/, 2 )
       @subtitle.sub!(/^\#\s*/,'')
       @body ||= ''
-      
+
       @categories = get_categories
       @stripped_subtitle = strip_subtitle
 
@@ -113,7 +113,7 @@ module TDiary
     end
 
     private
-    
+
     def to_html(string)
       r = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true),
         {:fenced_code_blocks => true, :autolink => true, :tables => true}).
