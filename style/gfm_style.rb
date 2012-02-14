@@ -18,7 +18,6 @@ ensure
   require 'redcarpet'
 end
 
-
 module TDiary
   class GfmSection
     attr_reader :subtitle, :author
@@ -169,7 +168,7 @@ module TDiary
 
     def append( body, author = nil )
       section = nil
-      body.each do |l|
+      body.each_line do |l|
         case l
         when /^\#[^\#]/
           @sections << GfmSection::new( section, author ) if section
