@@ -159,7 +159,7 @@ module TDiary
 
     def append( body, author = nil )
       section = nil
-      body.each do |l|
+      body.each_line do |l|
         case l
         when /^\#[^\#]/
           @sections << MarkdownSection::new( section, author ) if section
