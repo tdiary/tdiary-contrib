@@ -90,9 +90,8 @@ module TDiary
           }.join
         }
       }
-      subtitle.sub!(/<h3>/,%Q[<h3><a href="#{opt['index']}<%=anchor "#{date.strftime( '%Y%m%d' )}#p#{'%02d' % idx}" %>">#{opt['section_anchor']}</a> ])
-      if opt['anchor'] then
-        subtitle.sub!(/<h3><a /,%Q[<h3><a name="p#{'%02d' % idx}" ])
+      subtitle.sub!( %r!<h3>(.+?)</h3>!m ) do
+        "<h3><%= subtitle_proc( Time::at( #{date.to_i} ), #{$1.dump.gsub( /%/, '\\\\045' )} ) %></h3>"
       end
       if opt['multi_user'] and @author then
         subtitle.sub!(/<\/h3>/,%Q|[#{@author}]</h3>|)
@@ -214,7 +213,7 @@ module TDiary
       r
     end
 
-    def to_html( opt, mode = :HTML )
+    def to_html( opt = {}, mode = :HTML )
       case mode
       when :CHTML
         to_chtml( opt )
