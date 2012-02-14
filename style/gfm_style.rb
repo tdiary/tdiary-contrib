@@ -74,7 +74,9 @@ module TDiary
 
     def html4( date, idx, opt )
       r = %Q[<div class="section">\n]
+      r << %Q[<%=section_enter_proc( Time::at( #{date.to_i} ) )%>\n]
       r << do_html4( date, idx, opt )
+      r << %Q[<%=section_leave_proc( Time::at( #{date.to_i} ) )%>\n]
       r << "</div>\n"
     end
 
