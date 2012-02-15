@@ -44,6 +44,7 @@ module TDiary
       categories.each {|cat|
         cat_str << "[#{cat}]"
       }
+      cat_str << " " unless cat_str.empty?
       @subtitle = (subtitle || '').sub(/^# /,"\##{cat_str} ")
       @strip_subtitle = strip_subtitle
     end
@@ -83,13 +84,6 @@ module TDiary
     def do_html4( date, idx, opt )
       r = ''
       subtitle = to_html('# ' + @subtitle)
-      subtitle = subtitle.sub(/(\[([^\[]+?)\])+/) {
-        $&.gsub(/\[(.*?)\]/) {
-          $1.split(/,/).collect {|c|
-            %Q|<%= category_anchor("#{c}") %>|
-          }.join
-        }
-      }
       subtitle.sub!( %r!<h3>(.+?)</h3>!m ) do
         "<h3><%= subtitle_proc( Time::at( #{date.to_i} ), #{$1.dump.gsub( /%/, '\\\\045' )} ) %></h3>"
       end
