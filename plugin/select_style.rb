@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # select_style.rb: a plugin for selecting styles
 # Distributed under the GPL
@@ -15,7 +16,7 @@ end
 
 if @mode =~ /^(conf|saveconf)$/ then
 	@conf_style_list = []
-	Dir::glob( "#{::TDiary::PATH}/tdiary/*_style.rb" ) do |style_file|
+	Dir::glob( "#{::TDiary::PATH}/tdiary/{style/,}*_style.rb" ) do |style_file|
 		style = File::basename( style_file ).sub( /_style\.rb$/, '' )
 		@conf_style_list << style
 	end
