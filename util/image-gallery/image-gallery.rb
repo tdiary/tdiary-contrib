@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # image-gallery.rb $Revision: 2.0.1 $
 #
 # Copyright (c) 2005-2011 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
+
+if RUBY_VERSION >= '1.9.0' 
+  Encoding::default_external = 'UTF-8' 
+  $LOAD_PATH.push('./') 
+end 
 
 if FileTest::symlink?( __FILE__ ) then
   org_path = File::dirname( File::readlink( __FILE__ ) )
