@@ -14,7 +14,7 @@ def coderwall(name, size = [60, 60])
 			end
 			open(cache, 'wb') {|f| f.write(json) }
 		rescue Timeout::Error
-			""
+			return ""
 		end
 	end
 
