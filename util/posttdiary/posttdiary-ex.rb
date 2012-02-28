@@ -170,7 +170,7 @@ def usage( detailed_help )
   else
 	text.gsub!( /\![^\r\n]*[\r\n]+/, '' )
   end
-  text.delete( /\t/ )
+  text.delete("\t")
 end
 
 #--- override functions in the original tdiary.rb
