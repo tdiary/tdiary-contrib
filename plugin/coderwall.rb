@@ -2,7 +2,7 @@ require 'open-uri'
 require 'timeout'
 require 'json'
 
-def coderwall(name)
+def coderwall(name, size = [60, 60])
 	begin
 		cache = "#{@cache_path}/coderwall.json"
 		json = File.read(cache)
@@ -20,7 +20,7 @@ def coderwall(name)
 
 	html = '<div class="coderwall">'
 	JSON.parse(json)['badges'].each do |badge|
-		html << %Q|<img src="#{badge['badge']}" alt="#{badge['name']}" height="60px" width="60px" />|
+		html << %Q|<img src="#{badge['badge']}" alt="#{badge['name']}" title="#{badge['description']}" height="#{size[0]}px" width="#{size[1]}px" />|
 	end
 	html << '</div>'
 end
