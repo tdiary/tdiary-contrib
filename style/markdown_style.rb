@@ -22,7 +22,7 @@ module TDiary
       @subtitle, @body = fragment.split( /\n/, 2 )
       @subtitle.sub!(/^\#\s*/,'')
       @body ||= ''
-      
+
       @categories = get_categories
       @stripped_subtitle = strip_subtitle
 
@@ -105,10 +105,9 @@ module TDiary
     end
 
     private
-    
+
     def to_html(string)
-      parser = BlueCloth.new( string )
-      r = parser.to_html
+      r = BlueCloth.new( string ).to_html
       r.gsub!(/<h(\d)/) { "<h#{$1.to_i + 2}" }
       r.gsub!(/<\/h(\d)/) { "</h#{$1.to_i + 2}" }
       r.gsub!(/\{\{(.+?)\}\}/) {
@@ -160,7 +159,7 @@ module TDiary
 
     def append( body, author = nil )
       section = nil
-      body.each do |l|
+      body.each_line do |l|
         case l
         when /^\#[^\#]/
           @sections << MarkdownSection::new( section, author ) if section
