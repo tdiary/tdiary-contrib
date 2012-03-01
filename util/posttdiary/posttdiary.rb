@@ -152,16 +152,14 @@ begin
 			end
 		end
 	elsif head =~ /^Content-Type:\s*text\/plain/i
- 　             if head =~ /^Content-Transfer-Encoding:\squoted-printable/
-                        @body = body.unpack("M")
-                        i=0
-                        @body.each do |str|
-                                @body[i] = NKF::nkf("-wJd", str )
-                                i+=1
-                        end
-                else
-                       @body = body
-                end
+		if head =~ /^Content-Transfer-Encoding:\squoted-printable/
+			@body = []
+			body.unpack("M").each_with_index do |str, i|
+				@body[i] = NKF::nkf("-wJd", str)
+			end
+		else
+			@body = body
+		end
 	else
 		raise "cannot read this mail"
 	end
