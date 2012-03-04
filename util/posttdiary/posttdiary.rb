@@ -153,10 +153,7 @@ begin
 		end
 	elsif head =~ /^Content-Type:\s*text\/plain/i
 		if head =~ /^Content-Transfer-Encoding:\squoted-printable/
-			@body = []
-			body.unpack("M").each_with_index do |str, i|
-				@body[i] = NKF::nkf("-wJd", str)
-			end
+			@body = body.unpack("M").map {|str| NKF::nkf("-wJd", str) }
 		else
 			@body = body
 		end
