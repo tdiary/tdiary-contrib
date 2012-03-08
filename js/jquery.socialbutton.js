@@ -7,7 +7,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  * 
- * Version: 1.8.0
+ * Version: 1.8.1
  */
 
 /**
@@ -152,12 +152,12 @@
  * $('#google').socialbutton('google_plusone');
  * 
  * $('#google').socialbutton('google_plusone', {
+ *     button: 'standard', // synonym 'size'
+ *     url: 'http://itra.jp', // synonym 'href'
  *     lang: 'ja',
  *     parsetags: 'explicit',
  *     callback: 'some_callback_function',
- *     count: true,
- *     href: 'http://itra.jp/',
- *     size: 'standard'
+ *     count: true
  * });
  * 
  */
@@ -268,12 +268,12 @@ $.fn.socialbutton = function(service, options) {
 			padding: 7
 		},
 		google_plusone: {
+			button: '', // small, standard, medium, tall
+			url: '',
 			lang: '', // en-US
 			parsetags: '', // none(onload), explicit
 			callback: '',
-			count: true, // true, false
-			href: '',
-			size: '' // small, standard, medium, tall
+			count: true // true, false
 		}
 	};
 
@@ -655,7 +655,7 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 	});
 	
 	var tag = '<a' + attr + '><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>'
-			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
+			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>';
 
 	$(target).html(tag);
 }
@@ -684,13 +684,14 @@ function socialbutton_google_plusone(target, options, defaults, index, max_index
 		return;
 	}
 
+	var size = options.size || options.button || defaults.button;
+	var href = options.href || options.url || defaults.url;
+
 	var lang = options.lang || defaults.lang;
 	var parsetags = options.parsetags || defaults.parsetags;
 
 	var callback = options.callback || defaults.callback;
 	var count = options.count != undefined ? options.count : defaults.count;
-	var href = options.href || defaults.href;
-	var size = options.size || defaults.size;
 
 	switch (size) {
 		case 'small':
@@ -731,7 +732,7 @@ function socialbutton_google_plusone(target, options, defaults, index, max_index
 			script_params = '{' + script_params + '}';
 		}
 
-		if (typeof gapi === "undefined" || typeof gapi.plusone === "undefined") {
+		if (typeof gapi === 'undefined' || typeof gapi.plusone === 'undefined') {
 			$('body').append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js">' + script_params + '</script>');
 		} else {
 			gapi.plusone.go();
