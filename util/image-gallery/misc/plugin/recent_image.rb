@@ -94,12 +94,13 @@ def image_info_rcimg( filename )
     data = $'
 
     until data.empty?
-      break if data[0] != 0xFF
-      break if data[1] == 0xD9
+      break if data[0].unpack("C").first != 0xFF
+      break if data[1].unpack("C").first == 0xD9
 
       data_size = data[2,2].unpack( 'n' ).first + 2
-      case data[1]
-      when 0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf
+      case data[1].unpack("C").first
+      #when 0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf
+      when 0xC0
         image_height, image_width = data[5,4].unpack('nn')
         break
       else
