@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-# image-gallery.rb $Revision: 2.0.1 $
+# image-gallery.rb $Revision: 2.0.2 $
 #
-# Copyright (c) 2005-2011 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
 if RUBY_VERSION >= '1.9.0' 
@@ -43,7 +43,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.1"
+      @img_version = "2.0.2"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
