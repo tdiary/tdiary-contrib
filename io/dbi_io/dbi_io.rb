@@ -15,36 +15,36 @@
 require 'dbi'
 
 module TDiary
-
   class DbiIO < IOBase
+
     module CommentIO
       def restore_comment(diaries)
         begin
-          diaries.each {|date, diary_object|
-            @dbh.select_all("SELECT diary_id, name, mail, last_modified, visible, no, author, comment FROM commentdata WHERE author=? AND diary_id=? ORDER BY no;", @dbi_author, date) {|diary_id, name, mail, last_modified, visible, no, author, comment|
-              comment = Comment::new(name, mail, comment, Time::at(last_modified.to_i))
+          diaries.each do |date, diary_object|
+            @dbh.select_all("SELECT diary_id, name, mail, last_modified, visible, no, author, comment FROM commentdata WHERE author=? AND diary_id=? ORDER BY no;", @dbi_author, date) do |diary_id, name, mail, last_modified, visible, no, author, comment|
+              comment = Comment.new(name, mail, comment, Time.at(last_modified.to_i))
               comment.show = visible
               diary_object.add_comment(comment)
-            }
-          }
+            end
+          end
         rescue Errno::ENOENT
         end
       end
 
       def store_comment(diaries)
         begin
-          diaries.each {|date, diary|
+          diaries.each do |date, diary|
             no = 0
-            diary.each_comment(diary.count_comments(true)) {|com|
+            diary.each_comment(diary.count_comments(true)) do |com|
               no += 1
               param = [com.name, com.mail, com.date.to_i, com.visible?, com.body, @dbi_author, date, no]
               sth = @dbh.execute("UPDATE commentdata SET name=?, mail=?, last_modified=?, visible=?, comment=? WHERE author=? AND diary_id=? AND no=?;", *param)
               if sth.rows == 0
                 @dbh.execute("INSERT INTO commentdata (name, mail, last_modified, visible, comment, author, diary_id, no) VALUES (?,?,?,?,?,?,?,?);", *param)
               end
-            }
+            end
             @dbh.execute("DELETE FROM commentdata where author=? AND diary_id=? AND no>?", @dbi_author, date, no)
-          }
+          end
         rescue Errno::ENOENT
         end
       end
@@ -64,21 +64,21 @@ module TDiary
     include RefererIO
 
     def initialize(tdiary)
-      @tdiary    = tdiary
+      @tdiary     = tdiary
       @dbi_url    = tdiary.conf.dbi_driver_url
       @dbi_user   = tdiary.conf.dbi_user
       @dbi_passwd = tdiary.conf.dbi_passwd
       @dbi_author = tdiary.conf.dbi_author || 'default'
-      @dbh       = DBI.connect(@dbi_url, @dbi_user, @dbi_passwd)
+      @dbh        = DBI.connect(@dbi_url, @dbi_user, @dbi_passwd)
       load_styles
     end
-    
+
     def calendar
       calendar = Hash.new{|hash, key| hash[key] = []}
       sql = "SELECT year, month FROM diarydata WHERE author=? GROUP BY year, month ORDER BY year, month;"
-      @dbh.select_all(sql, @dbi_author) {|year, month|
+      @dbh.select_all(sql, @dbi_author) do |year, month|
         calendar[year] << month
-      }
+      end
       calendar
     end
 
@@ -86,9 +86,9 @@ module TDiary
     # block must be return boolean which dirty diaries.
     #
     def transaction(date)
-      File.open("#{@tdiary.conf.data_path}/dbi_io.lock", 'w') {|file|
+      File.open("#{@tdiary.conf.data_path}/dbi_io.lock", 'w') do |file|
         file.flock(File::LOCK_EX)
-        @dbh.transaction {
+        @dbh.transaction do
           date_string = date.strftime("%Y%m%d")
           diaries = {}
           cache = @tdiary.restore_parser_cache(date, 'defaultio')
@@ -108,8 +108,8 @@ module TDiary
           if dirty or not cache
             @tdiary.store_parser_cache(date, 'defaultio', diaries)
           end
-        }
-      }
+        end
+      end
     end
 
     def diary_factory(date, title, body, style = 'tDiary')
@@ -124,6 +124,7 @@ module TDiary
     end
 
     private
+
     def restore(date, diaries, month=true)
       sql = "SELECT diary_id, title, last_modified, visible, body, style FROM DiaryData WHERE author='#{@dbi_author}' and diary_id='#{date}';"
       if month == true
@@ -131,17 +132,17 @@ module TDiary
           sql = "SELECT diary_id, title, last_modified, visible, body, style FROM DiaryData WHERE author='#{@dbi_author}' AND year='#{$1}' AND month='#{$2}';"
         end
       end
-      @dbh.select_all(sql) {|diary_id, title, last_modified, visible, body, style|
+      @dbh.select_all(sql) do |diary_id, title, last_modified, visible, body, style|
         style = 'tdiary' if style.nil? || style.empty?
         style = style.downcase
         diary = eval("#{style(style)}::new(diary_id, title, body, Time::at(last_modified.to_i))")
         diary.show(visible)
         diaries[diary_id] = diary
-      }
+      end
     end
 
     def store(diaries)
-      diaries.each {|date, diary|
+      diaries.each do |date, diary|
         # save diaries
         if /(\d\d\d\d)(\d\d)(\d\d)/ =~ date
           year  = $1
@@ -155,17 +156,15 @@ module TDiary
         if sth.rows == 0
           @dbh.execute("INSERT INTO diarydata (year, month, day, title, last_modified, visible, body, style, author, diary_id) VALUES (?,?,?,?,?,?,?,?,?,?);", *param)
         end
-      }
+      end
     end
 
     # 追加メソッド for test
     def delete(diaries)
-      diaries.each {|date, diary|
+      diaries.each do |date, diary|
         sql = "DELETE FROM diarydata WHERE author=#{@dbi_author} AND diary_id=#{date};"
         @dbh.execute(sql)
-      }
+      end
     end
-
   end
-
 end
