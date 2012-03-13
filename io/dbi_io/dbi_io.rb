@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.6 $
 #
@@ -14,7 +15,7 @@
 require 'dbi'
 
 module TDiary
-  
+
   class DbiIO < IOBase
     module CommentIO
       def restore_comment(diaries)
@@ -58,10 +59,10 @@ module TDiary
         return
       end
     end
-    
+
     include CommentIO
     include RefererIO
-    
+
     def initialize(tdiary)
       @tdiary    = tdiary
       @dbi_url    = tdiary.conf.dbi_driver_url
@@ -80,7 +81,7 @@ module TDiary
       }
       calendar
     end
-    
+
     #
     # block must be return boolean which dirty diaries.
     #
@@ -110,18 +111,18 @@ module TDiary
         }
       }
     end
-    
+
     def diary_factory(date, title, body, style = 'tDiary')
       styled_diary_factory(date, title, body, style)
     end
-    
+
     # HNF移行ツールのため、作成
     def restore_diary(date)
       diaries = {}
       restore(date, diaries, false)
       diaries
     end
-    
+
     private
     def restore(date, diaries, month=true)
       sql = "SELECT diary_id, title, last_modified, visible, body, style FROM DiaryData WHERE author='#{@dbi_author}' and diary_id='#{date}';"
@@ -138,7 +139,7 @@ module TDiary
         diaries[diary_id] = diary
       }
     end
-    
+
     def store(diaries)
       diaries.each {|date, diary|
         # save diaries
@@ -156,7 +157,7 @@ module TDiary
         end
       }
     end
-    
+
     # 追加メソッド for test
     def delete(diaries)
       diaries.each {|date, diary|
@@ -164,7 +165,7 @@ module TDiary
         @dbh.execute(sql)
       }
     end
-    
+
   end
-  
+
 end
