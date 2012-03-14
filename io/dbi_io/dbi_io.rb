@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# dbi_io.rb: DBI IO for tDiary 2.x. $Revision: 1.6 $
+# dbi_io.rb: DBI IO for tDiary 2.x.
 #
 # NAME             dbi_io
 #
@@ -10,56 +10,59 @@
 # Copyright        (C) 2003 ma2tak <ma2tak@ma2tak.dyndns.org>
 #                  (C) 2004 moonwolf <moonwolf@mooonwolf.com>
 #                  (C) 2005 Kazuhiko <kazuhiko@fdiary.net>
+#                  (C) 2012 hsbt <shibata.hiroshi@gmail.com>
 #
 # You can distribute this under GPL.
+require 'tdiary/io/base'
+require 'tempfile'
 require 'dbi'
 
 module TDiary
-  class DbiIO < IOBase
-
-    module CommentIO
-      def restore_comment(diaries)
-        begin
-          diaries.each do |date, diary_object|
-            @dbh.select_all("SELECT diary_id, name, mail, last_modified, visible, no, author, comment FROM commentdata WHERE author=? AND diary_id=? ORDER BY no;", @dbi_author, date) do |diary_id, name, mail, last_modified, visible, no, author, comment|
-              comment = Comment.new(name, mail, comment, Time.at(last_modified.to_i))
-              comment.show = visible
-              diary_object.add_comment(comment)
-            end
+  module CommentIO
+    def restore_comment(diaries)
+      begin
+        diaries.each do |date, diary_object|
+          @dbh.select_all("SELECT diary_id, name, mail, last_modified, visible, no, author, comment FROM commentdata WHERE author=? AND diary_id=? ORDER BY no;", @dbi_author, date) do |diary_id, name, mail, last_modified, visible, no, author, comment|
+            comment = Comment.new(name, mail, comment, Time.at(last_modified.to_i))
+            comment.show = visible
+            diary_object.add_comment(comment)
           end
-        rescue Errno::ENOENT
         end
-      end
-
-      def store_comment(diaries)
-        begin
-          diaries.each do |date, diary|
-            no = 0
-            diary.each_comment(diary.count_comments(true)) do |com|
-              no += 1
-              param = [com.name, com.mail, com.date.to_i, com.visible?, com.body, @dbi_author, date, no]
-              sth = @dbh.execute("UPDATE commentdata SET name=?, mail=?, last_modified=?, visible=?, comment=? WHERE author=? AND diary_id=? AND no=?;", *param)
-              if sth.rows == 0
-                @dbh.execute("INSERT INTO commentdata (name, mail, last_modified, visible, comment, author, diary_id, no) VALUES (?,?,?,?,?,?,?,?);", *param)
-              end
-            end
-            @dbh.execute("DELETE FROM commentdata where author=? AND diary_id=? AND no>?", @dbi_author, date, no)
-          end
-        rescue Errno::ENOENT
-        end
+      rescue Errno::ENOENT
       end
     end
 
-    module RefererIO
-      def restore_referer(diaries)
-        return
-      end
-
-      def store_referer(diaries)
-        return
+    def store_comment(diaries)
+      begin
+        diaries.each do |date, diary|
+          no = 0
+          diary.each_comment(diary.count_comments(true)) do |com|
+            no += 1
+            param = [com.name, com.mail, com.date.to_i, com.visible?, com.body, @dbi_author, date, no]
+            sth = @dbh.execute("UPDATE commentdata SET name=?, mail=?, last_modified=?, visible=?, comment=? WHERE author=? AND diary_id=? AND no=?;", *param)
+            if sth.rows == 0
+              @dbh.execute("INSERT INTO commentdata (name, mail, last_modified, visible, comment, author, diary_id, no) VALUES (?,?,?,?,?,?,?,?);", *param)
+            end
+          end
+          @dbh.execute("DELETE FROM commentdata where author=? AND diary_id=? AND no>?", @dbi_author, date, no)
+        end
+      rescue Errno::ENOENT
       end
     end
+  end
 
+  module RefererIO
+    def restore_referer(diaries)
+      return
+    end
+
+    def store_referer(diaries)
+      return
+    end
+  end
+
+
+  class DbiIO < BaseIO
     include CommentIO
     include RefererIO
 
@@ -73,20 +76,19 @@ module TDiary
       load_styles
     end
 
-    def calendar
-      calendar = Hash.new{|hash, key| hash[key] = []}
-      sql = "SELECT year, month FROM diarydata WHERE author=? GROUP BY year, month ORDER BY year, month;"
-      @dbh.select_all(sql, @dbi_author) do |year, month|
-        calendar[year] << month
+    class << self
+      def load_cgi_conf(conf)
       end
-      calendar
+
+      def save_cgi_conf(conf, result)
+      end
     end
 
     #
     # block must be return boolean which dirty diaries.
     #
     def transaction(date)
-      File.open("#{@tdiary.conf.data_path}/dbi_io.lock", 'w') do |file|
+      File.open("#{Dir.tmpdir}/dbi_io.lock", 'w') do |file|
         file.flock(File::LOCK_EX)
         @dbh.transaction do
           date_string = date.strftime("%Y%m%d")
@@ -112,6 +114,15 @@ module TDiary
       end
     end
 
+    def calendar
+      calendar = Hash.new{|hash, key| hash[key] = []}
+      sql = "SELECT year, month FROM diarydata WHERE author=? GROUP BY year, month ORDER BY year, month;"
+      @dbh.select_all(sql, @dbi_author) do |year, month|
+        calendar[year] << month
+      end
+      calendar
+    end
+
     def diary_factory(date, title, body, style = 'tDiary')
       styled_diary_factory(date, title, body, style)
     end
@@ -123,7 +134,7 @@ module TDiary
       diaries
     end
 
-    private
+  private
 
     def restore(date, diaries, month=true)
       sql = "SELECT diary_id, title, last_modified, visible, body, style FROM DiaryData WHERE author='#{@dbi_author}' and diary_id='#{date}';"
