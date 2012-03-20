@@ -49,6 +49,7 @@ add_edit_proc do |date|
 		'<p>[ERROR] picasa.rb: Picasa username is not specified.</p>'
 	else
 		<<-HTML
+			<h3 class="plugin_picasa"><span>Picasa Web Album</span></h3>
 			<div id="plugin_picasa"></div>
 		HTML
 	end
