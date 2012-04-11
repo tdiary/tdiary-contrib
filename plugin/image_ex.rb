@@ -84,6 +84,10 @@
 @imageex_thumbnailsize = @options && @options['image_ex.previewsize'] || 120
 @imageex_yearlydir = @options && @options['image_ex.yearlydir'] || 0
 
+if @conf.smartphone?
+	enable_js("image_ex.js")
+end
+
 
 add_body_enter_proc(Proc.new do |date|	
 											@image_date = date.strftime("%Y%m%d")
@@ -115,16 +119,22 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 	else
 		width_tag = ""
 	end
+	if @conf.smartphone?
+		img_id = "image_ex_" + list[id.to_i].sub(/\..*\z/, "")
+		onload_attr = %Q[id="#{img_id}" onload="imageExResizeImage('#{img_id}')"]
+	else
+		onload_attr = ""
+	end
 
 	if id2
-		%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img class="#{h place}" src="#{h image_url}#{h list[id2.to_i]}" alt="#{h alt}"></a>]
+		%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img class="#{h place}" src="#{h image_url}#{h list[id2.to_i]}" alt="#{h alt}" #{onload_attr}></a>]
 	else
 		if slist[id.to_i]
-			%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h slist[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}"></a>]
+			%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h slist[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}></a>]
 		else
 			if list[id.to_i]
-#				%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" #{width_tag} class="#{h place}"></a>]
-				%Q[<img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}">]
+#				%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}></a>]
+				%Q[<img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}>]
 			end
 		end
 	end
