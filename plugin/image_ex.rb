@@ -83,7 +83,6 @@
 @image_url.chop! if /\/$/ =~ @image_url
 @imageex_thumbnailsize = @options && @options['image_ex.previewsize'] || 120
 @imageex_yearlydir = @options && @options['image_ex.yearlydir'] || 0
-@imageex_convertedwidth = @options && @options['image_ex.convertedwidth'] || 160
 
 
 add_body_enter_proc(Proc.new do |date|	
@@ -111,9 +110,7 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 	list = imageList(@image_date, image_dir).untaint
 	slist = imageList(@image_date, image_dir, "s").untaint
 	
-        if @conf.smartphone? && @imageex_convertedwidth > 270
-		width_tag = 'width="270"'
-	elsif width
+	if width
 		width_tag = %Q[width="#{h width}"]
 	else
 		width_tag = ""
