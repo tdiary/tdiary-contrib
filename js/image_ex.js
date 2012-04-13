@@ -5,36 +5,56 @@
  You can redistribute it and/or modify it under GPL2.
  */
 
-var imageExMaxWidth = function () {
-	function getWindowWidth() {
-		if ( window.innerWidth ) {
-			return window.innerWidth;
+var imageExMaxSize = function () {
+	function getWindowSize() {
+		if (window.innerWidth) {
+			return {
+				width: window.innerWidth,
+				height: window.innerHeight
+			};
 		}
-		else if ( document.documentElement && document.documentElement.clientWidth != 0 ) {
-			return document.documentElement.clientWidth;
+		else if (document.documentElement &&
+				  	document.documentElement.clientWidth != 0 ) {
+			return {
+				width: document.documentElement.clientWidth,
+				height: document.documentElement.clientHeight
+			};
 		}
 		else if ( document.body ) {
-			return document.body.clientWidth;
+			return {
+				width: document.body.clientWidth,
+				height: document.body.clientHeight
+			}
 		}
-		return -1;
+		return null;
 	}
-	var windowWidth = getWindowWidth();
-	if (windowWidth == -1) {
-		retrun -1;
+	var windowSize = getWindowSize();
+	if (windowSize == null) {
+		return null;
 	}
 	else {
-		return windowWidth * 0.8;
+		return {
+			width: windowSize.width * 0.8,
+			height: windowSize.height * 0.8
+		};
 	}
 }();
 
 function imageExResizeImage(id) {
-	if (imageExMaxWidth == -1) {
+	if (imageExMaxSize == null) {
 		return;
 	}
 
 	var img = document.getElementById(id);
 
-	if (img.width > imageExMaxWidth) {
-		img.width = imageExMaxWidth;
+	if (img.width > imageExMaxSize.width ||
+		img.height > imageExMaxSize.height) {
+		if (img.width / imageExMaxSize.width >
+			 img.height / imageExMaxSize.height) {
+			img.width = imageExMaxSize.width;
+		}
+		else {
+			img.height = imageExMaxSize.height;
+		}
 	}
 }
