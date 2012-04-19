@@ -90,9 +90,9 @@ end
 
 
 add_body_enter_proc(Proc.new do |date|	
-											@image_date = date.strftime("%Y%m%d")
-											@image_year = date.strftime("%Y")
-											""
+	@image_date = date.strftime("%Y%m%d")
+	@image_year = date.strftime("%Y")
+	""
 end)
 
 
@@ -119,22 +119,16 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 	else
 		width_tag = ""
 	end
-	if @conf.smartphone?
-		img_id = "image_ex_" + list[id.to_i].sub(/\..*\z/, "")
-		onload_attr = %Q[id="#{img_id}" onload="imageExResizeImage('#{img_id}')"]
-	else
-		onload_attr = ""
-	end
 
 	if id2
-		%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img class="#{h place}" src="#{h image_url}#{h list[id2.to_i]}" alt="#{h alt}" #{onload_attr}></a>]
+		%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img class="image-ex #{h place}" src="#{h image_url}#{h list[id2.to_i]}" alt="#{h alt}"></a>]
 	else
 		if slist[id.to_i]
-			%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h slist[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}></a>]
+			%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h slist[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="image-ex #{h place}"></a>]
 		else
 			if list[id.to_i]
-#				%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}></a>]
-				%Q[<img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="#{h place}" #{onload_attr}>]
+#				%Q[<a href="#{h image_url}#{h list[id.to_i]}"><img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" #{width_tag} class="image-ex #{h place}"></a>]
+				%Q[<img src="#{h image_url}#{h list[id.to_i]}" alt="#{h alt}" title="#{h alt}" #{width_tag} class="image-ex #{h place}">]
 			end
 		end
 	end
@@ -464,3 +458,5 @@ add_form_proc do |date|
 	<input type="submit" name="plugin" value="画像の追加">
 	</form></div>]
 end
+
+# vim: set ts=3 sw=3 noexpandtab :

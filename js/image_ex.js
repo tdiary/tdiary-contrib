@@ -5,7 +5,7 @@
  You can redistribute it and/or modify it under GPL2.
  */
 
-var imageExMaxSize = function () {
+$(function() {
 	function getWindowSize() {
 		if (window.innerWidth) {
 			return {
@@ -26,35 +26,54 @@ var imageExMaxSize = function () {
 				height: document.body.clientHeight
 			}
 		}
-		return null;
-	}
-	var windowSize = getWindowSize();
-	if (windowSize == null) {
-		return null;
-	}
-	else {
-		return {
-			width: windowSize.width * 0.8,
-			height: windowSize.height * 0.8
-		};
-	}
-}();
-
-function imageExResizeImage(id) {
-	if (imageExMaxSize == null) {
-		return;
+		return false;
 	}
 
-	var img = document.getElementById(id);
+	var maxSize = null;
 
-	if (img.width > imageExMaxSize.width ||
-		img.height > imageExMaxSize.height) {
-		if (img.width / imageExMaxSize.width >
-			 img.height / imageExMaxSize.height) {
-			img.width = imageExMaxSize.width;
+	function getMaxSize() {
+		if (maxSize != null) {
+			return maxSize;
+		}
+
+		var windowSize = getWindowSize();
+		if (windowSize == false) {
+			maxSize = false;
 		}
 		else {
-			img.height = imageExMaxSize.height;
+			maxSize = {
+				width: windowSize.width * 0.8,
+				height: windowSize.height * 0.8
+			};
+		}
+		return maxSize;
+	}
+
+	function resizeImage(img) {
+		var maxSize = getMaxSize();
+
+		if (img.width > maxSize.width || img.height > maxSize.height) {
+			if (img.width / maxSize.width > img.height / maxSize.height) {
+				img.width = maxSize.width;
+			}
+			else {
+				img.height = maxSize.height;
+			}
 		}
 	}
-}
+
+	$(document).ready(function() {
+		$("img.image-ex").bind("load", function() {
+			resizeImage(this);
+		});
+	});
+
+	// for when images have been cached
+	$(window).bind("load", function() {
+		$("img.image-ex").each(function() {
+			resizeImage(this);
+		});
+	});
+});
+
+// vim: set ts=3 sw=3 noexpandtab :
