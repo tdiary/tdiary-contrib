@@ -9,6 +9,8 @@ alias description_tag_dfb_orig description_tag
 def description_tag
 	if @mode == 'day' then
 		diary = @diaries[@date.strftime '%Y%m%d']
+		return '' unless diary
+
 		body = ''
 		diary.each_section do |sec|
 			body = remove_tag( apply_plugin( sec.body_to_html ) ).strip
