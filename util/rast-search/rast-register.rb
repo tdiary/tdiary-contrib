@@ -143,7 +143,7 @@ module ::TDiary
 			@plugin = ::TDiary::Plugin::new(
 				'conf' => @conf,
 				'cgi' => @cgi,
-				'cache_path' => cache_path,
+				'cache_path' => @io.cache_path,
 				'diaries' => @diaries
 				)
 			def @plugin.apply_plugin_alt( str, remove_tag = false )
