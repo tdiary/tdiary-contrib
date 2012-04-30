@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-# image-gallery.rb $Revision: 2.0.2 $
+# image-gallery.rb $Revision: 2.0.3 $
 #
 # Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -43,7 +43,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.2"
+      @img_version = "2.0.3"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
@@ -94,7 +94,11 @@ module TDiary
     end
 
     def read_cache
-      db = PStore.new("#{cache_path}/gallery/image-gallery2.dat")
+      begin
+        db = PStore.new("#{@io.cache_path}/gallery/image-gallery2.dat") # for tDiary 3.1.3 or later
+      rescue
+        db = PStore.new("#{cache_path}/gallery/image-gallery2.dat")     # for tDiary 3.1.2 or faster
+      end
       db.transaction do
         @image_hash = db["recent_image_hash"]
         @image_keys = db["recent_image_keys"]
