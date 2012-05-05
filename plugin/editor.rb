@@ -1,7 +1,8 @@
-# editor.rb
+#
+# editor.rb - support writing using wiki/gfm notation.
 #
 # Copyright (c) 2012 MATSUOKA Kohei <kmachu@gmail.com>
-# You can redistribute it and/or modify it under GPL2.
+# You can distribute it under GPL.
 #
 
 # load javascript
