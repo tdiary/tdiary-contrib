@@ -494,7 +494,7 @@ begin
   }
   body = tdiary.eval_rhtml
   head['charset'] = conf.encoding
-  head['Content-Length'] = body.size.to_s
+  head['Content-Length'] = body.bytesize.to_s
   head['Pragma'] = 'no-cache'
   head['Cache-Control'] = 'no-cache'
 
