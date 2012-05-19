@@ -160,6 +160,16 @@
  *     count: true
  * });
  * 
+ *
+ * Pintarest Button
+ * http://pinterest.com/about/goodies/
+ *
+ * $('#pintarest').socialbutton('pintarest', {
+ *     button: 'horizontal', // or 'vertical', 'none'
+ *     url: 'http://itra.jp',
+ *     media: 'http://itra.jp/image.jpg',
+ *     description: 'This is an image.',
+ * });
  */
 (function($) {
 
