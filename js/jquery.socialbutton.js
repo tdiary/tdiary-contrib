@@ -274,7 +274,13 @@ $.fn.socialbutton = function(service, options) {
 			parsetags: '', // none(onload), explicit
 			callback: '',
 			count: true // true, false
-		}
+		},
+		pintarest: {
+			button: 'horizontal', // horizontal, vertical, none
+			url: '',
+			media: '',
+			description: ''
+		},
 	};
 
 	var max_index = this.size() - 1;
@@ -320,6 +326,10 @@ $.fn.socialbutton = function(service, options) {
 
 			case 'google_plusone':
 				socialbutton_google_plusone(this, options, defaults.google_plusone, index, max_index);
+				break;
+
+			case 'pintarest':
+				socialbutton_pintarest(this, options, defaults.pintarest, index, max_index);
 				break;
 
 			default:
@@ -737,6 +747,32 @@ function socialbutton_google_plusone(target, options, defaults, index, max_index
 		} else {
 			gapi.plusone.go();
 		}
+	}
+}
+
+function socialbutton_pintarest(target, options, defaults, index, max_index)
+{
+	var url = options.url || defaults.url;
+	var button = options.button || defaults.button;
+	var media = options.media != undefined ? options.media : defaults.media;
+	var description = options.description != undefined ? options.description : defaults.description;
+
+	url = url_encode_rfc3986(decodeURIComponent(url));
+	media = url_encode_rfc3986(decodeURIComponent(media));
+	description = decodeURIComponent(description);
+
+	var params = merge_parameters({
+		'url': url,
+		'media': media,
+		'description': description
+	});
+
+	var tag = '<a href="http://pinterest.com/pin/create/button/?' + params + '" class="pin-it-button" count-layout="' + button +'"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>'
+
+	$(target).html(tag);
+
+	if (index == max_index) {
+		$('body').append('<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>');
 	}
 }
 

@@ -65,7 +65,16 @@ $(function() {
         size: 'medium',
         lang: $('html').attr('lang')
       };
-    }
+    },
+
+    pintarest: function(url, title) {
+      return { 
+        url: url,
+        description: title,
+        button: 'horizontal',
+      };
+    },
+    
   };
 
   function socialbutton(target) {
