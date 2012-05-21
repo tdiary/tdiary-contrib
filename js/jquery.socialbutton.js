@@ -164,7 +164,7 @@
  * Pintarest Button
  * http://pinterest.com/about/goodies/
  *
- * $('#pintarest').socialbutton('pintarest', {
+ * $('#pinterest').socialbutton('pinterest', {
  *     button: 'horizontal', // or 'vertical', 'none'
  *     url: 'http://itra.jp',
  *     media: 'http://itra.jp/image.jpg',
@@ -285,7 +285,7 @@ $.fn.socialbutton = function(service, options) {
 			callback: '',
 			count: true // true, false
 		},
-		pintarest: {
+		pinterest: {
 			button: 'horizontal', // horizontal, vertical, none
 			url: '',
 			media: '',
@@ -338,8 +338,8 @@ $.fn.socialbutton = function(service, options) {
 				socialbutton_google_plusone(this, options, defaults.google_plusone, index, max_index);
 				break;
 
-			case 'pintarest':
-				socialbutton_pintarest(this, options, defaults.pintarest, index, max_index);
+			case 'pinterest':
+				socialbutton_pinterest(this, options, defaults.pinterest, index, max_index);
 				break;
 
 			default:
@@ -760,7 +760,7 @@ function socialbutton_google_plusone(target, options, defaults, index, max_index
 	}
 }
 
-function socialbutton_pintarest(target, options, defaults, index, max_index)
+function socialbutton_pinterest(target, options, defaults, index, max_index)
 {
 	var url = options.url || defaults.url;
 	var button = options.button || defaults.button;

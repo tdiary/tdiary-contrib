@@ -67,7 +67,7 @@ $(function() {
       };
     },
 
-    pintarest: function(url, title) {
+    pinterest: function(url, title) {
       return { 
         url: url,
 		  media: $('p img:first', $('div.section h3 a[name=' + url.substr(-3) + ']').parent().parent()).attr('src'),
