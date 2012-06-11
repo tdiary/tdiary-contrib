@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 #
-# blackbird-pie.rb - BlackBird plugin for tDiary
+# tweet_quote.rb - tDiary plugin to quote tweet on twitter.com,
+# formaly known as blackbird-pie.rb
 #
 # Copyright (C) 2010, hb <smallstyle@gmail.com>
 #
 # usage:
+#    <%= tweet_quote "id|url" %>
+#     or
+#    <%= twitter_quote "id|url" %>
+#     or
 #    <%= blackbird_pie "id|url" %>
 #     or
 #    <%= bbp "id|url" %>
@@ -29,7 +34,7 @@ def twitter_statuses_show_api( tweet_id )
 end
 
 
-def blackbird_pie( src )
+def tweet_quote( src )
 	if %r|http://twitter.com/(?:#!/)?[^/]{1,15}/status(?:es)?/([0-9]+)| =~ src.to_s.downcase
 		src = $1
 	end
@@ -96,6 +101,6 @@ def blackbird_pie( src )
 	HTML
 end
 
-alias :bbp :blackbird_pie
-alias :twitter_quote :blackbird_pie
-
+alias :blackbird_pie :tweet_quote
+alias :bbp :tweet_quote
+alias :twitter_quote :tweet_quote

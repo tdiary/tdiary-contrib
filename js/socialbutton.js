@@ -65,7 +65,17 @@ $(function() {
         size: 'medium',
         lang: $('html').attr('lang')
       };
-    }
+    },
+
+    pinterest: function(url, title) {
+      return { 
+        url: url,
+		  media: $('p img:first', $('div.section h3 a[name=' + url.substr(-3) + ']').parent().parent()).attr('src'),
+        description: title,
+        button: 'horizontal',
+      };
+    },
+    
   };
 
   function socialbutton(target) {

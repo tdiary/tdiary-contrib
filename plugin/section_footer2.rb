@@ -56,7 +56,7 @@ end
 
 add_header_proc do
   <<-"EOS"
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>
   <style type="text/css">iframe.hatena-bookmark-button-frame {margin-bottom: -7px; }</style>
   <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
   <style type="text/css">iframe.twitter-share-button.twitter-count-horizontal {margin-bottom: -6px; }</style>

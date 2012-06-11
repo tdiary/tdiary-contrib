@@ -5,6 +5,8 @@
 # display book info in http://tatsu-zine.com/ like amazon.rb
 # USAGE: {{tatsu_zine 1}}
 
+require 'open-uri'
+
 def tatsu_zine_cache_dir
 	cache = "#{@cache_path}/tatsu-zine"
 	Dir.mkdir( cache ) unless File.directory?( cache )
@@ -30,40 +32,57 @@ def tatsu_zine( id, doc = nil )
 		return result
 	end
 
-	domain = "http://tatsu-zine.com"
-	link = "#{domain}/books/#{id}"
-	require 'open-uri'
-	doc ||= open(link)
-
-	require 'rexml/document'
-	xml = REXML::Document.new( doc )
-	section = "//html/body/div/div[3]/section/div[2]"
-	title = REXML::XPath.match( xml, "#{section}/h1" ).first.text
-	author = REXML::XPath.match( xml, "#{section}/p[@class='author']" ).first.text
-	description =
-		REXML::XPath.match( xml, "#{section}/div[@class='description']" ).
-		first.to_s.gsub(/<\/?[^>]*>/, "").gsub(/β版/, '')
-	image = domain +
-		REXML::XPath.match( xml, "/html/body/div/div[3]/section/div/img").
-		first.attributes["src"]
+	link = "http://tatsu-zine.com/books/#{id}"
+	doc ||= open( link ).read
+	title = doc.match(%r|<meta property="og:title" content="(.*)">|).to_a[1]
+	image = doc.match(%r|<meta property="og:image" content="(.*)">|).to_a[1]
+	price = doc.match(%r|<p class="price">[\r\n]?(.*?)[\r\n]?</p>|m).to_a[1].
+		gsub(/\s/, '')
+	author = doc.match(%r|<p class="author">(.*)</p>|).to_a[1]
 
 	result = <<-EOS
-	<a class="amazon-detail" href="#{h link}"><div class="amazon-detail">
+	<a class="amazon-detail" href="#{h link}"><span class="amazon-detail">
 		<img class="amazon-detail left" src="#{h image}"
 		height="150" width="100"
 		alt="#{h title}">
 		<span class="amazon-detail-desc">
 			<span class="amazon-title">#{h title}</span><br>
 			<span class="amazon-author">#{h author}</span><br>
-			<span class="amazon-label">#{h description}</span><br>
+			<span class="amazon-price">#{h price}</span>
 		</span><br style="clear: left">
-	</div></a>
+	</span></a>
 EOS
 
 	tatsu_zine_cache_set( id, result ) unless @conf.secure
 	result
 rescue
 	link
+end
+
+if __FILE__ == $0
+	require 'test/unit'
+	class TestTatsuZine < Test::Unit::TestCase
+		def setup
+			@conf = Struct.new("Conf", :secure).new(true)
+			def h(str); str; end
+		end
+
+		def test_tatsu_zine
+			expect = <<-EOS
+	<a class="amazon-detail" href="http://tatsu-zine.com/books/winrubybuild"><span class="amazon-detail">
+		<img class="amazon-detail left" src="http://tatsu-zine.com/images/books/1/cover_s.jpg"
+		height="150" width="100"
+		alt="Ruby環境構築講座 Windows編">
+		<span class="amazon-detail-desc">
+			<span class="amazon-title">Ruby環境構築講座 Windows編</span><br>
+			<span class="amazon-author">arton</span><br>
+			<span class="amazon-price">1,000円(税込)</span>
+		</span><br style="clear: left">
+	</span></a>
+EOS
+			assert_equal expect, tatsu_zine('winrubybuild')
+		end
+	end
 end
 
 # Local Variables:

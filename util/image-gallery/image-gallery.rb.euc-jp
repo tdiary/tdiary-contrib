@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
-# image-gallery.rb $Revision: 2.0.0 $
+# -*- coding: euc-jp -*-
+# image-gallery.rb $Revision: 2.0.3 $
 #
-# Copyright (c) 2005-2010 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
+
+if RUBY_VERSION >= '1.9.0' 
+  Encoding::default_external = 'EUC-JP' 
+  $LOAD_PATH.push('./') 
+end 
 
 if FileTest::symlink?( __FILE__ ) then
   org_path = File::dirname( File::readlink( __FILE__ ) )
@@ -37,7 +43,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.0"
+      @img_version = "2.0.3"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
@@ -469,12 +475,12 @@ end
 
 begin
   @cgi = CGI::new
-  if TDiary::Config.instance_method(:initialize).arity > 0
-    # for tDiary 2.1 or later
-    conf = TDiary::Config::new(@cgi)
-  else
+  if TDiary::Config.instance_method(:initialize).arity == 0
     # for tDiary 2.0 or earlier
     conf = TDiary::Config::new
+  else
+    # for tDiary 2.1 or later
+    conf = TDiary::Config::new(@cgi)
   end
   tdiary = TDiary::TDiaryGallery::new( @cgi, 'gallery.rhtml', conf )
 
@@ -484,7 +490,7 @@ begin
   }
   body = tdiary.eval_rhtml
   head['charset'] = conf.encoding
-  head['Content-Length'] = body.size.to_s
+  head['Content-Length'] = body.bytesize.to_s
   head['Pragma'] = 'no-cache'
   head['Cache-Control'] = 'no-cache'
 

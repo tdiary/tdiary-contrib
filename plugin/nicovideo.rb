@@ -1,8 +1,8 @@
 #
 # nicovideo.rb - tDiary plugin for Nico Nico Video
 #
-# Copyright (C) TADA Tadashi <t@tdtds.jp>
-# Distributed under GPL.
+# Copyright (C) 2012 TADA Tadashi <t@tdtds.jp>
+# You can modify and/or distribute it under GPL.
 #
 # usage:
 #    Link to the movie and show thumbnail, description...:
@@ -24,26 +24,7 @@ require 'net/http'
 require 'timeout'
 require 'rexml/document'
 
-def nicovideo_player_js
-	<<-HTML
-	<script type="text/javascript"><!--
-	function nicovideoPlayer( video_id ) {
-		document.getElementById( "thumbnail-" + video_id ).style.display = "none";
-		document.getElementById( "player-" + video_id ).style.display = "inline";
-		return false;
-	}
-	function nicovideoThumbnail( video_id ) {
-		document.getElementById( "thumbnail-" + video_id ).style.display = "inline";
-		document.getElementById( "player-" + video_id ).style.display = "none";
-		return false;
-	}
-	//--></script>
-	HTML
-end
-
-add_header_proc do
-	nicovideo_player_js
-end
+enable_js( 'nicovideo.js' )
 
 def nicovideo_call_api( video_id )
 	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
@@ -63,8 +44,9 @@ def nicovideo_call_api( video_id )
 	end
 end
 
-def nicovideo_inline( elem, label = nil, link = nil )
+def nicovideo_inline( video_id, elem, label = nil, link = nil )
 	i = {}
+	i[:id] = video_id
 	i[:url] = link || elem.to_a( 'watch_url' )[0].text
 	i[:thumb] = elem.to_a( 'thumbnail_url' )[0].text
 	i[:title] = label || elem.to_a( 'title' )[0].text
@@ -100,11 +82,12 @@ def nicovideo_player( video_id, size = [544,384] )
 	end
 end
 
-def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
+def nicovideo( video_id, label = nil, link = nil )
 	begin
 		r = ''
 		r << %Q|<div id="thumbnail-#{video_id}">|
-		thumb = @conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
+		api = nicovideo_call_api( video_id ).elements
+		thumb = @conf.to_native( nicovideo_inline( video_id, api, label, link ), 'UTF-8' )
 		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
 		r << '</div>'
@@ -112,11 +95,14 @@ def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
 		else
-			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;">|
+			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;padding-bottom:4px;">|
 			r << %Q|<a name="player-#{video_id}">|
 			r << nicovideo_player( video_id, [544,384] )
 			r << %Q|</a>|
-			r << %Q|<div class="nicovideo-player-close"><a href="#" onclick="return nicovideoThumbnail( '#{video_id}' )">Close Player</a></div>|
+			r << %Q|<div class="nicovideo-player-close" style="margin:4px;padding:8px;">|
+			r << %Q|<a href="#" onclick="return nicovideoThumbnail( '#{video_id}' )" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">▲CLOSE PLAYER</a>|
+			r << %Q|&nbsp;<a href="#{api.to_a( 'watch_url' )[0].text}" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">SHOW ORIGINAL&gt;</a>|
+			r << %Q|</div>|
 			r << %Q|</div>|
 		end
 		r
@@ -126,14 +112,4 @@ def nicovideo( video_id, label = nil, link = 'INLINE_PLAYER' )
 		nicovideo_iframe( video_id )
 	end
 end
-
-#def nicovideo( video_id, label = nil, link = nil )
-#	begin
-#		@conf.to_native( nicovideo_inline( nicovideo_call_api( video_id ).elements, label, link ), 'UTF-8' )
-#	rescue ::Errno::ENOENT
-#		"<strong>Sorry, #{video_id} was deleted.</strong>"
-#	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
-#		nicovideo_iframe( video_id )
-#	end
-#end
 

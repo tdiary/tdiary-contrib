@@ -152,7 +152,11 @@ begin
 			end
 		end
 	elsif head =~ /^Content-Type:\s*text\/plain/i
-		@body = body
+		if head =~ /^Content-Transfer-Encoding:\squoted-printable/
+			@body = body.unpack("M").map {|str| NKF::nkf("-wJd", str) }
+		else
+			@body = body
+		end
 	else
 		raise "cannot read this mail"
 	end

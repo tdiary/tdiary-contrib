@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
-# image-gallery.rb $Revision: 2.0.1 $
+# -*- coding: utf-8 -*-
+# image-gallery.rb $Revision: 2.0.3 $
 #
-# Copyright (c) 2005-2011 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
+
+if RUBY_VERSION >= '1.9.0' 
+  Encoding::default_external = 'UTF-8' 
+  $LOAD_PATH.push('./') 
+end 
 
 if FileTest::symlink?( __FILE__ ) then
   org_path = File::dirname( File::readlink( __FILE__ ) )
@@ -37,7 +43,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.1"
+      @img_version = "2.0.3"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
@@ -88,7 +94,11 @@ module TDiary
     end
 
     def read_cache
-      db = PStore.new("#{cache_path}/gallery/image-gallery2.dat")
+      begin
+        db = PStore.new("#{@io.cache_path}/gallery/image-gallery2.dat") # for tDiary 3.1.3 or later
+      rescue
+        db = PStore.new("#{cache_path}/gallery/image-gallery2.dat")     # for tDiary 3.1.2 or faster
+      end
       db.transaction do
         @image_hash = db["recent_image_hash"]
         @image_keys = db["recent_image_keys"]
@@ -484,7 +494,7 @@ begin
   }
   body = tdiary.eval_rhtml
   head['charset'] = conf.encoding
-  head['Content-Length'] = body.size.to_s
+  head['Content-Length'] = body.bytesize.to_s
   head['Pragma'] = 'no-cache'
   head['Cache-Control'] = 'no-cache'
 
