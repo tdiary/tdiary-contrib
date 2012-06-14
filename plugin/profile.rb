@@ -79,9 +79,9 @@ module ::Profile
 
     # github.com
     class GitHub < Base
-      property :name, '//user/name'
-      property :mail, '//user/email'
-      endpoint {|id| "http://github.com/api/v2/xml/user/show/#{id}" }
+      property :name, 'name'
+      property :mail, 'email'
+      endpoint {|id| "https://api.github.com/users/#{id}" }
 
       def image
         Gravatar.new(@mail, @options).image
@@ -90,6 +90,22 @@ module ::Profile
 
       def link
         "http://github.com/#{@id}"
+      end
+
+      def fetch(endpoint)
+        require 'json'
+        timeout(5) do
+          open(endpoint) do |f|
+            doc = JSON.parse(f.read)
+          end
+        end
+      end
+
+      # parse XML document with properties
+      def parse(doc)
+        self.class.properties.each do |property, key|
+          instance_variable_set("@#{property}", doc[key]) if doc[key]
+        end
       end
     end
 

@@ -8,6 +8,10 @@ describe "Profile::Service" do
 
   describe "GitHub" do
     before :all do
+      # workaround for run spec on various environment.
+      require 'openssl'
+      OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
       # http://develop.github.com/p/general.html
       @profile = Profile::Service::GitHub.new("schacon", :size => 40)
     end
