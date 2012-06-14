@@ -2,5 +2,10 @@ source :rubygems
 
 gem 'rake'
 gem 'rspec'
-gem 'rcov', :platforms => :ruby_18
+
+platforms :ruby_18 do
+  gem 'json'
+  gem 'rcov'
+end
+
 gem 'simplecov', :platforms => :ruby_19

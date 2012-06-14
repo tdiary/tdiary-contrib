@@ -95,13 +95,10 @@ module ::Profile
       def fetch(endpoint)
         require 'json'
         timeout(5) do
-          open(endpoint) do |f|
-            doc = JSON.parse(f.read)
-          end
+          doc = open(endpoint) {|f| JSON.parse(f.read) }
         end
       end
 
-      # parse XML document with properties
       def parse(doc)
         self.class.properties.each do |property, key|
           instance_variable_set("@#{property}", doc[key]) if doc[key]
