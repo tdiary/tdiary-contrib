@@ -5,7 +5,7 @@
 add_conf_proc('google_sitemaps', 'Google sitemap') do
   saveconf_google_sitemaps
 
-  request_uri = File::dirname(ENV['REQUEST_URI'])
+  request_uri = File::dirname(@cgi.request_uri)
   if request_uri == "/"
     @conf['google_sitemaps.uri_format'] ||= 'http://' + @cgi.server_name + '/index.cgi?date=%s'
   else
