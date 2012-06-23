@@ -9,6 +9,11 @@
 # Distributed under GPL.
 #
 
+def sappororubykaigi2012( role = 'attendee' )
+	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
+   %Q|<a href="http://sapporo.rubykaigi.org/2012/" style="display:block;margin:8px auto;text-align:center;"><img src="http://sapporo.rubykaigi.org/2012/images/goodiesBadge160#{r}.png" alt="SapporoRubyKaigi 2012 #{h r}"></a>|
+end
+
 def kansairubykaigi04( role = 'attendee' )
 	badges = {
 		'attendee' => "attendee_taiyou",
