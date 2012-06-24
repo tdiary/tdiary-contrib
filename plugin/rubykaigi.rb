@@ -11,7 +11,7 @@
 
 def sappororubykaigi2012( role = 'attendee' )
 	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
-   %Q|<a href="http://sapporo.rubykaigi.org/2012/" style="display:block;margin:8px auto;text-align:center;"><img src="http://sapporo.rubykaigi.org/2012/images/goodiesBadge160#{r}.png" alt="SapporoRubyKaigi 2012 #{h r}"></a>|
+   %Q|<a href="http://sapporo.rubykaigi.org/2012/" style="display:block;margin:8px auto;text-align:center;"><img src="http://sapporo.rubykaigi.org/2012/images/goodiesBadge160#{h r}.png" alt="SapporoRubyKaigi 2012 #{h r}"></a>|
 end
 
 def kansairubykaigi04( role = 'attendee' )
@@ -45,7 +45,7 @@ alias :rubykaigi :rubykaigi2011
 #----- OLD EDITIONS -----#
 
 def sappororubykaigi03( role = 'attendee' )
-	%Q|<a href="http://regional.rubykaigi.org/sapporo03/" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/sapporo03/badge_#{role}.gif" alt="badge_#{role}.gif"></a>|
+	%Q|<a href="http://regional.rubykaigi.org/sapporo03/" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/sapporo03/badge_#{h role}.gif" alt="badge_#{h role}.gif"></a>|
 end
 
 def rubykaigi2010( role = 'attendee' )
@@ -62,7 +62,7 @@ def rubykaigi2010( role = 'attendee' )
 end
 
 def rubykaigi2009( role = 'attendee' )
-	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://rubykaigi.org/2009/"><img src="http://rubykaigi.org/2009/images/goodies/badges/#{role}.gif" width="160" height="160" alt="RubyKaigi2009#{h role.capitalize}" style="border-width: 0px;"></a></div>|
+	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://rubykaigi.org/2009/"><img src="http://rubykaigi.org/2009/images/goodies/badges/#{h role}.gif" width="160" height="160" alt="RubyKaigi2009#{h role.capitalize}" style="border-width: 0px;"></a></div>|
 end
 
 def rubykaigi2008( role = 'attendee' )
@@ -81,7 +81,7 @@ def rubykaigi2008( role = 'attendee' )
 end
 
 def sappororubykaigi02( role = 'attendee' )
-	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://regional.rubykaigi.org/sapporo02/"><img src="http://ruby-sapporo.org/sappororubykaigi02/#{role}.gif" width="160" height="90" alt="SapporoRubyKaigi02#{h role.capitalize}" style="border-width: 0px;"></a></div>|
+	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://regional.rubykaigi.org/sapporo02/"><img src="http://ruby-sapporo.org/sappororubykaigi02/#{h role}.gif" width="160" height="90" alt="SapporoRubyKaigi02#{h role.capitalize}" style="border-width: 0px;"></a></div>|
 end
 
 # Local Variables:
