@@ -35,7 +35,7 @@ def instagr( short_url, size = :medium)
 	
 	begin
 		Net::HTTP.version_1_2
-		res = Net::HTTP::Proxy(px_host, px_port).get('instagr.am', "/api/v1/oembed/#{query}")
+		res = Net::HTTP::Proxy(px_host, px_port).get('instagram.com', "/api/v1/oembed/#{query}")
 		json_data = JSON::parse( res, &:read )
 		width  = option[:width]  ? option[:width]  : json_data["width"]
 		height = option[:height] ? option[:height] : json_data["height"]
@@ -52,6 +52,7 @@ def instagr( short_url, size = :medium)
 		return %Q|<p>Failed Open URL.. #{short_url}<br>#{h $!}</p>|
 	end
 end
+alias :instagram :instagr
 
 
 # Local Variables:
