@@ -41,9 +41,11 @@ HEADER = unindent <<'EOS'
     <title>tDiary Search</title>
   </head>
   <body>
+  <div class="whole-content">
 EOS
 
 FOOTER = unindent <<'EOS'
+  </div>
   </body>
   </html>
 EOS
@@ -123,7 +125,7 @@ else
 end
 $:.unshift tdiarylib
 require 'tdiary'
-require 'tdiary/defaultio'
+require 'tdiary/io/default'
 require 'erb'
 
 TDIARY_ENCODING = (TDIARY_VERSION >= '2.3.0') ? 'utf-8' : 'euc-jp'
@@ -316,7 +318,7 @@ DIARY_CLASS_CACHE = {}
 def diary_class(style)
   c = DIARY_CLASS_CACHE[style]
   return c if c
-  require "tdiary/#{style.downcase}_style.rb"
+  require "tdiary/style/#{style.downcase}_style.rb"
   c = eval("TDiary::#{style.capitalize}Diary")
   c.__send__(:include, DiaryClassDelta)
   DIARY_CLASS_CACHE[style] = c
