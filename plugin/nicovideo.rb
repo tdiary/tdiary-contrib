@@ -108,7 +108,7 @@ def nicovideo( video_id, label = nil, link = nil )
 		r
 	rescue ::Errno::ENOENT
 		"<strong>Sorry, #{video_id} was deleted.</strong>"
-	rescue Timeout::Error, OpenURI::HTTPError, SecurityError
+	rescue Timeout::Error, NoMethodError, SecurityError, StandardError
 		nicovideo_iframe( video_id )
 	end
 end
