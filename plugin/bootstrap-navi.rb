@@ -39,7 +39,7 @@ def bootstrap_navi(options = {})
   end
 
   <<-EOS
-<div class="navbar #{navbar_class}">
+<div class="navbar #{options[:navbar_class]}">
   <div class="navbar-inner">
     <div class="container">
       #{body}
