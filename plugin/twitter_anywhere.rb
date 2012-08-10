@@ -14,7 +14,7 @@ def follow_button(account)
    
    if account.nil? || account == ''
       return anywhere_plugin_error("Account name is not specified.")
-   
+      
    end
    
    <<-FOLLOW_API
@@ -31,60 +31,92 @@ end
 def tweet_box(label = nil, content = nil, option = {})
    return not_support_anywhere unless support_anywhere?
    return not_ready_anywhere   unless ready_anywhere?
+   init_tweetbox
    
-   option = {} if option.nil?
-   option.merge!(:height => 120) unless option[:height].to_i > 0
-   option.merge!(:width => 480)  unless option[:width].to_i > 0
+   @tweetbox_opt.merge!(option)
+   @tweetbox_opt.merge!(:height => 120) unless option[:height].to_i > 0
+   @tweetbox_opt.merge!(:width  => 480) unless option[:width].to_i > 0
    
-   r = ''
-   r << %Q|<span id="tweetbox"></span>|
-   r << %Q|<script type="text/javascript">\n|
-   r << %Q|   twttr.anywhere(function (T) {\n|
-   r << %Q|      T("#tweetbox").tweetBox({\n|
-   r << %Q|         height: #{option[:height]},\n|
-   r << %Q|         width: #{option[:width]},\n|
-   r << %Q|         label: '#{label}',\n|           if label
-   r << %Q|         defaultContent: '#{content}'\n| if content
-   r << %Q|      });\n|
-   r << %Q|   });\n|
-   r << %Q|</script>\n|
+   @tweetbox_opt.merge!(:label   => label)   if label
+   @tweetbox_opt.merge!(:defaultContent => content) if content
+   
+   %Q|<span id="tweetbox"></span>|
+   
+end
+
+def twitter_anywhere_settings
+   enable_js('twitter_anywhere.js')
+   add_js_setting('$tDiary.plugin.twitter_anywhere')
+   
+   selectors = @conf['twitter_anywhere.hovercards.selectors'].split(',').collect do |selector|
+      %Q|"#{selector.strip}"|
+   end
+   add_js_setting('$tDiary.plugin.twitter_anywhere.selectors',
+                  "[#{selectors.join(',')}]" )
+   
+   expanded = '{}'
+   if @conf['twitter_anywhere.hovercards.expand_default'] == 'true'
+      expanded = '{"expanded":true}'
+      
+   end
+   add_js_setting('$tDiary.plugin.twitter_anywhere.hovercards')
+   add_js_setting('$tDiary.plugin.twitter_anywhere.hovercards.expand_default',
+                  expanded)
    
 end
 
 
 add_header_proc do 
+
    if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
+      
       if ready_anywhere?
-         expanded = ''
-         if @conf['twitter_anywhere.hovercards.expand_default'] == 'true'
-            expanded = '{expanded: true}'
-            
-         end
-         
-         hovercards = @conf['twitter_anywhere.hovercards.selectors'].split(',').collect do |selector|
-            "twitter(\"#{selector.strip}\").hovercards(#{expanded});"
-         
-         end.join("\n\t\t\t\t")
-         
-         <<-ANYWHERE
-         <script src="http://platform.twitter.com/anywhere.js?id=#{h @conf['twitter_anywhere.id']}&v=1">
-         </script>
-         <script type="text/javascript">
-            twttr.anywhere(function(twitter) {
-            \t#{hovercards}
-            });
-         </script>
-         ANYWHERE
+         %Q|<script src="http://platform.twitter.com/anywhere.js?id=#{h @conf['twitter_anywhere.id']}&v=1"></script>|
          
       else
          ''
          
       end
-   
+       
    end
-
+   
 end
 
+def init_tweetbox
+   @tweetbox_json_opt ||= []
+   @tweetbox_opt ||= {}
+   
+end
+
+add_footer_proc do |date|
+   
+   if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
+      
+      if ready_anywhere?
+         
+         init_tweetbox
+         
+         @tweetbox_opt.each_pair do |k, v|
+            @tweetbox_json_opt << "\"#{k}\":\"#{v}\""
+            
+         end
+         
+         tweet_box_call =  %Q|<script type="text/javascript">\n|
+         tweet_box_call << %Q|<!--\n|
+         tweet_box_call << %Q|   showTweetBox({#{@tweetbox_json_opt.join(',')}});\n|
+         tweet_box_call << %Q|//-->\n|
+         tweet_box_call << %Q|</script>\n|
+         
+      else
+         ''
+         
+      end
+      
+   else
+      ''
+      
+   end
+end
 
 add_conf_proc( 'twitter_anywhere', 'Twitter Anywhere' ) do
    if @mode == 'saveconf' then
@@ -126,7 +158,7 @@ add_conf_proc( 'twitter_anywhere', 'Twitter Anywhere' ) do
 end
 
 def support_anywhere?
-   return false if @conf.mobile_agent?
+   return false if @conf.mobile_agent? || feed?
    return true
    
 end
@@ -143,7 +175,7 @@ end
 
 
 def not_support_anywhere
-   'not support this environment.' 
+   '[Twitter@Anywhere] not support this environment.' 
    
 end
 
@@ -164,6 +196,7 @@ def anywhere_plugin_error(message, detail= '')
    
 end
 
+twitter_anywhere_settings
 
 # Local Variables:
 # mode: ruby
