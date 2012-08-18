@@ -43,7 +43,7 @@ $(function() {
       return (age < 7);
     });
     if (updates.length > 0) {
-      $('div.update').before(createNotify(updates));
+      $('form.update').before(createNotify(updates));
     }
     $tDiary.updates = updates;
   });
