@@ -48,3 +48,7 @@ def bootstrap_navi(options = {})
 </div>
 EOS
 end
+
+add_header_proc do
+  %Q|<meta name="viewport" content="width=device-width, initial-scale=1.0">|
+end
