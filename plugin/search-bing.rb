@@ -13,8 +13,7 @@
 
 require 'timeout'
 require 'json'
-require 'net/http'
-Net::HTTP.version_1_2
+require 'open-uri'
 
 def search_title
 	'全文検索 by Bing'
@@ -37,7 +36,6 @@ def search_bing_api( q, start = 0 )
 	u << "?Query=%27#{q}%27&Options=%27EnableHighlighting%27&$top=50&$skip=#{start}&$format=Json"
 	uri = URI( u )
 
-	require 'open-uri'
 	open( uri, {:http_basic_authentication => [appid, appid]} ).read
 
 ### FIX ME: this code failed on Timeout error, temporary using open-uri above.
