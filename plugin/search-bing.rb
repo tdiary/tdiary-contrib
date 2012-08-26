@@ -12,7 +12,7 @@
 #
 
 require 'timeout'
-require 'rexml/document'
+require 'json'
 require 'net/http'
 Net::HTTP.version_1_2
 
@@ -30,39 +30,29 @@ def search_input_form( q )
 	HTML
 end
 
-def search_bing_market
-	'ja-JP'
-end
-
 def search_bing_api( q, start = 0 )
-	url = 'http://api.bing.net/xml.aspx'
 	appid = @conf['search-bing.appid']
 
-	url << "?AppId=#{appid}&Version=2.2&Market=#{search_bing_market}&Query=#{q}&Sources=web&Web.Count=20&Web.Offset=#{start}"
+	u = 'https://api.datamarket.azure.com/Data.ashx/Bing/SearchWeb/v1/Web'
+	u << "?Query=%27#{q}%27&Options=%27EnableHighlighting%27&$top=50&$skip=#{start}&$format=Json"
+	uri = URI( u )
 
-	proxy = @conf['proxy']
-	proxy = 'http://' + proxy if proxy
-	
-	proxy_host, proxy_port = nil
-	if proxy
-		proxy_host = proxy_uri.host
-		proxy_port = proxy_uri.port
-	end
-	proxy_class = Net::HTTP::Proxy(proxy_host, proxy_port)
+	require 'open-uri'
+	open( uri, {:http_basic_authentication => [appid, appid]} ).read
 
-	query = URI.parse(url)
-	req = Net::HTTP::Get.new(query.request_uri)
-	http = proxy_class.new(query.host, query.port)
-	http.open_timeout = 20
-	http.read_timeout = 20
-	res = http.start do
-		http.request(req)
-	end
-	res.body
+### FIX ME: this code failed on Timeout error, temporary using open-uri above.
+#	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
+#	px_port = 8080 if px_host and !px_port
+#	res = Net::HTTP::Proxy( px_host, px_port ).start( uri.host, uri.port ) do |http|
+#		req = Net::HTTP::Get.new( uri.request_uri )
+#		req.basic_auth( appid, appid )
+#		res = http.request( req )
+#	end
+#	res.body
 end
 
 def search_to_html( str )
-	(str || '').gsub( /(?:<wbr(?:[ \t\r\n][^>]*)?>)+/, '' ).gsub( %r{<(/?)b[ \t\n\r]*>}, '<\\1strong>' )
+	(str || '').gsub( /\uE000/, '<strong>' ).gsub( /\uE001/, '</strong>' )
 end
 
 def search_result
@@ -75,35 +65,24 @@ def search_result
 		q = "#{query} site:#{uri.host}"
 		q << %Q| inurl:"#{uri.path}"| unless uri.path == '/'
 		xml = search_bing_api( u( q.untaint ), start )
-		doc = REXML::Document::new( REXML::Source.new( xml ) ).root
-	rescue OpenURI::HTTPError
+		json = JSON::parse( xml )
+	rescue Net::HTTPError
 		return %Q|<p class="message">#$!</p>|
 	end
 
 	r = search_input_form( query )
 	r << '<dl class="search-result autopagerize_page_element">'
-	doc.elements.to_a( '*/web:Results/web:WebResult' ).each do |elem|
-		url = elem.elements.to_a( 'web:Url' )[0].text
-		next unless url =~ @conf['search.result_filter']
-		title = elem.elements.to_a( 'web:Title' )[0].text
-		desc = elem.elements.to_a( 'web:Description' )[0].text
+	json['d']['results'].each do |entry|
+		url = entry['url']
+		title = entry['Title']
+		desc = entry['Description']
 		r << %Q|<dt><a href="#{h url}">#{search_to_html title}</a></dt>|
 		r << %Q|<dd>#{search_to_html desc}</dd>|
 	end
 	r << '</dl>'
 	
 	r << '<div class="search-navi">'
-	total = doc.elements.to_a( 'web:Web/web:Total' )[0].text.to_i
-	total = 1000 if total > 1000
-	offset = doc.elements.to_a( 'web:Web/web:Offset' )[0].text.to_i
-
-	if offset - 20 >= 0 then
-		r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;start=#{offset-20}" rel="prev">&lt;前の20件</a>&nbsp;|
-	end
-
-	if offset + 20 < total then
-		r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;start=#{offset+20}" rel="next">次の20件&gt;</a>|
-	end
+		# no search navi on Bing search because no total result not supported
 	r << '</div>'
 
 	r
