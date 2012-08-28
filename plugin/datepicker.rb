@@ -29,7 +29,9 @@ add_header_proc do
 
 end
 
-enable_js('datepicker.js')
+if /\A(?:form|preview|append|edit|update)\z/ =~ @mode
+   enable_js('datepicker.js')
+end
 
 # Local Variables:
 # mode: ruby
