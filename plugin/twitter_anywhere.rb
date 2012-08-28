@@ -196,7 +196,9 @@ def anywhere_plugin_error(message, detail= '')
    
 end
 
-twitter_anywhere_settings
+if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
+   twitter_anywhere_settings
+end
 
 # Local Variables:
 # mode: ruby
