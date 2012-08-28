@@ -14,14 +14,7 @@ return if feed? || @conf.mobile_agent?
 add_header_proc do
    if /\A(?:form|preview|append|edit|update)\z/ =~ @mode
       
-      themes   = @conf['jquery.theme']
-      if themes.nil? || theme == ''
-         themes = 'base'
-      end
-      
       jquery_ui = ''
-      jquery_ui << %Q|<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/#{themes.downcase}/jquery-ui.css"/>|
-      jquery_ui << %Q|<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>|
       
       if @conf.lang == 'ja'
           jquery_ui << %Q|<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>|
@@ -34,21 +27,6 @@ add_header_proc do
       
    end
 
-end
-
-add_conf_proc( 'jquery_ui', 'jQuery UI' ) do
-   if @mode == 'saveconf' then
-      @conf['jquery.theme'] = @cgi.params['jquery.theme'][0]
-      
-   end
-   
-   <<-HTML
-   <h3 class="subtitle">Theme name</h3>
-   <p><input name="jquery.theme" value="#{h @conf['jquery.theme']}" size="40"></p>
-   <p>sample) blitzer, flick .. <a href="http://jqueryui.com/themeroller/">See JQuery Theme.</a></p>
-   <p>default is <b>base</b>.</p>
-   HTML
-   
 end
 
 enable_js('datepicker.js')
