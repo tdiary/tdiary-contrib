@@ -71,7 +71,7 @@ def search_result
 	r = search_input_form( query )
 	r << '<dl class="search-result autopagerize_page_element">'
 	json['d']['results'].each do |entry|
-		url = entry['url']
+		url = entry['Url']
 		title = entry['Title']
 		desc = entry['Description']
 		r << %Q|<dt><a href="#{h url}">#{search_to_html title}</a></dt>|
