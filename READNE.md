@@ -1,4 +1,4 @@
-== tDiary contrib パッケージ ==
+# tDiary contrib パッケージ
 
 このパッケージには、tDiaryに関係したいくつかのユーティリティやプラグ
 インが収録されています。ドキュメントはそれぞれのツールのディレクトリ
@@ -7,6 +7,7 @@
 著作権およびライセンスは各テーマのファイルに記述してあるものに従いま
 すが、特に明記されていない場合、配布条件はGPL2、著作権は以下になりま
 す。
- 
-   Copyright (c) 2005 TADA Tadashi <sho@spc.gr.jp> 
- 
+
+```
+Copyright (c) 2005 TADA Tadashi <t@tdtds.jp>
+```
