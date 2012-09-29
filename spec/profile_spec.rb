@@ -76,19 +76,6 @@ describe "Profile::Service" do
     end
   end
 
-  describe "Wassr" do
-    before do
-      Profile::Service::Wassr.any_instance.stub(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/wassr.xml")))
-
-      # http://wassr.jp/help/api
-      @profile = Profile::Service::Wassr.new("machu")
-    end
-
-    it "should include image property" do
-      @profile.image.should == "http://wassr.jp/user/machu/profile_img.png.64.1215127012"
-    end
-  end
-
   describe "Hatena" do
     before do
       @profile = Profile::Service::Hatena.new("kmachu")

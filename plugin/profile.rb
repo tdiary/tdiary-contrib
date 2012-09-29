@@ -159,15 +159,6 @@ module ::Profile
       end
     end
 
-    class Wassr < Base
-      property :image, '//statuses/status/user/profile_image_url'
-      endpoint {|id| "http://api.wassr.jp/statuses/show.xml?id=#{id}" }
-
-      def link
-        "http://wassr.jp/user/#{id}"
-      end
-    end
-
     class Hatena < Base
       def image
         prefix = id[0..1]
@@ -192,7 +183,6 @@ def profile(id, service = :twitter, options = {})
     :friendfeed => Profile::Service::FriendFeed,
     :iddy => Profile::Service::Iddy,
     :gravatar => Profile::Service::Gravatar,
-    :wassr => Profile::Service::Wassr,
     :hatena => Profile::Service::Hatena,
   }[service.to_s.downcase.to_sym]
 
@@ -230,4 +220,3 @@ def profile(id, service = :twitter, options = {})
   html << %Q{ <span class="profile-description">#{CGI.escapeHTML profile.description}</span> } if profile.description
   html << %Q{ </a></div> }
 end
-

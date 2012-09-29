@@ -219,21 +219,6 @@ describe "openid plugin w/" do
 				:rel => "openid.delegate")}
 	end
 
-	describe "Wassr" do
-		before do
-			plugin = setup_open_id_plugin('Wassr', 'tdtds')
-			@header_snippet = plugin.header_proc
-		end
-
-		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.server',
-				:href => 'https://wassr.jp/open_id/auth')}
-
-		it { @header_snippet.should include_link_tag_with(
-				:rel => 'openid.delegate',
-				:href => 'https://wassr.jp/user/tdtds')}
-	end
-
 	RSpec::Matchers.define :include_link_tag_with do |options|
     description do
       "include #{options[:rel]} link tag"
