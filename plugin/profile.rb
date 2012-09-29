@@ -14,7 +14,6 @@ require 'timeout'
 require 'rexml/document'
 require 'open-uri'
 require 'digest/md5'
-#require 'yaml/store'
 require 'pstore'
 
 module ::Profile
@@ -84,8 +83,8 @@ module ::Profile
       endpoint {|id| "https://api.github.com/users/#{id}" }
 
       def image
-        Gravatar.new(@mail, @options).image
         # "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@mail)}.jpg"
+        Gravatar.new(@mail, @options).image
       end
 
       def link

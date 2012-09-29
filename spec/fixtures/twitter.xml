@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <id>65589541</id>
+  <name>tDiary.org</name>
+  <screen_name>tDiary</screen_name>
+  <location></location>
+  <description>tDiary&#12458;&#12501;&#12451;&#12471;&#12515;&#12523;&#12450;&#12459;&#12454;&#12531;&#12488;</description>
+  <profile_image_url>http://a0.twimg.com/profile_images/379668735/square_logo_normal.png</profile_image_url>
+  <profile_image_url_https>https://si0.twimg.com/profile_images/379668735/square_logo_normal.png</profile_image_url_https>
+  <url>http://www.tdiary.org/</url>
+  <protected>false</protected>
+  <followers_count>286</followers_count>
+  <profile_background_color>FFFFFF</profile_background_color>
+  <profile_text_color>333333</profile_text_color>
+  <profile_link_color>0084B4</profile_link_color>
+  <profile_sidebar_fill_color>D0FFD0</profile_sidebar_fill_color>
+  <profile_sidebar_border_color>D0FFD0</profile_sidebar_border_color>
+  <friends_count>261</friends_count>
+  <created_at>Fri Aug 14 07:50:23 +0000 2009</created_at>
+  <favourites_count>3</favourites_count>
+  <utc_offset>32400</utc_offset>
+  <time_zone>Tokyo</time_zone>
+  <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+  <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+  <profile_background_tile>false</profile_background_tile>
+  <profile_use_background_image>false</profile_use_background_image>
+  <notifications></notifications>
+  <geo_enabled>false</geo_enabled>
+  <verified>false</verified>
+  <following></following>
+  <statuses_count>313</statuses_count>
+  <lang>ja</lang>
+  <contributors_enabled>false</contributors_enabled>
+  <follow_request_sent></follow_request_sent>
+  <listed_count>31</listed_count>
+  <default_profile>false</default_profile>
+  <default_profile_image>false</default_profile_image>
+  <is_translator>false</is_translator>
+  <status>
+    <created_at>Mon Sep 17 00:04:52 +0000 2012</created_at>
+    <id>247486242491604992</id>
+    <text>RT @hsbt: DefaultIO &#12363;&#12425; RdbIO &#12408;&#12398;&#12452;&#12531;&#12509;&#12540;&#12479;&#12391;&#12365;&#12383; #tdiary</text>
+    <source>&lt;a href=&quot;http://www.crowy.net/&quot; rel=&quot;nofollow&quot;&gt;Crowy&lt;/a&gt;</source>
+    <truncated>false</truncated>
+    <favorited>false</favorited>
+    <in_reply_to_status_id></in_reply_to_status_id>
+    <in_reply_to_user_id></in_reply_to_user_id>
+    <in_reply_to_screen_name></in_reply_to_screen_name>
+    <retweet_count>2</retweet_count>
+    <retweeted>false</retweeted>
+    <retweeted_status>
+      <created_at>Mon Sep 17 00:01:16 +0000 2012</created_at>
+      <id>247485333179101185</id>
+      <text>DefaultIO &#12363;&#12425; RdbIO &#12408;&#12398;&#12452;&#12531;&#12509;&#12540;&#12479;&#12391;&#12365;&#12383; #tdiary</text>
+      <source>&lt;a href=&quot;http://mzp.github.com/atig/&quot; rel=&quot;nofollow&quot;&gt;atig.rb&lt;/a&gt;</source>
+      <truncated>false</truncated>
+      <favorited>false</favorited>
+      <in_reply_to_status_id></in_reply_to_status_id>
+      <in_reply_to_user_id></in_reply_to_user_id>
+      <in_reply_to_screen_name></in_reply_to_screen_name>
+      <retweet_count>2</retweet_count>
+      <retweeted>false</retweeted>
+      <geo/>
+      <coordinates/>
+      <place/>
+      <contributors/>
+    </retweeted_status>
+    <geo/>
+    <coordinates/>
+    <place/>
+    <contributors/>
+  </status>
+</user>
