@@ -10,7 +10,7 @@ def coderwall(name, size = [60, 60])
 	rescue Errno::ENOENT
 		begin
 			timeout(10) do
-				json = open( "http://coderwall.com/#{name}.json" ) {|f| f.read }
+				json = open( "https://coderwall.com/#{name}.json" ) {|f| f.read }
 			end
 			open(cache, 'wb') {|f| f.write(json) }
 		rescue Timeout::Error
