@@ -39,7 +39,7 @@ $(function() {
         .attr({id: photo.id, src: src, title: photo.title})
         .css({margin: "2px", border: "1px solid #999", cursor: "pointer"})
         .click(function(event) {
-          var size = $('input[@name=flickr_to_blog_photo_size]:checked').val();
+          var size = $('input[name=flickr_photo_size]:checked').val();
           var tag = $.makePluginTag("flickr '" + event.target.id + "', '" + size + "'");
           $('#body').insertAtCaret(tag);
         })
