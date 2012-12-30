@@ -11,6 +11,8 @@
 # @options["search-google-custom.cof"] : 広告の表示場所（9:右，10:一番上と右，11:一番上と下）
 # @options["search-google-custom.width"] : 検索結果のフレームの幅
 # @options["search-google-custom.height"] : 検索結果のフレームの高さ
+# @options["search-google-custom.search_label"] : 検索テキストボックス左のラベル
+# @options["search-google-custom.button_text"] : 検索ボタンに書かれる文字列
 #
 
 def search_title
@@ -21,17 +23,19 @@ add_footer_proc do
 		%Q|<script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&lang=ja"></script>|
 end
 
-def search_input_form( q )
+def search_input_form(q='')
 	cof = @conf["search-google-custom.cof"] || 9
-	
+	search_label = @conf["search-google-custom.search_label"] || '検索キーワード:'
+	button_text = @conf["search-google-custom.button_text"] || '検索'
+
 	r = <<-HTML
 		<form action="#{@conf.index}" id="cse-search-box">
 			<div>
 				<input type="hidden" name="cx" value="#{@conf["search-google-custom.id"]}">
 				<input type="hidden" name="cof" value="FORID:#{cof}">
 				<input type="hidden" name="ie" value="UTF-8">
-				<label for="q">検索キーワード:</label><input type="text" name="q" value="#{h q}">
-				<input type="submit" name="sa" value="OK">
+				<label for="q">#{search_label}</label><input type="text" name="q" value="#{h q}">
+				<input type="submit" name="sa" value="#{button_text}">
 			</div>
 		</form>
 	HTML
