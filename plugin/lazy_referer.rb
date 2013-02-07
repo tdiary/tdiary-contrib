@@ -5,7 +5,7 @@
 # Copyright (C) 2013 by MATSUOKA Kohei <kmachu@gmail.com>
 # You can distribute it under GPL.
 #
-if @mode == 'day' and not bot? then
+if /^(day|form|edit)$/ =~ @mode and not bot? then
 	enable_js('referer.js')
 
 	#
