@@ -13,6 +13,7 @@ if /^(day|form|edit)$/ =~ @mode and not bot? then
 	#
 	def referer_of_today_long( diary, limit )
 		return if limit == 0
+		return unless diary
 		date = diary.date.strftime('%Y%m%d')
 		# FIXME: endpoint is should created by TDiary::Plugin, because easy customize routing
 		endpoint = "#{@conf.index}?plugin=referer&date=#{date}"
