@@ -58,7 +58,7 @@ $(function() {
       ul: function(){ form.insertAtCaret("* ") },
       ol: function(){ form.insertAtCaret("1. ") },
       table: function(){ form.insertAtCaret(
-        "\nhead1|head2\n---------\nbody1|body2\nbody3|body4\n") },
+        "\nhead1|head2\n----|----\nbody1|body2\nbody3|body4\n") },
       plugin: function(){ form.insertAtCaret2(
         "", $.makePluginTag("plugin_name")) }
     }
