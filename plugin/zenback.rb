@@ -7,12 +7,20 @@ def insert_zenback
 end
 
 if @mode == 'day' and (respond_to?(:section_mode?) ? section_mode? : true)
+  add_title_proc do |date, title|
+    "#{title}<!-- zenback_date #{date.strftime '%Y-%m-%d'} -->"
+  end
+  add_body_enter_proc do
+    "<!-- zenback_body_begin -->"
+  end
 	if defined? add_comment_leave_proc
 		add_comment_leave_proc do
+      "<!-- zenback_body_end -->" + 
 			insert_zenback
 		end
 	else
 		add_body_leave_proc do
+      "<!-- zenback_body_end -->" + 
 			insert_zenback
 		end
 	end
