@@ -2,16 +2,21 @@
 # rubykaigi.rb: make badges of RubyKaigi.
 #
 # usage: <%= rubykaigi 'role', 'size' %>
-#    role: attendee (default), speaker, sponsor, staff, committer, individual sponsor, away
-#    size: large(160x160), small(160x90)
+#	  role: attendee (default), speaker, sponsor, staff, committer, individual sponsor, away
+#	  size: large(160x160), small(160x90)
 #
 # Copyright (C) TADA Tadashi <t@tdtds.jp>
 # Distributed under GPL.
 #
+def rubykaigi2013( role = 'attendee', size = nil )
+	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
+	s = "@#{h size}" unless size.nil?
+	%Q|<a href="http://rubykaigi.org/2013/" style="display:block;margin:8px auto;text-align:center;"><img src="http://rubykaigi.org/2013/badge#{h r}#{s}.png" alt="RubyKaigi 2013 #{h r}"></a>|
+end
 
 def sappororubykaigi2012( role = 'attendee' )
 	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
-   %Q|<a href="http://sapporo.rubykaigi.org/2012/" style="display:block;margin:8px auto;text-align:center;"><img src="http://sapporo.rubykaigi.org/2012/images/goodiesBadge160#{h r}.png" alt="SapporoRubyKaigi 2012 #{h r}"></a>|
+	%Q|<a href="http://sapporo.rubykaigi.org/2012/" style="display:block;margin:8px auto;text-align:center;"><img src="http://sapporo.rubykaigi.org/2012/images/goodiesBadge160#{h r}.png" alt="SapporoRubyKaigi 2012 #{h r}"></a>|
 end
 
 def kansairubykaigi04( role = 'attendee' )
@@ -21,7 +26,7 @@ def kansairubykaigi04( role = 'attendee' )
 		'staff' => "staff_daibutsu"
 	}
 
-   %Q|<a href="http://regional.rubykaigi.org/kansai04" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/kansai04/#{badges[role]}.png" alt="KansaiRubyKaigi04 #{h role.capitalize}"></a>|
+	%Q|<a href="http://regional.rubykaigi.org/kansai04" style="display:block;margin:8px auto;text-align:center;"><img src="http://regional.rubykaigi.org/images/kansai04/#{badges[role]}.png" alt="KansaiRubyKaigi04 #{h role.capitalize}"></a>|
 end
 
 def rubykaigi2011( role = 'attendee', size = 'large' )
