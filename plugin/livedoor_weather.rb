@@ -9,12 +9,12 @@
 
 require 'open-uri'
 require 'timeout'
-require 'rexml/document'
+require 'json'
 
 @lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'
 
 def lwws_init
-	@conf['lwws.city_id'] ||= 63
+	@conf['lwws.city_id'] ||= 130010
 	@conf['lwws.icon.disp'] ||= ""
 	@conf['lwws.max_temp.disp'] ||= ""
 	@conf['lwws.min_temp.disp'] ||= ""
@@ -22,22 +22,9 @@ def lwws_init
 	@conf['lwws.cache_time'] ||= 6
 end
 
-def convert_date( date_status )
-	case date_status
-	when "today"
-		date = Time.now
-	when "tomorrow"
-		date = Time.now + (60 * 60 * 24)
-	when "dayaftertomorrow"
-		date = Time.now + (60 * 60 * 24 * 2)
-	end
-	return date.strftime("%Y%m%d")
-end
-
-def lwws_request( city_id, date_status )
+def lwws_request( city_id )
 	url =  @lwws_rest_url.dup
 	url << "?city=#{city_id}"
-	url << "&day=#{date_status}"
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
@@ -46,14 +33,12 @@ def lwws_request( city_id, date_status )
 	end
 end
 
-def lwws_get( date_status, update = false)
+def lwws_get
 	lwws_init
 
 	city_id = @conf['lwws.city_id']
-	cache_time = @conf['lwws.cache_time'] * 60 * 60  # hour
-
-	cache = "#{@cache_path}/lwws"
-	file_name = "#{cache}/#{convert_date( date_status )}.xml" # file_name is YYYYMMDD.xml
+	cache_time = @conf['lwws.cache_time'] * 60 * 60
+	file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.json"
 
 	begin
 		Dir::mkdir( cache ) unless File::directory?( cache )
@@ -65,8 +50,8 @@ def lwws_get( date_status, update = false)
 		end
 
 		if cached_time.nil? or update
-			xml = lwws_request( city_id, date_status )
-			File::open( file_name, 'wb' ) {|f| f.write( xml )}
+			json = lwws_request( city_id, date_status )
+			File::open( file_name, 'wb' ) {|f| f.write( json )}
 		end
 	rescue Timeout::Error
 		return
@@ -76,56 +61,52 @@ def lwws_get( date_status, update = false)
 	end
 end
 
-def lwws_to_html( date )
+def lwws_to_html
 	lwws_init
 
-	cache = "#{@cache_path}/lwws"
-	case date
-	when "today", "tommorow", "dayaftertommorow"
-		file_name = "#{cache}/#{convert_date( date_status)}.xml"
-	else
-		file_name = "#{cache}/#{date}.xml"
-	end
-
+  file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.xml"
 	today = Time.now.strftime("%Y%m%d")
 
 	begin
-		xml = File::read( file_name )
-		doc = REXML::Document::new( xml ).root
+    # http://weather.livedoor.com/help/restapi_close
+    if Time.now >= Time.parse('20130401')
+      file_name.sub!(/xml/, 'json')
+      doc = JSON.parse(File.read(file_name))
 
-		telop = @conf.to_native( doc.elements["telop"].text, 'utf-8' )
-		max_temp = doc.elements["temperature/max/celsius"].text
-		min_temp = doc.elements["temperature/min/celsius"].text
-		detail_url = doc.elements["link"].text
+      telop = @conf.to_native( doc["forecasts"][0]["telop"], 'utf-8' )
+      max_temp = doc["forecasts"][0]["temperature"]["max"]["celsius"]
+      min_temp = doc["forecasts"][0]["temperature"]["min"]["celsius"]
+      detail_url = doc["link"]
+			title = @conf.to_native( doc["forecasts"][0]["image"]["title"], 'utf-8' )
+			url = doc["forecasts"][0]["image"]["url"]
+			width = doc["forecasts"][0]["image"]["width"]
+			height = doc["forecasts"][0]["image"]["height"]
+    else
+      doc = REXML::Document.new(File.read(file_name)).root
 
-		result = ""
-		result << %Q|<div class="lwws">|
-
-		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
-			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
-		else
+      telop = @conf.to_native( doc.elements["telop"].text, 'utf-8' )
+      max_temp = doc.elements["temperature/max/celsius"].text
+      min_temp = doc.elements["temperature/min/celsius"].text
+      detail_url = doc.elements["link"].text
 			title = @conf.to_native( doc.elements["image/title"].text, 'utf-8' )
-			link = doc.elements["image/link"].text
 			url = doc.elements["image/url"].text
 			width = doc.elements["image/width"].text
 			height = doc.elements["image/height"].text
-			if date == today
-				result << %Q|<a href="#{link}">|
-			end
-			result << %Q|<img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
-			if date == today
-				result << %Q|</a>|
-			end
-		end
+    end
 
+		result = ""
+		result << %Q|<div class="lwws">|
+		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
+			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
+		else
+			result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
+		end
 		if @conf['lwws.max_temp.disp'] == "t" and not max_temp.nil? then
 			result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
 		end
-
 		if @conf['lwws.min_temp.disp'] == "t" and not min_temp.nil? then
 			result << %Q| #{@lwws_min_temp_label}:#{h(min_temp)}#{@celsius_label}|
 		end
-
 		result << %Q|</div>|
 
 		return result
@@ -179,16 +160,14 @@ def lwws_conf_proc
 	return result
 end
 
-add_body_enter_proc do |date|
+add_body_enter_proc do
 	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot?
-		lwws_to_html( date.strftime("%Y%m%d") )
+		lwws_to_html
 	end
 end
 
 add_update_proc do
-	lwws_get( "today" )
-	lwws_get( "tomorrow" )
-	lwws_get( "dayaftertomorrow" )
+	lwws_get
 end
 
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
