@@ -60,11 +60,10 @@ def lwws_get
 	end
 end
 
-def lwws_to_html
+def lwws_to_html(date)
 	lwws_init
 
-	file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.xml"
-	today = Time.now.strftime("%Y%m%d")
+	file_name = "#{@cache_path}/lwws/#{Time.parse(date).strftime("%Y%m%d")}.xml"
 
 	begin
 		# http://weather.livedoor.com/help/restapi_close
@@ -141,30 +140,28 @@ def lwws_conf_proc
 	HTML
 
 	result << %Q|<h3>#{@lwws_icon_label}</h3>|
-		checked = "t" == @conf['lwws.icon.disp'] ? ' checked' : ''
+	checked = "t" == @conf['lwws.icon.disp'] ? ' checked' : ''
 	result << %Q|<p><label for="lwws.icon.disp"><input id="lwws.icon.disp" name="lwws.icon.disp" type="checkbox" value="t"#{checked}>#{@lwws_icon_desc}</label></p>|
-
-		result << %Q|<h3>#{@lwws_label_disp_item}</h3>|
-		result << %Q|<p>#{@lwws_desc_disp_item}</p>|
-		result << %Q|<ul>|
-		checked = "t" == @conf['lwws.max_temp.disp'] ? ' checked' : ''
+	result << %Q|<h3>#{@lwws_label_disp_item}</h3>|
+	result << %Q|<p>#{@lwws_desc_disp_item}</p>|
+	result << %Q|<ul>|
+	checked = "t" == @conf['lwws.max_temp.disp'] ? ' checked' : ''
 	result << %Q|<li><label for="lwws.max_temp.disp"><input id="lwws.max_temp.disp" name="lwws.max_temp.disp" type="checkbox" value="t"#{checked}>#{@lwws_max_temp_label}</label></li>|
-		checked = "t" == @conf['lwws.min_temp.disp'] ? ' checked' : ''
+	checked = "t" == @conf['lwws.min_temp.disp'] ? ' checked' : ''
 	result << %Q|<li><label for="lwws.min_temp.disp"><input id="lwws.min_temp.disp" name="lwws.min_temp.disp" type="checkbox" value="t"#{checked}>#{@lwws_min_temp_label}</label></li>|
-		result << %Q|</ul>|
-
-		result << %Q|<h3>#{@lwws_label_cache}</h3>|
-		checked = "t" == @conf['lwws.cache'] ? ' checked' : ''
+	result << %Q|</ul>|
+	result << %Q|<h3>#{@lwws_label_cache}</h3>|
+	checked = "t" == @conf['lwws.cache'] ? ' checked' : ''
 	result << %Q|<p><label for="lwws.cache"><input id="lwws.cache" name="lwws.cache" type="checkbox" value="t"#{checked}>#{@lwws_desc_cache}</label></p>|
-		result << %Q|<p>#{@lwws_desc_cache_time}</p>|
-		result << %Q|<p><input name="lwws.cache_time" value="#{h(@conf['lwws.cache_time'])}"></p>|
+	result << %Q|<p>#{@lwws_desc_cache_time}</p>|
+	result << %Q|<p><input name="lwws.cache_time" value="#{h(@conf['lwws.cache_time'])}"></p>|
 
-		return result
+	result
 end
 
-add_body_enter_proc do
+add_body_enter_proc do |date|
 	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot?
-		lwws_to_html
+		lwws_to_html(date)
 	end
 end
 
