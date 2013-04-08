@@ -73,8 +73,8 @@ def lwws_to_html(date)
 			doc = JSON.parse(File.read(file_name))
 
 			telop = @conf.to_native( doc["forecasts"][0]["telop"], 'utf-8' )
-			max_temp = doc["forecasts"][0]["temperature"]["max"]["celsius"]
-			# 「今日」のデータに最低気温は含まれない場合がある
+			# 「今日」のデータに気温は含まれない場合がある
+			max_temp = doc["forecasts"][0]["temperature"]["max"]["celsius"] rescue nil
 			min_temp = doc["forecasts"][0]["temperature"]["min"]["celsius"] rescue nil
 			detail_url = doc["link"]
 			title = @conf.to_native( doc["forecasts"][0]["image"]["title"], 'utf-8' )
