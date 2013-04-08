@@ -67,7 +67,7 @@ def lwws_to_html(date)
 
 	begin
 		# http://weather.livedoor.com/help/restapi_close
-		if Time.parse('20130401') < Time.now
+		if Time.parse('20130331') < date
 			file_name.sub!(/xml/, 'json')
 			require 'json'
 			doc = JSON.parse(File.read(file_name))
