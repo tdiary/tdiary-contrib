@@ -63,7 +63,7 @@ end
 def lwws_to_html(date)
 	lwws_init
 
-	file_name = "#{@cache_path}/lwws/#{Time.parse(date).strftime("%Y%m%d")}.xml"
+	file_name = "#{@cache_path}/lwws/#{date.strftime("%Y%m%d")}.xml"
 
 	begin
 		# http://weather.livedoor.com/help/restapi_close
