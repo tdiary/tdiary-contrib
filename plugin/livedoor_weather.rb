@@ -97,11 +97,11 @@ def lwws_to_html(date)
 
 		result = ""
 		result << %Q|<div class="lwws">|
-			if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
-				result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
-			else
-				result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
-			end
+		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
+			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
+		else
+			result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
+		end
 		if @conf['lwws.max_temp.disp'] == "t" and not max_temp.nil? then
 			result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
 		end
@@ -110,12 +110,10 @@ def lwws_to_html(date)
 		end
 		result << %Q|</div>|
 
-			return result
-	rescue Errno::ENOENT
-		return ''
-	rescue => e
+		result
+	rescue StandardError, Errno::ENOENT => e
 		@logger.error( e )
-		return ''
+		''
 	end
 end
 
