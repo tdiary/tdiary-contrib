@@ -9,7 +9,7 @@
 
 require 'open-uri'
 require 'timeout'
-require 'json'
+require 'time'
 
 @lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/json/v1'
 
@@ -41,66 +41,68 @@ def lwws_get
 	file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.json"
 
 	begin
-		Dir::mkdir( cache ) unless File::directory?( cache )
-		cached_time = nil
-		cached_time = File.mtime( file_name ) if File.exist?( file_name )
+		Dir.mkdir("#{@cache_path}/lwws") unless File.directory?("#{@cache_path}/lwws")
 
-		if not cached_time.nil? and @conf['lwws.cache'] == "t" and Time.now > cached_time + cache_time
-			update = true
-		end
+		cached_time = if File.exist?( file_name )
+							  File.mtime( file_name )
+						  else
+							  nil
+						  end
 
-		if cached_time.nil? or update
-			json = lwws_request( city_id, date_status )
-			File::open( file_name, 'wb' ) {|f| f.write( json )}
+		update = true if @conf['lwws.cache'] == "t" && cached_time && Time.now > cached_time + cache_time
+
+		if cached_time.nil? || update
+			json = lwws_request(city_id)
+			File.open(file_name, 'wb') {|f| f.write(json)}
 		end
-	rescue Timeout::Error
-		return
 	rescue => e
 		@logger.error( e )
-		return
 	end
 end
 
 def lwws_to_html
 	lwws_init
 
-  file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.xml"
+	file_name = "#{@cache_path}/lwws/#{Time.now.strftime("%Y%m%d")}.xml"
 	today = Time.now.strftime("%Y%m%d")
 
 	begin
-    # http://weather.livedoor.com/help/restapi_close
-    if Time.now >= Time.parse('20130401')
-      file_name.sub!(/xml/, 'json')
-      doc = JSON.parse(File.read(file_name))
+		# http://weather.livedoor.com/help/restapi_close
+		if Time.parse('20130401') < Time.now
+			file_name.sub!(/xml/, 'json')
+			require 'json'
+			doc = JSON.parse(File.read(file_name))
 
-      telop = @conf.to_native( doc["forecasts"][0]["telop"], 'utf-8' )
-      max_temp = doc["forecasts"][0]["temperature"]["max"]["celsius"]
-      min_temp = doc["forecasts"][0]["temperature"]["min"]["celsius"]
-      detail_url = doc["link"]
+			telop = @conf.to_native( doc["forecasts"][0]["telop"], 'utf-8' )
+			max_temp = doc["forecasts"][0]["temperature"]["max"]["celsius"]
+			# 「今日」のデータに最低気温は含まれない場合がある
+			min_temp = doc["forecasts"][0]["temperature"]["min"]["celsius"] rescue nil
+			detail_url = doc["link"]
 			title = @conf.to_native( doc["forecasts"][0]["image"]["title"], 'utf-8' )
 			url = doc["forecasts"][0]["image"]["url"]
 			width = doc["forecasts"][0]["image"]["width"]
 			height = doc["forecasts"][0]["image"]["height"]
-    else
-      doc = REXML::Document.new(File.read(file_name)).root
+		else
+			require 'rexml/document'
+			doc = REXML::Document.new(File.read(file_name)).root
 
-      telop = @conf.to_native( doc.elements["telop"].text, 'utf-8' )
-      max_temp = doc.elements["temperature/max/celsius"].text
-      min_temp = doc.elements["temperature/min/celsius"].text
-      detail_url = doc.elements["link"].text
+			telop = @conf.to_native( doc.elements["telop"].text, 'utf-8' )
+			max_temp = doc.elements["temperature/max/celsius"].text
+			min_temp = doc.elements["temperature/min/celsius"].text
+			detail_url = doc.elements["link"].text
 			title = @conf.to_native( doc.elements["image/title"].text, 'utf-8' )
 			url = doc.elements["image/url"].text
 			width = doc.elements["image/width"].text
 			height = doc.elements["image/height"].text
-    end
+		end
 
 		result = ""
 		result << %Q|<div class="lwws">|
-		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
-			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
-		else
-			result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
-		end
+			if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
+				result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
+			else
+				result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
+			end
 		if @conf['lwws.max_temp.disp'] == "t" and not max_temp.nil? then
 			result << %Q| #{@lwws_max_temp_label}:#{h(max_temp)}#{@celsius_label}|
 		end
@@ -109,7 +111,7 @@ def lwws_to_html
 		end
 		result << %Q|</div>|
 
-		return result
+			return result
 	rescue Errno::ENOENT
 		return ''
 	rescue => e
@@ -139,25 +141,25 @@ def lwws_conf_proc
 	HTML
 
 	result << %Q|<h3>#{@lwws_icon_label}</h3>|
-	checked = "t" == @conf['lwws.icon.disp'] ? ' checked' : ''
+		checked = "t" == @conf['lwws.icon.disp'] ? ' checked' : ''
 	result << %Q|<p><label for="lwws.icon.disp"><input id="lwws.icon.disp" name="lwws.icon.disp" type="checkbox" value="t"#{checked}>#{@lwws_icon_desc}</label></p>|
 
-	result << %Q|<h3>#{@lwws_label_disp_item}</h3>|
-	result << %Q|<p>#{@lwws_desc_disp_item}</p>|
-	result << %Q|<ul>|
-	checked = "t" == @conf['lwws.max_temp.disp'] ? ' checked' : ''
+		result << %Q|<h3>#{@lwws_label_disp_item}</h3>|
+		result << %Q|<p>#{@lwws_desc_disp_item}</p>|
+		result << %Q|<ul>|
+		checked = "t" == @conf['lwws.max_temp.disp'] ? ' checked' : ''
 	result << %Q|<li><label for="lwws.max_temp.disp"><input id="lwws.max_temp.disp" name="lwws.max_temp.disp" type="checkbox" value="t"#{checked}>#{@lwws_max_temp_label}</label></li>|
-	checked = "t" == @conf['lwws.min_temp.disp'] ? ' checked' : ''
+		checked = "t" == @conf['lwws.min_temp.disp'] ? ' checked' : ''
 	result << %Q|<li><label for="lwws.min_temp.disp"><input id="lwws.min_temp.disp" name="lwws.min_temp.disp" type="checkbox" value="t"#{checked}>#{@lwws_min_temp_label}</label></li>|
-	result << %Q|</ul>|
+		result << %Q|</ul>|
 
-	result << %Q|<h3>#{@lwws_label_cache}</h3>|
-	checked = "t" == @conf['lwws.cache'] ? ' checked' : ''
+		result << %Q|<h3>#{@lwws_label_cache}</h3>|
+		checked = "t" == @conf['lwws.cache'] ? ' checked' : ''
 	result << %Q|<p><label for="lwws.cache"><input id="lwws.cache" name="lwws.cache" type="checkbox" value="t"#{checked}>#{@lwws_desc_cache}</label></p>|
-	result << %Q|<p>#{@lwws_desc_cache_time}</p>|
-	result << %Q|<p><input name="lwws.cache_time" value="#{h(@conf['lwws.cache_time'])}"></p>|
+		result << %Q|<p>#{@lwws_desc_cache_time}</p>|
+		result << %Q|<p><input name="lwws.cache_time" value="#{h(@conf['lwws.cache_time'])}"></p>|
 
-	return result
+		return result
 end
 
 add_body_enter_proc do
@@ -173,3 +175,11 @@ end
 add_conf_proc( 'lwws', @lwws_plugin_name ) do
 	lwws_conf_proc
 end
+
+# Local Variables:
+# mode: ruby
+# indent-tabs-mode: t
+# tab-width: 3
+# ruby-indent-level: 3
+# End:
+# vim: ts=3
