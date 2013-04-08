@@ -11,7 +11,7 @@ require 'open-uri'
 require 'timeout'
 require 'json'
 
-@lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/rest/v1'
+@lwws_rest_url = 'http://weather.livedoor.com/forecast/webservice/json/v1'
 
 def lwws_init
 	@conf['lwws.city_id'] ||= 130010
