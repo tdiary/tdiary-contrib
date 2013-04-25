@@ -97,7 +97,11 @@ $(function() {
       var icon_img = null;
       
       if (item.value != null){
-         icon_img = $("<img>").attr('src', 'http://www.emoji-cheat-sheet.com/graphics/emojis/' + item.value.replace(/:/g, "")+'.png')
+         png_basename = item.value.replace(/:/g, "");
+         
+         if (png_basename == '+1'){ png_basename = 'plus1' }
+         
+         icon_img = $("<img>").attr('src', 'http://www.emoji-cheat-sheet.com/graphics/emojis/' + png_basename + '.png')
          .css('width', '20').css('height', '20');
          
       }
