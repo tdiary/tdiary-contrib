@@ -1,5 +1,5 @@
-<%# gallery.rhtml $Revision: 2.0.0 $ %>
-<%# Copyright (c) 2005-2010 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp> %>
+<%# gallery.rhtml $Revision: 2.0.1 $ %>
+<%# Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp> %>
 <%# You can redistribute it and/or modify it under GPL2. %>
 
 <div class="adminmenu"><%%=navi_user%></div><h1><%= CGI::escapeHTML( @conf.html_title ) %> [Image Gallery]</h1>
@@ -48,7 +48,14 @@
 						<h3><%= CGI::escapeHTML(@images[i].title) %>[<%= @images[i].date.sub(/(\d{4})(\d{2})(\d{2})/, '\1-\2-\3') %>]</h3>
 						<p><%= CGI::escapeHTML(@images[i].subtitle) %></p>
 						<a href="./?date=<%= @images[i].date %>" title="to Diary" class="open"></a>
-						<% image_file = (@use_mid_image && @mode == "slide") ? "m"+@images[i].file : @images[i].file %>
+						<% image_file = @images[i].file.dup %>
+						<% if @use_mid_image && @mode == "slide" %>
+							<% if image_file[4] == ?/ %>
+								<% image_file[4] = "/m" %>
+							<% else %>
+								<% image_file = "m" + image_file %>
+							<% end %>
+						<% end %>
 						<img src="<%= @image_url %>/<%= image_file %>" class="full" />
 						<img src="<%= @image_url %>/<%= @images[i].url %>" class="thumbnail" />
 						</div>
@@ -71,12 +78,21 @@
 	<div class="day">
 		<h2><span class="date">&nbsp;<a href="./?date=<%= @images[0].date %>" title="<%= CGI::escapeHTML(@images[0].subtitle) %>"><%= @images[0].date.sub(/(\d{4})(\d{2})(\d{2})/, '\1-\2-\3') %></a></span>&nbsp;&nbsp;<span class="title"><%= CGI::escapeHTML(@images[0].title) %></span>&nbsp;&nbsp;<span class="nyear">[<%= @images[0].file %>:<%= @images[0].width %>(w)¡ß<%= @images[0].height %>(h)]</span></h2>
 		<div class="body">
-			<div class="categorylink">&raquo;<%= format_link_viewer_date(@images[0].date[0,4], @images[0].date[0,4]) %>-<%= format_link_viewer_date(@images[0].date[4,2], @images[0].date[0,6]) %>-<%= format_link_viewer_date(@images[0].date[6,2], @images[0].date[0,8]) %>&nbsp;|&nbsp;<%= format_link_viewer_category(@images[0].subtitle) %></div>
+			<% image_file = @images[0].file.dup %>
+			<% month_filter = ((image_file[4] == ?/) ? %Q[^#{image_file[0,4]}/#{image_file[5,6]}] : %Q[^#{image_file[0,6]}]) %>
+			<div class="categorylink">&raquo;<%= format_link_viewer_date(@images[0].date[0,4], "^"+@images[0].date[0,4]) %>-<%= format_link_viewer_date(@images[0].date[4,2], month_filter) %>-<%= format_link_viewer_date(@images[0].date[6,2], @images[0].date[0,8]) %>&nbsp;|&nbsp;<%= format_link_viewer_category(@images[0].subtitle) %></div>
 			<div class="section">
 				<table class="imageview">
 					<tr>
 						<td colspan="2">
-							<% image_file = (@use_mid_image) ? "m"+@images[0].file : @images[0].file %>
+							<% image_file = @images[0].file.dup %>
+							<% if @use_mid_image %>
+								<% if image_file[4] == ?/ %>
+									<% image_file[4] = "/m" %>
+								<% else %>
+									<% image_file = "m" + image_file %>
+								<% end %>
+							<% end %>
 							<a href="<%= @image_url %>/<%= @images[0].file %>"><img src="<%= @image_url %>/<%= image_file %>" <%= @sizestr %> alt="<%= CGI::escapeHTML(@images[0].title) %>" title="<%= CGI::escapeHTML(@images[0].title) %>" class="imagebody"></a>
 						</td>
 					</tr>

@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-# image-gallery.rb $Revision: 2.0.3 $
+# image-gallery.rb $Revision: 2.0.4 $
 #
-# Copyright (c) 2005-2012 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2013 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 
 if RUBY_VERSION >= '1.9.0' 
@@ -43,7 +43,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.3"
+      @img_version = "2.0.4"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
@@ -173,20 +173,23 @@ module TDiary
       @page_day   = ""
       @page_date  = nil
       return if @name_filter == ""
+      t_name_filter = @name_filter.dup
+      t_name_filter["^"] = "" if t_name_filter[0] == ?^
+      t_name_filter = t_name_filter[5,8] if t_name_filter[4] == ?/
       begin
-        if @name_filter.index(/[\d]{8}/) != nil
-          @page_year  = @name_filter[0,4]
-          @page_month = @name_filter[4,2]
-          @page_day   = @name_filter[6,2]
+        if t_name_filter.index(/[\d]{8}/) != nil
+          @page_year  = t_name_filter[0,4]
+          @page_month = t_name_filter[4,2]
+          @page_day   = t_name_filter[6,2]
           @page_date  = Date.new(@page_year.to_i, @page_month.to_i, @page_day.to_i)
 
-        elsif @name_filter.index(/[\d]{6}/) != nil
-          @page_year  = @name_filter[0,4]
-          @page_month = @name_filter[4,2]
+        elsif t_name_filter.index(/[\d]{6}/) != nil
+          @page_year  = t_name_filter[0,4]
+          @page_month = t_name_filter[4,2]
           @page_date  = Date.new(@page_year.to_i, @page_month.to_i, 1)
 
-        elsif @name_filter.index(/[\d]{4}/) != nil
-          @page_year  = @name_filter[0,4]
+        elsif t_name_filter.index(/[\d]{4}/) != nil and t_name_filter[0,4].to_i >= 1970
+          @page_year  = t_name_filter[0,4]
           @page_date  = Date.new(@page_year.to_i, 1, 1)
         end
       rescue
@@ -303,15 +306,22 @@ module TDiary
         elsif @page_month != ""
           prevmonth = (@page_date << 1).strftime("%Y%m")
           nextmonth = (@page_date >> 1).strftime("%Y%m")
+          if @name_filter[0] == ?^ and @name_filter[5] == ?/ 
+            prevmonth = %Q[^#{prevmonth[0,4]}/#{prevmonth}]
+            nextmonth = %Q[^#{nextmonth[0,4]}/#{nextmonth}]
+          elsif @name_filter[0] == ?^
+            prevmonth = %Q[^#{prevmonth[0,4]}]
+            nextmonth = %Q[^#{nextmonth[0,4]}]
+          end
           buf << format_link_date(%Q[&laquo;#{(@page_date << 1).to_s[0,7]}], prevmonth)
           buf << format('&nbsp;&nbsp;|&nbsp;&nbsp;<a href="%s?mode=%s;order=%s">%s</a>&nbsp;&nbsp;|&nbsp;&nbsp;', _(@cgi.script_name ? @cgi.script_name : ''), _(@mode), _(@order), '全画像')
           buf << format_link_date(%Q[#{(@page_date >> 1).to_s[0,7]}&raquo;], nextmonth)
 
         elsif @page_year != ""
           year = @page_year.to_i
-          buf << format_link_date(%Q[&laquo;#{(year - 1).to_s}], (year - 1).to_s)
+          buf << format_link_date(%Q[&laquo;#{(year - 1).to_s}], "^"+(year - 1).to_s)
           buf << format('&nbsp;&nbsp;|&nbsp;&nbsp;<a href="%s?mode=%s;order=%s">%s</a>&nbsp;&nbsp;|&nbsp;&nbsp;', _(@cgi.script_name ? @cgi.script_name : ''), _(@mode), _(@order), '全画像')
-          buf << format_link_date(%Q[#{(year + 1).to_s}&raquo;], (year + 1).to_s)
+          buf << format_link_date(%Q[#{(year + 1).to_s}&raquo;], "^"+(year + 1).to_s)
         end
 
         buf << "</p>\n"
@@ -336,7 +346,7 @@ module TDiary
     def format_link_viewer_date(label, name_filter)
       return format('<a href="%s?mode=list;order=desc;name=%s">%s</a>',
               _(@cgi.script_name ? @cgi.script_name : ''),
-              name_filter,
+              CGI::escape(name_filter),
               label)
     end
 
@@ -484,7 +494,8 @@ begin
     conf = TDiary::Config::new
   else
     # for tDiary 2.1 or later
-    conf = TDiary::Config::new(@cgi)
+    request = TDiary::Request.new( ENV, @cgi )
+    conf = TDiary::Config::new(@cgi, request)
   end
   tdiary = TDiary::TDiaryGallery::new( @cgi, 'gallery.rhtml', conf )
 
