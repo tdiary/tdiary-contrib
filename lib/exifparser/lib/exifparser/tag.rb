@@ -782,15 +782,11 @@ module Exif
       #
       class Copyright < Base
 
-        def _format0(data)
-          data.inspect
-        end
-
         def to_s
-          sep = @data.index(0)
-          photographer = @data[0..sep-1]
-          editor = @data[sep+1..-1]
-    "#{photographer} (Photographer) - #{editor} (Editor)"
+          sep = @data.split("\0")
+          photographer = sep[0]
+          editor       = sep[1]
+          "#{photographer} (Photographer) - #{editor} (Editor)"
         end
 
       end
