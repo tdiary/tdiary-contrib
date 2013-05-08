@@ -33,7 +33,7 @@ module Exif
       # check soi (start of image)
       #
       @fin.pos = 0
-      if @fin.read(2) != "\xFF\xD8"
+      unless get_soi == 0xFFD8
         raise RuntimeError, 'not JPEG format'
       end
 
@@ -197,7 +197,7 @@ module Exif
         end.value
         @fin.pos = @tiffHeader0 + thumbStart
         # check JPEG soi maker
-        if @fin.read(2) != "\xFF\xD8"
+        if get_soi != 0xFFD8
           raise RuntimeError, 'not JPEG format'
         end
         @fin.pos = @fin.pos - 2
@@ -245,6 +245,10 @@ module Exif
         obj.processData
         yield obj
       }
+    end
+
+    def get_soi
+      (@fin.read(1).unpack("C*")[0]) << 8 | (@fin.read(1).unpack("C*")[0])
     end
 
     def get_marker
