@@ -8,10 +8,11 @@
 # Copyright (C) TADA Tadashi <t@tdtds.jp>
 # Distributed under GPL.
 #
+
 def rubykaigi2013( role = 'attendee', size = nil )
 	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
 	s = "@#{h size}" unless size.nil?
-	%Q|<a href="http://rubykaigi.org/2013/" style="display:block;margin:8px auto;text-align:center;"><img src="http://rubykaigi.org/2013/badge#{h r}#{s}.png" alt="RubyKaigi 2013 #{h r}"></a>|
+	%Q|<a href="http://rubykaigi.org/2013/" style="display:block;margin:8px auto;text-align:center;"><img src="http://rubykaigi.org/2013/images/badge#{h r}#{s}.png" alt="RubyKaigi 2013 #{h r}"></a>|
 end
 
 def sappororubykaigi2012( role = 'attendee' )
