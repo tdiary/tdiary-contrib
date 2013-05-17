@@ -21,7 +21,11 @@
   * fork from image_gps2.rb
 =end
 
-require 'exifparser'
+begin
+  require 'exifparser'
+rescue
+  retry if require 'rubygems'
+end
 
 def tky2wgs lat,lon
   lat_w = lat - lat*0.00010695 + lon*0.000017464 + 0.0046017
@@ -56,6 +60,8 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   if exif
     #GPS Info
     begin
+      raise if exif['GPSLatitudeRef'].value.length==0
+      raise if exif['GPSLongitudeRef'].value.length==0
       lat = exif['GPSLatitude'].value
       lat = lat[0].to_f + lat[1].to_f/60 + lat[2].to_f/3600
       lat = -lat if exif['GPSLatitudeRef'].value == 'S'
@@ -67,32 +73,32 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     rescue
       lat = nil
     end
-    detail = "<ul>"
-    detail += "<li>#{exif['Model'].to_s}" if exif.tag?('Model')
-    detail += "<li>焦点距離:#{exif['FocalLength'].to_s}" if exif.tag?('FocalLength')
-    detail += "<li>F値:#{exif['FNumber'].to_s}" if exif.tag?('FNumber')
-    detail += "<li>露出時間:#{exif['ExposureTime'].to_s}" if exif.tag?('ExposureTime')
-    detail += "<li>露出補正:#{exif['ExposureBiasValue'].to_s}" if exif.tag?('ExposureBiasValue')
+    sep=' '
+    info=['Model','FocalLength','FNumber','ExposureTime','ExposureBiasValue']
+    detail =%Q[<p class="exif_info">]
+    info.each{|e|
+      detail += "#{exif[e].to_s}"+sep if exif.tag?(e)
+    }
     unless lat.nil?
       unless (@conf['image_gps.google_maps_api_key'] == '' || @conf.smartphone?)
-        img_map = %Q["http://maps.google.com/staticmap?format=gif&amp;]
+        img_map = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
         img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
         img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
       end
       map_link = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
-      map_link += "#{exif['GPSLatitude'].to_s},#{exif['GPSLatitudeRef'].value}"
-      map_link += " #{exif['GPSLongitude'].to_s},#{exif['GPSLongitudeRef'].value}"
+      map_link += %Q[<i class="icon-globe"></i>]
       map_link += %Q[<img class="map" src=#{img_map}>] if img_map
       map_link += "</a>"
-      detail += "<li>"+map_link
+      detail += map_link
     end
-    detail += "</ul>"
+    detail += "</p>"
   end
 
   img = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}>]
   img_t = %Q[<img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}" #{size}>]
 
   url  = ''
+
   if @conf.mobile_agent?
     url += %Q[<a href=#{google}/maps/m?q=#{lat},#{lon}>] unless lat.nil?
     url += thumbnail ? img_t : img
@@ -104,7 +110,9 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     url +=%Q[</a>]
     url += %Q[#{detail}</div>] if detail
   end
+
   url
+
 end
 add_header_proc do
   if @mode !~ /conf$/ and not bot? then
@@ -127,14 +135,11 @@ end
 
 add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
-    @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
     @conf['image_gps.google_maps_api_key'] = @cgi.params['image_gps.google_maps_api_key'][0]
   end
 
   <<-HTML
     <p>
-    <h3>撮影条件の表示</h3>
-    <input type="checkbox" name="image_gps.add_info" value="true" #{if @conf['image_gps.add_info'] then " checked" end}>タイトルに撮影条件を追加する
     <h3>Google Maps API Key</h3>
     <input type="text" name="image_gps.google_maps_api_key" value="#{@conf['image_gps.google_maps_api_key']}">
     </p>

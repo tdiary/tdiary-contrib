@@ -18,7 +18,8 @@ image.rbを有効にしてください。また、image_ex.rbと共存するこ�
 
 ・ExifParserの導入
 image_detail.rbはExifのパーサとして、ExifParserを使用しています。
-tdiary/lib/ExifParser/READMEに従って導入してください。
+以下のコマンドで導入できます。
+#gem install exifparser
 
 ・Pluginのインストール
 image_detail.rbを適切な場所に配置してください。多言語用リソースは存在しません。
