@@ -1,4 +1,6 @@
-source :rubygems
+source 'https://rubygems.org'
+
+gem 'tdiary'
 
 gem 'rake'
 gem 'rspec'
