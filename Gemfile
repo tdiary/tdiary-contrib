@@ -11,5 +11,3 @@ platforms :ruby_18 do
 end
 
 gem 'simplecov', :platforms => :ruby_19
-
-gemspec
