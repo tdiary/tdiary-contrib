@@ -52,6 +52,11 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   else
     size = ""
   end
+  
+  show_exif_info = @conf['image_gps.show_exif_info']
+  show_exif_info = '' if show_exif_info.nil?
+  google_maps_api_key = @conf['image_gps.google_maps_api_key']
+  google_maps_api_key = '' if google_maps_api_key.nil?
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
 
@@ -73,21 +78,23 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     rescue
       lat = nil
     end
-    sep=' '
-    info=['Model','FocalLength','FNumber','ExposureTime','ExposureBiasValue']
+
+    # show exif info
+    sep=' '  # ToDo: separator to config param.
+
     detail =%Q[<p class="exif_info">]
-    info.each{|e|
+    show_exif_info.split(' ').each{|e|
       detail += "#{exif[e].to_s}"+sep if exif.tag?(e)
     }
     unless lat.nil?
-      unless (@conf['image_gps.google_maps_api_key'] == '' || @conf.smartphone?)
-        img_map = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
-        img_map += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
-        img_map += %Q[key=#{@conf['image_gps.google_maps_api_key']}&amp;sensor=false"]
+      unless (google_maps_api_key == '' || @conf.smartphone?)
+        map_img = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
+        map_img += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
+        map_img += %Q[key=#{google_maps_api_key}&amp;sensor=false"]
       end
       map_link = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
-      map_link += %Q[<i class="icon-globe"></i>]
-      map_link += %Q[<img class="map" src=#{img_map}>] if img_map
+      map_link += %Q[MAP]
+      map_link += %Q[<img class="map" src=#{map_img}>] if map_img
       map_link += "</a>"
       detail += map_link
     end
@@ -104,11 +111,12 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     url += thumbnail ? img_t : img
     url += %Q[</a>] unless lat.nil?
   else
-    url += %Q[<div class="photo_detail"><p>#{alt}</p>] if detail
+    url += %Q[<div class="photo_detail">]
     url += %Q[<a href="#{@image_url}/#{image}">]
     url += thumbnail ? img_t : img
-    url +=%Q[</a>]
-    url += %Q[#{detail}</div>] if detail
+    url += %Q[</a>]
+    url += %Q[#{detail}] if detail
+    url += %Q[</div>]
   end
 
   url
@@ -135,14 +143,19 @@ end
 
 add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
-    @conf['image_gps.google_maps_api_key'] = @cgi.params['image_gps.google_maps_api_key'][0]
+    @conf['image_gps.show_exif_info'] = @cgi.params['image_gps.show_exif_info'][0]
   end
 
   <<-HTML
     <p>
-    <h3>Google Maps API Key</h3>
+    <h3>Google Static Maps API Key</h3>
     <input type="text" name="image_gps.google_maps_api_key" value="#{@conf['image_gps.google_maps_api_key']}">
     </p>
+    <p>
+    <h3>Show Exif Info</h3>
+    <input type="text" name="image_gps.show_exif_info" value="#{@conf['image_gps.show_exif_info']}">
+    </p>
+    <p>set exif tag name separate with space.</p>
+    <p>exp.)Model FocalLength FNumber ExposureTime ExposureBiasValue</p>
   HTML
-
 end
