@@ -1,7 +1,5 @@
 rvm:
-  - ree
-  - 1.9.2
   - 1.9.3
-  - ruby-head
+  - 2.0.0
 
 script: bundle exec rake spec
