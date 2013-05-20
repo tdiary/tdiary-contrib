@@ -234,7 +234,8 @@ if mode == "CMD"
 		if TDiary::Config.instance_method(:initialize).arity != 0
 			# for tDiary 2.1 or later
 			cgi = CGI.new
-			conf = TDiary::Config::new(cgi)
+			request = TDiary::Request.new(ENV, cgi)
+			conf = TDiary::Config::new(cgi, request)
 		else
 			# for tDiary 2.0 or earlier
 			conf = TDiary::Config::new
