@@ -1,46 +1,31 @@
 # -*- coding: utf-8 -*-
-# image_gps.rb $Revision: 1.7 $
+# image_gps.rb $Revision: 1.1 $
 # 
 # 概要:
-# 画像にGPSによる位置情報が含まれている場合は、対応する地図へのリンクを生成する。
+# 
 #
 # 使い方:
 # 絵日記Plugin(image.rb)とおなじ
 #
-# Copyright (c) 2004,2010 kp <kp@mmho.no-ip.org>
+# Copyright (c) 2009,2010 kp <kp@mmho.no-ip.org>
 # Distributed under the GPL
 #
 
 =begin ChangeLog
 2010-04-21 kp
-  * リンク先をGoogleに統一
-2009-06-01 kp
-  * モバイルモード時も世界測地系とする
-2009-05-26 kp
-  * walk.eznavi.jpの場合のクエリを修正
-  * リンク先をGoogle Mapsに
-  * wgs2tkyを使用しない
-2008-05-22 kp
-  * MapDatumがTOKYO以外の場合、WGS-84と類推する
-2008-01-17 kp
-  * いろいろ変更
-2006-03-28 kp
-  * cooperation with ALPSLAB clip!
-2006-03-27 kp
-  * use exifparser
-2005-07-25 kp
-  * correct link URL when access with mobile.
-2005-07-19 kp
-  * MapDatum macth to WGS84
-2005-05-25 kp
-  * correct URL link to Mapion.
-2005-05-24 kp
-  * create link to http://walk.eznavi.jp when access with mobile.
-2004-11-30 kp
+  * スマートフォン対応
+  * Google Maps API Keyが設定されていない場合はStaticMAPを生成しない
+  * リンク先をGoogle Mapsに統一
+2009-06-03 kp
   * first version
+  * fork from image_gps2.rb
 =end
 
-require 'exifparser'
+begin
+  require 'exifparser'
+rescue
+  retry if require 'rubygems'
+end
 
 def tky2wgs lat,lon
   lat_w = lat - lat*0.00010695 + lon*0.000017464 + 0.0046017
@@ -67,22 +52,21 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   else
     size = ""
   end
-
-  #m_map = 'http://m.google.com/maps'
-  map = 'http://maps.google.co.jp'
+  
+  show_exif_info = @conf['image_gps.show_exif_info']
+  show_exif_info = '' if show_exif_info.nil?
+  google_maps_api_key = @conf['image_gps.google_maps_api_key']
+  google_maps_api_key = '' if google_maps_api_key.nil?
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
 
-  datum = nil
+  google = "http://maps.google.co.jp"
 
   if exif
-    if @conf['image_gps.add_info']
-      alt += ' '+exif['Model'].to_s if exif.tag?('Model')
-      alt += ' '+exif['FocalLength'].to_s if exif.tag?('FocalLength')
-      alt += ' '+exif['ExposureTime'].to_s if exif.tag?('ExposureTime')
-      alt += ' '+exif['FNumber'].to_s if exif.tag?('FNumber')
-    end
+    #GPS Info
     begin
+      raise if exif['GPSLatitudeRef'].value.length==0
+      raise if exif['GPSLongitudeRef'].value.length==0
       lat = exif['GPSLatitude'].value
       lat = lat[0].to_f + lat[1].to_f/60 + lat[2].to_f/3600
       lat = -lat if exif['GPSLatitudeRef'].value == 'S'
@@ -90,39 +74,88 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       lon = lon[0].to_f + lon[1].to_f/60 + lon[2].to_f/3600
       lon = -lon if exif['GPSLongitudeRef'].value == 'W'
       datum = exif['GPSMapDatum'].value if exif.tag?('GPSMapDatum')
+      lat,lon = tky2wgs(lat,lon) if datum == 'TOKYO'
     rescue
       lat = nil
     end
-  end
 
-  unless lat.nil?
-    lat,lon = tky2wgs(lat,lon) if datum == 'TOKYO'
-  end
+    # show exif info
+    sep=' '  # ToDo: separator to config param.
 
-  if thumbnail
-    url = %Q[<a href="#{@image_url}/#{image}"><img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}"#{size}></a>]
-  elsif lat.nil?
-    url = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}"#{size}>]
-  else
-    if @conf.mobile_agent?
-      url = %Q[<a href="#{map}/maps/m?q=#{lat},#{lon}">]
-    else
-      url = %Q[<a href="#{map}/maps?q=#{lat},#{lon}">]
+    detail =%Q[<p class="exif_info">]
+    show_exif_info.split(' ').each{|e|
+      detail += "#{exif[e].to_s}"+sep if exif.tag?(e)
+    }
+    unless lat.nil?
+      unless (google_maps_api_key == '' || @conf.smartphone?)
+        map_img = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
+        map_img += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
+        map_img += %Q[key=#{google_maps_api_key}&amp;sensor=false"]
+      end
+      map_link = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
+      map_link += %Q[MAP]
+      map_link += %Q[<img class="map" src=#{map_img}>] if map_img
+      map_link += "</a>"
+      detail += map_link
     end
-    url += %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}></a>]
+    detail += "</p>"
   end
+
+  img = %Q[<img class="#{place}" src="#{@image_url}/#{image}" alt="#{alt}" title="#{alt}" #{size}>]
+  img_t = %Q[<img class="#{place}" src="#{@image_url}/#{image_t}" alt="#{alt}" title="#{alt}" #{size}>]
+
+  url  = ''
+
+  if @conf.mobile_agent?
+    url += %Q[<a href=#{google}/maps/m?q=#{lat},#{lon}>] unless lat.nil?
+    url += thumbnail ? img_t : img
+    url += %Q[</a>] unless lat.nil?
+  else
+    url += %Q[<div class="photo_detail">]
+    url += %Q[<a href="#{@image_url}/#{image}">]
+    url += thumbnail ? img_t : img
+    url += %Q[</a>]
+    url += %Q[#{detail}] if detail
+    url += %Q[</div>]
+  end
+
   url
+
+end
+add_header_proc do
+  if @mode !~ /conf$/ and not bot? then
+    <<-HTML
+      <style type="text/css"><!--
+        img.map{
+          display:none;
+          position:absolute;
+          border:none;
+        }
+        a:hover img.map{
+          display:inline;
+        }
+      --></style>
+    HTML
+  else
+    ''
+  end
 end
 
 add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
-    @conf['image_gps.add_info'] = @cgi.params['image_gps.add_info'][0]
+    @conf['image_gps.show_exif_info'] = @cgi.params['image_gps.show_exif_info'][0]
   end
 
   <<-HTML
     <p>
-    <h3>撮影条件の表示</h3>
-    <input type="checkbox" name="image_gps.add_info" value="true" #{if @conf['image_gps.add_info'] then " checked" end}>タイトルに撮影条件を追加する</p>
+    <h3>Google Static Maps API Key</h3>
+    <input type="text" name="image_gps.google_maps_api_key" value="#{@conf['image_gps.google_maps_api_key']}">
+    </p>
+    <p>
+    <h3>Show Exif Info</h3>
+    <input type="text" name="image_gps.show_exif_info" value="#{@conf['image_gps.show_exif_info']}">
+    </p>
+    <p>set exif tag name separate with space.</p>
+    <p>exp.)Model FocalLength FNumber ExposureTime ExposureBiasValue</p>
   HTML
-
 end

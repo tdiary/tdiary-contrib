@@ -1,35 +1,67 @@
 image_gps.rb
 
 機能
-アップロードした画像に含まれているGPSの位置情報を使用して、
-対応する地図へのリンクを生成します。また、画像ファイルに機種名などの情
-報が含まれている場合、タイトル情報として表示する事が可能です。
+JPEGファイルに含まれるExif情報を解析し、各種撮影条件を表示します。
+また、位置情報が含まれる場合、周辺地図ををポップアップ表示し、
+Googleマップへのリンクを生成します。
 
-更新情報
-revision 1.7:
-  リンク先をGoogleMapにした。
-  モバイルモード時も世界測地系に変換する。
-
-インストール
+前提条件
 このPluginはimage.rbが導入されていることを前提としています。
 image.rbを有効にしてください。また、image_ex.rbと共存することはできません。
 
 ・ExifParserの導入
 image_gps.rbはExifのパーサとして、ExifParserを使用しています。
-tdiary/lib/ExifParser/READMEに従って導入してください。
+以下のコマンドで導入できます。
+#gem install exifparser
 
 ・Pluginのインストール
 image_gps.rbを適切な場所に配置してください。多言語用リソースは存在しません。
 
+・Google Maps API Keyの取得
+ポップアップでの地図表示を行う場合は、
+Google API console( https://code.google.com/apis/console )
+にてStatic Maps APIのAPIキーを生成し、[設定]-[その他]-[image_gpsの設定]の
+Google Static Maps API Keyに生成されたAPIキーを設定してください。
+地図のポップアップ表示機能を使用しない場合は、設定する必要はありません。
+API Keyに関する詳細は、
+https://developers.google.com/maps/documentation/staticmaps/?hl=ja
+も参照してください。
+
+
+・Exif情報の表示
+[設定]-[その他]-[image_gpsの設定]のShow Exif Infoに値を設定することにより、
+任意のExif情報を表示することができます。
+Exifのタグ名をスペース区切りで記述してください
+例) Model FocalLength FNumber ExposureTime ExposureBiasValue
+で、モデル名、焦点距離、F値、露出時間､露出補正が表示されます。
+
+
+・CSSの追加
+写真と撮影条件をそれっぽく表示するために、CSSを設定する必要があります。
+apend_css.rbを使用すると簡単にCSSを追加することができます。
+参考に、作者が設定しているCSSを示します。
+
+--ここから
+img.photo{
+  float:left;
+  clear:both;
+}
+
+div.photo_detail{
+  clear:both;
+  display:block;
+  margin:0.5em;
+  padding:0.5em;
+}
+
+
+img.map {
+  outline:solid 5px gray;
+}
+--ここまで
+
 使用方法
-image.rbと同じです。画像にGPSの情報が含まれている場合は自動的に
-GoogleMAP(http://maps.google.co.jp/ )へのリンクを生成します。
-
-携帯端末でアクセスした場合は、http://walk.eznavi.jp/ へのリンクを生成します。
-auのezナビウォーク対応機種ではezナビウォークを起動するページが表示されます。
-それ以外の端末ではhttp://map.navitime.jp/ へリダイレクトされます。
-
-サムネイル画像が指定されている場合は、そちらが優先されます。
+プラグインの書式は、image.rbと同じです。
 
 制限事項
 secureモードには対応していません。
