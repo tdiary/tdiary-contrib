@@ -1,15 +1,9 @@
-Ruby Exif parser - Exif tag parser written in pure Ruby
+ExifParserは、tdiary-contribの管理から外れました。
 
-= Install
+通常は以下のコマンドによりインストールすることができます。
+#gem install exifparser
 
-$ ruby install.rb config
-$ ruby install.rb setup
-# ruby install.rb install
+もしくは、
+$git clone https://github.com/kp1/exifparser.git
+でソースコードを取得可能です。
 
-= License
-
-Ruby's
-
-= Author
-
-Ryuichi Tamura (r-tam@fsinet.or.jp)
