@@ -57,6 +57,11 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   show_exif_info = '' if show_exif_info.nil?
   google_maps_api_key = @conf['image_gps.google_maps_api_key']
   google_maps_api_key = '' if google_maps_api_key.nil?
+  if (@conf['image_gps.map_link_url'].nil? || @conf['image_gps.map_link_url'].empty?)
+    map_link_url = '"http://maps.google.co.jp/maps?q=#{lat},#{lon}"'
+  else
+    map_link_url = '"'+@conf['image_gps.map_link_url']+'"'
+  end
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
 
@@ -92,7 +97,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
         map_img += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
         map_img += %Q[key=#{google_maps_api_key}&amp;sensor=false"]
       end
-      map_link = %Q[<a href="#{google}/maps?q=#{lat},#{lon}">]
+      map_link = %Q[<a href="#{eval(map_link_url)}">]
       map_link += %Q[MAP]
       map_link += %Q[<img class="map" src=#{map_img}>] if map_img
       map_link += "</a>"
@@ -143,19 +148,35 @@ end
 
 add_conf_proc('image_gps','image_gpsの設定','etc') do
   if @mode == 'saveconf' then
+    @conf['mage_gps.google_maps_api_key'] = @cgi.params['image_gps.google_maps_api_key'][0]
     @conf['image_gps.show_exif_info'] = @cgi.params['image_gps.show_exif_info'][0]
+    @conf['image_gps.map_link_url'] = @cgi.params['image_gps.map_link_url'][0]
   end
 
   <<-HTML
-    <p>
+    <div>
     <h3>Google Static Maps API Key</h3>
     <input type="text" name="image_gps.google_maps_api_key" value="#{@conf['image_gps.google_maps_api_key']}">
-    </p>
-    <p>
+    </div>
+    <div>
     <h3>Show Exif Info</h3>
     <input type="text" name="image_gps.show_exif_info" value="#{@conf['image_gps.show_exif_info']}">
-    </p>
-    <p>set exif tag name separate with space.</p>
+    <p>EXIFのタグ名をスペース区切りで設定します。</p>
     <p>exp.)Model FocalLength FNumber ExposureTime ExposureBiasValue</p>
+    </div>
+    <div>
+    <h3>Map Link URL</h3>
+    <input type="text" name="image_gps.map_link_url" id="map_link_url" value="#{@conf['image_gps.map_link_url']}">
+    <p>地図サイトへのリンクURLを設定します。空欄の場合、Googleマップへリンクされます。</p>
+    <p>パラメータとして\#{lat},\#{lon}が使用できます。それぞれ緯度、経度に展開されます。</p>
+    <p>下のセレクタから選択すると各サービスのデフォルト値が設定されます。</p>
+    <select name="map_url" id="map_url" onChange="document.getElementById('map_link_url').value=this.value">
+      <option value="" selected disabled>--select service--</option>
+      <option value="http://maps.google.co.jp//maps/m?q=\#{lat},\#{lon}">Googleマップ</option>
+      <option value="http://maps.loco.yahoo.co.jp/maps?p=lat=\#{lat}&lon=\#{lon}&ei=utf-8">Yahoo地図</option>
+      <option value="http://www.mapion.co.jp/m/\#{lat}_\#{lon}_9">マピオン</option>
+      <option value="http://www.bing.com/maps/?v=2&cp=\#{lat}~\#{lon}&lvl=15">Bing Maps</option>
+    </select>
+    </div>
   HTML
 end
