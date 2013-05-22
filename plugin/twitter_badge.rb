@@ -23,7 +23,7 @@ add_footer_proc do
 		t = @twitter_badge_setting
 		<<-TEXT
 		<!-- Twitter follow badge by go2web20 -->
-		<script src="http://files.go2web20.net/twitterbadge/1.0/badge.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://www.go2web20.net/twitterfollowbadge/1.0/badge.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript"><!--
 		tfb.account = '#{t[:account]}';
 		tfb.label = '#{t[:label]}';
