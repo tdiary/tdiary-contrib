@@ -272,7 +272,7 @@ def recent_image(items = 4, width = 80, link_mode = 1, name_filter = nil, title_
     when 0
       result << %Q[<a href="./image-gallery.rb?mode=viewer;key=#{File.basename(image.file, ".*")}"><img src="#{@recent_image_url}/#{image.url}" #{sizestr} alt="#{image.title}" title="#{image.title}"></a>\n]
     when 1
-      result << %Q[<a href="./?date=#{image.date}"><img src="#{@recent_image_url}/#{image.url}" #{sizestr} alt="#{image.title}" title="#{image.title}"></a>\n]
+      result << %Q[<a href="#{anchor(image.date)}"><img src="#{@recent_image_url}/#{image.url}" #{sizestr} alt="#{image.title}" title="#{image.title}"></a>\n]
     when 2
       result << %Q[<a href="#{@recent_image_url}/#{image.file}"><img src="#{@recent_image_url}/#{image.url}" #{sizestr} alt="#{image.title}" title="#{image.title}"></a>\n]
     when 3
