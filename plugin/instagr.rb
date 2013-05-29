@@ -23,6 +23,7 @@ def instagr( short_url, size = :medium)
 	option = option.nil? ? {} : option
 	
 	# img size
+	size = size.to_sym if size != :medium
 	maxwidth_data = {:small => 150, :medium => 306, :large => 612}
 	maxwidth = maxwidth_data[ size ] ? maxwidth_data[ size ] : maxwidth_data[:medium]
 	
