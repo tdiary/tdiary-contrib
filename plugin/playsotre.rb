@@ -1,4 +1,14 @@
+# -*- coding: utf-8 -*-
+# playstore.rb 
+# 
+# 概要:
+#   GooglePlay( play.goog.com)へのリンクを生成します。
 #
+# 使い方:
+#   playstore'app_id' or playstore_txt'app_id'
+#
+# Copyright (c) 2014 kp <knomura.1394@gmail.com>
+# Distributed under the GPL
 #
 begin
    require 'market_bot'
