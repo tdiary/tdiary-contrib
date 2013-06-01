@@ -16,22 +16,79 @@ rescue
    retry if require 'rubygems'
 end
 
-def playstore(app_id)
+require 'date'
 
-   app = MarketBot::Android::App.new(app_id)
-   if app.nil?
+class PlayStore < MarketBot::Android::App
+   def initialize(app_id,option={})
+      super(app_id,option)
+   end
+
+   def save(path)
+      File.open(path,"wb"){ |f|
+         Marshal.dump(self.html,f)
+      }
+   end
+
+   def load(path)
+      html = nil
+      File.open(path,"rb"){ |f|
+         begin
+            html = Marshal.restore(f)
+         rescue
+            html = nil
+         end
+      }
+      unless html.nil?
+         result = PlayStore.parse(html)
+         update_callback(result)
+      end
+      return html
+   end
+end
+
+def playstore_load_cache(app)
+   path="#{@cache_path}/playstore/#{app.app_id}"
+   begin
+      stat = File::Stat.new(path)
+   rescue Errno::ENOENT
+      return nil
+   end
+   m = Date.parse(stat.mtime.to_s)
+   return nil if Date.today - m > 7 # 1week before
+   return app.load(path)
+end
+
+def playstore_save_cache(app)
+   path="#{@cache_path}/playstore/#{app.app_id}"
+   dir = File.dirname(path)
+   Dir.mkdir(dir) unless File.directory?(dir)
+   
+   app.save(path)
+end
+
+def playstore(app_id)
+   app = PlayStore.new(app_id) 
+   if playstore_load_cache(app).nil?
+      app.update
+      save = true
+   else
+      save = false
+   end
+   if app.nil? || app.error
       html =
          <<-HTML
             <div class="market">#{app_id} was not found.</div>
          HTML
    else
-      app.update
+      playstore_save_cache(app) if save
       html =
       <<-HTML
          <div class="market">
             <div class="leader"><a href="#{app.market_url}">#{app.title} #{app.current_version}</a>
                 - <span class="dev">#{app.developer}</span></div>
-            <img class="icon" src="#{app.banner_icon_url}" title="#{app.title}">
+            <a href="#{app.market_url}">
+               <img class="icon" src="#{app.banner_icon_url}" title="#{app.title}">
+            </a>
             <ul class="info">
             <li>Rating:#{app.rating}</li>
             <li>Price:#{app.price}</li>
@@ -43,11 +100,18 @@ def playstore(app_id)
 end
 
 def playstore_text(app_id)
-   app = MarketBot::Android::App.new(app_id)
-   if app.nil?
+   app = PlayStore.new(app_id)
+   if playstore_load_cache(app).nil?
+      app.update
+      save = true
+   else
+      save = false
+end
+   if app.nil? || app.error
       html = "<em>#{app_id} was not found</em>"
    else
       app.update
+      playstore_save_cache(app) if save
       html=%Q[<a href="#{app.market_url}">#{app.title} #{app.current_version}</a>]
    end
    return html
