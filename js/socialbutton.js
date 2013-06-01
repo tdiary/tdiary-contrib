@@ -90,15 +90,17 @@ $(function() {
         return $(this).find('.socialbutton').size() == 0
       })
       .each(function() {
+        var anchor = $(this).find('h3 a');
         if ($tDiary.blogkit) {
           var link = $(this).children('h2').find('a:first').get(0);
           var url = link ? link.href : document.URL;
           var title = $(this).children('h2').find('.title').text();
-        } else {
-          var anchor = $(this).find('h3 a');
+        } else if (anchor.size() == 0) {
           // The section may not have an anchor on etdiary style.
           // https://github.com/tdiary/tdiary-contrib/issues/59
-          if (anchor.size() == 0) { return; }
+          var url = $(this).parents('.day').find('h2 a:first').get(0).href;
+          var title = $(this).parents('.day').find('h2 .title').text();
+        } else {
           var url = anchor.get(0).href;
           var title = anchor.attr('title');
         }
