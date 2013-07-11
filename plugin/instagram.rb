@@ -1,7 +1,7 @@
 # instagram.rb - embed your photo/videos in instagram to a diary
 #
 # Author: Tatsuya Sato 
-# License: MIT
+# License: GPL
 
 def instagram(code, width=612, height=700)
   <<-BODY
