@@ -100,7 +100,7 @@ module DefaultIOSearch
 		c = DIARY_CLASS_CACHE[style]
 		return c if c
 		require "tdiary/style/#{style.downcase}_style.rb"
-		c = eval("TDiary::#{style.capitalize}Diary")
+		c = TDiary.const_defined?('Style') ? eval("TDiary::Style::#{style.capitalize}Diary") : eval("TDiary::#{style.capitalize}Diary")
 		c.__send__(:include, DiaryClassDelta)
 		DIARY_CLASS_CACHE[style] = c
 		c
