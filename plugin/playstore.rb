@@ -2,7 +2,7 @@
 # playstore.rb 
 # 
 # 概要:
-#   GooglePlay( play.goog.com)へのリンクを生成します。
+#   GooglePlay(play.google.com)へのリンクを生成します。
 #
 # 使い方:
 #   playstore'app_id' or playstore_txt'app_id'
@@ -44,7 +44,12 @@ class PlayStore < MarketBot::Android::App
       end
       return html
    end
+
+   def self.valid?(app_id)
+      return app_id.downcase =~ /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/
+   end
 end
+
 
 def playstore_load_cache(app)
    path="#{@cache_path}/playstore/#{app.app_id}"
@@ -66,79 +71,91 @@ def playstore_save_cache(app)
    app.save(path)
 end
 
-def playstore(app_id)
-   app = PlayStore.new(app_id) 
-   if playstore_load_cache(app).nil?
-      app.update
-      save = true
-   else
-      save = false
+def playstore_main(app_id)
+   unless PlayStore.valid?(app_id)
+      return :invalid
    end
-   if app.nil? || app.error
-      html =
-         <<-HTML
-            <div class="market">#{app_id} was not found.</div>
-         HTML
-   else
-      playstore_save_cache(app) if save
-      html =
-      <<-HTML
-         <div class="market">
-            <div class="leader"><a href="#{app.market_url}">#{app.title} #{app.current_version}</a>
-                - <span class="dev">#{app.developer}</span></div>
-            <a href="#{app.market_url}">
-               <img class="icon" src="#{app.banner_icon_url}" title="#{app.title}">
-            </a>
-            <ul class="info">
-            <li>Rating:#{app.rating}</li>
-            <li>Price:#{app.price}</li>
-            </ul>
-         </div>
-      HTML
-   end
-   return html
-end
 
-def playstore_text(app_id)
    app = PlayStore.new(app_id)
    if playstore_load_cache(app).nil?
       app.update
       save = true
    else
       save = false
-end
-   if app.nil? || app.error
-      html = "<em>#{app_id} was not found</em>"
-   else
-      app.update
-      playstore_save_cache(app) if save
-      html=%Q[<a href="#{app.market_url}">#{app.title} #{app.current_version}</a>]
    end
-   return html
+   if app.nil? || app.error
+      return :notfound
+   else
+      playstore_save_cache(app) if save
+      return app
+   end
+end
+
+def playstore(app_id)
+   app = playstore_main(app_id)
+   case app
+   when :invalid
+      <<-HTML
+         <div class="playstore-frame">package name is invalid(#{app_id}).</div>
+      HTML
+   when :notfound
+      <<-HTML
+         <div class="playstore-frame">#{app_id} was not found.</div>
+      HTML
+   else
+      <<-HTML
+         <div class="playstore-frame">
+            <div class="playstore-leader"><a href="#{app.market_url}">#{app.title} #{app.current_version}</a>
+                - <span class="playstore-devlop">#{app.developer}</span></div>
+            <a href="#{app.market_url}">
+               <img class="playstore-icon" src="#{app.banner_icon_url}" title="#{app.title}" >
+            </a>
+            <ul class="playstore-detail">
+            <li>Rating:#{app.rating}</li>
+            <li>Price:#{app.price}</li>
+            </ul>
+         </div>
+      HTML
+   end
+end
+
+def playstore_text(app_id)
+   app = playstore_main(app_id)
+   case app
+   when :invalid
+      "<em>package name is invalid(#{app_id}).</em>"
+   when :notfound
+      "<em>#{app_id} was not found</em>"
+   else
+      %Q[<a href="#{app.market_url}">#{app.title}</a>]
+   end
 end
 
 add_header_proc do
    if @mode !~ /conf$/ and not bot? then
       <<-HTML
         <style type="text/css"><!--
-         div.market ul.info {
+         ul.playstore-detail {
             list-style: none;
             padding: 3px;
          }
-         div.market img.icon {
+         img.playstore-icon {
             float: left;
+            width:100px;
+            height:100px;
+            padding:6px;
          }
-         div.market span.dev {
+         span.playstore-devlop {
             font-size: small;
             color: gray;
          }
-         div.market div.leader {
+         div.playstore-leader {
             background: #a4c639;
             border-top-left-radius: 6px;
             border-top-right-radius: 6px;
             padding: 3px;
          }
-         div.market {
+         div.playstore-frame {
             background: #f5f5f5;
             border-radius: 6px;
             margin: 5px;
