@@ -27,8 +27,13 @@ $(function() {
   // set options for jQuery.socialbutton
   var callbacks = {
     twitter: function(url, title) {
+      var link = url;
+      var pos = 0;
+      if ((pos = url.indexOf('#')) > 0) {
+        link = url.substr(0, pos)
+      }
       return {
-        url: url,
+        url: link,
         text: title,
         button: 'horizontal',
         lang: $('html').attr('lang').substr(0,2)
