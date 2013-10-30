@@ -24,7 +24,7 @@ require 'openssl'
 require 'json'
 
 def twitter_quote_option_keys
-	%w( consumer_key consumer_secret token token_secret).map{|k| "twitter_quote.oauth_#{k}" }
+	%w( oauth_consumer_key oauth_consumer_secret oauth_token oauth_token_secret, render_method ).map{|k| "twitter_quote.#{k}" }
 end
 
 def twitter_statuses_show_api( tweet_id )
@@ -61,24 +61,17 @@ def twitter_statuses_show_api( tweet_id )
 	end
 end
 
-def twitter_status_json_to_html( json )
-	tweet_id = json['id_str']
-	screen_name = json['user']['screen_name']
-	name = json['user']['name']
-	background_url = json['user']['profile_background_image_url']
-	profile_background_color = "##{json['user']['profile_background_color']}"
-	avatar = json['user']['profile_image_url']
-	source = json['source']
-	timestamp = Time.parse( json['created_at'] )
-	content = json['text']
-	content.gsub!( URI.regexp( %w|http https| ) ){ %Q|<a href="#{$&}">#{$&}</a>| }
-	content = content.split( /(<[^>]*>)/ ).map {|s|
-		next s if s[/\A</]
-		s.gsub!( /@(?>([a-zA-Z0-9_]{1,15}))(?![a-zA-Z0-9_])/ ){ %Q|<a href="http://twitter.com/#{$1}">#{$&}</a>| }
-		s.gsub( /#([a-zA-Z0-9]{1,16})/ ){ %Q|<a href="http://twitter.com/search?q=%23#{$1}">#{$&}</a>| }
-	}.join
-	
-	<<-HTML
+def render_widget(tweet_id, screen_name, name, background_url, profile_backgound_color, avatar, source, timestamp, content)
+  <<-HTML
+<blockquote class="twitter-tweet"><p>#{content}</p>
+&mdash; #{@name} (#{@screen_name}) <a href="http://twitter.com/#{screen_name}/status/#{tweet_id}">#{timestamp}</a>
+</blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  HTML
+end
+
+def render_bbp(tweet_id, screen_name, name, background_url, profile_backgound_color, avatar, source, timestamp, content)
+  <<-HTML
 	<!-- http://twitter.com/#{screen_name}/status/#{tweet_id} -->
 	<div class="bbpBox" style="background:url(#{background_url}) #{profile_background_color};padding:20px;">
 		<p class="bbpTweet" style=
@@ -103,6 +96,30 @@ def twitter_status_json_to_html( json )
 	</div>
 	<!-- end of tweet -->
 	HTML
+end
+
+def twitter_status_json_to_html( json )
+	tweet_id = json['id_str']
+	screen_name = json['user']['screen_name']
+	name = json['user']['name']
+	background_url = json['user']['profile_background_image_url']
+	profile_background_color = "##{json['user']['profile_background_color']}"
+	avatar = json['user']['profile_image_url']
+	source = json['source']
+	timestamp = Time.parse( json['created_at'] )
+	content = json['text']
+	content.gsub!( URI.regexp( %w|http https| ) ){ %Q|<a href="#{$&}">#{$&}</a>| }
+	content = content.split( /(<[^>]*>)/ ).map {|s|
+		next s if s[/\A</]
+		s.gsub!( /@(?>([a-zA-Z0-9_]{1,15}))(?![a-zA-Z0-9_])/ ){ %Q|<a href="http://twitter.com/#{$1}">#{$&}</a>| }
+		s.gsub( /#([a-zA-Z0-9]{1,16})/ ){ %Q|<a href="http://twitter.com/search?q=%23#{$1}">#{$&}</a>| }
+	}.join
+
+	if @conf['twitter_quote.render_method'] == 'widget'
+		render_widget(tweet_id, screen_name, name, background_url, profile_backgound_color, avatar, source, timestamp, content)
+	else
+		render_bbp(tweet_id, screen_name, name, background_url, profile_backgound_color, avatar, source, timestamp, content)
+	end
 end
 
 def tweet_quote( src )
@@ -152,6 +169,12 @@ add_conf_proc( 'twitter_quote', 'Embedded Tweets' ) do
 	<p><input type="text" name="twitter_quote.oauth_token" value="#{h @conf["twitter_quote.oauth_token"]}" size="80"></p>
 	<h3>Access token secret</h3>
 	<p><input type="text" name="twitter_quote.oauth_token_secret" value="#{h @conf["twitter_quote.oauth_token_secret"]}" size="80"></p>
+        <h3>Render method</h3>
+	<select name="twitter_quote.render_method">
+	<option value="bbp"#{' selected' if @conf['twitter_quote.render_method'] == 'bbp'}>Bbp</option>
+	<option value="widget"#{' selected' if @conf['twitter_quote.render_method'] == 'widget'}>Widget</option>
+	</select>
+        </p>
 	HTML
 end
 
