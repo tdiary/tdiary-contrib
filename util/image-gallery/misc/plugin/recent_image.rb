@@ -1,6 +1,6 @@
-# recent_image.rb  $Revision: 2.0.2 $
+# recent_image.rb  $Revision: 2.0.3 $
 #
-# Copyright (c) 2005-2010 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
+# Copyright (c) 2005-2013 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
 #
 #  http://www1.whi.m-net.ne.jp/n-kashi/recent_image.htm
@@ -115,7 +115,7 @@ def image_info_rcimg( filename )
         break
       else
         if data.size < data_size
-          f.seek(data_size - data.size, IO::SEEK_CUR)
+          f.seek(data_size - data.size, File::IO::SEEK_CUR)
           data = ''
         else
           data = data[data_size .. -1]
