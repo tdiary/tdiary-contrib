@@ -99,8 +99,13 @@ module DefaultIOSearch
 	def diary_class(style)
 		c = DIARY_CLASS_CACHE[style]
 		return c if c
-		require "tdiary/style/#{style.downcase}_style.rb"
-		c = TDiary.const_defined?('Style') ? eval("TDiary::Style::#{style.capitalize}Diary") : eval("TDiary::#{style.capitalize}Diary")
+		if TDiary.const_defined?('Style')
+			require "tdiary/style/#{style.downcase}.rb"
+			c = eval("TDiary::Style::#{style.capitalize}Diary")
+		else
+			require "tdiary/style/#{style.downcase}_style.rb"
+			c = eval("TDiary::#{style.capitalize}Diary")
+		end
 		c.__send__(:include, DiaryClassDelta)
 		DIARY_CLASS_CACHE[style] = c
 		c
@@ -227,7 +232,7 @@ def search_input_form( q )
 end
 
 def search_result
-	unless @conf.io_class == TDiary::DefaultIO
+	unless @conf.io_class == (TDiary.const_defined?('DefaultIO') ? TDiary::DefaultIO : TDiary::IO::Default)
 		return %Q|<p class="message">could not use this plugin under #{@conf.io_class}.</p>| 
 	end
 
