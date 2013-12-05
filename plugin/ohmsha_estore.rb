@@ -33,7 +33,7 @@ def ohmsha_estore( id, doc = nil )
 	image = "#{domain}/images/covers/#{id}.gif"
 	link = "#{domain}/titles/#{id}"
 	require 'open-uri'
-	doc ||= open(link)
+	doc ||= open(link, &:read).gsub(%r|</?fb:.*?>|, '')
 	require 'rexml/document'
 	xml = REXML::Document.new( doc )
 	biblio = "//html/body/div/div[2]/div/div/div/div[2]"
