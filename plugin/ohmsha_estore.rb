@@ -24,6 +24,9 @@ rescue
 	nil
 end
 
+require 'open-uri'
+autoload :REXML,    'rexml/document'
+autoload :StringIO, 'stringio'
 def ohmsha_estore( id, doc = nil )
 	if !@conf.secure and !(result = ohmsha_estore_cache_get(id)).nil?
 		return result
@@ -32,9 +35,7 @@ def ohmsha_estore( id, doc = nil )
 	domain = "http://estore.ohmsha.co.jp"
 	image = "#{domain}/images/covers/#{id}.gif"
 	link = "#{domain}/titles/#{id}"
-	require 'open-uri'
-	doc ||= open(link, &:read).gsub(%r|</?fb:.*?>|, '')
-	require 'rexml/document'
+	doc ||= StringIO.new(open(link, &:read).gsub(%r|</?fb:.*?>|, ''))
 	xml = REXML::Document.new( doc )
 	biblio = "//html/body/div/div[2]/div/div/div/div[2]"
 	title = REXML::XPath.match( xml,
