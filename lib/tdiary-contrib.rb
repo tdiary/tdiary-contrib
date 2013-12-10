@@ -1,10 +1,13 @@
-require 'tdiary'
-require 'tdiary/application'
-
 module TDiary
 	class Contrib
 		def self.root
 			File.expand_path('../..', __FILE__)
+		end
+
+		class Assets
+			def self.setup(environment)
+				environment.append_path File.join(TDiary::Contrib.root, 'js')
+			end
 		end
 
 		class Plugin
@@ -12,9 +15,5 @@ module TDiary
 				sp_path << File.join(TDiary::Contrib.root, 'plugin')
 			end
 		end
-	end
-
-	Application.configure do
-		config.assets_paths << File.join(TDiary::Contrib.root, 'js')
 	end
 end
