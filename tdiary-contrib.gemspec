@@ -1,11 +1,12 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'tdiary/contrib/version'
 require 'tdiary/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "tdiary-contrib"
-  spec.version       = TDiary::VERSION
+  spec.version       = TDiary::Contrib::VERSION
   spec.authors       = ["tDiary contributors"]
   spec.email         = ["support@tdiary.org"]
   spec.summary       = %q{tDiary contributions package}
