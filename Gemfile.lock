@@ -34,4 +34,4 @@ DEPENDENCIES
   rcov
   rspec
   simplecov
-  tdiary
+  tdiary (= 4.0.2)
