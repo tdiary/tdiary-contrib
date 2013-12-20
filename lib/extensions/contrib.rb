@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+require 'tdiary/extensions'
 
 module TDiary
 	module Extensions
