@@ -1,4 +1,4 @@
-# recent_image.rb  $Revision: 2.0.3 $
+# recent_image.rb  $Revision: 2.0.4 $
 #
 # Copyright (c) 2005-2013 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -184,7 +184,7 @@ def make_image_hash_rcimg
   @years.keys.sort.reverse_each do |year|
     @years[year].sort.reverse_each do |month|
       cgi.params['date'] = ["#{year}#{month}"]
-      m = TDiaryMonth::new(cgi, '', @conf)
+      m = TDiaryMonthWithoutFilter::new(cgi, '', @conf)
       m.diaries.keys.sort.reverse_each do |date|
         next unless m.diaries[date].visible?
         m.diaries[date].each_section do |section|
