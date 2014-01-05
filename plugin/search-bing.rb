@@ -9,6 +9,7 @@
 #
 # @options['search-bing.appid'] : Your Bing AppId
 # @options['search.result_filter'] : your dialy's URL format of DAY mode into Regexp.
+# @options['search-bing.base'] : Base URI of your diary (for debugging)
 #
 
 require 'timeout'
@@ -32,7 +33,7 @@ end
 def search_bing_api( q, start = 0 )
 	appid = @conf['search-bing.appid']
 
-	u = 'https://api.datamarket.azure.com/Data.ashx/Bing/SearchWeb/v1/Web'
+	u = 'https://api.datamarket.azure.com/Bing/SearchWeb/v1/Web'
 	u << "?Query=%27#{q}%27&Options=%27EnableHighlighting%27&$top=50&$skip=#{start}&$format=Json"
 	uri = URI( u )
 
@@ -58,12 +59,10 @@ def search_result
 	start = CGI::unescape( @cgi.params['start'][0] || '0' ).to_i
 
 	begin
-		uri = URI::parse( @conf.base_url )
-		#uri = URI::parse( 'http://sho.tdiary.net/' ) ### FOR DEBUGGING ###
+		uri = URI::parse( @conf['search-bing.base'] || @conf.base_url )
 		q = "#{query} site:#{uri.host}"
 		q << %Q| inurl:"#{uri.path}"| unless uri.path == '/'
-		xml = search_bing_api( u( q.untaint ), start )
-		json = JSON::parse( xml )
+		json = JSON::parse(search_bing_api(u(q.untaint), start))
 	rescue Net::HTTPError
 		return %Q|<p class="message">#$!</p>|
 	end
