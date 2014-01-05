@@ -37,7 +37,12 @@ def search_bing_api( q, start = 0 )
 	u << "?Query=%27#{q}%27&Options=%27EnableHighlighting%27&$top=50&$skip=#{start}&$format=Json"
 	uri = URI( u )
 
-	open( uri, {:http_basic_authentication => [appid, appid]} ).read
+	begin
+		open( uri, {:http_basic_authentication => [appid, appid]} ).read
+	rescue SecurityError
+		### FIX ME: mysterious error at 1st access to the API
+		open( uri, {:http_basic_authentication => [appid, appid]} ).read
+	end
 
 ### FIX ME: this code failed on Timeout error, temporary using open-uri above.
 #	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
