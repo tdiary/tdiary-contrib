@@ -26,7 +26,7 @@ class MakeRssCategory < MakeRssFull
 	def file
 		f = @conf['makerss.category.file'] || 'category.rdf'
 		f = 'category.rdf' if f.length == 0
-		f
+		f =~ %r|^/| ? f : "#{document_root}/#{f}"
 	end
 	
 	def write( encoder )
@@ -40,4 +40,4 @@ class MakeRssCategory < MakeRssFull
 	end
 end
 
-@makerss_rsses << MakeRssCategory::new( @conf )
+@makerss_rsses << MakeRssCategory::new( @conf, @cgi )

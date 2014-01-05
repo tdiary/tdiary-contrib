@@ -18,7 +18,7 @@ class MakeRssComments < MakeRssFull
 	def file
 		f = @conf['makerss.no_comments.file'] || 'comments.rdf'
 		f = 'comments.rdf' if f.length == 0
-		f
+		f =~ %r|^/| ? f : "#{document_root}/#{f}"
 	end
 	
 	def write( encoder )
@@ -32,4 +32,4 @@ class MakeRssComments < MakeRssFull
 	end
 end
 
-@makerss_rsses << MakeRssComments::new( @conf )
+@makerss_rsses << MakeRssComments::new( @conf, @cgi )
