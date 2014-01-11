@@ -383,23 +383,13 @@ add_form_proc do |date|
 	r << %Q[
 		<script type="text/javascript">
 		<!--
-		var elem=null
+		var elem=null;
 		function ins(val){
 			elem.value+=val
 		}
-		window.onload=function(){
-			for(var i=0;i<document.forms.length;i++){
-				for(var j=0;j<document.forms[i].elements.length;j++){
-					var e=document.forms[i].elements[j]
-					if(e.type&&e.type=="textarea"){
-						if(elem==null){
-							elem=e
-						}
-						e.onfocus=new Function("elem=this")
-					}
-				}
-			}
-		}
+		$(document).ready(function(){
+			$("textarea").focus(function() { elem = this; });
+		});
 		//-->
 		</script>
 	]
