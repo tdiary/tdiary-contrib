@@ -275,9 +275,17 @@ add_form_proc do |date|
 			if imageex_useresize == 1 or imageex_useresize == 2
 				open(image_file,"rb") do |fh|
 					img = ImageSize.new(fh.read)
-					width = img.get_width
-					height = img.get_height
-					orig_type = img.get_type
+					begin
+						# old image_size.rb
+						width = img.get_width
+						height = img.get_height
+						orig_type = img.get_type
+					rescue NoMethodError
+						# image_size gem
+						width = img.width
+						height = img.height
+						orig_type = (img.format || "OTHER").to_s.upcase
+					end
 					if imageex_converttype == 0
 						new_type = "jpg"
 					elsif imageex_converttype == 1
