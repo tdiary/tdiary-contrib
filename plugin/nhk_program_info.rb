@@ -36,6 +36,7 @@ def nhk_program_info(id, service, area = nil)
    <span class="amazon-title">#{h json["service"]["name"]} - #{h json["title"]}</span><br><br>
    <span class="amazon-title">#{h json["subtitle"]}</span><br><br>
    <span class="amazon-price">#{h stime} - #{etime}</span><br>
+   <span class="amazon-price">#{h '情報提供:ＮＨＫ'}</span>
    </div>
    <br style="clear: left">
    </a>
