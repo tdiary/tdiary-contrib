@@ -22,7 +22,7 @@ def nhk_program_info(id, service, area = nil)
    begin
       json = call_nhk_json(id, service, area)
    rescue
-      %Q|<p>#{__FILE__}: error, #{$!}</p>|
+      return %Q|<p>#{__FILE__}: error, #{$!}</p>|
    end
 
    stime = DateTime::parse(json["start_time"]).strftime("%Y/%m/%d %H:%M:%S")
