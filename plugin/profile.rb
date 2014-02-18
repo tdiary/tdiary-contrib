@@ -5,7 +5,7 @@
 #   profile(id[, service = :twitter])
 #   - id: user ID for profile service
 #   - service: profile service (default is :twitter)
-#     Choose from :github, :twitter, :friendfeed, :iddy
+#     Choose from :github, :twitter, :friendfeed
 #
 # Copyright (C) 2009 by MATSUOKA Kohei < http://www.machu.jp/ >
 # Distributed under the GPL.
@@ -132,23 +132,9 @@ module ::Profile
       end
     end
 
-    # iddy.jp
-    # this class is based on iddy.rb
+    # iddy.jp, for backward compatibility
     class Iddy < Base
-      ######################################################################
-      # If you will modify or release another version of this code,
-      # please get your own application key from iddy.jp and replace below.
-      ######################################################################
-      API_KEY = '9262ea8ffba962aabb4f1a1d3f1cfa953b11aa23' unless defined? API_KEY
-
-      property :name, '//response/users/user/accountname'
-      property :image, '//response/users/user/imageurl'
-      property :description, '/response/users/user/profile'
-      endpoint {|id| "http://iddy.jp/api/user/?apikey=#{API_KEY}&accountname=#{id}" }
-
-      def link
-        "http://iddy.jp/profile/#{@id}/"
-      end
+      # dummy class
     end
 
     # gravatar.com
@@ -181,10 +167,9 @@ def profile(id, service = :twitter, options = {})
     :twitter => Profile::Service::Twitter,
     :github => Profile::Service::GitHub,
     :friendfeed => Profile::Service::FriendFeed,
-    :iddy => Profile::Service::Iddy,
     :gravatar => Profile::Service::Gravatar,
     :hatena => Profile::Service::Hatena,
-  }[service.to_s.downcase.to_sym]
+  }[service.to_s.downcase.to_sym] || Profile::Service::Twitter
 
   # TODO: create cache manager class
 
