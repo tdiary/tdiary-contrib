@@ -14,7 +14,7 @@ describe "youtube plugin" do
       cgi = CGIFake.new
       cgi.user_agent = k
       plugin.conf.cgi = cgi
-      plugin.youtube(DUMMY_YOUTUBE_VIDEO_ID).should == v
+      expect(plugin.youtube(DUMMY_YOUTUBE_VIDEO_ID)).to eq(v)
     end
   end
 end

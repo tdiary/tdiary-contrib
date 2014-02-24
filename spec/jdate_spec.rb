@@ -14,7 +14,7 @@ describe "jdate plugin" do
     '20080126' => '土',
     '20080127' => '日',
   }.each do |k,v|
-    it { setup_jdate_plugin(Time.parse(k)).date.strftime('%J').should == v }
+    it { expect(setup_jdate_plugin(Time.parse(k)).date.strftime('%J')).to eq(v) }
   end
 
   def setup_jdate_plugin(date)

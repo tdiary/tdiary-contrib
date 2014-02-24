@@ -19,7 +19,7 @@ describe "jmonth plugin" do
     '2007/11/01' => '霜月',
     '2007/12/01' => '師走'
   }.each do |k,v|
-    it { setup_jmonth_plugin(Time.parse(k)).date.strftime('%i').should == v }
+    it { expect(setup_jmonth_plugin(Time.parse(k)).date.strftime('%i')).to eq(v) }
   end
 
   def setup_jmonth_plugin(date)

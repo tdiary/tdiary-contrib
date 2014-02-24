@@ -15,7 +15,7 @@ describe "apple_webclip plugin" do
 		end
 			
 		it "header include url" do 
-			@header_snippet.should == %Q|\t<link rel="apple-touch-icon" href="http://example.com/example.png">|
+			expect(@header_snippet).to eq(%Q|\t<link rel="apple-touch-icon" href="http://example.com/example.png">|)
 		end
 	end
 
@@ -27,7 +27,7 @@ describe "apple_webclip plugin" do
 			end
 			
 			it "header is empty" do 
-				@header_snippet.should be_empty
+				expect(@header_snippet).to be_empty
 			end
 		end
 
@@ -38,7 +38,7 @@ describe "apple_webclip plugin" do
 			end
 			
 			it "header is empty" do 
-				@header_snippet.should be_empty
+				expect(@header_snippet).to be_empty
 			end
 		end
 	end

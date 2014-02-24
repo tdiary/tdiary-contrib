@@ -16,9 +16,9 @@ describe "opensearch_ad plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should == expected_link_tag_with(
+		it { expect(@header_snippet).to eq(expected_link_tag_with(
 				:title => 'OpenSearch',
-				:xml => 'http://example.com/opensearch.xml')}
+				:xml => 'http://example.com/opensearch.xml'))}
 	end
 
 	describe "in latest mode" do
@@ -27,9 +27,9 @@ describe "opensearch_ad plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should == expected_link_tag_with(
+		it { expect(@header_snippet).to eq(expected_link_tag_with(
 				:title => 'OpenSearch',
-				:xml => 'http://example.com/opensearch.xml')}
+				:xml => 'http://example.com/opensearch.xml'))}
 	end
 
 	describe "in edit mode" do
@@ -38,7 +38,7 @@ describe "opensearch_ad plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should be_empty }
+		it { expect(@header_snippet).to be_empty }
 	end
 
 	def expected_link_tag_with(options)

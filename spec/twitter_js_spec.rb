@@ -18,12 +18,12 @@ describe "twitter_js plugin" do
 
 		it "for header" do
 			snippet = @plugin.header_proc
-			snippet.should == expected_html_header_snippet("123456789")
+			expect(snippet).to eq(expected_html_header_snippet("123456789"))
 		end
 
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
-			snippet.should == expected_html_body_snippet
+			expect(snippet).to eq(expected_html_body_snippet)
 		end
 	end
 
@@ -34,12 +34,12 @@ describe "twitter_js plugin" do
 
 		it "for header" do
 			snippet = @plugin.header_proc
-			snippet.should == expected_html_header_snippet("123456789")
+			expect(snippet).to eq(expected_html_header_snippet("123456789"))
 		end
 
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
-			snippet.should == expected_html_body_snippet
+			expect(snippet).to eq(expected_html_body_snippet)
 		end
 	end
 
@@ -50,12 +50,12 @@ describe "twitter_js plugin" do
 
 		it "for header" do
 			snippet = @plugin.header_proc
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 	end
 
@@ -66,12 +66,12 @@ describe "twitter_js plugin" do
 
 		it "for header" do
 			snippet = @plugin.header_proc
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 
 		it "for body leave" do
 			snippet = @plugin.body_leave_proc(Time.parse("20080124"))
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 	end
 

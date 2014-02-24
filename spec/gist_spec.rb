@@ -11,6 +11,6 @@ describe "gist plugin" do
 <div class="gist_plugin"><script src="http://gist.github.com/1234567890.js"></script>
 <noscript><a href="http://gist.github.com/1234567890">gist:1234567890</a></noscript></div>
 		EOS
-		snippet.should == expected
+		expect(snippet).to eq(expected)
 	end
 end

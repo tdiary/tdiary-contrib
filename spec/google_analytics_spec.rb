@@ -16,7 +16,7 @@ describe "google_analytics plugin" do
 
 		it "for footer" do
 			snippet = @plugin.footer_proc
-			snippet.should == expected_html_footer_snippet
+			expect(snippet).to eq(expected_html_footer_snippet)
 		end
 	end
 
@@ -27,7 +27,7 @@ describe "google_analytics plugin" do
 
 		it "for footer" do
 			snippet = @plugin.footer_proc
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 	end
 
@@ -38,7 +38,7 @@ describe "google_analytics plugin" do
 
 		it "for footer" do
 			snippet = @plugin.footer_proc
-			snippet.should be_empty
+			expect(snippet).to be_empty
 		end
 	end
 

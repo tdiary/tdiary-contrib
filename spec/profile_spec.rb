@@ -7,7 +7,7 @@ describe "Profile::Service" do
   describe "GitHub" do
     before do
       require 'json'
-      Profile::Service::GitHub.any_instance.stub(:fetch).and_return(JSON.parse(File.read("spec/fixtures/github.json")))
+      allow_any_instance_of(Profile::Service::GitHub).to receive(:fetch).and_return(JSON.parse(File.read("spec/fixtures/github.json")))
 
       # workaround for run spec on various environment.
       require 'openssl'
@@ -18,39 +18,39 @@ describe "Profile::Service" do
     end
 
     it "should include name, mail, image properties" do
-      @profile.name.should == "Scott Chacon"
-      @profile.mail.should == "schacon@gmail.com"
-      @profile.image.should == "http://www.gravatar.com/avatar/9375a9529679f1b42b567a640d775e7d.jpg?s=40"
+      expect(@profile.name).to eq("Scott Chacon")
+      expect(@profile.mail).to eq("schacon@gmail.com")
+      expect(@profile.image).to eq("http://www.gravatar.com/avatar/9375a9529679f1b42b567a640d775e7d.jpg?s=40")
     end
   end
 
   describe "Twitter" do
     before do
-      Profile::Service::Twitter.any_instance.stub(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/twitter.xml")))
+      allow_any_instance_of(Profile::Service::Twitter).to receive(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/twitter.xml")))
 
       # http://twitter.com/tdiary
       @profile = Profile::Service::Twitter.new("tdiary")
     end
 
     it "should include name, description, image properties" do
-      @profile.name.should == "tDiary.org"
-      @profile.description.should == "tDiaryオフィシャルアカウント"
-      @profile.image.should match(%r{^http://.*\.(png|jpg)$})
+      expect(@profile.name).to eq("tDiary.org")
+      expect(@profile.description).to eq("tDiaryオフィシャルアカウント")
+      expect(@profile.image).to match(%r{^http://.*\.(png|jpg)$})
     end
   end
 
   describe "FriendFeed" do
     before do
-      Profile::Service::FriendFeed.any_instance.stub(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/friendfeed.xml")))
+      allow_any_instance_of(Profile::Service::FriendFeed).to receive(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/friendfeed.xml")))
 
       # http://friendfeed.com/api/documentation#summary
       @profile = Profile::Service::FriendFeed.new("bret")
     end
 
     it "should include name, description, image properties" do
-      @profile.name.should == "Bret Taylor"
-      @profile.description.should == "Ex-CTO of Facebook. Previously co-founder and CEO of FriendFeed. Programmer, food lover."
-      @profile.image.should == "http://friendfeed-api.com/v2/picture/bret"
+      expect(@profile.name).to eq("Bret Taylor")
+      expect(@profile.description).to eq("Ex-CTO of Facebook. Previously co-founder and CEO of FriendFeed. Programmer, food lover.")
+      expect(@profile.image).to eq("http://friendfeed-api.com/v2/picture/bret")
     end
   end
 
@@ -62,7 +62,7 @@ describe "Profile::Service" do
     end
 
     it "should include image property" do
-      @profile.image.should == "http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg"
+      expect(@profile.image).to eq("http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg")
     end
 
     context 'with options' do
@@ -71,7 +71,7 @@ describe "Profile::Service" do
       end
 
       it "should specify size option" do
-        @profile.image.should == "http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg?s=40"
+        expect(@profile.image).to eq("http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg?s=40")
       end
     end
   end
@@ -82,7 +82,7 @@ describe "Profile::Service" do
     end
 
     it "should include image property" do
-      @profile.image.should == "http://www.hatena.ne.jp/users/km/kmachu/profile.gif"
+      expect(@profile.image).to eq("http://www.hatena.ne.jp/users/km/kmachu/profile.gif")
     end
   end
 end
