@@ -16,11 +16,11 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'https://www.hatena.ne.jp/openid/server')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.delegate',
 				:href => 'http://www.hatena.ne.jp/tdtds/')}
 	end
@@ -31,11 +31,11 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'http://auth.livedoor.com/openid/server')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 			:rel => 'openid.delegate',
 			:href => 'http://profile.livedoor.com/tdtds')}
 	end
@@ -46,11 +46,11 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'http://www.livejournal.com/openid/server.bml')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.delegate',
 				:href => 'http://tdtds.livejournal.com/')}
 
@@ -62,15 +62,15 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'http://www.openid.ne.jp/user/auth')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.delegate',
 				:href => 'http://tdtds.openid.ne.jp')}
 
-		it { @header_snippet.should include_xrds_meta_tag_with(
+		it { expect(@header_snippet).to include_xrds_meta_tag_with(
 				:content => 'http://tdtds.openid.ne.jp/user/xrds')}
 
 	end
@@ -81,11 +81,11 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'http://www.typekey.com/t/openid/')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.delegate',
 				:href => 'http://profile.typekey.com/tdtds/')}
 
@@ -97,11 +97,11 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.server',
 				:href => 'http://www.vox.com/services/openid/server')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid.delegate',
 				:href => 'http://tdtds.vox.com/')}
 	end
@@ -112,22 +112,22 @@ describe "openid plugin w/" do
 			@header_snippet = @plugin.header_proc
 		end
 
-		it { @header_snippet.should include_xrds_meta_tag_with(
+		it { expect(@header_snippet).to include_xrds_meta_tag_with(
 				:content => "http://www.myopenid.com/xrds?username=tdtds")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.server",
 				:href => "http://www.myopenid.com/server")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.delegate",
 				:href => "http://tdtds.myopenid.com")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid2.provider",
 				:href => "http://www.myopenid.com/server")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid2.local_id",
 				:href => "http://tdtds.myopenid.com")}
 	end
@@ -138,14 +138,14 @@ describe "openid plugin w/" do
 			@header_snippet = @plugin.header_proc
 		end
 
-		it { @header_snippet.should include_xrds_meta_tag_with(
+		it { expect(@header_snippet).to include_xrds_meta_tag_with(
 				:content => "http://claimid.com/tdtds/xrds")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.server",
 				:href => "http://openid.claimid.com/server")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.delegate",
 				:href => "http://openid.claimid.com/tdtds")}
 	end
@@ -156,22 +156,22 @@ describe "openid plugin w/" do
 			@header_snippet = @plugin.header_proc
 		end
 
-		it { @header_snippet.should include_xrds_meta_tag_with(
+		it { expect(@header_snippet).to include_xrds_meta_tag_with(
 				:content => "http://pip.verisignlabs.com/user/tdtds/yadisxrds")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.server",
 				:href => "http://pip.verisignlabs.com/server")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid.delegate",
 				:href => "http://tdtds.pip.verisignlabs.com/")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid2.provider",
 				:href => "http://pip.verisignlabs.com/server")}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => "openid2.local_id",
 				:href => "http://tdtds.pip.verisignlabs.com/")}
 	end
@@ -182,18 +182,18 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid2.provider',
 				:href => 'https://open.login.yahooapis.jp/openid/op/auth')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid2.local_id',
 				:href => 'https://me.yahoo.co.jp/a/tdtds')}
 
-		it { @header_snippet.should_not include_link_tag_with(
+		it { expect(@header_snippet).not_to include_link_tag_with(
 				:rel => "openid.server")}
 
-		it { @header_snippet.should_not include_link_tag_with(
+		it { expect(@header_snippet).not_to include_link_tag_with(
 				:rel => "openid.delegate")}
 
 	end
@@ -204,18 +204,18 @@ describe "openid plugin w/" do
 			@header_snippet = plugin.header_proc
 		end
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid2.provider',
 				:href => 'https://open.login.yahooapis.com/openid/op/auth')}
 
-		it { @header_snippet.should include_link_tag_with(
+		it { expect(@header_snippet).to include_link_tag_with(
 				:rel => 'openid2.local_id',
 				:href => 'https://me.yahoo.com/a/tdtds')}
 
-		it { @header_snippet.should_not include_link_tag_with(
+		it { expect(@header_snippet).not_to include_link_tag_with(
 				:rel => "openid.server")}
 
-		it { @header_snippet.should_not include_link_tag_with(
+		it { expect(@header_snippet).not_to include_link_tag_with(
 				:rel => "openid.delegate")}
 	end
 

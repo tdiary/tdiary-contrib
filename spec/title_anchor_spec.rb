@@ -15,9 +15,9 @@ describe "title_anchor plugin" do
 			@plugin = setup_title_anchor_plugin('day')
 		end
 
-		it { @plugin.title_anchor.should  == expected_html_title_in_day(
+		it { expect(@plugin.title_anchor).to  eq(expected_html_title_in_day(
 				:index => '',
-				:html_title => 'HsbtDiary')}
+				:html_title => 'HsbtDiary'))}
 	end
 
 	describe "in latest mode" do
@@ -25,8 +25,8 @@ describe "title_anchor plugin" do
 			@plugin = setup_title_anchor_plugin('latest')
 		end
 
-		it { @plugin.title_anchor.should  == expected_html_title_in_latest(
-				:html_title => 'HsbtDiary')}
+		it { expect(@plugin.title_anchor).to  eq(expected_html_title_in_latest(
+				:html_title => 'HsbtDiary'))}
 	end
 
 	def expected_html_title_in_day(options)

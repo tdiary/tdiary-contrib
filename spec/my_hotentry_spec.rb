@@ -29,17 +29,17 @@ describe "MyHotEntry" do
 		end
 
 		it "キャッシュファイルが生成されていること" do
-			File.should be_file(@dbfile)
+			expect(File).to be_file(@dbfile)
 		end
 
 		it "人気の日記が取得できていること" do
-			@entries.size.should > 0
+			expect(@entries.size).to be > 0
 		end
 
 		it "取得したエントリにbase_urlとタイトルが含まれていること" do
 			@entries.each do |entry|
-				entry[:url].should be_include(@base_url)
-				entry[:title].size.should > 0
+				expect(entry[:url]).to be_include(@base_url)
+				expect(entry[:title].size).to be > 0
 			end
 		end
 	end
@@ -53,7 +53,7 @@ describe "MyHotEntry" do
 		end
 
 		it "キャッシュサイズが大きくならないこと" do
-			@entry_size.should == @original_entry_size
+			expect(@entry_size).to eq(@original_entry_size)
 		end
 	end
 
@@ -65,14 +65,14 @@ describe "MyHotEntry" do
 
 		it "キャッシュをクリアしないこと" do
 			@hotentry.update(@empty_url)
-			@hotentry.entries.size.should == 0
+			expect(@hotentry.entries.size).to eq(0)
 
 			@hotentry.update(@exist_url)
-			@hotentry.entries.size.should > 0
+			expect(@hotentry.entries.size).to be > 0
 			exist_size = @hotentry.entries.size
 
 			@hotentry.update(@empty_url)
-			@hotentry.entries.size.should == exist_size
+			expect(@hotentry.entries.size).to eq(exist_size)
 		end
 	end
 end

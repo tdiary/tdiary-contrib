@@ -12,7 +12,7 @@ describe "jyear plugin" do
     '1989/01/08' => '平成元年',
     '1990/01/01' => '平成2',
   }.each do |k,v|
-    it { setup_jyear_plugin(Time.parse(k)).date.strftime('%K').should == v }
+    it { expect(setup_jyear_plugin(Time.parse(k)).date.strftime('%K')).to eq(v) }
   end
 
   def setup_jyear_plugin(date)
