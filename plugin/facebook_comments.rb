@@ -4,7 +4,7 @@
 
 add_header_proc do
 <<-HTML
-<meta property="fb:admins" content="#{h @conf['facebook_comments.YOUR_FACEBOOK_USER_ID']}"/>
+<meta property="fb:admins" content="#{h @conf['facebook_comments.YOUR_FACEBOOK_USER_ID']}">
 <meta property="fb:app_id" content="#{h @conf['facebook_comments.YOUR_APPLICATION_ID']}">
 HTML
 end
