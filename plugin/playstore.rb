@@ -154,6 +154,7 @@ add_header_proc do
             border-top-left-radius: 6px;
             border-top-right-radius: 6px;
             padding: 3px;
+            max-width: 600px;
          }
          div.playstore-frame {
             background: #f5f5f5;
@@ -162,6 +163,7 @@ add_header_proc do
             display: block;
             overflow: hidden;
             box-shadow: 3px 3px 3px 0px lightgray;
+            max-width: 600px;
          }
         --></style>
       HTML
