@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # show photo image on Flickr.com
 #
 # usage:
@@ -18,7 +19,7 @@
 # Copyright (c) MATSUOKA Kohei <http://www.machu.jp/>
 # Distributed under the GPL
 #
-require 'net/http'
+require 'net/https'
 require 'digest/md5'
 require 'rexml/document'
 
@@ -180,8 +181,11 @@ module Flickr
 
     def open
       Net::HTTP.version_1_2
-      Net::HTTP.start('www.flickr.com') {|http|
-        response = http.get(query)
+      https = Net::HTTP.new('www.flickr.com', 443)
+      https.use_ssl = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      https.start {
+        response = https.get(query)
         response.body
       }
     end
