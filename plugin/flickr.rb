@@ -183,7 +183,6 @@ module Flickr
       Net::HTTP.version_1_2
       https = Net::HTTP.new('www.flickr.com', 443)
       https.use_ssl = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_PEER
       https.start {
         response = https.get(query)
         response.body
