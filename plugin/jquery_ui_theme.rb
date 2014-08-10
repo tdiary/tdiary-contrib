@@ -8,24 +8,24 @@
 
 #
 # not support
-# 
+#
 return if feed? || @conf.mobile_agent?
 
 add_header_proc do
    if /\A(?:form|preview|append|edit|update)\z/ =~ @mode
-      
+
       themes   = @conf['jquery_ui.theme']
       if themes.nil? || theme == ''
          themes = 'base'
       end
-      
+
       jquery_ui = ''
       jquery_ui << %Q|<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/#{themes.downcase}/jquery-ui.css"/>\n|
       jquery_ui
-      
+
    else
       ''
-      
+
    end
 
 end
@@ -33,16 +33,16 @@ end
 add_conf_proc( 'jquery_ui_theme', 'jQuery UI Theme' ) do
    if @mode == 'saveconf' then
       @conf['jquery_ui.theme'] = @cgi.params['jquery_ui.theme'][0]
-      
+
    end
-   
+
    <<-HTML
    <h3 class="subtitle">Theme name</h3>
    <p><input name="jquery_ui.theme" value="#{h @conf['jquery_ui.theme']}" size="40"></p>
    <p>sample) blitzer, flick .. <a href="http://jqueryui.com/themeroller/">See JQuery UI Theme.</a></p>
    <p>default is <b>base</b>.</p>
    HTML
-   
+
 end
 
 

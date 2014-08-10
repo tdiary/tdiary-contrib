@@ -8,7 +8,7 @@
 # 2010.10.19: v.1.71: Modified by K.Sakurai (http://ks.nwr.jp)
 #  Acknowledgements:
 #   * Based on posttdiary.rb & tdiary.rb by TADA.
-#   * Some codes partially imported from Enikki Plugin Ex. : 
+#   * Some codes partially imported from Enikki Plugin Ex. :
 #     http://shimoi.s26.xrea.com/hiki/hiki.cgi?TdiaryEnikkiEx
 #   * Thanks to taketori for image size detection method.
 #   * Thanks to NOB for debugging.
@@ -124,7 +124,7 @@ def usage( detailed_help )
 !		          ex2. -z 140   (same to 140x140)
 ! 		  --image-format,    -f format string:
 !		          Specify the format string of the image tag
-!		          These variables can be used in the format string: 
+!		          These variables can be used in the format string:
 !		              $0 : image serial number
 !		              $1 : image url
 !		              $2 : thumbnail image url (when -t is specified)
@@ -420,7 +420,7 @@ end
 
 def add_body_text( prev, sub_head , sub_body )
 	addtext = prev
-	if prev.size > 0 and !(prev =~ /\n$/) then 
+	if prev.size > 0 and !(prev =~ /\n$/) then
 		addtext += "\n"
 	end
 	if sub_head =~ %r[^Content-Transfer-Encoding:\s*base64]i then
@@ -630,7 +630,7 @@ def parse_mail( head, body , image_dir )
 				orglist[imgnum] = orgname
 			end
 		end
-	elsif head =~ /^Content-Type:\s*text\/plain/i 
+	elsif head =~ /^Content-Type:\s*text\/plain/i
 		textbody = add_body_text( textbody , head, body )
 	else
 		raise "posttdiary-ex: can not read this mail (illegal format)"
@@ -912,7 +912,7 @@ begin
 		user = ARGV.shift.dup
 		pass = ARGV.shift.dup
 	end
-	
+
 	require 'base64'
 	require 'nkf'
 	require 'net/http'
@@ -921,7 +921,7 @@ begin
 
 	mail = NKF::nkf( '-m0 -Xwd', ARGF.read )
 	raise "posttdiary-ex: no mail text." if not mail or mail.length == 0
-	
+
 	head, body = mail.split( /(?:\r\n){2}|\r\r|\n\n/, 2 )
 	body = "" unless body
 	addr, subject, tmpimglist, orglist, @body = parse_mail( head, body, image_dir )
@@ -971,7 +971,7 @@ begin
 	else
 		now = tmp
 	end
-	
+
 	topic_year = now.strftime( "%Y" )
 	topic_month = now.strftime( "%m" )
 	topic_date = now.strftime( "%d" )

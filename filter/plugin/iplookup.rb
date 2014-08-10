@@ -25,12 +25,12 @@ def iplookup_conf_proc
       else
          @conf['iplookup.safe_ip.list'] = nil
       end
-      
+
 	end
-   
+
    # initialize DNSBL list
    @conf['iplookup.ip.list'] = "bsb.spamlookup.net\nopm.blitzed.org\nniku.2ch.net" unless @conf['iplookup.ip.list']
-   
+
 	result = <<-HTML
 		<h3>#{@iplookup_ip_label}</h3>
 		<p>#{@iplookup_ip_label_desc}</p>

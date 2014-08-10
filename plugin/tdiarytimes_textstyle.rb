@@ -47,7 +47,7 @@
 #
 # オプション値の設定方法には3つの方法があり、その優先順位は次の通りです。
 # <%= tdiarytimes_textstyle %> 引数指定 ＞ tdiary.conf設定値 ＞ デフォルト値
-# 
+#
 # entr_intervalを除いた全てのオプション値は <%= %> への引数指定により設定出来るため、
 # ページにごとに意匠を変更するなど自由度の高いサイトデザインが可能です。
 # 一方で、全てのオプションにデフォルト値が用意されているため、
@@ -60,7 +60,7 @@
 #【書式】
 # <%= tdiarytimes_textstyle init_text, entr_text, init_color, entr_color, fade_color, init_css, entr_css, title_text, fade_time %>
 #
-#【記述例】 
+#【記述例】
 # <%=tdiarytimes_textstyle "●","●","004400","66ff66","004400","background-color:#002200;font-size:9px",nil,"TEXTSTYLE!!",15 %>
 #
 # ※ tdiary.conf指定値、またはデフォルト値を使用したい場合は、引数に nil を指定してください。
@@ -193,7 +193,7 @@ if /^(append|replace)$/ =~ @mode then
 	if (Time.now.to_i - ary_data[144]) > entr_interval.to_f
 		ary_data[(Time.now.strftime('%H').to_i*6 + Time.now.strftime('%M').to_f/10).to_i] = Time.now.to_i
 		# 最終登録時間の記録
-		ary_data[144] = Time.now.to_i 
+		ary_data[144] = Time.now.to_i
 	end
 
 

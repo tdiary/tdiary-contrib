@@ -212,7 +212,7 @@ module ::TDiary
 				@db.register(body, properties)
 			end
 		end
-		
+
 		protected
 
 		def mode; 'day'; end

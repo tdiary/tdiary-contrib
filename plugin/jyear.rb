@@ -1,10 +1,10 @@
 #	jyear.rb $Revision: 1.1 $
-#	
+#
 #	西暦を和暦に変換するプラグイン。
 #	日記やツッコミの日付フォーマットで使う。
 #	「%Y」で「2005」のところを、「%K」で「平成17」と表示。
 #	pluginに入れるだけで動作する。
-#	
+#
 # Copyright (c) 2005 sasasin/SuzukiShinnosuke<sasasin@sasasin.sytes.net>
 # You can distribute this file under the GPL.
 #

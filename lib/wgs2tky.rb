@@ -23,14 +23,14 @@ class Wgs2Tky
 
   Dx = +128
   Dy = -481
-  Dz = -664	
+  Dz = -664
 
   def Wgs2Tky.conv!(lat,lon,h = 0)
     b = lat[0].to_f + lat[1].to_f/60 + lat[2].to_f/3600
     l = lon[0].to_f + lon[1].to_f/60 + lon[2].to_f/3600
-		
+
     (x,y,z) = Wgs2Tky._llh2xyz(b,l,h,A,E2)
-		
+
     x+=Dx
     y+=Dy
     z+=Dz
@@ -40,7 +40,7 @@ class Wgs2Tky
     lat[0..2]=Wgs2Tky._deg2gdms(b)
     lon[0..2]=Wgs2Tky._deg2gdms(l)
   end
-	
+
   private
 
   include Math
@@ -50,23 +50,23 @@ class Wgs2Tky
 
     b *= Rd
     l *= Rd
-		
+
     sb = sin(b)
     cb = cos(b)
 
     rn = a / Math.sqrt(1-e2*sb*sb)
-    
+
     x = (rn+h)*cb*cos(l)
     y = (rn+h)*cb*sin(l)
     z = (rn*(1-e2)+h) * sb
-		
+
     return x,y,z
   end
 
   def Wgs2Tky._xyz2llh(x,y,z,a,e2)
 
     bda = sqrt(1-e2)
-	
+
     po = sqrt(x*x+y*y)
     t = atan2(z,po*bda)
     st = sin(t)
@@ -77,7 +77,7 @@ class Wgs2Tky
     sb = sin(b)
     rn = a / sqrt(1-e2*sb*sb)
     h = po / cos(b) - rn
-		
+
     return b/Rd,l/Rd,h
   end
 
@@ -86,7 +86,7 @@ class Wgs2Tky
     s = sf.to_i%60
     m = (sf/60).to_i%60
     d = (sf/3600).to_i
-    s += sf - sf.to_i	
+    s += sf - sf.to_i
     return d,m,s
   end
 end

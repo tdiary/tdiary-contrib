@@ -16,7 +16,7 @@ unless Time::new.respond_to?( :strftime_jroku_backup ) then
    class Time
       alias strftime_jroku_backup strftime
       JROKU = %w(大安 赤口 先勝 友引 先負 仏滅)
-      
+
       def strftime( format )
          d=Gregorian.new(self.month, self.day, self.year)
          q_d = Calendar.kyureki_from_absolute(d.abs)

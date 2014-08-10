@@ -20,7 +20,7 @@
 
 def picasa( src, alt = "photo", place = 'photo' )
 	src.sub!( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
-	
+
 	if @cgi.mobile_agent?
 		body = %Q|<a href="#{src}">#{alt}</a>|
 	else
@@ -45,7 +45,7 @@ if /\A(form|edit|preview|showcomment)\z/ === @mode then
 end
 
 add_edit_proc do |date|
-	unless @conf['picasa.user'] 
+	unless @conf['picasa.user']
 		'<p>[ERROR] picasa.rb: Picasa username is not specified.</p>'
 	else
 		<<-HTML

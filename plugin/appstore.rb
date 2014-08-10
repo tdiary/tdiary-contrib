@@ -16,24 +16,24 @@ end
 
 def appstore_detail(url)
    appstore_dom = ''
-   
+
    begin
       appstore_dom = appstore_common(url, {:detail => true})
-      
+
    rescue
       appstore_dom = "<b>Error. message=#{$!.message}.</b>"
-      
+
    end
-   
+
 end
 
 def appstore_common(url, params)
    return %Q|<a href="url">#{url}</a>| if feed?
-   
+
    appstore_uri = URI::parse(url)
    id = appstore_uri.path.split('/').last.gsub('id', '')
    raise StandardError.new("AppStore ID: not found from #{url}..") if id.nil? || id == ''
-   
+
    return %Q|<a class="appstore" data-appstoreid="#{id}" href="#{url}"></a>|
 end
 

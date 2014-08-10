@@ -17,7 +17,7 @@ end
 
 add_footer_proc do
 	if @conf["brow.si.site_id"] and @conf.smartphone?
-		
+
 		<<-SCRIPT
 		<script type="text/javascript">
 			window['_brSiteId'] = '#{h @conf["brow.si.site_id"]}';

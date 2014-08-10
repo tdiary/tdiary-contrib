@@ -1,5 +1,5 @@
 #
-# yahoo_kousei.rb - 
+# yahoo_kousei.rb -
 #  Yahoo!JAPANデベロッパーネットワークの校正支援APIを利用して、
 #  日本語文の校正作業を支援します。文字の入力ミスや言葉の誤用がないか、
 #  わかりにくい表記や不適切な表現が使われていないかなどをチェックします。
@@ -32,7 +32,7 @@ def kousei_api( sentence )
 
 	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
 	px_port = 80 if px_host and !px_port
-	
+
 	xml = ''
 	Net::HTTP::Proxy( px_host, px_port ).start( 'jlp.yahooapis.jp' ) do |http|
 		xml = http.post( '/KouseiService/V1/kousei', query ).body

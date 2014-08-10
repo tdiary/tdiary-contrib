@@ -18,7 +18,7 @@
 # サーバが書き込み権限を持っているファイルを作ります。
 #	これで日記に書き込みするごとに、tdiarytimes.pngに
 #	画像を書き込みます。
-# 
+#
 # 日記上からこのpngファイルを呼び出すには、
 # tDiray上からプラグインとして
 # <%=tdiarytimes%>
@@ -28,27 +28,27 @@
 #
 # また、tdiary.confに以下のオプションを書き込むことにより、
 # カスタマイズをすることが出来ます。
-# 
+#
 # @options['tdiarytimes.width'] = 400
 # 四角の横幅。デフォルト値400。
 # 実際に出力される画像サイズは、これに+10したサイズ。
-# 
+#
 # @options['tdiarytimes.height'] = 20
 # 四角の縦幅。デフォルト値20。
 # 実際に出力される画像サイズは、これに+16したサイズ。
-# 
+#
 # @options['tdiarytimes.file'] = 'tdiarytimes.png'
 # 出力する画像ファイル名。デフォルトは'tdiarytimes.png'
-# 
+#
 # @options['tdiarytimes.fillcolor'] = '#444444'
 # 四角の色。デフォルトは'#444444'
-# 
+#
 # @options['tdiarytimes.linecolor'] = '#ffffff'
 # 縦棒の色。デフォルトは'#ffffff'
-# 
+#
 # @options['tdiarytimes.textcolor'] = '#444444'
 # 文字色。デフォルトは'#444444'
-# 
+#
 # @options['tdiarytimes.fadeout'] = false
 # フェードアウトするか。デフォルトはfalse。
 # フェードアウトしたいときには true にすればよい。
@@ -58,10 +58,10 @@
 # デフォルトではfillcolorへとフェードアウトしていく。
 # ここで色を指定するとその色へとフェードアウトしていく。
 # デフォルトは false
-# 
+#
 # @options['tdiarytimes.text'] = 'T D I A R Y T I M E S'
 # 出力する文字。デフォルトは'T D I A R Y T I M E S'。なお半角英数字のみ対応。
-# 
+#
 # @options['tdiarytimes.day'] = 30
 # ログを保存する最大日数。デフォルトは30。
 # この場合、30日以上経ったデータは消去され、縦棒として描画されなくなる。

@@ -8,7 +8,7 @@
 
 #
 # not support
-# 
+#
 return if feed? || @conf.mobile_agent?
 
 if /\A(?:form|preview|append|edit|update)\z/ =~ @mode

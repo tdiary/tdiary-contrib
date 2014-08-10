@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # image_gps.rb $Revision: 1.1 $
-# 
+#
 # 概要:
-# 
+#
 #
 # 使い方:
 # 絵日記Plugin(image.rb)とおなじ
@@ -52,7 +52,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   else
     size = ""
   end
-  
+
   show_exif_info = @conf['image_gps.show_exif_info']
   show_exif_info = '' if show_exif_info.nil?
   google_maps_api_key = @conf['image_gps.google_maps_api_key']

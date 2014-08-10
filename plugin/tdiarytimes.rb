@@ -15,7 +15,7 @@
 # サーバが書き込み権限を持っているファイルを作ります。
 #	これで日記に書き込みするごとに、tdiarytimes.pngに
 #	画像を書き込みます。
-# 
+#
 # 日記上からこのpngファイルを呼び出すには、
 # tDiray上からプラグインとして
 # <%=tdiarytimes%>
@@ -25,30 +25,30 @@
 #
 # また、tdiary.confに以下のオプションを書き込むことにより、
 # カスタマイズをすることが出来ます。
-# 
+#
 # @options['tdiarytimes.width'] = 400
 # 四角の横幅。デフォルト値400。
 # 実際に出力される画像サイズは、これに+10したサイズ。
-# 
+#
 # @options['tdiarytimes.height'] = 20
 # 四角の縦幅。デフォルト値20。
 # 実際に出力される画像サイズは、これに+16したサイズ。
-# 
+#
 # @options['tdiarytimes.file'] = 'tdiarytimes.png'
 # 出力する画像ファイル名。デフォルトは'tdiarytimes.png'
-# 
+#
 # @options['tdiarytimes.fillcolor'] = '#444444'
 # 四角の色。デフォルトは'#444444'
-# 
+#
 # @options['tdiarytimes.linecolor'] = '#ffffff'
 # 縦棒の色。デフォルトは'#ffffff'
-# 
+#
 # @options['tdiarytimes.textcolor'] = '#444444'
 # 文字色。デフォルトは'#444444'
-# 
+#
 # @options['tdiarytimes.text'] = 'T D I A R Y T I M E S'
 # 出力する文字。デフォルトは'T D I A R Y T I M E S'。なお半角英数字のみ対応。
-# 
+#
 # @options['tdiarytimes.day'] = 30
 # ログを保存する最大日数。デフォルトは30。
 # この場合、30日以上経ったデータは消去され、縦棒として描画されなくなる。
@@ -66,8 +66,8 @@ if /^(append|replace)$/ =~ @mode then
 	linecolor = @options['tdiarytimes.linecolor'] || '#ffffff'
 	textcolor = @options['tdiarytimes.textcolor'] || '#444444'
 	text = @options['tdiarytimes.text'] || 'T D I A R Y T I M E S'
-	day = @options['tdiarytimes.day'] || 30 
-	
+	day = @options['tdiarytimes.day'] || 30
+
 	cache = "#{@cache_path}/tdiarytimes"
 	Dir::mkdir( cache ) unless File::directory?( cache )
 
@@ -78,7 +78,7 @@ if /^(append|replace)$/ =~ @mode then
 	fillcolor = image.colorAllocate(fillcolor)
 	linecolor = image.colorAllocate(linecolor)
 	textcolor = image.colorAllocate(textcolor)
-	
+
 	#帯の描画
 	image.filledRectangle(5,8,width + 4,height + 7,fillcolor)
 
@@ -140,21 +140,21 @@ if /^(append|replace)$/ =~ @mode then
 	pngfile = open(file, 'w')
 		image.png(pngfile)
 	pngfile.close
-	
+
 end
 
 def tdiarytimes(alt = nil)
 	width = @options['tdiarytimes.width'].to_i || 400
 	width += 10
-	
+
 	height = @options['tdiarytimes.height'].to_i || 20
 	height += 16
-	
+
 	file = @options['tdiarytimes.file'] || 'tdiarytimes.png'
 	text = @options['tdiarytimes.text'] || 'T D I A R Y T I M E S'
 
 	result = ""
-	
+
 	if alt
 		result << %Q|<img src="#{h file}" alt="#{h alt}" width="#{width}" height="#{height}" class="tdiarytimes">|
 	else

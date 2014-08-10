@@ -24,7 +24,7 @@ add_section_leave_proc do |date, index|
   hb_footer4sec(rss_url, 50, cache_time, template_head, template_list, template_foot)
 end
 
-# rss-recent.rb: RSS recent plugin 
+# rss-recent.rb: RSS recent plugin
 #
 # rss_recnet: show recnet list from RSS
 #   parameters (default):
@@ -61,11 +61,11 @@ def hb_footer4sec(url, max = 5, cache_time = 3600, \
 	cache_file = "#{@cache_path}/rss-recent.#{CGI.escape(url)}"
 
 	hb_footer4sec_cache_rss(url, cache_file, cache_time.to_i)
-	
+
 	return '' unless test(?r, cache_file)
 
 	rv = template_head
-	
+
 	i = 0
 	hb_footer4sec_read_from_cache(cache_file).each do |title, url, time, content, description|
 		break if i >= max
@@ -100,14 +100,14 @@ def hb_footer4sec_cache_rss(url, cache_file, cache_time)
 		require 'rss/2.0'
 		require 'rss/dublincore'
 		require 'rss/content'
-		
+
 		begin
 			uri = URI.parse(url)
 
 			raise URI::InvalidURIError if uri.scheme != "http"
 
 			rss_source = hb_footer4sec_fetch_rss(uri, cached_time)
-			
+
 			raise InvalidResourceError if rss_source.nil?
 
 			# parse RSS

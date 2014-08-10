@@ -6,7 +6,7 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 # tDiaryのデータを日別でGitに登録するプラグインです
-# 
+#
 # 1. プラグインディレクトリ(例: plugin)にgit-register.rbを設置。
 # 2. プラグインディレクトリにja/git-register.rb、en/git-register.rbを設置。
 # 3. tdiary.confにリポジトリを指定(リポジトリの場所を/var/git-respoと仮定)
@@ -113,16 +113,16 @@ module ::TDiary
 
 			# commit
 			require 'shellwords'
-			
-			msg = "#{ENV['REMOTE_ADDR']} - #{ENV['REMOTE_HOST']}" 
-			
+
+			msg = "#{ENV['REMOTE_ADDR']} - #{ENV['REMOTE_HOST']}"
+
 			Dir.chdir("#{@repository_dir}") do
 				td2_file2 = @date.strftime("%Y%m/%Y%m%d.td2")
 				system("git add -- #{Shellwords.shellescape(td2_file2)}".untaint)
 				system("git commit -q -m \"#{msg}\" -- #{Shellwords.shellescape(td2_file2)}".untaint)
 			end
 		end
-		
+
 		protected
 
 		def mode; 'day'; end
@@ -199,9 +199,9 @@ else
 		conf.show_nyear = false
 		def conf.bot?; true; end
 
-		repository_dir = @conf['git.repository_dir'] 
+		repository_dir = @conf['git.repository_dir']
 		diary = @diaries[@date.strftime('%Y%m%d')]
-		
+
 		TDiary::GitRegister.new(repository_dir, diary).execute
 	end
 

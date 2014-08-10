@@ -19,7 +19,7 @@ module TDiary
                                    "niku.2ch.net\ndnsbl.spam-champuru.livedoor.com"
             end
          end
-         
+
          def black_ip?( address )
             chance = 2
             ip = address.gsub(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/, '\4.\3.\2.\1')
@@ -38,13 +38,13 @@ module TDiary
             end
             return false
          end
-         
+
          def comment_filter( diary, comment )
             iplookup_init
             return false if black_ip?( @cgi.remote_addr )
             return true
          end
-         
+
          def referer_filter( referer )
             iplookup_init
             return false if black_ip?( @cgi.remote_addr )

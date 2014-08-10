@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# playstore.rb 
-# 
+# playstore.rb
+#
 # 概要:
 #   GooglePlay(play.google.com)へのリンクを生成します。
 #
@@ -67,7 +67,7 @@ def playstore_save_cache(app)
    path="#{@cache_path}/playstore/#{app.app_id}"
    dir = File.dirname(path)
    Dir.mkdir(dir) unless File.directory?(dir)
-   
+
    app.save(path)
 end
 

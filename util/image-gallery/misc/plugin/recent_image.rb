@@ -94,7 +94,7 @@ def image_info_rcimg( filename )
     data = $'
 
     until data.empty?
-      if RUBY_VERSION >= '1.9.0' 
+      if RUBY_VERSION >= '1.9.0'
         break if data[0].unpack("C").first != 0xFF
         break if data[1].unpack("C").first == 0xD9
       else
@@ -230,7 +230,7 @@ def init_rcimg
     make_image_hash_rcimg
     keysort_rcimg
     if @recent_image_use_cache
-      save_cache_rcimg 
+      save_cache_rcimg
     end
   end
 end
@@ -294,7 +294,7 @@ def count_image(name_filter = nil, title_filter = nil)
   init_rcimg
 
   if name_filter == nil and title_filter == nil
-    count = @recent_image_keys.length 
+    count = @recent_image_keys.length
   else
     @recent_image_keys.each do |key|
       image = @recent_image_hash[key]
@@ -350,7 +350,7 @@ end
 #  Callback Functions
 
 # this is for view_exif().
-add_body_enter_proc(Proc.new do |date| 
+add_body_enter_proc(Proc.new do |date|
   @image_date_exif = date.strftime("%Y%m%d")
   ""
 end)
