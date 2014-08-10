@@ -9,7 +9,7 @@ module TDiary
             return false if comment.body.size > @conf['comment.size']
             true
          end
-         
+
          def referer_filter( referer )
             true
          end

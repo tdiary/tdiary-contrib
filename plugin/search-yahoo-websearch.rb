@@ -41,12 +41,12 @@ def yahoo_websearch_api( q, start = 1 )
 	url = request_url
 	appid = @conf['search-yahoo-websearch.appid']
 	uri = URI::parse( @conf.base_url )
-	
+
 	url << "?appid=#{appid}&query=#{q}&results=20&start=#{start}&format=html&site=#{uri.host}"
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-  
+
 	proxy_host, proxy_port = nil
 	if proxy
 		proxy_host = proxy_uri.host
@@ -77,7 +77,7 @@ end
 def search_result
 	query = CGI::unescape( @cgi.params['q'][0] )
 	start = CGI::unescape( @cgi.params['start'][0] || '1' ).to_i
-	
+
    begin
 		uri = URI::parse( @conf.base_url )
 		xml = yahoo_websearch_api( u( query.untaint ), start )
@@ -89,7 +89,7 @@ def search_result
 	rescue OpenURI::HTTPError
 		return %Q|<p class="message">#$!</p>|
 	end
-	
+
 	r = '<dl class="search-result autopagerize_page_element">'
 	doc.elements.to_a( 'Result' ).each do |elem|
 		url = elem.elements.to_a( 'Url' )[0].text
@@ -100,13 +100,13 @@ def search_result
 		r << %Q|<dd>#{search_to_html summary}</dd>|
 	end
 	r << '</dl>'
-	
+
 	r << '<div class="search-navi">'
 	pos = doc.elements["/ResultSet"].attributes["firstResultPosition"]
 	unless pos == '1'
 		r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;start=#{pos.to_i - 20}" rel="prev">&lt;前の20件</a>&nbsp;|
 	end
-		
+
 	total = doc.elements["/ResultSet"].attributes["totalResultsAvailable"]
 	ret = doc.elements["/ResultSet"].attributes["totalResultsReturned"]
 
@@ -114,8 +114,8 @@ def search_result
 		r << %Q|<a href="#{@conf.index}?q=#{u query}&amp;start=#{pos.to_i + 20}" rel="next">次の20件&gt;</a>|
 	end
 	r << '</div>'
-	
+
 	r << yahoo_websearch_attribution
-	
+
 	r
 end

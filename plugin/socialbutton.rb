@@ -6,7 +6,7 @@
 
 # enable social button names
 @conf['socialbutton.enables'] ||= 'twitter,hatena,facebook_like'
-# screen name of the user to attribute the tweet to 
+# screen name of the user to attribute the tweet to
 @conf['socialbutton.twitter.via'] ||= ''
 
 def socialbutton_js_settings
@@ -14,7 +14,7 @@ def socialbutton_js_settings
 	enable_js('socialbutton.js')
 	add_js_setting('$tDiary.plugin.socialbutton')
 	# convert array to json
-	add_js_setting('$tDiary.plugin.socialbutton.enables', 
+	add_js_setting('$tDiary.plugin.socialbutton.enables',
 						%Q|["#{@conf['socialbutton.enables'].split(',').join('", "')}"]|)
 
 	if @conf['socialbutton.twitter.via'] != ''

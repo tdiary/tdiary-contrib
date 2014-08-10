@@ -44,7 +44,7 @@ end
 def search_result
 	w = @conf["search-google-custom.width"] || 600
 	h = @conf["search-google-custom.height"] || 1300
-	
+
 	r = <<-HTML
 		<div id="cse-search-results"></div>
 			<script type="text/javascript">

@@ -4,10 +4,10 @@
 # 		 estsearch.cgiが作成する検索キーワードログから
 #		 最新xx件分の検索語を表示します。
 # パラメタ:
-#   file:       検索キーワードログファイル名(絶対パス表記) 
-#   estraier:     estseach.cgiのパス 
-#   limit:      表示件数(未指定時:5) 
-#   make_link:  <a>を生成するか?(未指定時:生成する)    
+#   file:       検索キーワードログファイル名(絶対パス表記)
+#   estraier:     estseach.cgiのパス
+#   limit:      表示件数(未指定時:5)
+#   make_link:  <a>を生成するか?(未指定時:生成する)
 #
 #
 # Copyright (c) 2005 SHIBATA Hiroshi <h-sbt@nifty.com>
@@ -26,7 +26,7 @@ def recent_estraier(file, estraier, limit = 5, make_link = true)
       log.each_line do |line|
          lines << line
       end
-      
+
       result = "<ol>"
       lines.reverse.each_with_index do |line,idx|
          break if idx >= limit
@@ -41,9 +41,9 @@ def recent_estraier(file, estraier, limit = 5, make_link = true)
             end
          end
       end
-		
+
       result << %Q[</ol>]
-      
+
    rescue
 		%Q[<p class="message">#$! (#{$!.class})<br>cannot read #{file}.</p>]
 	end

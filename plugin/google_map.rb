@@ -27,7 +27,7 @@ def google_map_common(params)
      return %Q|<a href="#{url}">#{url}</a>|
    end
    return 'not support this environment.' if @conf.mobile_agent?
-   
+
    params[:zoom]    ||=  10
    params[:html]    ||= nil
    params[:title]   ||= nil
@@ -36,7 +36,7 @@ def google_map_common(params)
    params[:address] ||= nil
    params[:type]    ||= :ROADMAP
    params[:overview]||= false
-   
+
    dom_id = "#{@date.strftime("%Y%m")}_#{@gmap_count}"
    params.merge!(:id => dom_id)
    params.merge!(:width => 240, :height => 180) if @conf.iphone?
@@ -96,7 +96,7 @@ def google_map_script(hash)
    if hash[:title]
    str << %Q|  var marker = new google.maps.Marker({\n|
    str << %Q|      position: new google.maps.LatLng(#{hash[:lat]}, #{hash[:lon]}),\n|
-   str << %Q|      map: gMap,\n| 
+   str << %Q|      map: gMap,\n|
    str << %Q|      title: '#{hash[:title]}'\n|
    str << %Q|  });\n|
    # set InfoWindow
@@ -109,7 +109,7 @@ def google_map_script(hash)
    end # :html
    end # :title
    str << %Q|});\n|
-    
+
    str
 end
 
@@ -137,7 +137,7 @@ def google_geomap_script(hash)
    if hash[:title]
    str << %Q|        var marker = new google.maps.Marker({\n|
    str << %Q|            position: geoLat,\n|
-   str << %Q|            map: gMap,\n| 
+   str << %Q|            map: gMap,\n|
    str << %Q|            title: '#{hash[:title]}'\n|
    str << %Q|        });\n|
    # set InfoWindow
@@ -155,7 +155,7 @@ def google_geomap_script(hash)
    str << %Q|    });\n|
    str << %Q|  }\n|
    str << %Q|});\n|
-    
+
    str
 end
 

@@ -186,7 +186,7 @@ module ::TDiary
 				@db.put_doc(doc)
 			end
 		end
-		
+
 		protected
 
 		def mode; 'day'; end
@@ -265,7 +265,7 @@ else
 		conf.hide_comment_form = true
 		conf.show_nyear = false
 		def conf.bot?; true; end
-	
+
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		TDiary::EstraierDB.new(conf).transaction do |estraier_db|
 			TDiary::EstraierRegister.new(estraier_db, diary).execute(true)

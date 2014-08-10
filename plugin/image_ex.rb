@@ -1,7 +1,7 @@
 # image_plugin_ex.rb
 # version 0.3
 # -pv-
-# 
+#
 # 名称:
 # 絵日記Plugin機能追加版
 #
@@ -89,7 +89,7 @@ if @conf.smartphone?
 end
 
 
-add_body_enter_proc(Proc.new do |date|	
+add_body_enter_proc(Proc.new do |date|
 	@image_date = date.strftime("%Y%m%d")
 	@image_year = date.strftime("%Y")
 	""
@@ -110,10 +110,10 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 
 	image_dir.untaint
 	Dir.mkdir(image_dir) unless File.directory?(image_dir)
-	
+
 	list = imageList(@image_date, image_dir).untaint
 	slist = imageList(@image_date, image_dir, "s").untaint
-	
+
 	if width
 		width_tag = %Q[width="#{h width}"]
 	else
@@ -194,7 +194,7 @@ add_form_proc do |date|
 			def resize_image(orig, new, width, height, imageex_convertedwidth, imageex_convertedheight, orig_type, new_type)
 				imageex_convertpath = @options && @options['image_ex.convertpath'] || "convert"
 				imageex_convertpath
-				
+
 				if width > height
 					imageex_convertedsize = %Q[#{imageex_convertedwidth}x#{imageex_convertedheight}]
 					imageex_convertedsize
@@ -217,16 +217,16 @@ add_form_proc do |date|
 				giftopnm = @options && @options['image_ex.giftopnmpath'] || "giftopnm"
 				tifftopnm = @options && @options['image_ex.tifftopnmpath'] || "tifftopnm"
 				bmptopnm = @options && @options['image_ex.bmptopnmpath'] || "bmptopnm"
-				
+
 				downtype = orig_type.downcase
 				topnm = eval("#{downtype}topnm")
-				
+
 				if new_type == "jpg"
 					pnmto = pnmtojpeg
 				elsif new_type == "png"
 					pnmto = pnmtopng
 				end
-				
+
 				if width > height
 					imageex_convertedsize ="#{imageex_convertedwidth}"
 				else
@@ -252,7 +252,7 @@ add_form_proc do |date|
 			}
 			return image_path
 		end
-	
+
 		if @cgi.params['plugin_image_add'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
 			image_dir = @cgi.params['plugin_image_dir'][0].read.untaint
 			image_filename = ''
@@ -271,7 +271,7 @@ add_form_proc do |date|
 					f.print @cgi.params['plugin_image_file'][0].read
 				}
 			end
-			
+
 			if imageex_useresize == 1 or imageex_useresize == 2
 				open(image_file,"rb") do |fh|
 					img = ImageSize.new(fh.read)
@@ -291,7 +291,7 @@ add_form_proc do |date|
 					elsif imageex_converttype == 1
 						new_type = "png"
 					end
-					
+
 					if width
 						if width > imageex_thresholdsize or height > imageex_thresholdsize
 							small_image_file = %Q[#{image_dir}s#{image_date}_#{image_name.length.to_s}.#{new_type}]
@@ -367,10 +367,10 @@ add_form_proc do |date|
 	n_image = imageList(@date.strftime("%Y%m%d"), image_dir).length
 	list = imageList(@date.strftime("%Y%m%d"), image_dir)
 	slist = imageList(@date.strftime("%Y%m%d"), image_dir, "s")
-	
+
 	pretable=""
 	posttable=""
-	
+
 	if n_image > 0
 		pretable<< %Q[<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0">]
 		posttable << %Q[</TR></TABLE>]
@@ -386,7 +386,7 @@ add_form_proc do |date|
 		image_plugin_tag1 = "&lt;%="
 		image_plugin_tag2 = "%&gt;"
 	end
-	
+
 	r = ''
 	r << %Q[
 		<script type="text/javascript">
@@ -416,14 +416,14 @@ add_form_proc do |date|
 			alt_tag = %Q[alt="#{h list[id.to_i]}"]
 			thumbnail_tag = %Q[<form class="update" method="post" enctype="multipart/form-data" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_name" value="#{date.strftime( '%Y%m%d' )}_#{h id}"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"><input type="hidden" name="plugin_image_thumbnail" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="file" name="plugin_image_file"><input type="submit" name="plugin" value="サムネイル"></form>] if imageex_useresize == 0
 		end
-		
+
 		ptag = "#{image_plugin_tag1}image #{id}, '画像の説明'#{image_plugin_tag2}"
-		
+
 		i<< %Q[<td><table border="1" cellpadding="1" cellspacing="1"><tr><td style="text-align:center"><input type="button" onclick="ins(&quot;#{ptag}&quot;)" value="本文に追加"></td></tr><tr><td style="text-align:center">#{image_plugin_tag1}image #{h id},'title#{h id}'#{image_plugin_tag2}</td></tr><tr><td width="#{@imageex_thumbnailsize * 1.5}" height="#{@imageex_thumbnailsize * 1.3}" style="text-align:center">
 <img class="form" #{src_tag} #{alt_tag} height="#{@imageex_thumbnailsize}" ></tr><tr><td>#{thumbnail_tag}<form class="update" method="post" action="#{h @update}">#{csrf_protection}<input type="hidden" name="plugin_image_del" value="true"><input type="hidden" name="date" value="#{date.strftime( '%Y%m%d' )}"><input type="hidden" name="plugin_image_id" value="#{h id}"><input type="submit" name="plugin" value="画像を削除"><input type="hidden" name="plugin_image_dir" value="#{h image_dir}"></form>
 </tr></table></td>] if slist[id.to_i] || list[id.to_i]
 		nt += 1 if slist[id.to_i] || list[id.to_i]
-		
+
 		if nt > 0 and nt%2 == 0
 			i<< %Q[</TR></TABLE><TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>]
 		end

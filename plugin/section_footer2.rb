@@ -186,7 +186,7 @@ def add_twitter(date, index)
 		data-url="#{permalink(date, index, false).gsub(/#.*$/, '')}"
 		data-text="#{CGI.escapeHTML(subtitle(date, index))}"
 		data-via="#{@conf['twitter.user']}"
-	>tweet</a> | 
+	>tweet</a> |
 	EOS
 end
 

@@ -6,7 +6,7 @@
 # そのまま plugin ディレクトリに置きます。
 # '設定' -> 'rating.rb Configuration' で、評価軸や
 # 表示内容を設定。
-# くわしくは 
+# くわしくは
 # http://www.maripo.jp/diary/?date=20071019
 #
 # Copyright (c) 2007 Mariko/Maripo GODA <god@maripo.jp>
@@ -90,9 +90,9 @@ HTML
 <tr>
 <td>追加</td>
 <td>
-軸の名前:<input type="text" size="16" name="label_new"> 
-最低ラベル:<input type="text" size="10" name="label_min_new"> 
-最高ラベル:<input type="text" size="10" name="label_max_new"> 
+軸の名前:<input type="text" size="16" name="label_new">
+最低ラベル:<input type="text" size="10" name="label_min_new">
+最高ラベル:<input type="text" size="10" name="label_max_new">
 選択肢数:<input type="text" size="4" name="range_new">
 </td>
 </tr>
@@ -133,13 +133,13 @@ HTML
     form_string += ('<form action="./"><input type="hidden" name="comment" value="submit"><input type="hidden" name="body" value="rating"><input type="hidden" name="body" value="rating"><input type="hidden" name="name" value=""><input type="hidden" value="' + date.strftime('%Y%m%d') + '"><div class="ratingForm">')
     @rating_config.each{|axis_config|
 
-        if !axis_config.display 
+        if !axis_config.display
             next
         end
 
         # add axis info
         form_string += ('<div class="ratingQuestion"><span class="ratingLabel">' + axis_config.label + '</span>')
-        
+
         # add radio buttons
         form_string += ('<span class="ratingRadioButtons"><span class="ratingLabelMin">' + axis_config.label_min + '</span>')
 
@@ -253,7 +253,7 @@ class AxisConfig
     @id
     @order
     @display = true
-    
+
     #accessors
     attr_reader :label, :label_max, :label_min, :range, :id, :order, :display
 
@@ -287,11 +287,11 @@ class AxisConfig
     def enable
         @hidden = false
     end #end disable
-    
+
     def check_label
         return @display? "checked":""
     end #end check_label
-    
+
 end
 
 #########################################
@@ -357,7 +357,7 @@ class DateEval
 
     def vote(id, rank)
         unless @axes.key?(id)
-            @axes[id] = Array.new        
+            @axes[id] = Array.new
         end
         if @axes[id][rank] != nil
             @axes[id][rank] += 1

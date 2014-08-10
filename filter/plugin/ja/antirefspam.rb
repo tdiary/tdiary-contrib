@@ -1,5 +1,5 @@
 #
-# antirefspam.rb 
+# antirefspam.rb
 #
 # Copyright (c) 2004-2005 T.Shimomura <redbug@netlife.gr.jp>
 # You can redistribute it and/or modify it under GPL2.

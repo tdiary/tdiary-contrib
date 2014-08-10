@@ -82,7 +82,7 @@ def search_result
 		r << %Q|<dd>#{search_to_html desc}</dd>|
 	end
 	r << '</dl>'
-	
+
 	r << '<div class="search-navi">'
 		# no search navi on Bing search because no total result not supported
 	r << '</div>'
