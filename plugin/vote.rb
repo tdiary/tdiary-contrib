@@ -3,8 +3,8 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 # ref. http://elpeo.jp/diary/20060622.html#p01
-# 
-# .tdiary-vote { 
+#
+# .tdiary-vote {
 #   float: left;
 #   background-color: aqua;
 # }
@@ -53,7 +53,7 @@ def get_vote( date, uid )
 			voted = db['voter'].include?( uid ) if db.root?( 'voter' )
 			db.abort
 		end
-	end		
+	end
 	[h, voted]
 end
 
@@ -81,7 +81,7 @@ end
 
 unless bot? then
 	if @mode == 'comment' && @cgi.valid?( 'vote' ) && @cgi.cookies['tdiary_vote'][0] then
-		add_vote( @date, @cgi.params['vote'][0], @cgi.cookies['tdiary_vote'][0] ) 
+		add_vote( @date, @cgi.params['vote'][0], @cgi.cookies['tdiary_vote'][0] )
 	end
 
 	add_footer_proc do

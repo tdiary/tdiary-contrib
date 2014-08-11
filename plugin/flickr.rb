@@ -96,7 +96,7 @@ def flickr_open(method, photo_id)
   Dir::mkdir(cache_dir) unless File::directory?(cache_dir)
 
   file = "#{cache_dir}/#{photo_id}.#{method}"
-  unless File.exist?(file)
+  if !File.exist?(file) || File.size(file) == 0
     req = Flickr::Request.new(@conf['flickr.apikey'])
     req['method'] = method
     req['photo_id'] = photo_id
@@ -106,7 +106,7 @@ def flickr_open(method, photo_id)
           fout.puts req.open
         }
       end
-    rescue TimeoutError => e
+    rescue TimeoutError, OpenSSL::OpenSSLError => e
       File.delete(file)
       raise e
     end

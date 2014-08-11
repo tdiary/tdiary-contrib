@@ -149,13 +149,13 @@ if category_enable?
 				now_year = Time.now.year
 				now_month = Time.now.month
 				r = Hash.new
-	
+
 				months = [
 					['01'],['01','02'],['01','02','03'],['02','03','04'],['03','04','05'],
 					['04','05','06'],['05','06','07'],['06','07','08'],['07','08','09'],
 					['08','09','10'],['09','10','11'],['10','11','12']
 				][now_month - 1]
-	
+
 				r[now_year.to_s] = months
 				case now_month
 				when 1

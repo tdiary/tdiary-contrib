@@ -21,7 +21,7 @@ def category_similar(categories, max_item)
 			items << %Q|<a href="#{h @index}#{anchor "#{ymd}#p#{'%02d' % idx}"}" title="#{h excerpt}">#{t}#p#{'%02d' % idx}</a> #{apply_plugin(title)}|
 		end
 	end
-	
+
 	unless items.empty?
 		'<div class="section">' +
 		"<h3 class='category-similar'>#{category_similar_label}</h3>" +

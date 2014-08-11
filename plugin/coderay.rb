@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # coderay.rb - easy syntax highlighting for selected languages
-#  refer to the URL below. 
+#  refer to the URL below.
 #  http://coderay.rubychan.de/
 #
 # Copyright (C) 2013, tamoot <tamoot+tdiary@gmail.com>

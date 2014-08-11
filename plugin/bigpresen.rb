@@ -12,7 +12,7 @@
 # 文字のサイズは、表示テキストとスライドのサイズに合うよう自動的に調整されます。
 # JavaScriptとDHTMLを用いて動かすので、閲覧環境によっては表示されないこともあります。
 #
-# Copyright (c) 2006 Maripo Goda 
+# Copyright (c) 2006 Maripo Goda
 # mailto:madin@madin.jp
 # Document URL http://www.madin.jp/works/plugin.html
 # You can redistribute it and/or modify it under GPL2.
@@ -44,7 +44,7 @@ function #{scriptID} () {
 			maxPx = Math.min(maxPx, w#{scriptID} * 2 * 0.9 / countLength(msgArr[t]));
 		}
 		maxPx = Math.min(maxPx, Math.floor(h#{scriptID} * 0.8 / msgArr.length));
-	        with (document.getElementById("#{scriptID}")) {	
+	        with (document.getElementById("#{scriptID}")) {
 			innerHTML = msg#{scriptID}[t#{scriptID}];
 			style.fontSize = maxPx+"px";
 			style.top = ((h#{scriptID}-(maxPx * msgArr.length)) / 2) + "px";
@@ -61,7 +61,7 @@ function #{scriptID} () {
 	}
 }
 
-function countLength (str) 
+function countLength (str)
 	{
 	len = 0;
 	for (i = 0; i < str.length; i++) {

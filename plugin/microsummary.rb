@@ -6,7 +6,7 @@
 
 add_header_proc do
 	generator_xml = @conf['generator.xml']
-	
+
 	if generator_xml != nil and @mode == 'latest' and !@cgi.valid?( 'date' )
 		%Q|\t<link rel="microsummary" href="#{generator_xml}" type="application/x.microsummary+xml">\n|
 	end
@@ -41,7 +41,7 @@ def create_xml file_name
   </pages>
 </generator>
 XML
-	
+
 	begin
 		File::open( file_name, 'w' ) do |f|
 			f.print to_utf8( xml )

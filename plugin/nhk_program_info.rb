@@ -42,7 +42,7 @@ def nhk_program_info(id, service, area = nil)
    </a>
    </div>
    PROGRAM_HTML
-  
+
 end
 
 def call_nhk_json(id, service, area)
@@ -81,7 +81,7 @@ add_conf_proc( 'nhk', 'NHK API' ) do
       @conf['nhk_api.id'] = @cgi.params['nhk_api.id'][0]
       @conf['nhk_api.default.area'] = @cgi.params['nhk_api.default.area'][0]
    end
-   
+
    <<-HTML
    <h3 class="subtitle">API key</h3>
    <p><input name="nhk_api.id" value="#{h @conf['nhk_api.id']}" size="70"></p>

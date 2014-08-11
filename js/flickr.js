@@ -54,7 +54,7 @@ $(function() {
  * a Flickr API client for JavaScript
  */
 flickrClient = function(apiKey) {
-  this.baseUrl = 'http://api.flickr.com/services/rest/?';
+  this.baseUrl = 'https://api.flickr.com/services/rest/?';
   this.apiKey = apiKey;
 }
 

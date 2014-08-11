@@ -38,7 +38,7 @@ def search_boss_api( q, start = 0 )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	
+
 	proxy_host, proxy_port = nil
 	if proxy
 		proxy_host = proxy_uri.host

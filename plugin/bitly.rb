@@ -5,7 +5,7 @@
 #        (because bitly returns nil sometime.)
 #
 # required some options below:
-#    @options['biyly.login'] : your login ID of bit.ly. 
+#    @options['biyly.login'] : your login ID of bit.ly.
 #    @options['biyly.key']   : your API key of biy.ly.
 #
 # Copyright (C) 2010, TADA Tadashi <t@tdtds.jp>

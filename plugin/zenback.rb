@@ -15,12 +15,12 @@ if @mode == 'day' and (respond_to?(:section_mode?) ? section_mode? : true)
   end
 	if defined? add_comment_leave_proc
 		add_comment_leave_proc do
-      "<!-- zenback_body_end -->" + 
+      "<!-- zenback_body_end -->" +
 			insert_zenback
 		end
 	else
 		add_body_leave_proc do
-      "<!-- zenback_body_end -->" + 
+      "<!-- zenback_body_end -->" +
 			insert_zenback
 		end
 	end

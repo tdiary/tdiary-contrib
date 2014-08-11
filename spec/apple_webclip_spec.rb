@@ -13,8 +13,8 @@ describe "apple_webclip plugin" do
 			plugin = setup_apple_webclip_plugin('http://example.com/example.png')
 			@header_snippet = plugin.header_proc
 		end
-			
-		it "header include url" do 
+
+		it "header include url" do
 			expect(@header_snippet).to eq(%Q|\t<link rel="apple-touch-icon" href="http://example.com/example.png">|)
 		end
 	end
@@ -25,8 +25,8 @@ describe "apple_webclip plugin" do
 				plugin = setup_apple_webclip_plugin('')
 				@header_snippet = plugin.header_proc
 			end
-			
-			it "header is empty" do 
+
+			it "header is empty" do
 				expect(@header_snippet).to be_empty
 			end
 		end
@@ -36,8 +36,8 @@ describe "apple_webclip plugin" do
 				plugin = setup_apple_webclip_plugin(nil)
 				@header_snippet = plugin.header_proc
 			end
-			
-			it "header is empty" do 
+
+			it "header is empty" do
 				expect(@header_snippet).to be_empty
 			end
 		end
