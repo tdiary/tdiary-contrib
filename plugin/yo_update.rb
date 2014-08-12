@@ -177,11 +177,10 @@ add_conf_proc('yo_update', yo_update_conf_label) do
 end
 
 add_update_proc do
-	case @mode
-	when 'append'
-		yo_update_send_yo_or_log if @conf['yo_update.send_on_update']
-	when 'comment'
-		yo_update_send_yo_or_log if @conf['yo_update.send_on_comment']
+	if @mode == 'append' and @conf['yo_update.send_on_update']
+		yo_update_send_yo_or_log
+	elsif @mode == 'comment' and @comment and @comment.visible? and @conf['yo_update.send_on_comment']
+		yo_update_send_yo_or_log
 	end
 end
 
