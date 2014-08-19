@@ -78,7 +78,11 @@ def playstore_main(app_id)
 
    app = PlayStore.new(app_id)
    if playstore_load_cache(app).nil?
-      app.update
+      begin
+         app.update
+      rescue
+         return :notfound
+      end
       save = true
    else
       save = false
@@ -100,7 +104,7 @@ def playstore(app_id)
       HTML
    when :notfound
       <<-HTML
-         <div class="playstore-frame">#{app_id} was not found.</div>
+         <div class="playstore-frame"><a href="https://play.google.com/store/apps/details?id=#{app_id}">#{app_id}</a> was not found.</div>
       HTML
    else
       <<-HTML
