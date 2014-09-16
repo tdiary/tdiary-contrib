@@ -1,16 +1,16 @@
 # bigpresen.rb $Revision: 1.03 $
 #
-# bigpresen : ����å��ǿʹԤ���ֹⶶ�᥽�åɡ�������ʸ���ץ쥼��ơ�����������
+# bigpresen : クリックで進行する「高橋メソッド」風巨大文字プレゼンテーションを挿入
 #
-#  �ѥ�᥿ :
-#  str : ��ʸ��"|"�ϥ��饤�ɤζ��ڤꡢ"/"�ϥ��饤����β��ԤȤʤ롣
-#   "|"��"|"��ɽ��������ˤϡ�����"\"��Ĥ��ƥ��������ס�
-#  width : ���饤�ɤ������ԥ�����ǻ��ꡣ(�ǥե���� : 480)
-#  height : ���饤�ɤι⤵���ԥ�����ǻ��ꡣ(�ǥե���� : 320)
+#  パラメタ :
+#  str : 本文。"|"はスライドの区切り、"/"はスライド内の改行となる。
+#   "|"と"|"を表示する場合には、前に"\"をつけてエスケープ。
+#  width : スライドの幅。ピクセルで指定。(デフォルト : 480)
+#  height : スライドの高さ。ピクセルで指定。(デフォルト : 320)
 #
-# ������ʸ�ˡ�<%= bigpresen 'str','width','height' %> �η����ǵ��Ҥ��ޤ���
-# ʸ���Υ������ϡ�ɽ���ƥ����Ȥȥ��饤�ɤΥ������˹礦�褦��ưŪ��Ĵ������ޤ���
-# JavaScript��DHTML���Ѥ���ư�����Τǡ������Ķ��ˤ�äƤ�ɽ������ʤ����Ȥ⤢��ޤ���
+# 日記本文に、<%= bigpresen 'str','width','height' %> の形式で記述します。
+# 文字のサイズは、表示テキストとスライドのサイズに合うよう自動的に調整されます。
+# JavaScriptとDHTMLを用いて動かすので、閲覧環境によっては表示されないこともあります。
 #
 # Copyright (c) 2006 Maripo Goda
 # mailto:madin@madin.jp
@@ -54,7 +54,7 @@ function #{scriptID} () {
 	else {
 		t#{scriptID} = 0;
 		with (document.getElementById("#{scriptID}")) {
-			innerHTML = "��REPLAY��";
+			innerHTML = "《REPLAY》";
 			style.fontSize = '100%';
 			style.top = '50%';
 		}
@@ -78,7 +78,7 @@ function countLength (str)
 <noscript><p>JavaScript Required.</p></noscript>
 <div class="bigpresen" style="text-align:center; position:relative; width:#{width}px; height:#{height}px; background:#fff;border:ridge 4px #ccc;" onclick="#{scriptID}()">
 
-<span id="#{scriptID}" style="width:100%; position:absolute; top:50%; left:0; line-height:100%; color:black; font-family:'�ͣ� �Х����å�', sans-serif;">��START��</span>
+<span id="#{scriptID}" style="width:100%; position:absolute; top:50%; left:0; line-height:100%; color:black; font-family:'ＭＳ Ｐゴシック', sans-serif;">《START》</span>
 
 </div>
 

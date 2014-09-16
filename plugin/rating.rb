@@ -1,12 +1,12 @@
 # $Revision:0.1$
-# rating.rb: ʣ�����ˤ�뵭��ɾ���ȥ����ɽ��
+# rating.rb: 複数軸による記事評価とグラフ表示
 # for tDiary
 #
-# �Ȥ���
-# ���Τޤ� plugin �ǥ��쥯�ȥ���֤��ޤ���
-# '����' -> 'rating.rb Configuration' �ǡ�ɾ������
-# ɽ�����Ƥ����ꡣ
-# ���路����
+# 使い方
+# そのまま plugin ディレクトリに置きます。
+# '設定' -> 'rating.rb Configuration' で、評価軸や
+# 表示内容を設定。
+# くわしくは
 # http://www.maripo.jp/diary/?date=20071019
 #
 # Copyright (c) 2007 Mariko/Maripo GODA <god@maripo.jp>
@@ -51,21 +51,21 @@ add_conf_proc('rating', 'rating.rb Configuration') do
 
     form_string += <<HTML
 <p>
-�ե����ɥХå��ե����������򤷤ޤ������Ϥ����ĤǤ�������뤳�Ȥ��Ǥ��ޤ���
+フィードバックフォームの設定をします。軸はいくつでも作成することができます。
 </p>
 <p>
-<a href="http://www.maripo.jp/">���</a>�� <a href="http://www.maripo.jp/diary/?date=20071019">blog</a> ���ɲþ��󤬽񤤤Ƥ��뤫�⤷��ޤ���
+<a href="http://www.maripo.jp/">作者</a>の <a href="http://www.maripo.jp/diary/?date=20071019">blog</a> に追加情報が書いてあるかもしれません。
 </p>
-<h3>������ˡ</h3>
+<h3>設定方法</h3>
 <ul>
-<li>�� �� ɽ���������֤Ǥ����������ۤ��������¤Ӥޤ����ֹ椬����Ǥ�OK��</li>
-<li>ɽ�� �� ����ʤ����ϥ����å��򳰤��Ƥ��ޤäƤ���������
-<li>����̾�� �� (��) "���ε����ϻ��ͤˤʤ�ޤ�����"</li>
-<li>�����٥� �� �� "�ޤä������ͤˤʤ�ʤ�"</li>
-<li>�ǹ��٥� �� �� "�ȤƤ⻲�ͤˤʤä�"</li>
-<li>������ �� �� : 1��5��5�ʳ��ʤ� "5"</li>
+<li>順 … 表示される順番です。小さいほうから順に並びます。番号が飛んでもOK。</li>
+<li>表示 … いらない軸はチェックを外してしまってください。
+<li>軸の名前 … (例) "この記事は参考になりましたか"</li>
+<li>最低ラベル … 例 "まったく参考にならない"</li>
+<li>最高ラベル … 例 "とても参考になった"</li>
+<li>選択肢数 … 例 : 1～5の5段階なら "5"</li>
 </p>
-<h3>��������</h3>
+<h3>設定内容</h3>
 <form>
 <table>
 HTML
@@ -74,13 +74,13 @@ HTML
     rating_config.each { |axis_config|
         form_string += <<HTML
 <tr>
-<td>��:<input type="text" size="2" name="order#{index}" value="#{axis_config.order}"></td>
+<td>順:<input type="text" size="2" name="order#{index}" value="#{axis_config.order}"></td>
 <td>
-����̾��:<input type="text" size="16" name="label#{index}" value="#{axis_config.label}">��
-�����٥�:<input type="text" size="10" name="label_min#{index}" value="#{axis_config.label_min}">��
-�ǹ��٥�:<input type="text" size="10" name="label_max#{index}" value="#{axis_config.label_max}">��
-������:<input type="text" size="4" name="range#{index}" value="#{axis_config.range.to_s}">��
-ɽ��:<input type="checkbox" name="display#{index}" value="#{axis_config.label_max}" #{axis_config.check_label}>
+軸の名前:<input type="text" size="16" name="label#{index}" value="#{axis_config.label}">　
+最低ラベル:<input type="text" size="10" name="label_min#{index}" value="#{axis_config.label_min}">　
+最高ラベル:<input type="text" size="10" name="label_max#{index}" value="#{axis_config.label_max}">　
+選択肢数:<input type="text" size="4" name="range#{index}" value="#{axis_config.range.to_s}">　
+表示:<input type="checkbox" name="display#{index}" value="#{axis_config.label_max}" #{axis_config.check_label}>
 </td>
 </tr>
 HTML
@@ -88,12 +88,12 @@ HTML
     }
     form_string += <<HTML
 <tr>
-<td>�ɲ�</td>
+<td>追加</td>
 <td>
-����̾��:<input type="text" size="16" name="label_new">
-�����٥�:<input type="text" size="10" name="label_min_new">
-�ǹ��٥�:<input type="text" size="10" name="label_max_new">
-������:<input type="text" size="4" name="range_new">
+軸の名前:<input type="text" size="16" name="label_new">
+最低ラベル:<input type="text" size="10" name="label_min_new">
+最高ラベル:<input type="text" size="10" name="label_max_new">
+選択肢数:<input type="text" size="4" name="range_new">
 </td>
 </tr>
 </table>
@@ -125,7 +125,7 @@ add_body_leave_proc do |date|
 onclick="with(this.parentNode.style){if(overflow=='hidden'){overflow='visible';}else{overflow='hidden';}}"
 style="cursor:hand;"
 class="ratingGraphOpener">
-[ʬ�ۤ�ߤ�]
+[分布をみる]
 </div>
 <div class="ratingGraphContent">
 HTML
@@ -153,7 +153,7 @@ HTML
 class="ratingGraphRank">' + (current_rank + 1).to_s + '</div><div
 class="ratingGraphBar" style="width:' +
 todays_eval.get_graph_length(axis_config.id, current_rank).to_s +
-'px"></div><span class="ratingGraphValue"> (' + todays_eval.get_value(axis_config.id, current_rank).to_s + 'ɼ)</span></div>')
+'px"></div><span class="ratingGraphValue"> (' + todays_eval.get_value(axis_config.id, current_rank).to_s + '票)</span></div>')
             current_rank += 1
         end
         graph_string += '</div>' #end "graphBox"
@@ -170,7 +170,7 @@ todays_eval.get_graph_length(axis_config.id, current_rank).to_s +
 <div style="clear:both;height:0px;"></div>
 HTML
     form_string += '<input type="hidden" name="date" value="' + date.strftime('%Y%m%d') + '">'
-    form_string += '<input type="submit" value="ɾ������"></div></form>'+"\n"
+    form_string += '<input type="submit" value="評価する"></div></form>'+"\n"
     (form_string + graph_string)
 
 end
