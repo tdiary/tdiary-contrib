@@ -20,7 +20,7 @@ require 'date'
 
 class PlayStore < MarketBot::Android::App
    def initialize(app_id,option={})
-      super(app_id,option)
+      super(app_id,'ja',option)
    end
 
    def save(path)
@@ -109,14 +109,14 @@ def playstore(app_id)
    else
       <<-HTML
          <div class="playstore-frame">
-            <div class="playstore-leader"><a href="#{app.market_url}">#{app.title} #{app.current_version}</a>
-                - <span class="playstore-devlop">#{app.developer}</span></div>
             <a href="#{app.market_url}">
                <img class="playstore-icon" src="#{app.banner_icon_url}" title="#{app.title}" >
             </a>
             <ul class="playstore-detail">
-            <li>Rating:#{app.rating}</li>
-            <li>Price:#{app.price}</li>
+            <li><a href="#{app.market_url}">#{app.title}</a></li>
+            <li>カテゴリ:#{app.category}</li>
+            <li>価格:#{app.price.eql?("0")?"無料":app.price}</li>
+            <li><a href="#{app.market_url}">GooglePlayで詳細をみる</a></li>
             </ul>
          </div>
       HTML
@@ -140,34 +140,20 @@ add_header_proc do
       <<-HTML
         <style type="text/css"><!--
          ul.playstore-detail {
+            display:inline-block;
+            vertical-align:top;
             list-style: none;
-            padding: 3px;
+            padding: 0px;
+            margin:0px;
          }
          img.playstore-icon {
-            float: left;
+            display:inline-block;
             width:100px;
             height:100px;
-            padding:6px;
-         }
-         span.playstore-devlop {
-            font-size: small;
-            color: gray;
-         }
-         div.playstore-leader {
-            background: #a4c639;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-            padding: 3px;
-            max-width: 600px;
          }
          div.playstore-frame {
-            background: #f5f5f5;
-            border-radius: 6px;
-            margin: 5px;
             display: block;
-            overflow: hidden;
-            box-shadow: 3px 3px 3px 0px lightgray;
-            max-width: 600px;
+            padding: 3px;
          }
         --></style>
       HTML
