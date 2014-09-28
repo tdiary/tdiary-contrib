@@ -1,4 +1,4 @@
-# recent_image.rb  $Revision: 2.0.4 $
+# recent_image.rb  $Revision: 2.0.5 $
 #
 # Copyright (c) 2005-2013 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -72,63 +72,11 @@ def get_filehash_rcimg(target)
 end
 
 
-def image_info_rcimg( filename )
-  image_type = nil
-  image_height = nil
-  image_width = nil
-
-  f = File.open(filename.untaint, "rb")
-  return image_type, image_height, image_width if f == nil
-
-  sig = f.read( 24 )
-  if /\A\x89PNG\x0D\x0A\x1A\x0A(....)IHDR(........)/on =~ sig
-    image_type = 'png'
-    image_width, image_height = $2.unpack( 'NN' )
-
-  elsif /\AGIF8[79]a(....)/on =~ sig
-    image_type   = 'gif'
-    image_width, image_height = $1.unpack( 'vv' )
-
-  elsif /\A\xFF\xD8/on =~ sig
-    image_type = 'jpg'
-    data = $'
-
-    until data.empty?
-      if RUBY_VERSION >= '1.9.0'
-        break if data[0].unpack("C").first != 0xFF
-        break if data[1].unpack("C").first == 0xD9
-      else
-        break if data[0] != 0xFF
-        break if data[1] == 0xD9
-      end
-
-      data_size = data[2,2].unpack( 'n' ).first + 2
-      datax   = data[1]
-      datax_s = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]
-      if RUBY_VERSION >= '1.9.0'
-        datax   = data[1].unpack("C").first
-        datax_s = [0xc0]
-      end
-
-      if datax_s.index(datax) != nil
-        image_height, image_width = data[5,4].unpack('nn')
-        break
-      else
-        if data.size < data_size
-          f.seek(data_size - data.size, File::IO::SEEK_CUR)
-          data = ''
-        else
-          data = data[data_size .. -1]
-        end
-        data << f.read( 128 ) if data.size <= 4
-      end
-    end
-  end
-
-  f.close
-  return image_type, image_height, image_width
+def image_info_rcimg( f )
+  require 'fastimage'
+  info = FastImage.new( f )
+  [info.type.to_s.sub( /jpeg/, 'jpg' ), info.size].flatten
 end
-
 
 
 # Make sorted keys of @recent_image_hash
@@ -203,7 +151,7 @@ def search_img_rcimg(date, body, subtitle, f_imghash)
     f_name = f_imghash[%Q[#{date}_#{num}]]                              #  and pick up params. -> image[0]=number, image[1]=title
     next if f_name == nil
     begin
-      type, height, width = image_info_rcimg(%Q[#{@recent_image_dir}/#{f_name.delete("s")}])
+      type, width, height = image_info_rcimg(%Q[#{@recent_image_dir}/#{f_name.delete("s")}].untaint)
       image = ImageData.new
       image.url   = f_name
       image.file  = f_name.delete("s")
@@ -305,45 +253,6 @@ def count_image(name_filter = nil, title_filter = nil)
   end
 
   count.to_s.reverse.gsub(/\d\d\d/, '\0,').reverse.sub(/^([-]{0,1}),/, '\1')
-end
-
-
-# PLUGIN body
-#     view_exif() ... input EXIF datas of images in your diary.
-#
-def view_exif(id = 0, exifparam ="")
-  init_rcimg if @recent_image_hash == nil or @recent_image_hash.length == 0
-  begin
-    require 'exifparser'
-
-    @image_date_exif ||= @date.strftime("%Y%m%d")
-    @exifparser = ExifParser.new(%Q[#{@image_dir}/#{@recent_image_hash[@image_date_exif+"_"+id.to_s].file}].untaint)
-
-    if exifparam == ""    # return a formatted string.
-      model             = @exifparser['Model'].to_s
-      focallength       = @exifparser['FocalLength'].to_s
-      fnumber           = @exifparser['FNumber'].to_s
-      exposuretime      = @exifparser['ExposureTime'].to_s
-      isospeedratings   = @exifparser['ISOSpeedRatings'].to_s
-      exposurebiasvalue = @exifparser['ExposureBiasValue'].to_s
-      if @exifparser.tag?('LensParameters')
-        lensname        = "("+ @exifparser['LensParameters'].to_s + ")"
-      else
-        lensname        = ""
-      end
-      return %Q[<div class="exifdatastr"><p>#{model}, #{focallength}, #{fnumber}, #{exposuretime}, ISO#{isospeedratings}, #{exposurebiasvalue}EV #{lensname}</p></div>]
-    else                  # return the requested value.
-      return @exifparser[exifparam.untaint].to_s
-    end
-
-  rescue
-    exp = ($!).to_s + "<br>"
-    ($!).backtrace.each do |btinfo|
-      exp += btinfo
-      exp += "<br>"
-    end
-    return exp
-  end
 end
 
 
