@@ -18,6 +18,18 @@ YO_UPDATE_TIMEOUT = 10
 
 class YoUpdateError < StandardError; end
 
+def yo_update_url(date = nil, frag = nil)	# date: Time frag: e.g. 'p01'
+	url = @conf.index.dup
+	url[0, 0] = base_url unless %r|^https?://|i =~ url
+	url.gsub!( %r|/\./|, '/' )
+	if date
+		ymd = date.strftime('%Y%m%d')
+		anc = frag ? "#{ymd}##{frag}" : ymd
+		url += anchor(anc)
+	end
+	url
+end
+
 def yo_update_api_key
 	r = @conf['yo_update.api_key']
 	if not r or r.empty?
@@ -48,18 +60,21 @@ def yo_update_access_api(req)
 	end
 end
 
-def yo_update_send_yo(username = nil)
+def yo_update_send_yo(username = nil, url = '')
 	api_key = yo_update_api_key
 	unless api_key
 		raise YoUpdateError, "Yo API Key is not set"
 	end
+	data = {'api_token' => yo_update_api_key}
+	data['link'] = url unless url.empty?
 	unless username
 		req = Net::HTTP::Post.new(URI("http://api.justyo.co/yoall/"))
-		req.set_form_data('api_token' => yo_update_api_key)
+		req.set_form_data(data)
 		expected = '{}'
 	else
 		req = Net::HTTP::Post.new(URI("http://api.justyo.co/yo/"))
-		req.set_form_data('api_token' => yo_update_api_key, 'username' => username)
+		data['username'] = username
+		req.set_form_data(data)
 		expected = '{"result": "OK"}'
 	end
 	res = yo_update_access_api(req)
@@ -70,10 +85,10 @@ def yo_update_send_yo(username = nil)
 	return data
 end
 
-def yo_update_send_yo_or_log(username = nil)
+def yo_update_send_yo_or_log(username = nil, url = '')
 	return unless yo_update_api_key
 	begin
-		yo_update_send_yo(username)
+		yo_update_send_yo(username, url)
 	rescue YoUpdateError => e
 		@logger.error "yo_update.rb: #{e.message}"
 	end
@@ -131,7 +146,7 @@ unless defined? yo_update_conf_html	# maybe defined in a language resource
 			%Q|<li><label for="yo_update.#{action}"><input id="yo_update.#{action}" name="yo_update.#{action}" value="t" type="checkbox"#{checked}>#{action_label[action]}</label>|
 		}.join("\n\t")}
 		</ul>
-		<p>Test sending Yo! to <input name="yo_update.test" value="" size="10">#{test_result}</p>
+		<p>Test sending Yo! to <input name="yo_update.test" value="" size="10"> with optional link <input name="yo_update.link" value="#{yo_update_url}" size="40">#{test_result}</p>
 		<h3 class="subtitle">Current Subscribers</h3>
 		<p>#{h n_subscribers}</p>
 		<h3 class="subtitle">Yo button</h3>
@@ -156,9 +171,10 @@ add_conf_proc('yo_update', yo_update_conf_label) do
 		@conf['yo_update.send_on_update'] = (@cgi.params['yo_update.send_on_update'][0] == 't')
 		@conf['yo_update.send_on_comment'] = (@cgi.params['yo_update.send_on_comment'][0] == 't')
 		test_username = @cgi.params['yo_update.test'][0]
+		test_link = @cgi.params['yo_update.link'][0]
 		if test_username and not test_username.empty?
 			begin
-				result = yo_update_send_yo(test_username)
+				result = yo_update_send_yo(test_username, test_link)
 			rescue YoUpdateError => e
 				result = e.message
 			end
@@ -178,9 +194,12 @@ end
 
 add_update_proc do
 	if @mode == 'append' and @conf['yo_update.send_on_update']
-		yo_update_send_yo_or_log
+		url = yo_update_url(@date)	# link to the date
+		yo_update_send_yo_or_log(nil, url)
 	elsif @mode == 'comment' and @comment and @comment.visible? and @conf['yo_update.send_on_comment']
-		yo_update_send_yo_or_log
+		frag = "c%02d" % @diaries[@date.strftime("%Y%m%d")].count_comments(true)
+		url = yo_update_url(@date, frag)
+		yo_update_send_yo_or_log(nil, url)
 	end
 end
 
