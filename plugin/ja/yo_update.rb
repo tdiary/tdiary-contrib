@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# yo_update.rb - Japanese resourc
+# yo_update.rb - Japanese resource
 #
 # Copyright (C) 2014, zunda <zundan at gmail.com>
 #
@@ -34,7 +34,7 @@ def yo_update_conf_html(conf, n_subscribers, test_result)
 		%Q|<li><label for="yo_update.#{action}"><input id="yo_update.#{action}" name="yo_update.#{action}" value="t" type="checkbox"#{checked}>#{action_label[action]}</label>|
 	}.join("\n\t")}
 	</ul>
-	<p>Yo を<input name="yo_update.test" value="" size="10">に送ってみる#{test_result}</p>
+	<p>Yo を<input name="yo_update.test" value="" size="10">にリンク<input name="yo_update.link" value="#{yo_update_url}" size="40">(不要なら空白)をつけて送ってみる#{test_result}</p>
 	<h3 class="subtitle">現在の受信者数</h3>
 	<p>#{h n_subscribers}</p>
 	<h3 class="subtitle">Yoボタン</h3>
