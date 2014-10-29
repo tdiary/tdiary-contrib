@@ -65,7 +65,7 @@ def yo_update_send_yo(username = nil, url = '')
 	unless api_key
 		raise YoUpdateError, "Yo API Key is not set"
 	end
-	data = {'api_token' => yo_update_api_key}
+	data = {'api_token' => api_key}
 	data['link'] = url unless url.empty?
 	unless username
 		req = Net::HTTP::Post.new(URI("http://api.justyo.co/yoall/"))
