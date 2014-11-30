@@ -59,7 +59,7 @@ var gallery = {
 		preloader: true,
 		preloaderImage: true,
 		preloaderErrorImage: true,
-		fullScreen: false,  // TEST
+		fullScreen: false,
 		/* Data retrieval */
 		manualData: [],
 		populateFrom: false,
@@ -128,17 +128,28 @@ var gallery = {
 			this.populateData();
 		element.style.display="block";
 
-		if(this.options.fullScreen)  //TEST
+		if(this.options.fullScreen)
 		{
-			var size = window.getSize();
-//			if(document.body.offsetHeight>window.innerHeight)
-//			  size.x-=18;
+			var sizex = window.innerWidth;
+			var sizey = window.innerHeight;
 			element.setStyles({
 				'position':'absolute',
 				'top':'0px',
 				'left':'0px',
-				'width':size.x + 14,
-				'height':size.y - 8
+				'width':sizex,
+				'height':sizey
+			});
+
+			window.addEvent('resize', function(event) {
+				var sizex = window.innerWidth;
+				var sizey = window.innerHeight;
+				element.setStyles({
+					'position':'absolute',
+					'top':'0px',
+					'left':'0px',
+					'width':sizex,
+					'height':sizey
+				});
 			});
 		}
 
@@ -249,41 +260,45 @@ var gallery = {
 				currentImg.load = function(imageStyle, i) {
 					if (!imageStyle.loaded)	{
 						this.galleryData[i].imgloader = new Asset.image(imageStyle.source, {
-		                            'onload'  : function(img, i){
-													img.loaded = true;
-													img.width = this.galleryData[i].imgloader.width;
-													img.height = this.galleryData[i].imgloader.height;
-													top_height = this.topElement.getStyle('height').toInt();
-													top_width = this.topElement.getStyle('width').toInt();
-													new_width = img.width;
-													new_height = img.height;
-													margin_top = 0;
-													if(top_height < img.height && img.height >= img.width){
-														new_height = top_height;
-														new_width = Math.round(top_height*img.width/img.height);
-													} else if(top_width < img.width && img.height <= img.width) {
-														new_width = top_width;
-														new_height = Math.round(top_width*img.height/img.width);
-														margin_top = Math.round((top_height - new_height)/2);
-													} else {
-														margin_top = Math.round((top_height - img.height)/2);
-													}
-													img.element.appendChild(new Element('img').set('src',img.source).setStyles({
-														'margin':'0 auto',
-														'display':'block',
-														'width':new_width+'px',
-														'height':new_height+'px',
-														'margin-top':margin_top+'px'
-													}));
-												}.pass([imageStyle, i], this)
+						'onload'  : function(img, i){
+							img.loaded = true;
+							img.width = this.galleryData[i].imgloader.width;
+							img.height = this.galleryData[i].imgloader.height;
+							top_height = this.topElement.getStyle('height').toInt();
+							top_width = this.topElement.getStyle('width').toInt();
+							new_width = img.width;
+							new_height = img.height;
+							margin_top = 0;
+							if(top_height < img.height && img.height >= img.width){
+								new_height = top_height;
+								new_width = Math.round(top_height*img.width/img.height);
+							} else if(top_width < img.width && img.height <= img.width) {
+								new_width = top_width;
+								new_height = Math.round(top_width*img.height/img.width);
+								if(new_height > top_height) {
+									new_height = top_height;
+	    								new_width = Math.round(top_height*img.width/img.height);
+								}
+								margin_top = Math.round((top_height - new_height)/2);
+							} else {
+								margin_top = Math.round((top_height - img.height)/2);
+							}
+							img.element.appendChild(new Element('img').set('src',img.source).setStyles({
+								'margin':'0 auto',
+								'display':'block',
+								'width':new_width+'px',
+								'height':new_height+'px',
+								'margin-top':margin_top+'px'
+							}));
+						}.pass([imageStyle, i], this)
 						});
 					}
 				}.pass([currentImg, i], this);
 			} else {
-					currentImg.element.appendChild(new Element('img').set('src',this.galleryData[i].image).setStyles({
-						'margin':'0 auto',
-						'display':'block'
-					}));
+				currentImg.element.appendChild(new Element('img').set('src',this.galleryData[i].image).setStyles({
+					'margin':'0 auto',
+					'display':'block'
+				}));
 			}
 			this.galleryElements[parseInt(i)] = currentImg;
 		}
