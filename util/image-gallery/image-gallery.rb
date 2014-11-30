@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-# image-gallery.rb $Revision: 2.0.4 $
+# image-gallery.rb $Revision: 2.1.0 $
 #
 # Copyright (c) 2005-2013 N.KASHIJUKU <n-kashi[at]whi.m-net.ne.jp>
 # You can redistribute it and/or modify it under GPL2.
@@ -16,6 +16,7 @@ else
   org_path = File::dirname( __FILE__ )
 end
 $:.unshift( org_path.untaint )
+$:.unshift( (org_path + '/lib').untaint ) unless $:.include?( org_path + '/lib' )
 require 'tdiary'
 require 'pstore'
 require 'date'
@@ -43,7 +44,7 @@ module TDiary
 
     def initialize( cgi, rhtml, conf )
       super
-      @img_version = "2.0.4"
+      @img_version = "2.1.0"
       @image_hash = Hash[]
       @image_num = 0
       @image_keys = []
