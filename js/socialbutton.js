@@ -87,7 +87,7 @@ $(function() {
     $('.socialbuttons').css('height', '1em')
     var bottom = $(window).height() + $(window).scrollTop();
 
-    $($tDiary.blogkit ? '.day' : '.section')
+    $($tDiary.blogkit ? '.day' : '.day .section')
       .filter(function() {
         return bottom > $(this).offset().top;
       })
@@ -103,7 +103,7 @@ $(function() {
         } else if (anchor.size() == 0) {
           // The section may not have an anchor on etdiary style.
           // https://github.com/tdiary/tdiary-contrib/issues/59
-          var url = $(this).parents('.day').find('h2 a:first').get(0).href;
+          var url = ($(this).parents('.day').find('h2 a:first').get(0)||'').href;
           var title = $(this).parents('.day').find('h2 .title').text();
         } else {
           var url = anchor.get(0).href;
