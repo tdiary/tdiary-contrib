@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'tdiary', '~> 4.0.2'
+gem 'tdiary', '~> 4.1.0'
 
 gem 'rake'
 gem 'rspec'
