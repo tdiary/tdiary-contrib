@@ -10,6 +10,8 @@ if ENV['COVERAGE'] == 'simplecov'
 end
 
 require 'erb'
+require 'webmock/rspec'
+
 # FIXME PluginFake in under construction.
 class PluginFake
   include ERB::Util
