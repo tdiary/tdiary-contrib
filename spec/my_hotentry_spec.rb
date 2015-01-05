@@ -10,6 +10,11 @@ describe "MyHotEntry" do
 		"#{File.basename(__FILE__, ".rb")}-#{$$}"
 	end
 	before(:each) do
+		stub_request(:get, "http://b.hatena.ne.jp/entrylist?mode=rss&url=http%3A%2F%2Fd.hatena.ne.jp%2F&sort=eid&threshold=3")
+			.to_return(status: 200, body: File.new('spec/fixtures/my_hotentry/entrylist.xml'))
+		stub_request(:get, "http://b.hatena.ne.jp/entrylist?mode=rss&sort=eid&threshold=3&url=http://empty-url.example.com/")
+			.to_return(status: 200, body: File.new('spec/fixtures/my_hotentry/entrylist-empty.xml'))
+
 		fake_plugin(:my_hotentry)
 		@cache_path = File.join(Dir.tmpdir, cache_filename)
 		Dir.mkdir(@cache_path)

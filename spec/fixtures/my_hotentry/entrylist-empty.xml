@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:opensearch="http://a9.com/-/spec/opensearchrss/1.0/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:hatena="http://www.hatena.ne.jp/info/xmlns#"
+ xmlns:media="http://search.yahoo.com/mrss"
+>
+  <channel rdf:about="http://b.hatena.ne.jp/entrylist?sort=eid&amp;threshold=3&amp;url=http%3A%2F%2Fempty-url.example.com">
+    <title>はてなブックマーク - 新着エントリー - empty-url.example.com</title>
+    <link>http://b.hatena.ne.jp/entrylist?sort=eid&amp;threshold=3&amp;url=http%3A%2F%2Fempty-url.example.com</link>
+    <description>empty-url.example.com の新着エントリー</description>
+
+    <items>
+      <rdf:Seq>
+
+      </rdf:Seq>
+    </items>
+  </channel>
+
+</rdf:RDF>
