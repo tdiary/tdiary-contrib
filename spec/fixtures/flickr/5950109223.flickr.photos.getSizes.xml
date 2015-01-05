@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<sizes canblog="0" canprint="0" candownload="1">
+	<size label="Square" width="75" height="75" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_s.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/sq/" media="photo" />
+	<size label="Large Square" width="150" height="150" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_q.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/q/" media="photo" />
+	<size label="Thumbnail" width="100" height="75" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_t.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/t/" media="photo" />
+	<size label="Small" width="240" height="180" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_m.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/s/" media="photo" />
+	<size label="Small 320" width="320" height="240" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_n.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/n/" media="photo" />
+	<size label="Medium" width="500" height="375" source="https://farm7.staticflickr.com/6006/5950109223_040097db92.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/m/" media="photo" />
+	<size label="Medium 640" width="640" height="480" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_z.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/z/" media="photo" />
+	<size label="Large" width="1024" height="768" source="https://farm7.staticflickr.com/6006/5950109223_040097db92_b.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/l/" media="photo" />
+	<size label="Original" width="2592" height="1944" source="https://farm7.staticflickr.com/6006/5950109223_45aaba502a_o.jpg" url="https://www.flickr.com/photos/machu/5950109223/sizes/o/" media="photo" />
+</sizes>
+</rsp>

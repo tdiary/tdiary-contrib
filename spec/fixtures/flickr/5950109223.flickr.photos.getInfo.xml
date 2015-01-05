@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<photo id="5950109223" secret="040097db92" server="6006" farm="7" dateuploaded="1310997234" isfavorite="0" license="5" safety_level="0" rotation="0" originalsecret="45aaba502a" originalformat="jpg" views="111" media="photo">
+	<owner nsid="19594487@N00" username="machu." realname="" location="" iconserver="6" iconfarm="1" path_alias="machu" />
+	<title>RubyKaigi 2011</title>
+	<description />
+	<visibility ispublic="1" isfriend="0" isfamily="0" />
+	<dates posted="1310997234" taken="2011-07-18 18:44:49" takengranularity="0" takenunknown="0" lastupdate="1310997320" />
+	<editability cancomment="0" canaddmeta="0" />
+	<publiceditability cancomment="1" canaddmeta="1" />
+	<usage candownload="1" canblog="0" canprint="0" canshare="1" />
+	<comments>0</comments>
+	<notes />
+	<people haspeople="0" />
+	<tags>
+		<tag id="617957-5950109223-3919351" author="19594487@N00" authorname="machu." raw="rubykaigi" machine_tag="0">rubykaigi</tag>
+	</tags>
+	<urls>
+		<url type="photopage">https://www.flickr.com/photos/machu/5950109223/</url>
+	</urls>
+</photo>
+</rsp>
