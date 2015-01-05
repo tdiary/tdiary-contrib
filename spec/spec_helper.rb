@@ -11,6 +11,18 @@ end
 
 require 'erb'
 require 'webmock/rspec'
+require 'tmpdir'
+
+RSpec.configure do |c|
+	# create a temporary directory used by the plugin for cache
+	c.before(:all) do
+		@cache_path = Dir.mktmpdir
+	end
+
+	c.after(:all) do
+		FileUtils.rmtree(@cache_path)
+	end
+end
 
 # FIXME PluginFake in under construction.
 class PluginFake
@@ -21,6 +33,7 @@ class PluginFake
 
 	def initialize
 		@conf = Config.new
+		@cache_path = ""
 		@mode = ""
 		@date = nil
 		@header_procs = []
@@ -189,6 +202,8 @@ def fake_plugin( name_sym, cgi=nil, base=nil, &block )
 
 	file_path = plugin_path( name_sym, base )
 	plugin_name = File.basename( file_path, ".rb" )
+
+	plugin.instance_variable_set(:@cache_path, @cache_path)
 
 	plugin.instance_eval do
 		eval( File.read( file_path ), binding,
