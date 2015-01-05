@@ -27,12 +27,17 @@ class PluginFake
 		@footer_procs = []
 		@update_procs = []
 		@conf_procs = []
+		@edit_procs = []
 		@body_enter_procs = []
 		@body_leave_procs = []
 	end
 
 	def add_conf_proc( key, label, genre=nil, &block )
 		@conf_procs << block
+	end
+
+	def add_edit_proc( block = Proc::new )
+		@edit_procs << block
 	end
 
 	def add_header_proc( block = Proc::new )
