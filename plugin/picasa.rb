@@ -54,3 +54,19 @@ add_edit_proc do |date|
 		HTML
 	end
 end
+
+add_conf_proc( 'picasa', 'Picasa' ) do
+	if @mode == 'saveconf'
+		@conf['picasa.user'], = @cgi.params['picasa.user']
+		@conf['picasa.default_size'] = @cgi.params['picasa.default_size'][0].to_i
+		@conf['picasa.default_size'] = 400 if @conf['picasa.default_size'] == 0
+	end
+
+	<<-HTML
+	<h3 class="subtitle">Picasa user name</h3>
+	<p><input name="picasa.user" value="#{h @conf['picasa.user']}"></p>
+
+	<h3 class="subtitle">default size</h3>
+	<p><input name="picasa.default_size" value="#{h @conf['picasa.default_size']}"></p>
+	HTML
+end
