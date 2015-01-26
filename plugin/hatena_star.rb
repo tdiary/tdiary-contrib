@@ -10,7 +10,7 @@
 }
 
 add_header_proc do
-	hatena_star = %Q|\t<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>\n|
+	hatena_star = %Q|\t<script type="text/javascript" src="//s.hatena.ne.jp/js/HatenaStar.js"></script>\n|
 	hatena_star << %Q|\t<script type="text/javascript"><!--
 		Hatena.Star.SiteConfig = {
 			entryNodes: {
