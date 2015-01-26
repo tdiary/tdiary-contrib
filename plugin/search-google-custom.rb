@@ -20,7 +20,7 @@ def search_title
 end
 
 add_footer_proc do
-		%Q|<script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&lang=ja"></script>|
+		%Q|<script type="text/javascript" src="//www.google.com/cse/brand?form=cse-search-box&lang=ja"></script>|
 end
 
 def search_input_form(q='')
