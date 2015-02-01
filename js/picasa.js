@@ -80,7 +80,7 @@ $(function () {
 			var timerId = this.setErrorHandler();
 			var self = this;
 			$.ajax({
-				url: 'http://picasaweb.google.com/data/feed/api/user/' + this.userId,
+				url: '//picasaweb.google.com/data/feed/api/user/' + this.userId,
 				data: 'alt=json-in-script&max-results=25&thumbsize=128c&start-index=' + this.album_start_index,
 				dataType: 'jsonp',
 				success: function (data) {
@@ -99,7 +99,7 @@ $(function () {
 		getPhotos: function (albumId, fn) {
 			var timerId = this.setErrorHandler();
 			$.ajax({
-				url: 'http://picasaweb.google.com/data/feed/api/user/' + this.userId + '/albumid/' + albumId,
+				url: '//picasaweb.google.com/data/feed/api/user/' + this.userId + '/albumid/' + albumId,
 				data: 'alt=json-in-script&imgmax=' + this.imgMax + '&thumbsize=200',
 				dataType: 'jsonp',
 				success: function (data) {
@@ -113,7 +113,7 @@ $(function () {
 			var timerId = this.setErrorHandler();
 			var self = this;
 			$.ajax({
-				url: 'http://picasaweb.google.com/data/feed/api/user/' + this.userId,
+				url: '//picasaweb.google.com/data/feed/api/user/' + this.userId,
 				data: 'alt=json-in-script&imgmax=' + this.imgMax + '&thumbsize=200&kind=photo&max-results=25&start-index=' + this.recently_uploaded_photo_start_index,
 				dataType: 'jsonp',
 				success: function (data) {
