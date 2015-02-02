@@ -22,7 +22,6 @@
 #
 require 'net/http'
 require 'timeout'
-require 'rexml/document'
 
 enable_js( 'nicovideo.js' )
 
@@ -35,10 +34,9 @@ def nicovideo_call_api( video_id )
 		px_port = 80 if px_host and !px_port
 		Net::HTTP::Proxy( px_host, px_port ).get_response( URI::parse( uri ) ).body
 	}
-	doc = REXML::Document::new( xml ).root
-	res = doc.elements.to_a( '/nicovideo_thumb_response' )[0]
-	if res.attributes['status'] == 'ok' then
-		res.elements.to_a( 'thumb' )[0]
+	status = xml.scan(%r|<nicovideo_thumb_response\s*status="(.*)">|).flatten.first
+	if status == 'ok' then
+		xml.scan(%r|<thumb>(.*)</thumb>|m).flatten.first.scan(%r|<(.*?)>(.*)</.*?>|).to_h
 	else
 		raise ::Errno::ENOENT::new
 	end
@@ -47,16 +45,16 @@ end
 def nicovideo_inline( video_id, elem, label = nil, link = nil )
 	i = {}
 	i[:id] = video_id
-	i[:url] = link || elem.to_a( 'watch_url' )[0].text
-	i[:thumb] = elem.to_a( 'thumbnail_url' )[0].text
-	i[:title] = label || elem.to_a( 'title' )[0].text
-	i[:desc] = elem.to_a( 'description' )[0].text
-	i[:comment] = @conf.mobile_agent? ? '' : elem.to_a( 'last_res_body' )[0].text
-	i[:date] = elem.to_a( 'first_retrieve' )[0].text
-	i[:length] = elem.to_a( 'length' )[0].text
-	i[:view] = elem.to_a( 'view_counter' )[0].text
-	i[:comment_num] = elem.to_a( 'comment_num' )[0].text
-	i[:mylist] = elem.to_a( 'mylist_counter' )[0].text
+	i[:url] = link || elem['watch_url']
+	i[:thumb] = elem['thumbnail_url']
+	i[:title] = label || elem['title']
+	i[:desc] = elem['description']
+	i[:comment] = @conf.mobile_agent? ? '' : elem['last_res_body']
+	i[:date] = elem['first_retrieve']
+	i[:length] = elem['length']
+	i[:view] = elem['view_counter']
+	i[:comment_num] = elem['comment_num']
+	i[:mylist] = elem['mylist_counter']
 
 	if feed? then
 		result = nicovideo_feed( i )
@@ -86,7 +84,7 @@ def nicovideo( video_id, label = nil, link = nil )
 	begin
 		r = ''
 		r << %Q|<div id="thumbnail-#{video_id}">|
-		api = nicovideo_call_api( video_id ).elements
+		api = nicovideo_call_api( video_id )
 		thumb = @conf.to_native( nicovideo_inline( video_id, api, label, link ), 'UTF-8' )
 		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
@@ -101,7 +99,7 @@ def nicovideo( video_id, label = nil, link = nil )
 			r << %Q|</a>|
 			r << %Q|<div class="nicovideo-player-close" style="margin:4px;padding:8px;">|
 			r << %Q|<a href="#" onclick="return nicovideoThumbnail( '#{video_id}' )" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">▲CLOSE PLAYER</a>|
-			r << %Q|&nbsp;<a href="#{api.to_a( 'watch_url' )[0].text}" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">SHOW ORIGINAL&gt;</a>|
+			r << %Q|&nbsp;<a href="#{api['watch_url']}" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">SHOW ORIGINAL&gt;</a>|
 			r << %Q|</div>|
 			r << %Q|</div>|
 		end
@@ -109,6 +107,8 @@ def nicovideo( video_id, label = nil, link = nil )
 	rescue ::Errno::ENOENT
 		"<strong>Sorry, #{video_id} was deleted.</strong>"
 	rescue Timeout::Error, NoMethodError, SecurityError, StandardError
+		puts $!
+		$@.each{|l| puts l}
 		nicovideo_iframe( video_id )
 	end
 end
