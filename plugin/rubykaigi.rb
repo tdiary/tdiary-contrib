@@ -9,6 +9,12 @@
 # Distributed under GPL.
 #
 
+def rubykaigi2014( role = 'attendee', size = nil )
+	r = role.split(/[ _]+/).join('-')
+	s = "@#{h size}" unless size.nil?
+	%Q|<a href="http://rubykaigi.org/2014/" style="display:block;margin:8px auto;text-align:center;"><img src="http://rubykaigi.org/2014/images/badge-for-#{h r}#{s}.png" alt="RubyKaigi 2014 #{h r}"></a>|
+end
+
 def rubykaigi2013( role = 'attendee', size = nil )
 	r = role.split(/[ _]+/).map{|s| s.capitalize}.join
 	s = "@#{h size}" unless size.nil?
