@@ -36,7 +36,12 @@ def nicovideo_call_api( video_id )
 	}
 	status = xml.scan(%r|<nicovideo_thumb_response\s*status="(.*)">|).flatten.first
 	if status == 'ok' then
-		xml.scan(%r|<thumb>(.*)</thumb>|m).flatten.first.scan(%r|<(.*?)>(.*)</.*?>|).to_h
+		raw_api = xml.scan(%r|<thumb>(.*)</thumb>|m).flatten.first.scan(%r|<(.*?)>(.*)</.*?>|)
+		api = {}
+		raw_api.each do |key, value|
+			api[key] = @conf.to_native( value )
+		end
+		api
 	else
 		raise ::Errno::ENOENT::new
 	end
