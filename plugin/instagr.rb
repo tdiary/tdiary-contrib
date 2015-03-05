@@ -24,7 +24,7 @@ def instagr( short_url, size = :medium)
 
 	# img size
 	size = size.to_sym if size != :medium
-	maxwidth_data = {:small => 150, :medium => 306, :large => 612}
+	maxwidth_data = {:medium => 320, :large => 612}
 	maxwidth = maxwidth_data[ size ] ? maxwidth_data[ size ] : maxwidth_data[:medium]
 
 	# proxy
@@ -44,7 +44,7 @@ def instagr( short_url, size = :medium)
 		return <<-INSTAGR_DOM
 			<div class="instagr">
 				<a class="instagr" href="#{h short_url}" title="#{h @conf.to_native(json_data["title"])}">
-					<img src="#{h json_data["url"]}" width="#{h width}" height="#{h height}" alt="#{h @conf.to_native(json_data["title"])}">
+					<img src="#{h json_data["thumbnail_url"]}" width="#{h width}" height="#{h height}" alt="#{h @conf.to_native(json_data["title"])}">
 				</a>
 				<p>#{h json_data["author_name"]}'s photo.</p>
 			</div>
