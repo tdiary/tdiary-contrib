@@ -89,7 +89,7 @@ def rubykaigi2008( role = 'attendee' )
 		role = 'attendee'
 		0
 	end
-	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://jp.rubyist.net/RubyKaigi2008/"><img src="http://rubykaigi.tdiary.net/images/20080617_#{img}.png" width="160" height="79" alt="RubyKaigi2008#{h role.capitalize}" style="border-width: 0px;"></a></div>|
+	%Q|<div style="text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;"><a href="http://jp.rubyist.net/RubyKaigi2008/"><img src="http://userimages.tdiary.net/rubykaigi/20080617_#{img}.png" width="160" height="79" alt="RubyKaigi2008#{h role.capitalize}" style="border-width: 0px;"></a></div>|
 end
 
 def sappororubykaigi02( role = 'attendee' )
