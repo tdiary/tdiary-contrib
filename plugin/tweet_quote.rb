@@ -24,7 +24,7 @@ require 'openssl'
 require 'json'
 
 def twitter_quote_option_keys
-	%w( oauth_consumer_key oauth_consumer_secret oauth_token oauth_token_secret, render_method ).map{|k| "twitter_quote.#{k}" }
+	%w( oauth_consumer_key oauth_consumer_secret oauth_token oauth_token_secret render_method ).map{|k| "twitter_quote.#{k}" }
 end
 
 def twitter_statuses_show_api( tweet_id )
