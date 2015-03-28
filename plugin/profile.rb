@@ -5,7 +5,7 @@
 #   profile(id[, service = :twitter])
 #   - id: user ID for profile service
 #   - service: profile service (default is :twitter)
-#     Choose from :github, :twitter
+#     Choose from :github, :twitter, :gravatar
 #
 # Copyright (C) 2009 by MATSUOKA Kohei < http://www.machu.jp/ >
 # Distributed under the GPL.
@@ -124,9 +124,29 @@ module ::Profile
 
     # gravatar.com
     class Gravatar < Base
+      property :name, 'diaplayName'
+      property :mail, 'email'
+      endpoint {|id|
+        hash = Digest::MD5.hexdigest(id.downcase)
+        "https://www.gravatar.com/#{hash}.json"
+      }
+
       def image
         size = @options[:size] ? "?s=#{@options[:size]}" : ""
-        "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@id.downcase)}.jpg#{size}"
+        "#{@image_base}#{size}"
+		end
+
+      def fetch(endpoint)
+        require 'json'
+        timeout(5) do
+          doc = open(endpoint) {|f| JSON.parse(f.read) }
+        end
+      end
+
+      def parse(doc)
+        instance_variable_set("@name", doc['entry'][0]['displayName'])
+        instance_variable_set("@mail", @id)
+        instance_variable_set("@image_base", doc['entry'][0]['thumbnailUrl'])
       end
     end
 
