@@ -128,7 +128,7 @@ module ::Profile
       property :mail, 'email'
       endpoint {|id|
         hash = Digest::MD5.hexdigest(id.downcase)
-        "https://www.gravatar.com/#{hash}.json"
+        "https://ja.gravatar.com/#{hash}.json"
       }
 
       def image
