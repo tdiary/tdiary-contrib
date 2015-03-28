@@ -5,7 +5,7 @@
 #   profile(id[, service = :twitter])
 #   - id: user ID for profile service
 #   - service: profile service (default is :twitter)
-#     Choose from :github, :twitter, :friendfeed
+#     Choose from :github, :twitter
 #
 # Copyright (C) 2009 by MATSUOKA Kohei < http://www.machu.jp/ >
 # Distributed under the GPL.
@@ -117,21 +117,6 @@ module ::Profile
       end
     end
 
-    # friendfeed.com
-    class FriendFeed < Base
-      property :name, '//feed/name'
-      property :description, '//feed/description'
-      endpoint {|id| "http://friendfeed-api.com/v2/feed/#{id}?format=xml&num=0" }
-
-      def image
-        "http://friendfeed-api.com/v2/picture/#{id}"
-      end
-
-      def link
-        "http://friendfeed.com/#{@id}"
-      end
-    end
-
     # iddy.jp, for backward compatibility
     class Iddy < Base
       # dummy class
@@ -166,7 +151,6 @@ def profile(id, service = :twitter, options = {})
   service_class = {
     :twitter => Profile::Service::Twitter,
     :github => Profile::Service::GitHub,
-    :friendfeed => Profile::Service::FriendFeed,
     :gravatar => Profile::Service::Gravatar,
     :hatena => Profile::Service::Hatena,
   }[service.to_s.downcase.to_sym] || Profile::Service::Twitter
