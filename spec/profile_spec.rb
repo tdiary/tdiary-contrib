@@ -40,21 +40,6 @@ describe "Profile::Service" do
     end
   end
 
-  describe "FriendFeed" do
-    before do
-      allow_any_instance_of(Profile::Service::FriendFeed).to receive(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/friendfeed.xml")))
-
-      # http://friendfeed.com/api/documentation#summary
-      @profile = Profile::Service::FriendFeed.new("bret")
-    end
-
-    it "should include name, description, image properties" do
-      expect(@profile.name).to eq("Bret Taylor")
-      expect(@profile.description).to eq("Ex-CTO of Facebook. Previously co-founder and CEO of FriendFeed. Programmer, food lover.")
-      expect(@profile.image).to eq("http://friendfeed-api.com/v2/picture/bret")
-    end
-  end
-
   describe "Gravatar" do
     # http://ja.gravatar.com/site/implement/hash/
 
