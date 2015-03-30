@@ -124,22 +124,29 @@ module ::Profile
 
     # gravatar.com
     class Gravatar < Base
-      property :name, 'diaplayName'
-      property :mail, 'email'
       endpoint {|id|
         hash = Digest::MD5.hexdigest(id.downcase)
-        "https://ja.gravatar.com/#{hash}.json"
+        "https://www.gravatar.com/#{hash}.json"
       }
 
       def image
         size = @options[:size] ? "?s=#{@options[:size]}" : ""
         "#{@image_base}#{size}"
-		end
+      end
 
       def fetch(endpoint)
         require 'json'
         timeout(5) do
-          doc = open(endpoint) {|f| JSON.parse(f.read) }
+          begin
+            doc = open(endpoint) {|f| JSON.parse(f.read) }
+          rescue RuntimeError => err
+            if err.message =~ /^redirection forbidden: /
+               endpoint.sub!(/www/, @options[:lang])
+               retry
+            else
+               raise
+            end
+          end
         end
       end
 
@@ -147,6 +154,8 @@ module ::Profile
         instance_variable_set("@name", doc['entry'][0]['displayName'])
         instance_variable_set("@mail", @id)
         instance_variable_set("@image_base", doc['entry'][0]['thumbnailUrl'])
+        instance_variable_set("@link", doc['entry'][0]['profileUrl'])
+        instance_variable_set("@description", doc['entry'][0]['aboutMe'])
       end
     end
 
@@ -192,14 +201,14 @@ def profile(id, service = :twitter, options = {})
     else
       # get latest date and update cache
       begin
-        profile = service_class.new(id, options)
+        profile = service_class.new(id, options.merge(lang: @conf.lang))
       rescue Timeout::Error, StandardError
         return html << %Q{ <div class="profile">no profile</div> }
       end
       db[key][:updated] = Time::now
       db[key][:profile] = profile
       db[key][:version] = PROFILE_VERSION
-    end
+   end
   end
 
   html << %Q{ <div class="profile"><a href="#{CGI.escapeHTML profile.link}"> }
