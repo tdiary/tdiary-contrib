@@ -32,10 +32,21 @@ def google_map_common(params)
 
    if feed?
       require 'cgi'
-      query = params[:lat] && params[:lon] ? "#{params[:lat]},#{params[:lon]}" : params[:address]
-      url   = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
-      return %Q|<a href="#{url}">#{url}</a>|
-   end
+
+      url = nil
+      if params[:lat].nonzero? && params[:lon].nonzero?
+         query = "#{params[:lat]},#{params[:lon]}"
+         url = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
+
+      elsif params[:address] != nil
+         query = params[:address]
+         url = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
+
+      end
+
+      return %Q|<a href="#{url}">#{url}</a>| if url
+
+   end 
    return 'not support this environment.' if @conf.mobile_agent?
 
    dom_id = "#{@gmap_date.strftime("%Y%m%d")}_#{@gmap_count}"
