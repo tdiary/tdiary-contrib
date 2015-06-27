@@ -62,3 +62,6 @@ DEPENDENCIES
   simplecov
   tdiary (~> 4.1.0)
   webmock
+
+BUNDLED WITH
+   1.10.3
