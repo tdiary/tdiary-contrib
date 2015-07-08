@@ -33,7 +33,7 @@ def comment_pushbullet
 	serial = @diaries[@date.strftime('%Y%m%d')].count_comments(true)
 	title = %Q|#{@date.strftime(header)}-#{serial} #{@comment.name}|
 	body = @comment.body.sub( /[\r\n]+\Z/, '' )
-   body += ' ' + @conf.base_url + anchor(@date.strftime('%Y%m%d')) + '#c' + "%02d"%serial
+	body += ' ' + @conf.base_url + anchor(@date.strftime('%Y%m%d')) + '#c' + "%02d"%serial
 
 	Pushbullet.api_token = @conf['comment_pushbullet.access_token']
 	Pushbullet::Contact.me.push_note(title, body)
