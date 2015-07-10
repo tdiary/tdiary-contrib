@@ -69,13 +69,13 @@ if __FILE__ == $0
 		def test_tatsu_zine
 			expect = <<-EOS
 	<a class="amazon-detail" href="http://tatsu-zine.com/books/winrubybuild"><span class="amazon-detail">
-		<img class="amazon-detail left" src="http://tatsu-zine.com/images/books/1/cover_s.jpg"
+		<img class="amazon-detail left" src="http://tatsu-zine.com/images/books/1/cover_l.jpg"
 		height="150" width="100"
 		alt="Ruby環境構築講座 Windows編">
 		<span class="amazon-detail-desc">
 			<span class="amazon-title">Ruby環境構築講座 Windows編</span><br>
 			<span class="amazon-author">arton</span><br>
-			<span class="amazon-price">1,000円(税込)</span>
+			<span class="amazon-price">1036</span>
 		</span><br style="clear: left">
 	</span></a>
 EOS
