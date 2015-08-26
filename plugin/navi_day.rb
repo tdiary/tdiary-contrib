@@ -46,9 +46,9 @@ end
 alias :calc_links_navi_day_backup :calc_links
 
 def calc_links
-	if not (@conf.secure and @conf.mobile_agent?) and \
+	if not @conf.secure and \
 	       (/day|edit/ =~ @mode or \
-	        (@conf.mobile_agent? and /latest|month|nyear/ =~ @mode)) then
+	        /latest|month|nyear/ =~ @mode) then
 		if /(latest|month|nyear)/ === @mode
 			today = @diaries.keys.sort[-1]
 		else

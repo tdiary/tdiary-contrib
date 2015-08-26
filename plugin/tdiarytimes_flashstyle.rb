@@ -240,11 +240,7 @@ end
 
 
 def tdiarytimes_flashstyle_preview
-	unless @conf.mobile_agent?
-	<<-r
-		<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>
-	r
-	end
+	%Q|<p>#{if @conf['tdiarytimes_f.preview'] == "1" then "#{tdiarytimes_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>|
 end
 
 def tdiarytimes_flashstyle_templete( filename="tdiarytimes234x30.swf", argvs="", width="234", height="30" )

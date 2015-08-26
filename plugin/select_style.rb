@@ -27,7 +27,7 @@ add_conf_proc( 'style', 'スタイル' ) do
 
 	r = <<-HTML
 	<h3 class="subtitle">スタイルの指定</h3>
-	#{"<p>スタイル (日記の文法) を指定します。</p>" unless @conf.mobile_agent?}
+	<p>スタイル (日記の文法) を指定します。</p>
 	<p>
 	<select name="style">
 	HTML
@@ -37,6 +37,6 @@ add_conf_proc( 'style', 'スタイル' ) do
 	r << <<-HTML
 	</select>
 	</p>
-	#{"<p>スタイルについての詳細は<a href=\"http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?%A5%B9%A5%BF%A5%A4%A5%EB\">スタイル - tDiary の記法</a>をごらんください。</p>" unless @conf.mobile_agent?}
+	<p>スタイルについての詳細は<a href="http://tdiary-users.sourceforge.jp/cgi-bin/wiki.cgi?%A5%B9%A5%BF%A5%A4%A5%EB">スタイル - tDiary の記法</a>をごらんください。</p>
 	HTML
 end

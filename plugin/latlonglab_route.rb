@@ -8,7 +8,7 @@
 
 def route( id, w = 480, h = 480 )
 
-  if feed? or @conf.mobile_agent?
+  if feed?
     return %Q|<p><a href="http://latlonglab.yahoo.co.jp/route/watch?id=#{id}">Link to LatLongLab Route</a></p>|
   end
 

@@ -9,7 +9,7 @@
 #
 # not support
 #
-return if feed? || @conf.mobile_agent?
+return if feed?
 
 add_header_proc do
    if /\A(?:form|preview|append|edit|update)\z/ =~ @mode

@@ -53,40 +53,38 @@ end
 add_section_leave_proc do |date, index|
 	r = '<div class="tags">'
 
-	unless @conf.mobile_agent? then
-		# カテゴリタグの追加
-		if @category_to_tag_list and not @category_to_tag_list.empty? then
-			r << "Tags: "
-			@category_to_tag_list.each do |tag, blog|
-				if blog
-					r << %Q|<a href="#{@index}?blogcategory=#{h tag}">#{tag}</a> |
-				else
-					r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
-				end
+	# カテゴリタグの追加
+	if @category_to_tag_list and not @category_to_tag_list.empty? then
+		r << "Tags: "
+		@category_to_tag_list.each do |tag, blog|
+			if blog
+				r << %Q|<a href="#{@index}?blogcategory=#{h tag}">#{tag}</a> |
+			else
+				r << category_anchor( "#{tag}" ).sub( /^\[/, '' ).sub( /\]$/, '' ) << ' '
 			end
 		end
-
-		# 「このエントリの Delicious history (JSON)」
-		r << add_delicious_json(date, index)
-
-		# 「このエントリを含む Delicious (画像API)」
-		# r << add_delicious(date, index)
-
-		# 「このエントリを含むはてなブックーク」
-		r << add_hatenabm(date, index)
-
-		# 「このエントリを含む livedoor クリップ」
-		r << add_ldclip(date, index)
-
-		# 「このエントリを含む Buzzurl」
-		r << add_buzzurl(date, index)
-
-		# 「このエントリを含む Yahoo!ブックマーク」
-		r << add_yahoobm(date, index)
-
-		# Permalinkの追加
-		r << add_permalink(date, index)
 	end
+
+	# 「このエントリの Delicious history (JSON)」
+	r << add_delicious_json(date, index)
+
+	# 「このエントリを含む Delicious (画像API)」
+	# r << add_delicious(date, index)
+
+	# 「このエントリを含むはてなブックーク」
+	r << add_hatenabm(date, index)
+
+	# 「このエントリを含む livedoor クリップ」
+	r << add_ldclip(date, index)
+
+	# 「このエントリを含む Buzzurl」
+	r << add_buzzurl(date, index)
+
+	# 「このエントリを含む Yahoo!ブックマーク」
+	r << add_yahoobm(date, index)
+
+	# Permalinkの追加
+	r << add_permalink(date, index)
 
 	r << "</div>\n"
 end

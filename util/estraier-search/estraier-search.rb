@@ -244,22 +244,16 @@ begin
 		'type' => 'text/html',
 		'Vary' => 'User-Agent'
 	}
-	if @cgi.mobile_agent? then
-		body = conf.to_mobile( tdiary.eval_rhtml( 'i.' ) )
-		head['charset'] = conf.mobile_encoding
-		head['Content-Length'] = body.bytesize.to_s
+	if @cgi['type'] == 'rss'
+		head['type'] = "application/xml; charset=#{conf.encoding}"
+		body = tdiary.eval_rxml
 	else
-		if @cgi['type'] == 'rss'
-			head['type'] = "application/xml; charset=#{conf.encoding}"
-			body = tdiary.eval_rxml
-		else
-			body = tdiary.eval_rhtml
-		end
-		head['charset'] = conf.encoding
-		head['Content-Length'] = body.bytesize.to_s
-		head['Pragma'] = 'no-cache'
-		head['Cache-Control'] = 'no-cache'
+		body = tdiary.eval_rhtml
 	end
+	head['charset'] = conf.encoding
+	head['Content-Length'] = body.bytesize.to_s
+	head['Pragma'] = 'no-cache'
+	head['Cache-Control'] = 'no-cache'
 	print @cgi.header( head )
 	print body
 rescue Exception

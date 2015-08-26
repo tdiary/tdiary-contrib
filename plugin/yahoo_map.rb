@@ -44,7 +44,7 @@ def yahoo_map(lat, lon, options = {})
    options[:layer] ||= 17
    options[:size] ||= 'medium'
 
-   if feed? or @conf.mobile_agent? then
+   if feed?
       return %Q|<p><a href="http://map.yahoo.co.jp/pl?type=scroll&amp;lat=#{lat}&amp;lon=#{lon}&amp;z=17&amp;mode=map&amp;pointer=on&amp;datum=wgs&amp;fa=ks&amp;home=on&amp;hlat=#{lat}&amp;hlon=#{lon}&amp;layout=&amp;ei=utf-8&amp;p=">Link to Yahoo! JAPAN Map </a></p>|
    end
 

@@ -4,7 +4,7 @@
 # You can redistribute it and/or modify it under GPL2.
 #
 
-if @mode == 'day' and not bot? and not @conf.mobile_agent? then
+if @mode == 'day' and not bot?
 	add_body_enter_proc do |date|
 		<<-SCRIPT
 		<script type="text/javascript">

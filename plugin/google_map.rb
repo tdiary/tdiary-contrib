@@ -47,7 +47,6 @@ def google_map_common(params)
       return %Q|<a href="#{url}">#{url}</a>| if url
 
    end 
-   return 'not support this environment.' if @conf.mobile_agent?
 
    dom_id = "#{@gmap_date.strftime("%Y%m%d")}_#{@gmap_count}"
    params.merge!(:id => dom_id)

@@ -212,13 +212,6 @@ end
 # --------------------------------------------------------------------
 
 def tdiarytimes_textstyle(init_text = nil, entr_text = nil, init_color = nil, entr_color = nil, fade_color = nil, init_css = nil, entr_css = nil, title_text = nil, fade_time = nil)
-
-
-    # モバイル端末、テキストブラウザ、CSS非対応ブラウザ、検索ボットなどには結果を出力しない
-
-    unless @cgi.mobile_agent? || @cgi.user_agent =~ %r[(#{tdiarytimes_textstyle_ignore_user_agent})]i
-
-
 	r = ""
 
 
