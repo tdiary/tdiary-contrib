@@ -158,9 +158,7 @@ add_conf_proc( 'twitter_anywhere', 'Twitter Anywhere' ) do
 end
 
 def support_anywhere?
-   return false if @conf.mobile_agent? || feed?
-   return true
-
+   return !feed?
 end
 
 def ready_anywhere?

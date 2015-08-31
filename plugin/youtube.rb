@@ -6,7 +6,7 @@
 # usage: <%= youtube 'VIDEO_ID' %>
 #
 def youtube( video_id, size = [425,350] )
-	if @conf.mobile_agent? or feed? then
+	if feed?
 		%Q|<div class="youtube"><a href="http://www.youtube.com/watch?v=#{video_id}">YouTube (#{video_id})</a></div>|
 	elsif defined?( :smartphone? ) and @conf.smartphone?
 		size = [240, 194]

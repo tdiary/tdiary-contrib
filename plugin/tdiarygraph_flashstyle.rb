@@ -265,11 +265,7 @@ end
 
 
 def tdiarygraph_flashstyle_preview
-	unless @conf.mobile_agent?
-	<<-r
-		<p>#{if @conf['tdiarygraph_f.preview'] == "1" then "#{tdiarygraph_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>
-	r
-	end
+	%Q|<p>#{if @conf['tdiarygraph_f.preview'] == "1" then "#{tdiarygraph_flashstyle}" else "プレビュー表示を有効にすると、ここに Flash が表示されます。" end}</p>|
 end
 
 

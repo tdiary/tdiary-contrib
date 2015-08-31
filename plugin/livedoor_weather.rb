@@ -97,7 +97,7 @@ def lwws_to_html(date)
 
 		result = ""
 		result << %Q|<div class="lwws">|
-		if @conf['lwws.icon.disp'] != "t" or @conf.mobile_agent? then
+		if @conf['lwws.icon.disp'] != "t" then
 			result << %Q|<a href="#{h(detail_url)}">#{telop}</a>|
 		else
 			result << %Q|<a href="#{h(detail_url)}"><img src="#{url}" border="0" alt="#{title}" title="#{title}" width=#{width} height="#{height}"></a>|
@@ -158,7 +158,7 @@ def lwws_conf_proc
 end
 
 add_body_enter_proc do |date|
-	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot?
+	unless @conf.iphone? or feed? or bot?
 		lwws_to_html(date)
 	end
 end

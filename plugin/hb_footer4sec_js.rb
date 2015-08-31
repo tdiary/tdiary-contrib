@@ -15,7 +15,7 @@ def permalink( date, index, escape = true )
 end
 
 add_section_leave_proc do |date, index|
-	if @mode == 'day' and not bot? and not @conf.mobile_agent? then
+	if @mode == 'day' and not bot?
 		<<-SCRIPT
 		<script type= "text/javascript"><!--
 		var hatena_bookmark_anywhere_limit = 10;

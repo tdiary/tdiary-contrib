@@ -99,7 +99,7 @@ def subtitle_link( date, index, subtitle )
 end
 
 add_section_leave_proc do |date, index|
-	unless @conf.mobile_agent? or @conf.iphone? or feed? or bot?
+	unless @conf.iphone? or feed? or bot?
 		r = '<div class="tags">'
 		# add category_tag
 		if @category_to_tag_list and not @category_to_tag_list.empty? then

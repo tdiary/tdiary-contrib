@@ -54,7 +54,7 @@ def nicovideo_inline( video_id, elem, label = nil, link = nil )
 	i[:thumb] = elem['thumbnail_url']
 	i[:title] = label || elem['title']
 	i[:desc] = elem['description']
-	i[:comment] = @conf.mobile_agent? ? '' : elem['last_res_body']
+	i[:comment] = elem['last_res_body']
 	i[:date] = elem['first_retrieve']
 	i[:length] = elem['length']
 	i[:view] = elem['view_counter']
@@ -74,7 +74,7 @@ def nicovideo_iframe( video_id )
 end
 
 def nicovideo_player( video_id, size = [544,384] )
-	if feed? or @conf.mobile_agent? or @conf.iphone? then
+	if feed? or @conf.iphone? then
 		nicovideo( video_id )
 	else
 		q = ''
@@ -94,7 +94,7 @@ def nicovideo( video_id, label = nil, link = nil )
 		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
 		r << '</div>'
-		if feed? or @conf.mobile_agent? or @conf.iphone? then
+		if feed? or @conf.iphone? then
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
 		else

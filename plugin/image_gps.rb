@@ -111,21 +111,14 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 
   url  = ''
 
-  if @conf.mobile_agent?
-    url += %Q[<a href=#{google}/maps/m?q=#{lat},#{lon}>] unless lat.nil?
-    url += thumbnail ? img_t : img
-    url += %Q[</a>] unless lat.nil?
-  else
-    url += %Q[<div class="photo_detail">]
-    url += %Q[<a href="#{@image_url}/#{image}">]
-    url += thumbnail ? img_t : img
-    url += %Q[</a>]
-    url += %Q[#{detail}] if detail
-    url += %Q[</div>]
-  end
+  url += %Q[<div class="photo_detail">]
+  url += %Q[<a href="#{@image_url}/#{image}">]
+  url += thumbnail ? img_t : img
+  url += %Q[</a>]
+  url += %Q[#{detail}] if detail
+  url += %Q[</div>]
 
   url
-
 end
 add_header_proc do
   if @mode !~ /conf$/ and not bot? then

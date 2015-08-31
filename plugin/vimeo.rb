@@ -6,7 +6,7 @@
 #
 
 def vimeo( id )
-	if @conf.mobile_agent? or @conf.iphone? or feed? then
+	if @conf.iphone? or feed? then
 		return %Q|<a href="http://vimeo.com/#{id}">Link to vimeo ##{id}</a></p><p>|
 	end
 

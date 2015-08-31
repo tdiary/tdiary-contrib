@@ -9,7 +9,7 @@
 #
 # not support
 #
-return if feed? || @conf.mobile_agent?
+return if feed?
 
 if /\A(?:form|preview|append|edit|update)\z/ =~ @mode
    enable_js('//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js')

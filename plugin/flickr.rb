@@ -44,16 +44,12 @@ def flickr(photo_id, size = nil, place = 'flickr')
     return '[ERROR] flickr.rb: failed to get photo.'
   end
 
-  if @conf.mobile_agent?
-    body = %Q|<a href="#{photo[:src]}" class="flickr">#{photo[:title]}</a>|
-  else
-    body = %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
-   unless @conf.smartphone?
+  body = %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
+  unless @conf.smartphone?
     body << %Q| width="#{photo[:width]}"| if photo[:width]
     body << %Q| height="#{photo[:height]}"| if photo[:height]
-   end
-    body << %Q|></a>|
   end
+  body << %Q|></a>|
 
   body
 end

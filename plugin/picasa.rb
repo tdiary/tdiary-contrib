@@ -20,13 +20,7 @@
 
 def picasa( src, alt = "photo", place = 'photo' )
 	src.sub!( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
-
-	if @cgi.mobile_agent?
-		body = %Q|<a href="#{src}">#{alt}</a>|
-	else
-		body = %Q|<img title="#{alt}" alt="#{alt}" src="#{src}" class="#{place} picasa">|
-	end
-	body
+	%Q|<img title="#{alt}" alt="#{alt}" src="#{src}" class="#{place} picasa">|
 end
 
 def picasa_left( src, alt = "photo" )
