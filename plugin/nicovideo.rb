@@ -74,7 +74,7 @@ def nicovideo_iframe( video_id )
 end
 
 def nicovideo_player( video_id, size = [544,384] )
-	if feed? or @conf.iphone? then
+	if feed?
 		nicovideo( video_id )
 	else
 		q = ''
@@ -94,7 +94,7 @@ def nicovideo( video_id, label = nil, link = nil )
 		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
 		r << '</div>'
-		if feed? or @conf.iphone? then
+		if feed?
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
 		else

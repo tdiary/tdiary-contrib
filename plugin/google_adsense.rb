@@ -74,7 +74,7 @@ def google_adsense_init( layout )
 end
 
 add_section_leave_proc do |date,index|
-	if @mode == 'day' and !@conf.iphone? and index == 1 and @conf['google_adsense.slot'] then
+	if @mode == 'day' and index == 1 and @conf['google_adsense.slot'] then
 		%Q|<div class="google-adsense">#{google_adsense( 0, @conf['google_adsense.slot'] )}</div>|
 	else
 		''

@@ -9,9 +9,6 @@ def everytrail_adjust_size( size )
    s = size.collect {|i| i.to_i }
    s[0] = 400 if s[0] == 0
    s[1] = 300 if s[1] == 0
-   if @conf.iphone? then
-      s = [300, 300 * s[1] / s[0]]
-   end
    s
 end
 
@@ -28,8 +25,6 @@ def everytrail_flash( trip_id, label = nil, size = [400, 300] )
 end
 
 def everytrail_widget( trip_id, latitude = nil, longtitude = nil, label = nil, size = [400, 300] )
-   return '' if @conf.iphone?
-
    size = everytrail_adjust_size( size )
    lat_param = latitude ? "&amp;startLat=#{latitude}" : ''
    lon_param = longtitude ? "&amp;startLon=#{longtitude}" : ''

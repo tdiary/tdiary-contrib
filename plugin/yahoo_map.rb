@@ -49,13 +49,9 @@ def yahoo_map(lat, lon, options = {})
    end
 
    # define map size
-   height = {'iphone' => '240px', 'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
-   width = {'iphone' => '240px', 'small' => '320px', 'medium' => '480px', 'large' => '640px'}
-   if @conf.iphone? then
-      size = 'iphone'
-   else
-      size = options[:size]
-   end
+   height = {'small'=> '240px', 'medium' => '360px', 'large' => '480px'}
+   width = {'small' => '320px', 'medium' => '480px', 'large' => '640px'}
+   size = options[:size]
 
    ymapid = generate_ymapid(lat, lon, options[:layer], options[:size])
    ymap_info = {:ymapid => ymapid, :lat => lat, :lon => lon, :layer => options[:layer]}

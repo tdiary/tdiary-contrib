@@ -158,7 +158,7 @@ def lwws_conf_proc
 end
 
 add_body_enter_proc do |date|
-	unless @conf.iphone? or feed? or bot?
+	unless feed? or bot?
 		lwws_to_html(date)
 	end
 end
