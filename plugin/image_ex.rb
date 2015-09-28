@@ -84,10 +84,7 @@
 @imageex_thumbnailsize = @options && @options['image_ex.previewsize'] || 120
 @imageex_yearlydir = @options && @options['image_ex.yearlydir'] || 0
 
-if @conf.smartphone?
-	enable_js("image_ex.js")
-end
-
+enable_js("image_ex.js")
 
 add_body_enter_proc(Proc.new do |date|
 	@image_date = date.strftime("%Y%m%d")

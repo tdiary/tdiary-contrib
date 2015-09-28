@@ -19,7 +19,6 @@
 #
 
 def picasa( src, alt = "photo", place = 'photo' )
-	src.sub!( %r|/s\d+/|, "/s200/" ) if @conf.iphone?
 	%Q|<img title="#{alt}" alt="#{alt}" src="#{src}" class="#{place} picasa">|
 end
 

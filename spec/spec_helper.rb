@@ -156,7 +156,7 @@ class PluginFake
 		end
 
     def smartphone?
-      @cgi.iphone?
+      false
     end
 
 		def bot?
@@ -169,7 +169,7 @@ class PluginFake
   end
 
 	def iphone?
-		@conf.cgi.iphone?
+		false
 	end
 	alias ipod? iphone?
 end
@@ -186,7 +186,7 @@ class CGIFake
 	end
 
 	def iphone?
-		self.user_agent =~ /iP(?:hone|od)/
+		false
 	end
 end
 

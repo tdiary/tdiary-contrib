@@ -62,18 +62,20 @@ $(function() {
 		}
 	}
 
-	$(document).ready(function() {
-		$("img.image-ex").bind("load", function() {
-			resizeImage(this);
+	$(window).width() <= 360) {
+		$(document).ready(function() {
+			$("img.image-ex").bind("load", function() {
+				resizeImage(this);
+			});
 		});
-	});
 
-	// for when images have been cached
-	$(window).bind("load", function() {
-		$("img.image-ex").each(function() {
-			resizeImage(this);
+		// for when images have been cached
+		$(window).bind("load", function() {
+			$("img.image-ex").each(function() {
+				resizeImage(this);
+			});
 		});
-	});
+	}
 });
 
 // vim: set ts=3 sw=3 noexpandtab :

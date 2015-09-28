@@ -92,7 +92,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       detail += "#{exif[e].to_s}"+sep if exif.tag?(e)
     }
     unless lat.nil?
-      unless (google_maps_api_key == '' || @conf.smartphone?)
+      unless google_maps_api_key == ''
         map_img = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
         map_img += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
         map_img += %Q[key=#{google_maps_api_key}&amp;sensor=false"]

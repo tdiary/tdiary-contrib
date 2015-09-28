@@ -38,17 +38,14 @@ def flickr(photo_id, size = nil, place = 'flickr')
     return '[ERROR] flickr.rb: API Key is not specified.'
   end
   size ||= @conf['flickr.default_size']
-  size = 'small' if @conf.smartphone?
   photo = flickr_photo_info(photo_id.to_s, size)
   unless photo
     return '[ERROR] flickr.rb: failed to get photo.'
   end
 
   body = %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place}"|
-  unless @conf.smartphone?
-    body << %Q| width="#{photo[:width]}"| if photo[:width]
-    body << %Q| height="#{photo[:height]}"| if photo[:height]
-  end
+  body << %Q| width="#{photo[:width]}"| if photo[:width]
+  body << %Q| height="#{photo[:height]}"| if photo[:height]
   body << %Q|></a>|
 
   body
