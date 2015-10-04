@@ -22,10 +22,13 @@ $tDiary.plugin.preview = function() {
       // 自動更新時にスクロール位置を自動調整してみたがカクカクする
       // window.scrollTo($(window).scrollLeft(),
       //   $(window).scrollTop() + afterOffset.top - beforeOffset.top);
-      previewButton.prop("disabled", false);
+      setTimeout($tDiary.plugin.preview, 10000);
     },
     'html'
-  );
+  )
+  .always(function() {
+    previewButton.prop("disabled", false);
+  });
 }
 
 if ($('div.autopagerize_page_element').length == 0) {
@@ -42,6 +45,6 @@ previewButton.click(
   }
 );
 
-setInterval($tDiary.plugin.preview, 10000);
+setTimeout($tDiary.plugin.preview, 10000);
 
 });
