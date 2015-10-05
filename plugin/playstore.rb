@@ -20,7 +20,7 @@ require 'date'
 
 class PlayStore < MarketBot::Android::App
    def initialize(app_id,option={})
-      super(app_id,'ja',option)
+      super(app_id,option)
    end
 
    def save(path)
