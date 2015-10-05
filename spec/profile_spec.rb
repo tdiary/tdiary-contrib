@@ -8,20 +8,19 @@ describe "Profile::Service" do
     before do
       require 'json'
       allow_any_instance_of(Profile::Service::GitHub).to receive(:fetch).and_return(JSON.parse(File.read("spec/fixtures/github.json")))
-      allow_any_instance_of(Profile::Service::Gravatar).to receive(:fetch).and_return(JSON.parse(File.read("spec/fixtures/gravatar.json")))
 
       # workaround for run spec on various environment.
       require 'openssl'
       OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
       # http://develop.github.com/p/general.html
-      @profile = Profile::Service::GitHub.new("schacon", :size => 40)
+      @profile = Profile::Service::GitHub.new("schacon")
     end
 
     it "should include name, mail, image properties" do
       expect(@profile.name).to eq("Scott Chacon")
       expect(@profile.mail).to eq("schacon@gmail.com")
-      expect(@profile.image).to eq("http://2.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?s=40")
+      expect(@profile.image).to eq("https://avatars.githubusercontent.com/u/70?v=3")
     end
   end
 

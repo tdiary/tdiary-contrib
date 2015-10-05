@@ -80,12 +80,8 @@ module ::Profile
 		class GitHub < Base
 			property :name, 'name'
 			property :mail, 'email'
+			property :image, 'avatar_url'
 			endpoint {|id| "https://api.github.com/users/#{id}" }
-
-			def image
-				# "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@mail)}.jpg"
-				Gravatar.new(@mail, @options).image
-			end
 
 			def link
 				"http://github.com/#{@id}"
