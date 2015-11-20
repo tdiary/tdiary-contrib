@@ -43,12 +43,12 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     image = image_list( @image_date )[id.to_i]
     image_t = image_list( @image_date )[thumbnail.to_i] if thumbnail
   end
-  
+
   if size
     if size.kind_of?(Array)
       if size.length > 1
         size = %Q| width="#{h size[0]}" height="#{h size[1]}"|
-		elsif size.length > 0
+      elsif size.length > 0
         size = %Q| width="#{h size[0]}"|
       end
     else
@@ -62,7 +62,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
       size = ""
     end
   end
-  
+
   show_exif_info = @conf['image_gps.show_exif_info']
   show_exif_info = '' if show_exif_info.nil?
   google_maps_api_key = @conf['image_gps.google_maps_api_key']
