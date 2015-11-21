@@ -3,7 +3,7 @@ PATH
   specs:
     tdiary-contrib (4.2.0)
       ruby-pushbullet
-      tdiary
+      tdiary (~> 4.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -66,7 +66,6 @@ DEPENDENCIES
   rake
   rspec
   simplecov
-  tdiary (~> 4.1.0)
   tdiary-contrib!
   webmock
 
