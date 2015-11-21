@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gemspec
 
 gem 'tdiary', '~> 4.1.0'
 
