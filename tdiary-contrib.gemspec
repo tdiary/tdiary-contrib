@@ -13,7 +13,21 @@ Gem::Specification.new do |spec|
   spec.homepage      = "http://www.tdiary.org/"
   spec.license       = "GPL-2 and/or others"
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = Dir[
+    'README.md',
+    'README.en.md',
+    'Rakefile',
+    'doc/**/*',
+    'filter/**/*',
+    'io/**/*',
+    'js/**/*',
+    'lib/**/*',
+    'misc/**/*',
+    'plugin/**/*',
+    'spec/**/*',
+    'style/**/*',
+    'util/**/*'
+  ]
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
