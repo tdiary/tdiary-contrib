@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # You can redistribute it and/or modify it under the same license as tDiary.
 #
-# display book info in http://estore.ohmsha.co.jp/ like amazon.rb
+# display book info in https://estore.ohmsha.co.jp/ like amazon.rb
 # USAGE: {{ohmsha_estore '978427406694P'}}
 
 def ohmsha_estore_cache_dir
@@ -25,37 +25,24 @@ rescue
 end
 
 require 'open-uri'
-autoload :REXML,    'rexml/document'
-autoload :StringIO, 'stringio'
+require 'json'
 def ohmsha_estore( id, doc = nil )
 	if !@conf.secure and !(result = ohmsha_estore_cache_get(id)).nil?
 		return result
 	end
 
-	domain = "http://estore.ohmsha.co.jp"
-	image = "#{domain}/images/covers/#{id}.gif"
-	link = "#{domain}/titles/#{id}"
-	doc ||= StringIO.new(open(link, &:read).gsub(%r|</?fb:.*?>|, ''))
-	xml = REXML::Document.new( doc )
-	biblio = "//html/body/div/div[2]/div/div/div/div[2]"
-	title = REXML::XPath.match( xml,
-		"#{biblio}/h2").first.text
-	author = REXML::XPath.match( xml,
-		"#{biblio}/div" ).first.text
-
-	description =
-		REXML::XPath.match( xml, '//html/body/div/div[2]/div/div/div[2]' ).
-		first.text
+	html = open("https://estore.ohmsha.co.jp#{domain}/titles/#{id}", &:read)
+	info = JSON.parse(html.scan(%r|<script type='application/ld\+json'>(.*?)</script>|m).flatten[0])
 
 	result = <<-EOS
 	<a class="amazon-detail" href="#{h link}"><span class="amazon-detail">
-		<img class="amazon-detail left" src="#{h image}"
+		<img class="amazon-detail left" src="#{h info['image']}"
 		height="150" width="100"
-		alt="#{h title}">
+		alt="#{h info['name']}">
 		<span class="amazon-detail-desc">
-			<span class="amazon-title">#{h title}</span><br>
-			<span class="amazon-author">#{h author}</span><br>
-			<span class="amazon-label">#{h description}</span><br>
+			<span class="amazon-title">#{h info['name']}</span><br>
+			<span class="amazon-label">#{h info['description'].split.first}</span><br>
+			<span class="amazon-price">#{h info['offers']['price'].to_f.to_i}円</span>
 		</span><br style="clear: left">
 	</span></a>
 EOS
