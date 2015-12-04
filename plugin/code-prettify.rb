@@ -4,14 +4,7 @@
 
 add_header_proc do
   <<-EOS
-<link href="js/prettify/prettify.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="js/prettify/prettify.js"></script>
-<script type="text/javascript"><!--
-jQuery.event.add(window, "load", function(){
-  prettyPrint();
-});
-//-->
-</script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 EOS
 end
 
