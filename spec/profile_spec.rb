@@ -24,21 +24,6 @@ describe "Profile::Service" do
     end
   end
 
-  describe "Twitter" do
-    before do
-      allow_any_instance_of(Profile::Service::Twitter).to receive(:fetch).and_return(REXML::Document.new(File.read("spec/fixtures/twitter.xml")))
-
-      # http://twitter.com/tdiary
-      @profile = Profile::Service::Twitter.new("tdiary")
-    end
-
-    it "should include name, description, image properties" do
-      expect(@profile.name).to eq("tDiary.org")
-      expect(@profile.description).to eq("tDiaryオフィシャルアカウント")
-      expect(@profile.image).to match(%r{^http://.*\.(png|jpg)$})
-    end
-  end
-
   describe "Gravatar" do
     # http://ja.gravatar.com/site/implement/hash/
 
