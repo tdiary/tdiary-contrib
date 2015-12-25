@@ -26,7 +26,7 @@ def socialbutton_js_settings
 end
 
 socialbutton_footer = Proc.new { %Q|<div class="socialbuttons"></div>| }
-if blogkit?
+if respond_to?(:blogkit?) && blogkit?
 	add_body_leave_proc(socialbutton_footer)
 else
 	add_section_leave_proc(socialbutton_footer)
