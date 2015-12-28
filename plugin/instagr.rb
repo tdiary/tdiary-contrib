@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 #
 # instagr.rb - plugin to insert images on instagr.am
+#              !! integrated into the instagram.rb.
+#              !! Please use the instagram.rb
 #
-# Copyright (C) 2011, tamoot <tamoot+tdiary@gmail.com>
+# Copyright (C) 2011-2015, tamoot <tamoot+tdiary@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
 #
 # usage:
@@ -14,46 +16,13 @@
 #  :medium => 306x306 pixel (default)
 #  :large  => 612x612 pixel
 
-require 'cgi'
-require 'json'
-require 'net/http'
-
 def instagr( short_url, size = :medium)
-	return %Q|<p>Argument is empty.. #{short_url}</p>| if !short_url or short_url.empty?
-	option = option.nil? ? {} : option
-
-	# img size
-	size = size.to_sym if size != :medium
-	maxwidth_data = {:medium => 320, :large => 612}
-	maxwidth = maxwidth_data[ size ] ? maxwidth_data[ size ] : maxwidth_data[:medium]
-
-	# proxy
-	px_host, px_port = (@conf['proxy'] || '').split( /:/ )
-	px_port = 80 if px_host and !px_port
-
-	# query
-	query = "?url=#{CGI::escape(short_url)}&maxwidth=#{maxwidth}"
-
-	begin
-		Net::HTTP.version_1_2
-		res = Net::HTTP::Proxy(px_host, px_port).get('instagram.com', "/api/v1/oembed/#{query}")
-		json_data = JSON::parse( res, &:read )
-		width  = option[:width]  ? option[:width]  : json_data["width"]
-		height = option[:height] ? option[:height] : json_data["height"]
-
-		return <<-INSTAGR_DOM
-			<div class="instagr">
-				<a class="instagr" href="#{h short_url}" title="#{h @conf.to_native(json_data["title"])}">
-					<img src="#{h json_data["thumbnail_url"]}" width="#{h width}" height="#{h height}" alt="#{h @conf.to_native(json_data["title"])}">
-				</a>
-				<p>#{h json_data["author_name"]}'s photo.</p>
-			</div>
-		INSTAGR_DOM
-	rescue
-		return %Q|<p>Failed Open URL.. #{short_url}<br>#{h $!}</p>|
-	end
+   if respond_to?(:instagram)
+      instagram( short_url, size )
+   else
+      return %Q|instagr.rb was integrated into instagram.rb. Please use the instagram.rb|
+   end
 end
-alias :instagram :instagr
 
 
 # Local Variables:
