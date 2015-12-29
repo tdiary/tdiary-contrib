@@ -7,7 +7,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  * 
- * Version: 1.8.1
+ * Version: 1.9.1
  */
 
 /**
@@ -164,11 +164,11 @@
  * Pintarest Button
  * http://pinterest.com/about/goodies/
  *
- * $('#pinterest').socialbutton('pinterest', {
+ * $('#pinterest').socialbutton('pintarest', {
  *     button: 'horizontal', // or 'vertical', 'none'
  *     url: 'http://itra.jp',
  *     media: 'http://itra.jp/image.jpg',
- *     description: 'This is an image.',
+ *     description: 'This is an image.'
  * });
  */
 (function($) {
@@ -287,10 +287,10 @@ $.fn.socialbutton = function(service, options) {
 		},
 		pinterest: {
 			button: 'horizontal', // horizontal, vertical, none
-			url: '',
+			url: document.URL,
 			media: '',
 			description: ''
-		},
+		}
 	};
 
 	var max_index = this.size() - 1;
@@ -675,7 +675,7 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 	});
 	
 	var tag = '<a' + attr + '><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>'
-			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>';
+			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
 
 	$(target).html(tag);
 }
@@ -700,7 +700,7 @@ function socialbutton_hatena_oldstyle(target, options, defaults, index, max_inde
 
 function socialbutton_google_plusone(target, options, defaults, index, max_index)
 {
-	if ($.browser.msie && parseInt($.browser.version, 10) < 8) {
+	if (!$.support.tbody) {
 		return;
 	}
 
