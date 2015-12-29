@@ -496,7 +496,7 @@ function socialbutton_facebook_like(target, options, defaults, index, max_index)
 		'height': height
 	});
 
-	var tag = '<iframe src="http://www.facebook.com/plugins/like.php?' + params + '" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:' + width + 'px; height:' + height + 'px;" allowTransparency="true"></iframe>';
+	var tag = '<iframe src="https://www.facebook.com/plugins/like.php?' + params + '" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:' + width + 'px; height:' + height + 'px;" allowTransparency="true"></iframe>';
 
 	$(target).html(tag);
 }
