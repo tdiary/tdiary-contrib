@@ -15,7 +15,7 @@ describe "flickr plugin" do
 		subject { plugin.flickr('5950109223', size = nil) }
 
 		it do
-			expect(subject).to eq %Q|<a href=\"https://www.flickr.com/photos/machu/5950109223/\" class=\"flickr\"><img title=\"RubyKaigi 2011\" alt=\"RubyKaigi 2011\" src=\"https://farm7.staticflickr.com/6006/5950109223_040097db92.jpg\" class=\"flickr\" width=\"500\" height=\"375\"></a>|
+			expect(subject).to eq %Q|<a href=\"https://www.flickr.com/photos/machu/5950109223/\" class=\"flickr\"><img title=\"RubyKaigi 2011\" alt=\"RubyKaigi 2011\" src=\"https://farm7.staticflickr.com/6006/5950109223_040097db92.jpg\" class=\"flickr photo\"></a>|
 		end
 	end
 end

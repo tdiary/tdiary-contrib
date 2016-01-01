@@ -2,10 +2,10 @@
 # profile.rb: profile plugin for tDiary
 #
 # usage:
-#   profile(id[, service = :twitter])
+#   profile(id[, service = :gravatar])
 #   - id: user ID for profile service
-#   - service: profile service (default is :twitter)
-#     Choose from :github, :twitter, :gravatar
+#   - service: profile service (default is :gravatar)
+#     Choose from :github, :gravatar, :hatena
 #
 # Copyright (C) 2009 by MATSUOKA Kohei < http://www.machu.jp/ >
 # Distributed under the GPL.
@@ -103,14 +103,7 @@ module ::Profile
 
 		# twitter.com
 		class Twitter < Base
-			property :name, '//user/name'
-			property :image, '//user/profile_image_url'
-			property :description, '//user/description'
-			endpoint {|id| "http://twitter.com/users/show/#{id}.xml" }
-
-			def link
-				"http://twitter.com/#{@id}"
-			end
+			# dummy class
 		end
 
 		# iddy.jp, for backward compatibility
@@ -170,15 +163,14 @@ end
 
 PROFILE_VERSION = '20090909'
 
-def profile(id, service = :twitter, options = {})
+def profile(id, service = :gravatar, options = {})
 	html = ''
 
 	service_class = {
-		:twitter => Profile::Service::Twitter,
 		:github => Profile::Service::GitHub,
 		:gravatar => Profile::Service::Gravatar,
 		:hatena => Profile::Service::Hatena,
-	}[service.to_s.downcase.to_sym] || Profile::Service::Twitter
+	}[service.to_s.downcase.to_sym] || Profile::Service::Gravatar
 
 	# TODO: create cache manager class
 
