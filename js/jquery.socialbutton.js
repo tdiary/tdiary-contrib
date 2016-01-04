@@ -1,40 +1,40 @@
 /**
  * jquery.socialbutton - jQuery plugin for social networking websites
  * http://itra.jp/jquery_socialbutton_plugin/
- * 
+ *
  * Copyright 2010, Itrans, Inc. http://itra.jp/
- * 
+ *
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
- * 
- * Version: 1.8.1
+ *
+ * Version: 1.9.1
  */
 
 /**
  * SYNOPSIS
- * 
- * 
+ *
+ *
  * mixi_check
  * http://developer.mixi.co.jp/connect/mixi_plugin/mixi_check/spec_mixi_check
- * 
+ *
  * $('#mixi_check').socialbutton('mixi_check', {
  *     key: 'mixi-check-key'
  * });
- * 
+ *
  * $('#mixi_check').socialbutton('mixi_check', {
  *     key: 'mixi-check-key',
  *     button: 'button-1',
  *     url: 'http://itra.jp/'
  * });
- * 
- * 
+ *
+ *
  * mixi_like
  * http://developer.mixi.co.jp/connect/mixi_plugin/favorite_button/spec
- * 
+ *
  * $('#mixi_like').socialbutton('mixi_like', {
  *     key: 'mixi-check-key',
  * });
- * 
+ *
  * $('#mixi_like').socialbutton('mixi_like', {
  *     key: 'mixi-check-key',
  *     url: 'http://itra.jp/',
@@ -43,13 +43,13 @@
  *     show_faces: true,
  *     style: 'additional-style-here'
  * });
- * 
- * 
+ *
+ *
  * facebook_like
  * http://developers.facebook.com/docs/reference/plugins/like
- * 
+ *
  * $('#facebook_like').socialbutton('facebook_like');
- * 
+ *
  * $('#facebook_like').socialbutton('facebook_like', {
  *     button: 'standard', // synonym 'layout'
  *     url: 'http://itra.jp',
@@ -61,25 +61,25 @@
  *     font: 'arial',
  *     colorscheme: 'light'
  * });
- * 
- * 
+ *
+ *
  * facebook_share
  * http://developers.facebook.com/docs/share
- * 
+ *
  * $('#facebook_share').socialbutton('facebook_share');
- * 
+ *
  * $('#facebook_share').socialbutton('facebook_share', {
  *     button: 'button_count', // synonym 'type'
  *     url: 'http://itra.jp',
  *     text: 'Share'
  * });
- * 
- * 
+ *
+ *
  * Twitter
  * http://twitter.com/goodies/tweetbutton
- * 
+ *
  * $('#twitter').socialbutton('twitter');
- * 
+ *
  * $('#twitter').socialbutton('twitter', {
  *     button: 'vertical', // synonym 'count'
  *     url: 'http://itra.jp/',
@@ -88,26 +88,26 @@
  *     via: 'ishiiyoshinori',
  *     related: 'twitter'
  * });
- * 
- * 
+ *
+ *
  * GREE Social Feedback
  * http://developer.gree.co.jp/connect/plugins/sf
- * 
+ *
  * $('#gree_sf').socialbutton('gree_sf');
- * 
+ *
  * $('#gree_sf').socialbutton('gree_sf', {
  *     button: 0, // synonym 'type'
  *     url: 'http://itra.jp/',
  *     width: 0, // auto
  *     height: 20
  * });
- * 
- * 
+ *
+ *
  * Evernote Site Memory
  * http://www.evernote.com/about/developer/sitememory/
- * 
+ *
  * $('#evernote').socialbutton('evernote');
- * 
+ *
  * $('#evernote').socialbutton('evernote', {
  *     button: 'article-clipper',
  *     url: 'http://itra.jp/',
@@ -119,38 +119,38 @@
  *     suggest_tags: 'comma-separated-tags,up-to-three-tags',
  *     styling: 'full'
  * });
- * 
- * 
+ *
+ *
  * Hatena Bookmark
  * http://b.hatena.ne.jp/
- * 
+ *
  * $('#hatena').socialbutton('hatena');
- * 
+ *
  * $('#hatena').socialbutton('hatena', {
  *     button: 'standard',
  *     url: 'http://itra.jp/',
  *     title: 'page-title'
  * });
- * 
- * 
+ *
+ *
  * Hatena Bookmark (Old Style)
  * http://b.hatena.ne.jp/
- * 
+ *
  * $('#hatena').socialbutton('hatena_oldstyle');
- * 
+ *
  * $('#hatena').socialbutton('hatena_oldstyle', {
  *     button: '/path/to/your-icon.png',
  *     url: 'http://itra.jp/',
  *     padding: 10,
  *     height: 15
  * });
- * 
- * 
+ *
+ *
  * Google +1 Button
  * http://www.google.com/webmasters/+1/button/
- * 
+ *
  * $('#google').socialbutton('google_plusone');
- * 
+ *
  * $('#google').socialbutton('google_plusone', {
  *     button: 'standard', // synonym 'size'
  *     url: 'http://itra.jp', // synonym 'href'
@@ -159,16 +159,16 @@
  *     callback: 'some_callback_function',
  *     count: true
  * });
- * 
+ *
  *
  * Pintarest Button
  * http://pinterest.com/about/goodies/
  *
- * $('#pinterest').socialbutton('pinterest', {
+ * $('#pinterest').socialbutton('pintarest', {
  *     button: 'horizontal', // or 'vertical', 'none'
  *     url: 'http://itra.jp',
  *     media: 'http://itra.jp/image.jpg',
- *     description: 'This is an image.',
+ *     description: 'This is an image.'
  * });
  */
 (function($) {
@@ -287,10 +287,10 @@ $.fn.socialbutton = function(service, options) {
 		},
 		pinterest: {
 			button: 'horizontal', // horizontal, vertical, none
-			url: '',
+			url: document.URL,
 			media: '',
 			description: ''
-		},
+		}
 	};
 
 	var max_index = this.size() - 1;
@@ -496,7 +496,7 @@ function socialbutton_facebook_like(target, options, defaults, index, max_index)
 		'height': height
 	});
 
-	var tag = '<iframe src="http://www.facebook.com/plugins/like.php?' + params + '" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:' + width + 'px; height:' + height + 'px;" allowTransparency="true"></iframe>';
+	var tag = '<iframe src="https://www.facebook.com/plugins/like.php?' + params + '" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:' + width + 'px; height:' + height + 'px;" allowTransparency="true"></iframe>';
 
 	$(target).html(tag);
 }
@@ -673,9 +673,9 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 		'data-hatena-bookmark-layout': layout,
 		'title': 'このエントリーをはてなブックマークに追加'
 	});
-	
+
 	var tag = '<a' + attr + '><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>'
-			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>';
+			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
 
 	$(target).html(tag);
 }
@@ -700,7 +700,7 @@ function socialbutton_hatena_oldstyle(target, options, defaults, index, max_inde
 
 function socialbutton_google_plusone(target, options, defaults, index, max_index)
 {
-	if ($.browser.msie && parseInt($.browser.version, 10) < 8) {
+	if (!$.support.tbody) {
 		return;
 	}
 
