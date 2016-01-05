@@ -4,7 +4,6 @@
 # Copyright (C) 2012 SHIBATA Hiroshi <shibata.hiroshi@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
 #
-require 'pygments'
 
 add_header_proc do
 	<<-STYLE
