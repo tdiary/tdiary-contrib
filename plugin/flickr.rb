@@ -89,7 +89,7 @@ def flickr_open(method, photo_id)
     req['method'] = method
     req['photo_id'] = photo_id
     begin
-      timeout(5) do
+      Timeout.timeout(5) do
         open(file, 'w') {|fout|
           fout.puts req.open
         }

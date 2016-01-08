@@ -28,7 +28,7 @@ def lwws_request( city_id )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 10 ) do
+	Timeout.timeout( 10 ) do
 		open( url, :proxy => proxy ) {|f| f.read }
 	end
 end

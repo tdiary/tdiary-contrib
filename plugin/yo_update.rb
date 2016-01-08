@@ -48,7 +48,7 @@ def yo_update_access_api(req)
 		proxy_port = nil
 	end
 	begin
-		timeout(YO_UPDATE_TIMEOUT) do
+		Timeout.timeout(YO_UPDATE_TIMEOUT) do
 			return Net::HTTP.start(req.uri.host, req.uri.port, proxy_addr, proxt_port){|http|
 				http.request(req)
 			}

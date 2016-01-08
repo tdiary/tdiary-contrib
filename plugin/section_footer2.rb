@@ -123,7 +123,7 @@ end
 def call_delicious_json( url_md5 )
 	json = nil
 	begin
-		timeout(10) do
+		Timeout.timeout(10) do
 			open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}" ) do |f|
 				json = JSON.parse( f.read )
 			end

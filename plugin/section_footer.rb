@@ -152,7 +152,7 @@ def add_delicious_json(date, index)
 
 		if cached_time.nil? or update
 			begin
-				timeout(10) do
+				Timeout.timeout(10) do
 					open( "http://feeds.delicious.com/v2/json/urlinfo/#{url_md5}") do |file|
 						File::open( file_name, 'wb' ) do |f|
 							f.write( file.read )

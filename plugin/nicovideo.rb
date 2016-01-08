@@ -29,7 +29,7 @@ def nicovideo_call_api( video_id )
 	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	xml = timeout( feed? ? 10 : 2 ) {
+	xml = Timeout.timeout( feed? ? 10 : 2 ) {
 		px_host, px_port = (@conf['proxy'] || '').split( /:/ )
 		px_port = 80 if px_host and !px_port
 		Net::HTTP::Proxy( px_host, px_port ).get_response( URI::parse( uri ) ).body

@@ -64,7 +64,7 @@ def call_nhk_json(id, service, area)
 
       status = nil
       data = nil
-      timeout(10) do
+      Timeout.timeout(10) do
          open(*open_param){ |ff| data = ff.read; status = ff.status[0] }
       end
       raise "API Error" if status.to_s != '200'

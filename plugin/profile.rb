@@ -58,7 +58,7 @@ module ::Profile
 
 			# get a XML document from endpoint and create REXML::Document instance
 			def fetch(endpoint)
-				timeout(5) do
+				Timeout.timeout(5) do
 					open(endpoint) do |f|
 						doc = REXML::Document.new(f)
 					end
@@ -89,7 +89,7 @@ module ::Profile
 
 			def fetch(endpoint)
 				require 'json'
-				timeout(5) do
+				Timeout.timeout(5) do
 					doc = open(endpoint) {|f| JSON.parse(f.read) }
 				end
 			end
@@ -125,7 +125,7 @@ module ::Profile
 
 			def fetch(endpoint)
 				require 'json'
-				timeout(5) do
+				Timeout.timeout(5) do
 					begin
 						doc = open(endpoint) {|f| JSON.parse(f.read) }
 					rescue RuntimeError => err

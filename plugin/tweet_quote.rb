@@ -56,7 +56,7 @@ def twitter_statuses_show_api( tweet_id )
 		"Authorization" => %Q[OAuth #{oauth_parameters.map{|k ,v| "#{URI.escape( k.to_s, unsafe )}=\"#{URI.escape( v, unsafe )}\""}.join( "," )}],
 		:proxy => proxy
 	}
-	timeout( 20 ) do
+	Timeout.timeout( 20 ) do
 		open( "#{url}?#{parameters.map{|k,v| "#{k}=#{v}"}.join( "&" )}", headers ) {|f| f.read }
 	end
 end

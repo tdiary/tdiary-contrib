@@ -9,7 +9,7 @@ def coderwall(name, size = [60, 60])
 		File::delete(cache) if Time::now > File::mtime( cache ) + 60*60*24
 	rescue Errno::ENOENT
 		begin
-			timeout(10) do
+			Timeout.timeout(10) do
 				json = open( "https://coderwall.com/#{name}.json" ) {|f| f.read }
 			end
 			open(cache, 'wb') {|f| f.write(json) }

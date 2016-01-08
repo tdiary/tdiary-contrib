@@ -125,7 +125,7 @@ module Hatena
     File.open(kw, IO::WRONLY|IO::CREAT) do |fp|
       break unless fp.flock(IO::LOCK_EX|IO::LOCK_NB)
       uri = ::URI.parse('http://d.hatena.ne.jp/images/keyword/keywordlist')
-      timeout(60) do
+      Timeout.timeout(60) do
         Net::HTTP.version_1_1
         Net::HTTP.new(uri.host, uri.port).start do |http|
           res, body = http.get(uri.request_uri,

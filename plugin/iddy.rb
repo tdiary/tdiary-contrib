@@ -75,7 +75,7 @@ def iddy_call_api( id, key )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 3 ) do
+	Timeout.timeout( 3 ) do
 		open( request, :proxy => proxy ) {|f| f.read }
 	end
 end

@@ -65,7 +65,7 @@ def recent_tweet_call_api( id )
 
 	proxy = @conf['proxy']
 	proxy = 'http://' + proxy if proxy
-	timeout( 10 ) do
+	Timeout.timeout( 10 ) do
 		open( request, :proxy => proxy ) {|f| f.read }
 	end
 end

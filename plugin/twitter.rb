@@ -12,7 +12,7 @@ require 'rexml/document'
 if /^(latest|day)$/ =~ @mode then
 	add_header_proc do
 		xml = nil
-		timeout( 5 ) do
+		Timeout.timeout( 5 ) do
 			begin
 				xml = open( "http://twitter.com/statuses/user_timeline/#{@conf['twitter.user']}.xml" ){|f| f.read}
 			rescue Exception
