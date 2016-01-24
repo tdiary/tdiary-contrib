@@ -56,11 +56,11 @@ end
 
 add_header_proc do
   <<-"EOS"
-  <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>
+  <script type="text/javascript" src="//b.st-hatena.com/js/bookmark_button_wo_al.js" charset="utf-8" async="async"></script>
   <style type="text/css">iframe.hatena-bookmark-button-frame {margin-bottom: -7px; }</style>
-  <script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
+  <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
   <style type="text/css">iframe.twitter-share-button.twitter-count-horizontal {margin-bottom: -6px; }</style>
-  <script src="https://connect.facebook.net/#{@section_footer2_locale}/all.js"></script>
+  <script src="//connect.facebook.net/#{@section_footer2_locale}/all.js"></script>
   <script>
   FB.init({
     appId  : '',
@@ -70,7 +70,7 @@ add_header_proc do
   });
   </script>
   <style type="text/css">iframe.fb_ltr {margin-bottom: -2px; margin-right: 4px;}</style>
-  <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+  <script type="text/javascript" src="//apis.google.com/js/plusone.js">
   {lang: '#{@section_footer2_locale}'}
   </script>
   <style type="text/css">.tags > div > iframe {margin-bottom: -6px !important; }</style>
@@ -171,7 +171,7 @@ def add_delicious( date, index )
 end
 
 def add_hatena( date, index )
-       %Q!<a href="http://b.hatena.ne.jp/entry/#{permalink( date, index )}" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard"><img src="https://b.st-hatena.com/images/entry-button/button-only.gif" width="20" height="20" style="border: none;" /></a> | !
+       %Q!<a href="http://b.hatena.ne.jp/entry/#{permalink( date, index )}" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard"><img src="//b.st-hatena.com/images/entry-button/button-only.gif" width="20" height="20" style="border: none;" /></a> | !
 end
 
 def add_facebook(date, index)
