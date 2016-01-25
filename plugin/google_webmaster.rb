@@ -16,7 +16,7 @@ add_conf_proc('Google Webmaster', 'Google ウェブマスターツール', 'etc'
   <<-HTML
   <h3>Google ウェブマスターツールの検証コード</h3>
   <p>
-  <input name='google_webmaster.verification'/>
+  <input name='google_webmaster.verification' value="#{h @conf['google_webmaster.verification']}" />
   </p>
   HTML
 end
