@@ -31,7 +31,11 @@ def ohmsha_estore( id, doc = nil )
 		return result
 	end
 
-	html = open("https://estore.ohmsha.co.jp#{domain}/titles/#{id}", &:read)
+	html = ''
+	begin
+		open("https://estore.ohmsha.co.jp/titles/#{id}"){|r|html = r.read}
+	rescue SecurityError # avoid error on unlink
+	end
 	info = JSON.parse(html.scan(%r|<script type='application/ld\+json'>(.*?)</script>|m).flatten[0])
 
 	result = <<-EOS
