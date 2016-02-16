@@ -20,7 +20,7 @@ end
 
 def youtube_custom( video_id, size = [416,337] )
   <<-TAG
-  <div  class="youtube-player-wrapper">
+  <div class="youtube-player-wrapper">
   <object width="#{size[0]}" height="#{size[1]}">
   <param name="movie" value="//www.youtube.com/cp/#{video_id}"></param>
   <embed src="//www.youtube.com/cp/#{video_id}" type="application/x-shockwave-flash" width="#{size[0]}" height="#{size[1]}"></embed>
