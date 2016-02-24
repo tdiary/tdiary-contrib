@@ -5,7 +5,7 @@ describe "youtube plugin" do
 	DUMMY_YOUTUBE_VIDEO_ID = 1234567890
 
   {
-    'Mozilla' => %|\t\t<iframe class="youtube-player" type="text/html" width="425" height="350" src="//www.youtube.com/embed/#{DUMMY_YOUTUBE_VIDEO_ID}" frameborder="0">\n\t\t</iframe>\n|
+    'Mozilla' => %|\t\t<div class="youtube-player-wrapper">\n\t\t<iframe class="youtube-player" type="text/html" width="425" height="350" src="//www.youtube.com/embed/#{DUMMY_YOUTUBE_VIDEO_ID}" frameborder="0">\n\t\t</iframe>\n\t\t</div>\n|
   }.each do |k,v|
     it 'should render object tag in :user_agent' do
       plugin = fake_plugin(:youtube)
