@@ -3,8 +3,8 @@
 if /\A(?:latest|day|month|nyear)\z/ =~ @mode then
 	add_header_proc do
 		<<-HTML
-		<link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet">
-		<script type="text/javascript" src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+		<link href="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet">
+		<script type="text/javascript" src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 		<script type="text/javascript"><!--
 			if(window.addEventListener){
 				window.addEventListener("load", prettyPrint, false);

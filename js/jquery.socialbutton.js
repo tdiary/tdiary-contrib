@@ -272,7 +272,7 @@ $.fn.socialbutton = function(service, options) {
 			title: document.title
 		},
 		hatena_oldstyle: {
-			button: 'http://d.hatena.ne.jp/images/b_append.gif',
+			button: 'https://d.hatena.ne.jp/images/b_append.gif',
 			url: document.URL,
 			height: 13,
 			padding: 7
@@ -545,7 +545,7 @@ function socialbutton_twitter(target, options, defaults, index, max_index)
 	$(target).html(tag);
 
 	if (index == max_index) {
-		$('body').append('<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>');
+		$('body').append('<script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>');
 	}
 }
 
@@ -667,15 +667,15 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 	title = htmlspecialchars(title);
 
 	var attr = merge_attributes({
-		'href': 'http://b.hatena.ne.jp/entry/' + url,
+		'href': 'https://b.hatena.ne.jp/entry/' + url,
 		'class': 'hatena-bookmark-button',
 		'data-hatena-bookmark-title': title,
 		'data-hatena-bookmark-layout': layout,
 		'title': 'このエントリーをはてなブックマークに追加'
 	});
 
-	var tag = '<a' + attr + '><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>'
-			+ '<script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
+	var tag = '<a' + attr + '><img src="https://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>'
+			+ '<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
 
 	$(target).html(tag);
 }
@@ -691,8 +691,8 @@ function socialbutton_hatena_oldstyle(target, options, defaults, index, max_inde
 	url = htmlspecialchars(url);
 
 	var tag = '<span style="font-size: ' + height + 'px; line-height: 100%; ">'
-			+ '<span style="padding-right: ' + padding + 'px"><a href="http://b.hatena.ne.jp/entry/add/' + url + '" target="_blank"><img src="' + button + '" style="border: none; vertical-align: text-bottom" /></a></span>'
-			+ '<a href="http://b.hatena.ne.jp/entry/' + url + '" target="_blank"><img src="http://b.hatena.ne.jp/entry/image/' + url + '" style="border: none; vertical-align: text-bottom" /></a>'
+			+ '<span style="padding-right: ' + padding + 'px"><a href="https://b.hatena.ne.jp/entry/add/' + url + '" target="_blank"><img src="' + button + '" style="border: none; vertical-align: text-bottom" /></a></span>'
+			+ '<a href="https://b.hatena.ne.jp/entry/' + url + '" target="_blank"><img src="https://b.hatena.ne.jp/entry/image/' + url + '" style="border: none; vertical-align: text-bottom" /></a>'
 			+ '</span>';
 
 	$(target).html(tag);
