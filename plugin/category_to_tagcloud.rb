@@ -69,20 +69,24 @@ def tag_list limit = nil
 	return '' if bot?
 	return '' unless category_enable?
 
-	init_category_to_tagcloud
-	cache = @conf['category_to_tagcloud.cache']
-	@limit = limit
+	begin
+		init_category_to_tagcloud
+		cache = @conf['category_to_tagcloud.cache']
+		@limit = limit
 
-	PStore.new(cache).transaction(read_only=true) do |db|
-		break unless db.root?('tagcloud') or db.root?('last_update')
-		break if Time.now.strftime('%Y%m%d').to_i > db['last_update']
-		@counts = db['tagcloud'][0]
-		@urls = db['tagcloud'][1]
-		@elapsed_times = db['tagcloud'][2]
+		PStore.new(cache).transaction(read_only=true) do |db|
+			break unless db.root?('tagcloud') or db.root?('last_update')
+			break if Time.now.strftime('%Y%m%d').to_i > db['last_update']
+			@counts = db['tagcloud'][0]
+			@urls = db['tagcloud'][1]
+			@elapsed_times = db['tagcloud'][2]
+		end
+
+		gen_tag_list if @urls.empty?
+		print_html
+	rescue TypeError
+		'<p class="message">category plugin does not support category_to_tagcloud plugin. use category_legacy plugin instead of categoty plugin.</p>'
 	end
-
-	gen_tag_list if @urls.empty?
-	print_html
 end
 
 def styleclass diff
