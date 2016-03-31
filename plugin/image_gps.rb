@@ -75,8 +75,6 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
 
-  google = "//maps.google.co.jp"
-
   if exif
     #GPS Info
     begin
