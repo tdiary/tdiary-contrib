@@ -68,14 +68,12 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
   google_maps_api_key = @conf['image_gps.google_maps_api_key']
   google_maps_api_key = '' if google_maps_api_key.nil?
   if (@conf['image_gps.map_link_url'].nil? || @conf['image_gps.map_link_url'].empty?)
-    map_link_url = '"http://maps.google.co.jp/maps?q=#{lat},#{lon}"'
+    map_link_url = '"//maps.google.co.jp/maps?q=#{lat},#{lon}"'
   else
     map_link_url = '"'+@conf['image_gps.map_link_url']+'"'
   end
 
   exif = ExifParser.new("#{@image_dir}/#{image}".untaint) rescue nil
-
-  google = "http://maps.google.co.jp"
 
   if exif
     #GPS Info
@@ -103,7 +101,7 @@ def image( id, alt = 'image', thumbnail = nil, size = nil, place = 'photo' )
     }
     unless lat.nil?
       unless google_maps_api_key == ''
-        map_img = %Q["http://maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
+        map_img = %Q["//maps.googleapis.com/maps/api/staticmap?format=gif&amp;]
         map_img += %Q[center=#{lat},#{lon}&amp;zoom=14&amp;size=200x200&amp;markers=#{lat},#{lon}&amp;]
         map_img += %Q[key=#{google_maps_api_key}&amp;sensor=false"]
       end
