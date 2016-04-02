@@ -12,7 +12,7 @@
 return if feed?
 
 if /\A(?:form|preview|append|edit|update)\z/ =~ @mode
-   enable_js('//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js')
+   enable_js('//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
    if @conf.lang == 'ja'
       enable_js('//ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js')
    end
