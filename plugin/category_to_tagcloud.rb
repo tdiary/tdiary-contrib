@@ -14,7 +14,7 @@
 require 'pstore'
 
 def category_enable?
-	!@plugin_files.grep(/\/category\.rb$/).empty?
+	!@plugin_files.grep(/\/category\-legacy\.rb$/).empty?
 end
 
 def add tag, url, count, elapsed_time
