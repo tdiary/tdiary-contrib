@@ -62,7 +62,7 @@ $(function() {
 		}
 	}
 
-	$(window).width() <= 360) {
+	if ($(window).width() <= 360) {
 		$(document).ready(function() {
 			$("img.image-ex").bind("load", function() {
 				resizeImage(this);
