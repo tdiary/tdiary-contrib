@@ -58,19 +58,36 @@ def flickr_photo_info(photo_id, size)
   photo = {}
 
   begin
-    flickr_open('flickr.photos.getInfo', photo_id) {|f|
-      res = REXML::Document.new(f)
-      photo[:page]  = res.elements['//rsp/photo/urls/url'].text
-      photo[:title] = res.elements['//rsp/photo/title'].text
-    }
+		flickr_open('flickr.photos.getInfo', photo_id) {|f|
+			if defined?(Oga)
+				res = Oga.parse_xml(f)
+				photo[:page] = res.xpath('/rsp/photo/urls/url').text
+				photo[:title] = res.xpath('/rsp/photo/title').text
+			else
+				res = REXML::Document.new(f)
+				photo[:page]  = res.elements['//rsp/photo/urls/url'].text
+				photo[:title] = res.elements['//rsp/photo/title'].text
+			end
+		}
     flickr_open('flickr.photos.getSizes', photo_id) {|f|
-      res = REXML::Document.new(f)
-      res.elements.each('//rsp/sizes/size') do |s|
-        if s.attributes['label'].downcase == size.downcase
-          photo[:src] = s.attributes['source']
-          photo[:width] = s.attributes['width']
-          photo[:height] = s.attributes['height']
-        end
+			if defined?(Oga)
+				res = Oga.parse_xml(f)
+				res.xpath('//rsp/sizes/size').each do |s|
+					if s.get('label').downcase == size.downcase
+						photo[:src] = s.get('source')
+						photo[:width] = s.get('width')
+						photo[:height] = s.get('height')
+					end
+				end
+			else
+				res = REXML::Document.new(f)
+				res.elements.each('//rsp/sizes/size') do |s|
+					if s.attributes['label'].downcase == size.downcase
+						photo[:src] = s.attributes['source']
+						photo[:width] = s.attributes['width']
+						photo[:height] = s.attributes['height']
+					end
+				end
       end
     }
   rescue Exception => e
