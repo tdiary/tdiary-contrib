@@ -27,10 +27,10 @@ require 'rexml/document'
 @conf['flickr.default_size'] ||= 'medium'
 
 if /\A(form|edit|preview|showcomment)\z/ === @mode then
-	enable_js('flickr.js')
-	add_js_setting('$tDiary.plugin.flickr')
-	add_js_setting('$tDiary.plugin.flickr.apiKey', %Q|'#{@conf['flickr.apikey']}'|)
-	add_js_setting('$tDiary.plugin.flickr.userId', %Q|'#{@conf['flickr.user_id']}'|)
+  enable_js('flickr.js')
+  add_js_setting('$tDiary.plugin.flickr')
+  add_js_setting('$tDiary.plugin.flickr.apiKey', %Q|'#{@conf['flickr.apikey']}'|)
+  add_js_setting('$tDiary.plugin.flickr.userId', %Q|'#{@conf['flickr.user_id']}'|)
 end
 
 def flickr(photo_id, size = nil, place = 'flickr')
@@ -59,17 +59,34 @@ def flickr_photo_info(photo_id, size)
 
   begin
     flickr_open('flickr.photos.getInfo', photo_id) {|f|
-      res = REXML::Document.new(f)
-      photo[:page]  = res.elements['//rsp/photo/urls/url'].text
-      photo[:title] = res.elements['//rsp/photo/title'].text
+      if defined?(Oga)
+        res = Oga.parse_xml(f)
+        photo[:page] = res.xpath('/rsp/photo/urls/url').text
+        photo[:title] = res.xpath('/rsp/photo/title').text
+      else
+        res = REXML::Document.new(f)
+        photo[:page]  = res.elements['//rsp/photo/urls/url'].text
+        photo[:title] = res.elements['//rsp/photo/title'].text
+      end
     }
     flickr_open('flickr.photos.getSizes', photo_id) {|f|
-      res = REXML::Document.new(f)
-      res.elements.each('//rsp/sizes/size') do |s|
-        if s.attributes['label'].downcase == size.downcase
-          photo[:src] = s.attributes['source']
-          photo[:width] = s.attributes['width']
-          photo[:height] = s.attributes['height']
+      if defined?(Oga)
+        res = Oga.parse_xml(f)
+        res.xpath('//rsp/sizes/size').each do |s|
+          if s.get('label').downcase == size.downcase
+            photo[:src] = s.get('source')
+            photo[:width] = s.get('width')
+            photo[:height] = s.get('height')
+          end
+        end
+      else
+        res = REXML::Document.new(f)
+        res.elements.each('//rsp/sizes/size') do |s|
+          if s.attributes['label'].downcase == size.downcase
+            photo[:src] = s.attributes['source']
+            photo[:width] = s.attributes['width']
+            photo[:height] = s.attributes['height']
+          end
         end
       end
     }
@@ -124,11 +141,11 @@ add_edit_proc do |date|
         <option value="40">40</option>
         <option value="50">50</option>
       </select>
-		件
+    件
       <input id="flickr_search" type="button" value="Get flickr photos"></input>
     </div>
     <div id="flickr_photo_size">
-	   Photo size:
+     Photo size:
       <input type="radio" id="flickr_photo_size_square" name="flickr_photo_size" value="square">
       <label for="flickr_photo_size_square">square</label>
       <input type="radio" id="flickr_photo_size_thumbnail" name="flickr_photo_size" value="thumbnail">
