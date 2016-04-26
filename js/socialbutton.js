@@ -44,7 +44,7 @@ $(function() {
       return {
         url: url,
         title: title,
-        button: 'standard'
+        button: 'simple-balloon'
       };
     },
 
