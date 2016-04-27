@@ -669,7 +669,7 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 	var attr = merge_attributes({
 		'href': 'https://b.hatena.ne.jp/entry/' + url,
 		'class': 'hatena-bookmark-button',
-		'data-hatena-bookmark-url': 'https://b.hatena.ne.jp/entry/' + url,
+		'data-hatena-bookmark-url': url,
 		'data-hatena-bookmark-title': title,
 		'data-hatena-bookmark-layout': layout,
 		'title': 'このエントリーをはてなブックマークに追加'
