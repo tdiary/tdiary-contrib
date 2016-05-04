@@ -58,7 +58,7 @@ end
 
 add_header_proc do
    if /\A(?:latest|day|month|nyear|preview)\z/ =~ @mode
-      %Q|<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>\n|
+      %Q|<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>\n|
    end
 end
 
