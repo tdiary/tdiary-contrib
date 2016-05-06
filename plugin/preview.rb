@@ -12,8 +12,8 @@
 if /\A(form|edit|preview)\z/ === @mode then
 	enable_js('preview.js')
 	add_js_setting('$tDiary.plugin.preview')
-	add_js_setting('$tDiary.plugin.preview.interval', @conf['preview.interval'])
-	add_js_setting('$tDiary.plugin.preview.minWidth', @conf['preview.min_width'])
+	add_js_setting('$tDiary.plugin.preview.interval', @conf['preview.interval'].to_json)
+	add_js_setting('$tDiary.plugin.preview.minWidth', @conf['preview.min_width'].to_json)
 end
 
 add_conf_proc('preview', @preview_label_conf) do
