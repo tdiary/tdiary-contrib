@@ -6,7 +6,7 @@
  */
 $(function() {
 
-var previewButton = $('input[name="appendpreview"]');
+var previewButton = $('input[name*="preview"]');
 
 $tDiary.plugin.preview = function() {
   previewButton.prop("disabled", true);
@@ -14,14 +14,10 @@ $tDiary.plugin.preview = function() {
     'update.rb',
     $('form.update').serialize() + "&appendpreview=1",
     function(data) {
-      var beforeOffset = $('div.update').offset();
       $('div.autopagerize_page_element').replaceWith(
         $(data).find('div.autopagerize_page_element')
       )
-      var afterOffset = $('div.update').offset();
-      // 自動更新時にスクロール位置を自動調整してみたがカクカクする
-      // window.scrollTo($(window).scrollLeft(),
-      //   $(window).scrollTop() + afterOffset.top - beforeOffset.top);
+      $('div.day').css('flex', '1 1 480px');
       setTimeout($tDiary.plugin.preview, 10000);
     },
     'html'
@@ -33,9 +29,16 @@ $tDiary.plugin.preview = function() {
 
 if ($('div.autopagerize_page_element').length == 0) {
   $('div.update').before(
-    $('<div class="autopagerize_page_element"></div>')
+    '<div class="day autopagerize_page_element">'
   );
 }
+
+$('<div class="preview-container"></div>')
+  .css('display', 'flex')
+  .css('flex-flow', 'row-reverse wrap')
+  .insertAfter('h1')
+  .append($('div.day'));
+$('div.day').css('flex', '1 1 480px');
 
 // プレビューボタンを押した時もajaxで更新するよう設定
 previewButton.click(
@@ -45,6 +48,6 @@ previewButton.click(
   }
 );
 
-setTimeout($tDiary.plugin.preview, 10000);
+$tDiary.plugin.preview();
 
 });
