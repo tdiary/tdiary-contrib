@@ -8,7 +8,7 @@ $(function() {
 
 var previewButton = $('input[name*="preview"]');
 
-$tDiary.plugin.preview = function() {
+$tDiary.plugin.preview.reload = function() {
   previewButton.prop("disabled", true);
   $.post(
     'update.rb',
@@ -16,9 +16,11 @@ $tDiary.plugin.preview = function() {
     function(data) {
       $('div.autopagerize_page_element').replaceWith(
         $(data).find('div.autopagerize_page_element')
-      )
-      $('div.day').css('flex', '1 1 480px');
-      setTimeout($tDiary.plugin.preview, 10000);
+      );
+      $('div.day')
+        .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
+      setTimeout($tDiary.plugin.preview.reload,
+        $tDiary.plugin.preview.interval * 1000);
     },
     'html'
   )
@@ -38,16 +40,17 @@ $('<div class="preview-container"></div>')
   .css('flex-flow', 'row-reverse wrap')
   .insertAfter('h1')
   .append($('div.day'));
-$('div.day').css('flex', '1 1 480px');
+$('div.day')
+  .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
 
 // プレビューボタンを押した時もajaxで更新するよう設定
 previewButton.click(
   function(event) {
     event.preventDefault();
-    $tDiary.plugin.preview();
+    $tDiary.plugin.preview.reload();
   }
 );
 
-$tDiary.plugin.preview();
+$tDiary.plugin.preview.reload();
 
 });
