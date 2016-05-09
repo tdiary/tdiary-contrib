@@ -16,7 +16,7 @@ if /\A(form|edit|preview)\z/ === @mode then
 	add_js_setting('$tDiary.plugin.preview.minWidth', @conf['preview.min_width'].to_json)
 end
 
-add_conf_proc('preview', @preview_label_conf) do
+add_conf_proc('preview', @preview_label_conf, 'update') do
 	if @mode == 'saveconf'
 		@conf['preview.interval'] = @cgi.params['preview.interval'][0].to_i
 		@conf['preview.min_width'] = @cgi.params['preview.min_width'][0].to_i
