@@ -42,6 +42,7 @@ $('<div class="preview-container"></div>')
   .append($('div.day'));
 $('div.day')
   .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
+$("div.whole-content").css('max-width', 'none');
 
 // プレビューボタンを押した時もajaxで更新するよう設定
 previewButton.click(

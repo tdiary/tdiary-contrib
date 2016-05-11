@@ -7,7 +7,7 @@
 #
 
 @conf['preview.interval'] ||= 10
-@conf['preview.min_width'] ||= 960
+@conf['preview.min_width'] ||= 896
 
 if /\A(form|edit|preview)\z/ === @mode then
 	enable_js('preview.js')
