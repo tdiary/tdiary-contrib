@@ -25,11 +25,13 @@ def socialbutton_js_settings
 	add_js_setting('$tDiary.plugin.socialbutton.options', options)
 end
 
-socialbutton_footer = Proc.new { %Q|<div class="socialbuttons"></div>| }
-if respond_to?(:blogkit?) && blogkit?
-	add_body_leave_proc(socialbutton_footer)
-else
-	add_section_leave_proc(socialbutton_footer)
+if @mode =~ /^(latest|day|month|nyear)$/
+	socialbutton_footer = Proc.new { %Q|<div class="socialbuttons"></div>| }
+	if respond_to?(:blogkit?) && blogkit?
+		add_body_leave_proc(socialbutton_footer)
+	else
+		add_section_leave_proc(socialbutton_footer)
+	end
 end
 
 add_conf_proc('socialbutton', @socialbutton_label_conf) do
