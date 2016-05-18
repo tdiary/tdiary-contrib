@@ -19,13 +19,13 @@ $tDiary.plugin.preview.reload = function() {
       );
       $('div.day')
         .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
-      setTimeout($tDiary.plugin.preview.reload,
-        $tDiary.plugin.preview.interval * 1000);
     },
     'html'
   )
   .always(function() {
     previewButton.prop("disabled", false);
+    setTimeout($tDiary.plugin.preview.reload,
+      $tDiary.plugin.preview.interval * 1000);
   });
 }
 
