@@ -15,9 +15,10 @@ $tDiary.plugin.preview.reload = function() {
     'update.rb',
     $('form.update').serialize() + "&appendpreview=1",
     function(data) {
-      $('div.autopagerize_page_element').replaceWith(
-        $(data).find('div.autopagerize_page_element')
-      );
+      var previewContent = $(data).find('div.autopagerize_page_element');
+      if (previewContent.size() != 0) {
+        $('div.autopagerize_page_element').replaceWith(previewContent);
+      }
       $('div.day')
         .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
     },
