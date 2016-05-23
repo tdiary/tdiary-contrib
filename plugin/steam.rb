@@ -17,5 +17,5 @@
 =end
 
 def steam( id )
-   %Q[<iframe src="//store.steampowered.com/widget/#{id}/" frameborder="0" width="646" height="190"></iframe>]
+   %Q[<iframe src="//store.steampowered.com/widget/#{id}/" frameborder="0" width="646" height="190" style="max-width:100%;"></iframe>]
 end
