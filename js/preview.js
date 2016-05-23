@@ -7,6 +7,7 @@
 $(function() {
 
 var previewButton = $('input[name*="preview"]');
+var intervalRate = 1;
 
 $tDiary.plugin.preview.reload = function() {
   previewButton.prop("disabled", true);
@@ -22,10 +23,16 @@ $tDiary.plugin.preview.reload = function() {
     },
     'html'
   )
+  .done(function() {
+    intervalRate = 1;
+  })
+  .fail(function() {
+    intervalRate *= 2;
+  })
   .always(function() {
     previewButton.prop("disabled", false);
     setTimeout($tDiary.plugin.preview.reload,
-      $tDiary.plugin.preview.interval * 1000);
+      $tDiary.plugin.preview.interval * 1000 * intervalRate);
   });
 }
 
