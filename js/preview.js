@@ -18,17 +18,21 @@ $tDiary.plugin.preview.reload = function() {
       var previewContent = $(data).find('div.autopagerize_page_element');
       if (previewContent.size() != 0) {
         $('div.autopagerize_page_element').replaceWith(previewContent);
+        intervalRate = 1;
+      } else {
+        intervalRate *= 2;
+        console.info('[preview.js] update failed, the next update will be after '
+          + $tDiary.plugin.preview.interval * intervalRate + 'sec.');
       }
       $('div.day')
         .css('flex', "1 1 " + $tDiary.plugin.preview.minWidth / 2 + "px");
     },
     'html'
   )
-  .done(function() {
-    intervalRate = 1;
-  })
   .fail(function() {
     intervalRate *= 2;
+    console.info('[preview.js] update failed, the next update will be after '
+      + $tDiary.plugin.preview.interval * intervalRate + 'sec.');
   })
   .always(function() {
     previewButton.prop("disabled", false);
