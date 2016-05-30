@@ -18,7 +18,7 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
     <dt>画像ID</dt>
       <dd>それぞれの写真に一意に付けられる番号です。<br>画像IDは Flickr で画像を表示したときの URL に含まれています。</dd>
     <dt>画像サイズ</dt>
-      <dd>表示する画像の大きさを square, thumbnail, small, medium, large から指定します。<br>この値は省略できます。省略すると、画像は設定画面（この画面）で指定したサイズで表示されます。</dd>
+      <dd>表示する画像の大きさを square, large square, thumbnail, small, small 320, medium, medium 640, medium 800, large から指定します。<br>この値は省略できます。省略すると、画像は設定画面（この画面）で指定したサイズで表示されます。</dd>
   </dl>
 
   <h3>標準の画像サイズ</h3>
@@ -26,7 +26,7 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
   <p>
   <select name="flickr.default_size">
   _HTML
-  %w(square thumbnail small medium large).each do |size|
+  %w(square large\ square thumbnail small small\ 320 medium medium\ 640 medium\ 800 large).each do |size|
     selected = (size == @conf['flickr.default_size']) ? 'selected' : ''
     r << %Q|<option value="#{size}" #{selected}>#{size}</option>|
   end
