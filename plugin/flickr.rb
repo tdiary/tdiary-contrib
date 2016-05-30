@@ -148,14 +148,20 @@ add_edit_proc do |date|
      Photo size:
       <input type="radio" id="flickr_photo_size_square" name="flickr_photo_size" value="square">
       <label for="flickr_photo_size_square">square</label>
+      <input type="radio" id="flickr_photo_size_large_square" name="flickr_photo_size" value="large square">
+      <label for="flickr_photo_size_large_square">large square</label>
       <input type="radio" id="flickr_photo_size_thumbnail" name="flickr_photo_size" value="thumbnail">
       <label for="flickr_photo_size_thumbnail">thumbnail</label>
       <input type="radio" id="flickr_photo_size_small" name="flickr_photo_size" value="small">
       <label for="flickr_photo_size_small">small</label>
+      <input type="radio" id="flickr_photo_size_small320" name="flickr_photo_size" value="small 320">
+      <label for="flickr_photo_size_small320">small 320</label>
       <input type="radio" id="flickr_photo_size_medium" name="flickr_photo_size" value="medium" checked="true">
       <label for="flickr_photo_size_medium">medium</label>
       <input type="radio" id="flickr_photo_size_medium640" name="flickr_photo_size" value="medium 640">
       <label for="flickr_photo_size_medium640">medium 640</label>
+      <input type="radio" id="flickr_photo_size_medium800" name="flickr_photo_size" value="medium 800">
+      <label for="flickr_photo_size_medium800">medium 800</label>
       <input type="radio" id="flickr_photo_size_large" name="flickr_photo_size" value="large">
       <label for="flickr_photo_size_large">large</label>
     </div>
