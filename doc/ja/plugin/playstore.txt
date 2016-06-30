@@ -7,7 +7,10 @@ GooglePlayのアプリ情報の表示及びリンクの生成を行います。
 ・market_botの導入
 GooglePlayのパーサとして、market_botを使用しています。
 通常は以下のコマンドで導入できます。
-#gem install market_bot
+#gem install market_bot -v 1.0.4
+
+Rack環境の場合、Gemfile.localに以下を記述し、bundle installを実行してください。
+gem 'market_bot','=1.0.4'
 
 ・Pluginのインストール
 playstore.rbを適切な場所に配置してください。多言語用リソースは存在しません。
