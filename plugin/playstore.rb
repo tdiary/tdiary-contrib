@@ -30,7 +30,6 @@ class PlayStore < MarketBot::Play::App
    end
 
    def load(path)
-      html = nil
       File.open(path,"rb"){ |f|
          begin
             html = Marshal.restore(f)
@@ -40,6 +39,7 @@ class PlayStore < MarketBot::Play::App
       }
       unless html.nil?
          result = PlayStore.parse(html)
+         response_handler(html)
       end
       return html
    end
@@ -76,7 +76,7 @@ def playstore_main(app_id)
       return :invalid
    end
 
-   app = PlayStore.new(app_id,lang:'JA')
+   app = PlayStore.new(app_id,lang:'ja')
    if playstore_load_cache(app).nil?
       begin
          app.update
