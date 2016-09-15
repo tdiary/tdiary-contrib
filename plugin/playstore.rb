@@ -18,7 +18,7 @@ end
 
 require 'date'
 
-class PlayStore < MarketBot::Android::App
+class PlayStore < MarketBot::Play::App
    def initialize(app_id,option={})
       super(app_id,option)
    end
@@ -30,7 +30,6 @@ class PlayStore < MarketBot::Android::App
    end
 
    def load(path)
-      html = nil
       File.open(path,"rb"){ |f|
          begin
             html = Marshal.restore(f)
@@ -40,7 +39,7 @@ class PlayStore < MarketBot::Android::App
       }
       unless html.nil?
          result = PlayStore.parse(html)
-         update_callback(result)
+         response_handler(html)
       end
       return html
    end
@@ -52,7 +51,8 @@ end
 
 
 def playstore_load_cache(app)
-   path="#{@cache_path}/playstore/#{app.app_id}"
+   return nil
+   path="#{@cache_path}/playstore/#{app.package}"
    begin
       stat = File::Stat.new(path)
    rescue Errno::ENOENT
@@ -64,7 +64,7 @@ def playstore_load_cache(app)
 end
 
 def playstore_save_cache(app)
-   path="#{@cache_path}/playstore/#{app.app_id}"
+   path="#{@cache_path}/playstore/#{app.package}"
    dir = File.dirname(path)
    Dir.mkdir(dir) unless File.directory?(dir)
 
@@ -76,7 +76,7 @@ def playstore_main(app_id)
       return :invalid
    end
 
-   app = PlayStore.new(app_id)
+   app = PlayStore.new(app_id,lang:'ja')
    if playstore_load_cache(app).nil?
       begin
          app.update
@@ -87,7 +87,7 @@ def playstore_main(app_id)
    else
       save = false
    end
-   if app.nil? || app.error
+   if app.nil?
       return :notfound
    else
       playstore_save_cache(app) if save
@@ -109,14 +109,14 @@ def playstore(app_id)
    else
       <<-HTML
          <div class="playstore-frame">
-            <a href="#{app.market_url}">
-               <img class="playstore-icon" src="#{app.banner_icon_url}" title="#{app.title}" >
+            <a href="#{app.store_url}">
+               <img class="playstore-icon" src="#{app.cover_image_url}" title="#{app.title}" >
             </a>
             <ul class="playstore-detail">
-            <li><a href="#{app.market_url}">#{app.title}</a></li>
+            <li><a href="#{app.store_url}">#{app.title}</a></li>
             <li>カテゴリ:#{app.category}</li>
             <li>価格:#{app.price.eql?("0")?"無料":app.price}</li>
-            <li><a href="#{app.market_url}">GooglePlayで詳細をみる</a></li>
+            <li><a href="#{app.store_url}">GooglePlayで詳細をみる</a></li>
             </ul>
          </div>
       HTML
