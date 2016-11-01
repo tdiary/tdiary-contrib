@@ -131,7 +131,7 @@ def playstore_text(app_id)
    when :notfound
       "<em>#{app_id} was not found</em>"
    else
-      %Q[<a href="#{app.market_url}">#{app.title}</a>]
+      %Q[<a href="#{app.store_url}">#{app.title}</a>]
    end
 end
 
