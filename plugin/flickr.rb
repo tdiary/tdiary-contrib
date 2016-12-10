@@ -43,7 +43,7 @@ def flickr(photo_id, size = nil, place = 'flickr')
     return '[ERROR] flickr.rb: failed to get photo.'
   end
 
-  %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place} photo"></a>|
+  %Q|<a href="#{photo[:page]}" class="flickr"><img title="#{photo[:title]}" alt="#{photo[:title]}" src="#{photo[:src]}" class="#{place} photo" height="#{photo[:height]}" width="#{photo[:width]}"></a>|
 end
 
 def flickr_left(photo_id, size = nil)
