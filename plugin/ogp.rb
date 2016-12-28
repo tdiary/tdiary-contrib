@@ -13,7 +13,7 @@ end
 
 def ogp_image(html)
 	images = html.scan(/<img.*?src="(.*?)"/)
-	if images
+	if !images.empty?
 		images.first[0]
 	else
 		@conf.banner
