@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tdiary-contrib (5.0.3)
+    tdiary-contrib (5.0.4)
       ruby-pushbullet
       tdiary
 
@@ -100,4 +100,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.3
+   1.14.6
