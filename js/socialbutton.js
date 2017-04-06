@@ -92,7 +92,7 @@ $(function() {
         return bottom > $(this).offset().top;
       })
       .filter(function() {
-        return $(this).find('.socialbutton').size() == 0
+        return $(this).find('.socialbutton').length == 0
       })
       .each(function() {
         var anchor = $(this).find('h3 a');
@@ -100,7 +100,7 @@ $(function() {
           var link = $(this).children('h2').find('a:first').get(0);
           var url = link ? link.href : document.URL;
           var title = $(this).children('h2').find('.title').text();
-        } else if (anchor.size() == 0) {
+        } else if (anchor.length == 0) {
           // The section may not have an anchor on etdiary style.
           // https://github.com/tdiary/tdiary-contrib/issues/59
           var url = ($(this).parents('.day').find('h2 a:first').get(0)||'').href;

@@ -293,7 +293,7 @@ $.fn.socialbutton = function(service, options) {
 		}
 	};
 
-	var max_index = this.size() - 1;
+	var max_index = this.length - 1;
 
 	return this.each(function(index) {
 
