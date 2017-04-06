@@ -129,7 +129,7 @@ $(function() {
     });
   }
 
-  $(window).bind('scroll', function(event) {
+  $(window).on('scroll', function(event) {
     socialbutton(document);
   });
 

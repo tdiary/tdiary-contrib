@@ -88,7 +88,7 @@ $( function() {
 	};
 
 	// for AutoPagerize
-	$(window).bind('AutoPagerize_DOMNodeInserted', function(event) {
+	$(window).on('AutoPagerize_DOMNodeInserted', function(event) {
 		appstore(event.target);
 	});
 	
