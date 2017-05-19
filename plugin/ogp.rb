@@ -20,16 +20,21 @@ def ogp_image(html)
 	end
 end
 
-add_header_proc do
+if defined? :ogp_tag && !defined? :ogp_tag_org
+	alias :ogp_tag_org :ogp_tag
+end
+
+def ogp_tag
+	ogp = ogp_tag_org || ''
 	headers = {
-		'og:title' => title_tag.match(/>([^<]+)</).to_a[1],
-		'og:site_name' => @conf.html_title,
-		'og:author' => @conf.author_name,
 		'fb:app_id' => @conf['ogp.facebook.app_id'],
 		'fb:admins' => @conf['ogp.facebook.admins']
 	}
 
 	if @mode == 'day'
+		# remove original og:image generated at 00default.rb
+		ogp.gsub!(/<meta property="og:image"[^>]+>\n/, '')
+
 		diary = @diaries[@date.strftime('%Y%m%d')]
 		if diary
 			sections = diary.instance_variable_get(:@sections)
@@ -39,15 +44,10 @@ add_header_proc do
 
 			headers['og:description'] = ogp_description(section_html)
 			headers['og:image'] = ogp_image(section_html)
-			headers['og:type'] = 'article'
 		end
-	else
-		headers['og:description'] = @conf.description
-		headers['og:image'] = @conf.banner
-		headers['og:type'] = 'website'
 	end
 
-	headers.select {|key, val|
+	ogp + "\n" + headers.select {|key, val|
 		val && !val.empty?
 	}.map {|key, val|
 		%Q|<meta property="#{key}" content="#{CGI::escapeHTML(val)}">|
