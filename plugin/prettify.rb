@@ -3,15 +3,21 @@
 if /\A(?:latest|day|month|nyear)\z/ =~ @mode then
 	add_header_proc do
 		<<-HTML
-		<link href="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet">
-		<script type="text/javascript" src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+		<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 		<script type="text/javascript"><!--
+			var initPrettyPrint = function() {
+				var pres = document.querySelectorAll("div.body > div.section > pre");
+				Array.prototype.slice.call(pres).forEach(function(pre) {
+					pre.setAttribute("class", "prettyprint");
+				});
+				PR.prettyPrint();
+			};
 			if(window.addEventListener){
-				window.addEventListener("load", prettyPrint, false);
+				window.addEventListener("load", initPrettyPrint, false);
 			}else if(window.attachEvent){
-				window.attachEvent("onload", prettyPrint);
+				window.attachEvent("onload", initPrettyPrint);
 			}else{
-				window.onload=prettyPrint;
+				window.onload=initPrettyPrint;
 			}
 		// --></script>
 		HTML
