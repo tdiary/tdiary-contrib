@@ -5,11 +5,6 @@
 # Distributed under the GPL
 #
 
-@conf['google_photos.api_key'] = nil
-@conf['google_photos.client_id'] = nil
-@conf['google_photos.api_key'] ||= 'AIzaSyCJIwIQMND58yVOZ8oeemCcMXYl6YU0jMQ'
-@conf['google_photos.client_id'] ||= '797614784971-a0lhq52knkcgber5imvfn8gcgf904tks.apps.googleusercontent.com'
-
 def google_photos(src, width, height, alt="photo", place="photo")
 	%Q|<img title="#{alt}" width="#{width}" height="#{height}" alt="#{alt}" src="#{src}" class="#{place} google">|
 end
