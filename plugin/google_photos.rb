@@ -43,9 +43,25 @@ add_conf_proc('google_photos', 'Googleフォト') do
   end
 
   r = <<-_HTML
-  <h3>APIキー</h3>
-  <p><input type="text" name="google_photos.api_key" size="100" value="#{@conf['google_photos.api_key']}"></p>
-  <h3>認証用クライアントID</h3>
-  <p><input type="text" name="google_photos.client_id" size="100" value="#{@conf['google_photos.client_id']}"></p>
+	<h3>概要</h3>
+	<p>Googleフォトの写真を日記に表示します。</p>
+	<h3>機能</h3>
+	<ul>
+		<li>Googleフォトの写真を選択して日記に貼り付ける</li>
+		<li>PC上の写真をGoogleフォトへアップロードする</li>
+	</ul>
+	<h3>制約事項</h3>
+	<ul>
+		<li>サムネイルを使用しているため、サイズが512pxまでしか表示できません</li>
+	</ul>
+	<h3>使い方</h3>
+	<p>
+		このプラグインを使うためには、Google Developers ConsoleからAPIキーと認証用クライアントIDを取得する必要があります。
+		手順は<a href="https://www.evernote.com/shard/s18/sh/7211b9c3-fb75-4af8-aa55-718ff6c81aac/77c3a51871f0f245">Googleフォトプラグインを利用するためのAPIキーとクライアントIDの取得手順</a>を参考にしてください。
+	</p>
+	<h3>APIキー</h3>
+	<p><input type="text" name="google_photos.api_key" size="100" value="#{@conf['google_photos.api_key']}"></p>
+	<h3>認証用クライアントID</h3>
+	<p><input type="text" name="google_photos.client_id" size="100" value="#{@conf['google_photos.client_id']}"></p>
 _HTML
 end
