@@ -33,7 +33,7 @@ def tatsu_zine( id, doc = nil )
 	end
 
 	link = "https://tatsu-zine.com/books/#{id}"
-	doc ||= open( link ).read
+	doc ||= open(link, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE).read
 	title = doc.match(%r|<meta property="og:title" content="(.*)">|).to_a[1]
 	image = doc.match(%r|<meta property="og:image" content="(.*)">|).to_a[1]
 	price = doc.match(%r|span itemprop="price">(.*)</span>|).to_a[1]
