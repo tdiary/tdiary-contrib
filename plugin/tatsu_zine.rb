@@ -32,12 +32,12 @@ def tatsu_zine( id, doc = nil )
 		return result
 	end
 
-	link = "http://tatsu-zine.com/books/#{id}"
+	link = "https://tatsu-zine.com/books/#{id}"
 	doc ||= open( link ).read
 	title = doc.match(%r|<meta property="og:title" content="(.*)">|).to_a[1]
 	image = doc.match(%r|<meta property="og:image" content="(.*)">|).to_a[1]
-	price = doc.match(%r|<meta name="twitter:data2" content="(.*)JPY">|).to_a[1]
-	author = doc.match(%r|<meta name="twitter:data1" content="(.*)">|).to_a[1]
+	price = doc.match(%r|span itemprop="price">(.*)</span>|).to_a[1]
+	author = doc.match(%r|<p itemprop="author" class="author">(.*)</p>|).to_a[1]
 
 	result = <<-EOS
 	<a class="amazon-detail" href="#{h link}"><span class="amazon-detail">
@@ -54,7 +54,8 @@ EOS
 
 	tatsu_zine_cache_set( id, result ) unless @conf.secure
 	result
-rescue
+rescue => e
+	@logger.error(e)
 	link
 end
 
