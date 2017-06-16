@@ -39,7 +39,7 @@ def ogp_tag
 		if diary
 			sections = diary.instance_variable_get(:@sections)
 			section_index = @cgi.params['p'][0] || sections.size
-			section = sections[section_index.to_i - 1].body_to_html
+			section = sections[section_index.to_i - 1]&.body_to_html
 			section_html = apply_plugin(section)
 
 			headers['og:description'] = ogp_description(section_html)
