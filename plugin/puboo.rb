@@ -34,7 +34,7 @@ def puboo( id, doc = nil )
 	end
 
 	link = "http://p.booklog.jp/book/#{id}"
-	doc ||= open( link ).read
+	doc ||= open( link ).read.force_encoding('UTF-8')
 	title = doc.match(%r|<meta property="og:title"\s*content="(.*)"|).to_a[1]
 	image = doc.match(%r|<meta property="og:image"\s*content="(.*)"|).to_a[1]
 	price = doc.match(%r|<th class="th_2">価格</th>.*?<span>(.*?)</span>.*?<br />|m).to_a[1]
@@ -55,7 +55,7 @@ EOS
 
 	puboo_cache_set( id, result ) unless @conf.secure
 	result
-rescue
+rescue 
 	link
 end
 
