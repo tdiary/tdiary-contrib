@@ -114,7 +114,6 @@ module ::Profile
 		# gravatar.com
 		class Gravatar < Base
 			HOST = 'ja.gravatar.com' unless const_defined?(:HOST)
-			p "japanese: #{HOST}"
 			endpoint {|id|
 				hash = Digest::MD5.hexdigest(id.downcase)
 				"https://#{HOST}/#{hash}.json"
@@ -126,7 +125,6 @@ module ::Profile
 			end
 
 			def fetch(endpoint)
-				p endpoint
 				require 'json'
 				Timeout.timeout(5) do
 					begin
