@@ -113,9 +113,10 @@ module ::Profile
 
 		# gravatar.com
 		class Gravatar < Base
+			HOST = 'ja.gravatar.com' unless const_defined?(:HOST)
 			endpoint {|id|
 				hash = Digest::MD5.hexdigest(id.downcase)
-				"https://www.gravatar.com/#{hash}.json"
+				"https://#{HOST}/#{hash}.json"
 			}
 
 			def image
