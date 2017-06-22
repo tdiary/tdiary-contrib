@@ -23,7 +23,7 @@
 require 'net/http'
 require 'timeout'
 
-enable_js( 'nicovideo.js' )
+enable_js('nicovideo.js') unless base_url =~ /\Ahttps:/
 
 def nicovideo_call_api( video_id )
 	uri = "http://ext.nicovideo.jp/api/getthumbinfo/#{video_id}"
@@ -76,6 +76,8 @@ end
 def nicovideo_player( video_id, size = [544,384] )
 	if feed?
 		nicovideo( video_id )
+	elsif base_url =~ /\Ahttps:/
+		nicovideo(video_id)
 	else
 		q = ''
 		if size then
@@ -97,7 +99,7 @@ def nicovideo( video_id, label = nil, link = nil )
 		if feed?
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
-		else
+		elsif base_url !~ /\Ahttps:/
 			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;padding-bottom:4px;">|
 			r << %Q|<a name="player-#{video_id}">|
 			r << nicovideo_player( video_id, [544,384] )
