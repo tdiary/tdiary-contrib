@@ -16,7 +16,7 @@ $( function() {
 	};
 	
 	// for AutoPagerize
-	$(window).bind('AutoPagerize_DOMNodeInserted', function(event) {
+	$(window).on('AutoPagerize_DOMNodeInserted', function(event) {
 		show_and_hide(event.target);
 	});
 	

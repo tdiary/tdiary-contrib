@@ -64,13 +64,13 @@ $(function() {
 
 	if ($(window).width() <= 360) {
 		$(document).ready(function() {
-			$("img.image-ex").bind("load", function() {
+			$("img.image-ex").on("load", function() {
 				resizeImage(this);
 			});
 		});
 
 		// for when images have been cached
-		$(window).bind("load", function() {
+		$(window).on("load", function() {
 			$("img.image-ex").each(function() {
 				resizeImage(this);
 			});
