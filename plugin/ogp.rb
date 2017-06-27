@@ -39,11 +39,14 @@ def ogp_tag
 		if diary
 			sections = diary.instance_variable_get(:@sections)
 			section_index = @cgi.params['p'][0] || sections.size
-			section = sections[section_index.to_i - 1].body_to_html if sections[section_index.to_i - 1]
-			section_html = apply_plugin(section)
+            begin
+				section = sections[section_index.to_i - 1].body_to_html
+				section_html = apply_plugin(section)
 
-			headers['og:description'] = ogp_description(section_html)
-			headers['og:image'] = ogp_image(section_html)
+				headers['og:description'] = ogp_description(section_html)
+				headers['og:image'] = ogp_image(section_html)
+            rescue
+            end
 		end
 	end
 
