@@ -5,15 +5,21 @@
 # Distributed under the GPL
 #
 
-def google_photos(src, width, height, alt="photo", place="photo")
+def google_photos(src, width, height, scale=70, alt="photo", place="photo")
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	%Q|<img title="#{alt}" width="#{width}" height="#{height}" alt="#{alt}" src="#{src}" class="#{place} google">|
 end
 
-def google_photos_left(src, width, height, alt="photo")
+def google_photos_left(src, width, height, scale=70, alt="photo")
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	google_photos(src, width, height, alt, 'left')
 end
 
-def google_photos_right(src, width, height, alt="photo")
+def google_photos_right(src, width, height, scale=70, alt="photo")
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	google_photos(src, width, height, alt, 'right')
 end
 
