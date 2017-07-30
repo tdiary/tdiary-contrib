@@ -5,15 +5,24 @@
 # Distributed under the GPL
 #
 
-def google_photos(src, width, height, alt="photo", place="photo")
+def google_photos(src, width, height, alt="photo", place="photo", scale=nil)
+	scale = scale || @conf['google_photos.scale'] || 100
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	%Q|<img title="#{alt}" width="#{width}" height="#{height}" alt="#{alt}" src="#{src}" class="#{place} google">|
 end
 
-def google_photos_left(src, width, height, alt="photo")
+def google_photos_left(src, width, height, alt="photo", scale=nil)
+	scale = scale || @conf['google_photos.scale'] || 100
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	google_photos(src, width, height, alt, 'left')
 end
 
-def google_photos_right(src, width, height, alt="photo")
+def google_photos_right(src, width, height, alt="photo", scale=nil)
+	scale = scale || @conf['google_photos.scale'] || 100
+	width = width.to_i * (scale.to_f / 100)
+	height = height.to_i * (scale.to_f / 100)
 	google_photos(src, width, height, alt, 'right')
 end
 
@@ -40,6 +49,8 @@ add_conf_proc('google_photos', 'Googleフォト') do
   if @mode == 'saveconf'
     @conf['google_photos.api_key'] = @cgi.params['google_photos.api_key'][0]
     @conf['google_photos.client_id'] = @cgi.params['google_photos.client_id'][0]
+    @conf['google_photos.scale'] = @cgi.params['google_photos.scale'][0]
+    @conf['google_photos.scale'] = 100 if @conf['google_photos.scale'].nil? || @conf['google_photos.scale'].empty?
   end
 
   r = <<-_HTML
@@ -63,5 +74,7 @@ add_conf_proc('google_photos', 'Googleフォト') do
 	<p><input type="text" name="google_photos.api_key" size="100" value="#{@conf['google_photos.api_key']}"></p>
 	<h3>認証用クライアントID</h3>
 	<p><input type="text" name="google_photos.client_id" size="100" value="#{@conf['google_photos.client_id']}"></p>
+	<h3>サムネイルからの縮小率 (単位%。数値1〜100)</h3>
+	<p><input type="text" name="google_photos.scale" size="100" value="#{@conf['google_photos.scale']}"></p>
 _HTML
 end

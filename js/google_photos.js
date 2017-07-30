@@ -48,16 +48,20 @@ $(function() {
       .setDeveloperKey(developerKey)
       .setLocale('ja')
       .setCallback(pickerCallback)
+      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
       .build();
     picker.setVisible(true);
   }
 
   function pickerCallback(data) {
     if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-      var doc = data[google.picker.Response.DOCUMENTS][0];
-      var image = doc.thumbnails[doc.thumbnails.length - 1];
-      var tag = $.makePluginTag("google_photos '" + image.url + "', '" + image.width + "', '" + image.height + "'");
-      $('#body').insertAtCaret(tag);
+      var tag = [];
+      for (var i = 0; i < data[google.picker.Response.DOCUMENTS].length; i++) {
+        var doc = data[google.picker.Response.DOCUMENTS][i];
+        var image = doc.thumbnails[doc.thumbnails.length - 1];
+        tag.push($.makePluginTag("google_photos '" + image.url + "', '" + image.width + "', '" + image.height + "'"));
+      }
+      $('#body').insertAtCaret(tag.join("\n") + "\n");
     }
   }
 });
