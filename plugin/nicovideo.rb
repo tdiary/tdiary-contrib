@@ -73,17 +73,12 @@ def nicovideo_iframe( video_id )
 	%Q|<iframe src="http://www.nicovideo.jp/thumb/#{video_id}" scrolling="no" style="border:1px solid #CCC;" frameborder="0"><a href="http://www.nicovideo.jp/watch/#{video_id}">#{label || 'link for nicovideo'}</a></iframe>\n|
 end
 
-def nicovideo_player( video_id, size = [544,384] )
+def nicovideo_player(video_id, size = [640,360])
 	if feed?
-		nicovideo( video_id )
-	elsif base_url =~ /\Ahttps:/
 		nicovideo(video_id)
 	else
-		q = ''
-		if size then
-			q = "?w=#{h size[0]}&amp;h=#{h size[1]}"
-		end
-		%Q|<script type="text/javascript" src="#{nicovideo_player_path}/thumb_watch/#{video_id}#{q}"></script>|
+		q = size ? "?w=#{h size[0]}&amp;h=#{h size[1]}" : ''
+		%Q|<script type="application/javascript" src="https://embed.nicovideo.jp/watch/#{video_id}/script#{q}"></script>|
 	end
 end
 
@@ -93,16 +88,15 @@ def nicovideo( video_id, label = nil, link = nil )
 		r << %Q|<div id="thumbnail-#{video_id}">|
 		api = nicovideo_call_api( video_id )
 		thumb = @conf.to_native( nicovideo_inline( video_id, api, label, link ), 'UTF-8' )
-		thumb.gsub!( /"INLINE_PLAYER"/, %Q|"#" onclick="return nicovideoPlayer( '#{video_id}' );"| )
 		r << thumb
 		r << '</div>'
 		if feed?
 			r.gsub!( /<a(?:[ \t\n\r][^>]*)?>/, '' )
 			r.gsub!( %r{</a[ \t\n\r]*>}, '' )
-		elsif base_url !~ /\Ahttps:/
+		else
 			r << %Q|<div id="player-#{video_id}" style="display:none;background-color:#000;margin-left:2em;padding-bottom:4px;">|
 			r << %Q|<a name="player-#{video_id}">|
-			r << nicovideo_player( video_id, [544,384] )
+			r << nicovideo_player(video_id, [640,360])
 			r << %Q|</a>|
 			r << %Q|<div class="nicovideo-player-close" style="margin:4px;padding:8px;">|
 			r << %Q|<a href="#" onclick="return nicovideoThumbnail( '#{video_id}' )" style="background-color:black; color:white; margin:2px; padding:8px; border-color:white; border-radius:6px; border-width:2px; border-style:solid; text-decoration:none;">▲CLOSE PLAYER</a>|
