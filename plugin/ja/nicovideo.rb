@@ -5,10 +5,6 @@
 # Distributed under GPL.
 #
 
-def nicovideo_player_path
-	'http://www.nicovideo.jp'
-end
-
 def nicovideo_feed( i )
 	<<-HTML
 		<table border="0" cellpadding="4" cellspacing="0" summary="#{h i[:title]}"><tr valign="top">
