@@ -26,7 +26,7 @@
 # You can distribute this file under the GPL2 or any later version.
 #
 def comment_pushbullet
-	require 'pushbullet'
+	require 'pushbullet_ruby'
 
 	header = (@conf['comment_mail.header'] || '').dup
 	header << ":#{@conf.date_format}" unless /%[a-zA-Z%]/ =~ header
@@ -35,8 +35,9 @@ def comment_pushbullet
 	body = @comment.body.sub( /[\r\n]+\Z/, '' )
 	link = @conf.base_url + anchor(@date.strftime('%Y%m%d')) + '#c' + "%02d"%serial
 
-	Pushbullet.api_token = @conf['comment_pushbullet.access_token']
-	Pushbullet::Contact.me.push_link(title,link,body)
+	client = PushbulletRuby::Client.new(@conf['comment_pushbullet.access_token'])
+	params = {title: title, url: link, body: body}
+	client.push_link(id: client.me, params: params)
 end
 
 add_update_proc do
