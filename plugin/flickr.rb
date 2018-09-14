@@ -129,47 +129,49 @@ def flickr_clear_cache
 end
 
 FLICKER_FORM_PID = 'plugin_flickr_pid'
-add_edit_proc do |date|
-  <<-FORM
-  <div id="flickr_form" style="margin: 1em 0">
-    <div>
-      Flickr: <input type="text" id="flickr_search_text">
-      <select id="flickr_search_count">
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
-        <option value="40">40</option>
-        <option value="50">50</option>
-      </select>
-    件
-      <input id="flickr_search" type="button" value="Get flickr photos"></input>
+if @conf['flickr.input_support']
+  add_edit_proc do |date|
+    <<-FORM
+    <div id="flickr_form" style="margin: 1em 0">
+      <div>
+        Flickr: <input type="text" id="flickr_search_text">
+        <select id="flickr_search_count">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+      件
+        <input id="flickr_search" type="button" value="Get flickr photos"></input>
+      </div>
+      <div id="flickr_photo_size">
+      Photo size:
+        <input type="radio" id="flickr_photo_size_square" name="flickr_photo_size" value="square">
+        <label for="flickr_photo_size_square">square</label>
+        <input type="radio" id="flickr_photo_size_large_square" name="flickr_photo_size" value="large square">
+        <label for="flickr_photo_size_large_square">large square</label>
+        <input type="radio" id="flickr_photo_size_thumbnail" name="flickr_photo_size" value="thumbnail">
+        <label for="flickr_photo_size_thumbnail">thumbnail</label>
+        <input type="radio" id="flickr_photo_size_small" name="flickr_photo_size" value="small">
+        <label for="flickr_photo_size_small">small</label>
+        <input type="radio" id="flickr_photo_size_small320" name="flickr_photo_size" value="small 320">
+        <label for="flickr_photo_size_small320">small 320</label>
+        <input type="radio" id="flickr_photo_size_medium" name="flickr_photo_size" value="medium" checked="true">
+        <label for="flickr_photo_size_medium">medium</label>
+        <input type="radio" id="flickr_photo_size_medium640" name="flickr_photo_size" value="medium 640">
+        <label for="flickr_photo_size_medium640">medium 640</label>
+        <input type="radio" id="flickr_photo_size_medium800" name="flickr_photo_size" value="medium 800">
+        <label for="flickr_photo_size_medium800">medium 800</label>
+        <input type="radio" id="flickr_photo_size_large" name="flickr_photo_size" value="large">
+        <label for="flickr_photo_size_large">large</label>
+      </div>
+      <div id="flickr_photos" style="margin: 1em">
+        <!-- <img src="dummy" height="100" width="100" title="dummy"> -->
+      </div>
     </div>
-    <div id="flickr_photo_size">
-     Photo size:
-      <input type="radio" id="flickr_photo_size_square" name="flickr_photo_size" value="square">
-      <label for="flickr_photo_size_square">square</label>
-      <input type="radio" id="flickr_photo_size_large_square" name="flickr_photo_size" value="large square">
-      <label for="flickr_photo_size_large_square">large square</label>
-      <input type="radio" id="flickr_photo_size_thumbnail" name="flickr_photo_size" value="thumbnail">
-      <label for="flickr_photo_size_thumbnail">thumbnail</label>
-      <input type="radio" id="flickr_photo_size_small" name="flickr_photo_size" value="small">
-      <label for="flickr_photo_size_small">small</label>
-      <input type="radio" id="flickr_photo_size_small320" name="flickr_photo_size" value="small 320">
-      <label for="flickr_photo_size_small320">small 320</label>
-      <input type="radio" id="flickr_photo_size_medium" name="flickr_photo_size" value="medium" checked="true">
-      <label for="flickr_photo_size_medium">medium</label>
-      <input type="radio" id="flickr_photo_size_medium640" name="flickr_photo_size" value="medium 640">
-      <label for="flickr_photo_size_medium640">medium 640</label>
-      <input type="radio" id="flickr_photo_size_medium800" name="flickr_photo_size" value="medium 800">
-      <label for="flickr_photo_size_medium800">medium 800</label>
-      <input type="radio" id="flickr_photo_size_large" name="flickr_photo_size" value="large">
-      <label for="flickr_photo_size_large">large</label>
-    </div>
-    <div id="flickr_photos" style="margin: 1em">
-      <!-- <img src="dummy" height="100" width="100" title="dummy"> -->
-    </div>
-  </div>
-  FORM
+    FORM
+  end
 end
 
 def flickr_slideshow(tag, id = nil)

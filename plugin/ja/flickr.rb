@@ -5,6 +5,7 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
   if @mode == 'saveconf'
     @conf['flickr.default_size'] = @cgi.params['flickr.default_size'][0]
     @conf['flickr.user_id'] = @cgi.params['flickr.user_id'][0]
+    @conf['flickr.input_support'] = !!(@cgi.params['flickr.input_support'][0] == "true")
     if @cgi.params['flickr.clear'][0] == "true"
       flickr_clear_cache
     end
@@ -51,6 +52,12 @@ add_conf_proc('flickr', 'Flickr プラグイン') do
     <li>日記の編集フォームの下に先ほどの写真が表示されます。</li>
     <li>「本文に追加」ボタンを押すと、日記中にこの写真を表示するための記述（プラグイン）が追記されます。</li>
   </ol>
+
+  <h3>編集画面からの入力補助</h3>
+  <p>
+    <input type="checkbox" id="flickr.input_support" name="flickr.input_support" value="true" #{@conf['flickr.input_support'] ? "checked": ""}>
+    <label for="flickr.input_support">写真を一覧から選べるようにする</label>
+  </p>
 
   <h3>キャッシュファイルの削除</h3>
   <p>Flickrプラグインが使用しているキャッシュを削除します。</p>
