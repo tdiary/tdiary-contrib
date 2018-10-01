@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tdiary-contrib (5.0.9)
+    tdiary-contrib (5.0.10)
       pushbullet_ruby
       tdiary
 
