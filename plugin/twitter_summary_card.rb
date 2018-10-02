@@ -21,15 +21,17 @@ def twitter_summary_card_description
 end
 
 add_header_proc do
+  card_type = 'summary'
   image_src = @conf.banner
   if @mode == 'day' && @conf['twitter_summary_card.use_attached_image']
     images = image_list(@date.strftime('%Y%m%d'))
     unless images.empty?
+      card_type = 'summary_large_image'
       image_src = "#{@image_url}/#{images.first}"
     end
   end
   headers = {
-    'twitter:card' => 'summary',
+    'twitter:card' => card_type,
     'twitter:site' => @conf['twitter_summary_card.site'] || @conf['twitter_summary_card.creator'],
     'twitter:creator' => @conf['twitter_summary_card.creator'],
     'twitter:title' => title_tag.match(/>([^<]+)/).to_a[1],
