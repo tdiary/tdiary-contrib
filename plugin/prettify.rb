@@ -3,7 +3,7 @@
 if /\A(?:latest|day|month|nyear)\z/ =~ @mode then
 	add_header_proc do
 		<<-HTML
-		<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify/loader/run_prettify.js"></script>
 		<script type="text/javascript"><!--
 			var initPrettyPrint = function() {
 				var pres = document.querySelectorAll("div.body > div.section > pre");
