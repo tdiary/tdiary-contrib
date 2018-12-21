@@ -56,26 +56,10 @@ $(function() {
       };
     },
 
-    evernote: function(url, title) {
-      return { 
-        url: url,
-        title: title,
-        button: 'article-clipper-jp'
-      };
-    },
-    
-    google_plusone: function(url, title) {
-      return {
-        href: url,
-        size: 'medium',
-        lang: $('html').attr('lang')
-      };
-    },
-
     pinterest: function(url, title) {
       return { 
         url: url,
-		  media: $('p img:first', $('div.section h3 a[name=' + url.substr(-3) + ']').parent().parent()).attr('src'),
+        media: $('p img:first', $('div.section h3 a[name=' + url.substr(-3) + ']').parent().parent()).attr('src'),
         description: title,
         button: 'horizontal',
       };

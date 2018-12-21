@@ -90,37 +90,6 @@
  * });
  *
  *
- * GREE Social Feedback
- * https://developer.gree.co.jp/connect/plugins/sf
- *
- * $('#gree_sf').socialbutton('gree_sf');
- *
- * $('#gree_sf').socialbutton('gree_sf', {
- *     button: 0, // synonym 'type'
- *     url: 'http://itra.jp/',
- *     width: 0, // auto
- *     height: 20
- * });
- *
- *
- * Evernote Site Memory
- * http://www.evernote.com/about/developer/sitememory/
- *
- * $('#evernote').socialbutton('evernote');
- *
- * $('#evernote').socialbutton('evernote', {
- *     button: 'article-clipper',
- *     url: 'http://itra.jp/',
- *     provider_name: 'itra.jp',
- *     suggest_notebook: 'webclip',
- *     content_id: 'element-id-to-clip',
- *     code: 'your-affiliate-code',
- *     title: 'note-title',
- *     suggest_tags: 'comma-separated-tags,up-to-three-tags',
- *     styling: 'full'
- * });
- *
- *
  * Hatena Bookmark
  * http://b.hatena.ne.jp/guide/bbutton
  *
@@ -130,34 +99,6 @@
  *     button: 'standard',
  *     url: 'https://itra.jp/',
  *     title: 'page-title'
- * });
- *
- *
- * Hatena Bookmark (Old Style)
- * http://b.hatena.ne.jp/
- *
- * $('#hatena').socialbutton('hatena_oldstyle');
- *
- * $('#hatena').socialbutton('hatena_oldstyle', {
- *     button: '/path/to/your-icon.png',
- *     url: 'http://itra.jp/',
- *     padding: 10,
- *     height: 15
- * });
- *
- *
- * Google +1 Button
- * http://www.google.com/webmasters/+1/button/
- *
- * $('#google').socialbutton('google_plusone');
- *
- * $('#google').socialbutton('google_plusone', {
- *     button: 'standard', // synonym 'size'
- *     url: 'http://itra.jp', // synonym 'href'
- *     lang: 'ja',
- *     parsetags: 'explicit',
- *     callback: 'some_callback_function',
- *     count: true
  * });
  *
  *
@@ -241,49 +182,10 @@ $.fn.socialbutton = function(service, options) {
 			via: '',
 			related: ''
 		},
-		gree_sf: {
-			button: 0, // 0,1,2,3,4
-			url: document.URL,
-			width: 0, // auto
-			height: 20,
-
-			widths: {
-				type0_16: 58, type0_20: 70, type0_23: 76,
-				type1_16: 58, type1_20: 73, type1_23: 78,
-				type2_16: 58, type2_20: 73, type2_23: 78,
-				type3_16: 49, type3_20: 61, type3_23: 64,
-				type4_16: 16, type4_22: 21, type4_32: 32
-			}
-		},
-		evernote: {
-			button: 'article-clipper', // article-clipper, article-clipper-remember, article-clipper-jp, article-clipper-rus, article-clipper-fr, article-clipper-es, article-clipper-de, article-clipper-vert, site-mem-32, site-mem-36, site-mem-22, site-mem-16
-			url: '', // document.URL
-			provider_name: '', // domain name
-			suggest_notebook: '', // notebook name
-			content_id: '', // element id for clip
-			code: '', // affiliate code
-			title: '',
-			suggest_tags: '',
-			styling: '' // none(text-only), full
-		},
 		hatena: {
 			button: 'standard', // standard, vertical, simple
 			url: document.URL,
 			title: document.title
-		},
-		hatena_oldstyle: {
-			button: 'https://d.hatena.ne.jp/images/b_append.gif',
-			url: document.URL,
-			height: 13,
-			padding: 7
-		},
-		google_plusone: {
-			button: '', // small, standard, medium, tall
-			url: '',
-			lang: '', // en-US
-			parsetags: '', // none(onload), explicit
-			callback: '',
-			count: true // true, false
 		},
 		pinterest: {
 			button: 'horizontal', // horizontal, vertical, none
@@ -318,24 +220,8 @@ $.fn.socialbutton = function(service, options) {
 				socialbutton_twitter(this, options, defaults.twitter, index, max_index);
 				break;
 
-			case 'gree_sf':
-				socialbutton_gree_sf(this, options, defaults.gree_sf, index, max_index);
-				break;
-
-			case 'evernote':
-				socialbutton_evernote(this, options, defaults.evernote, index, max_index);
-				break;
-
 			case 'hatena':
 				socialbutton_hatena(this, options, defaults.hatena, index, max_index);
-				break;
-
-			case 'hatena_oldstyle':
-				socialbutton_hatena_oldstyle(this, options, defaults.hatena_oldstyle, index, max_index);
-				break;
-
-			case 'google_plusone':
-				socialbutton_google_plusone(this, options, defaults.google_plusone, index, max_index);
 				break;
 
 			case 'pinterest':
@@ -549,114 +435,6 @@ function socialbutton_twitter(target, options, defaults, index, max_index)
 	}
 }
 
-function socialbutton_gree_sf(target, options, defaults, index, max_index)
-{
-	var type = options.type || options.button || defaults.button;
-	var url = options.url || defaults.url;
-
-	var width = options.width != undefined ? options.width : defaults.width;
-	var height = options.height != undefined ? options.height : defaults.height;
-
-	if (options.url) {
-		url = decodeURIComponent(url);
-	}
-	url = url_encode_rfc3986(url);
-
-	switch (type) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-			if (height != 16 && height != 20 && height != 23) {
-				height = 20;
-			}
-			break;
-
-		case 4:
-			if (height != 16 && height != 22 && height != 32) {
-				height = 22;
-			}
-			break;
-
-		default:
-			type = 0;
-			width = 0;
-			height = 20;
-			break;
-	}
-
-	if (width == 0) {
-		width = defaults.widths['type' + type + '_' + height];
-	}
-
-	var params = merge_parameters({
-		'url': url,
-		'type': String(type),
-		'height': height
-	});
-
-	var tag = '<iframe src="http://share.gree.jp/share?' + params + '" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" style="border:none; overflow:hidden; width:' + width + 'px; height:' + height + 'px;" allowTransparency="true"></iframe>';
-
-	$(target).html(tag);
-}
-
-function socialbutton_evernote(target, options, defaults, index, max_index)
-{
-	var button = options.button || defaults.button;
-	var url = options.url || defaults.url;
-
-	var provider_name = options.provider_name || defaults.provider_name;
-	var suggest_notebook = options.suggest_notebook || defaults.suggest_notebook;
-	var content_id = options.content_id || defaults.content_id;
-	var code = options.code || defaults.code;
-	var title = options.title || defaults.title;
-	var suggest_tags = options.suggest_tags || defaults.suggest_tags;
-	var styling = options.styling || defaults.styling;
-
-	if (button == 'article-clipper' ||
-		button == 'article-clipper-remember' ||
-		button == 'article-clipper-jp' ||
-		button == 'article-clipper-rus' ||
-		button == 'article-clipper-fr' ||
-		button == 'article-clipper-es' ||
-		button == 'article-clipper-de' ||
-		button == 'article-clipper-vert' ||
-		button == 'site-mem-32' ||
-		button == 'site-mem-36' ||
-		button == 'site-mem-22' ||
-		button == 'site-mem-16'
-		) {
-			button = 'http://static.evernote.com/' + button + '.png';
-	}
-
-	var clipoptions = {
-		'url': url,
-		'providerName': provider_name,
-		'suggestNotebook': suggest_notebook,
-		'contentId': content_id,
-		'code': code,
-		'title': title,
-		'suggestTags': suggest_tags,
-		'styling': styling
-	};
-
-	if (index == 0) {
-		$('body').append('<script type="text/javascript" src="http://static.evernote.com/noteit.js"></script>');
-	}
-
-	var tag = $(document.createElement('a'))
-		.attr({href: '#'})
-		.click(function(){
-			if (Evernote) {
-				Evernote.doClip(clipoptions);
-			}
-			return false;
-		})
-		.append('<img src="' + button + '" alt="Clip to Evernote" style="border: none" />');
-
-	$(target).html(tag);
-}
-
 function socialbutton_hatena(target, options, defaults, index, max_index)
 {
 	var layout = options.layout || options.button || defaults.button;
@@ -679,86 +457,6 @@ function socialbutton_hatena(target, options, defaults, index, max_index)
 			+ '<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>';
 
 	$(target).html(tag);
-}
-
-function socialbutton_hatena_oldstyle(target, options, defaults, index, max_index)
-{
-	var button = options.button || defaults.button;
-	var url = options.url || defaults.url;
-
-	var height = options.height != undefined ? options.height : defaults.height;
-	var padding = options.padding != undefined ? options.padding : defaults.padding;
-
-	url = htmlspecialchars(url);
-
-	var tag = '<span style="font-size: ' + height + 'px; line-height: 100%; ">'
-			+ '<span style="padding-right: ' + padding + 'px"><a href="https://b.hatena.ne.jp/entry/add/' + url + '" target="_blank"><img src="' + button + '" style="border: none; vertical-align: text-bottom" /></a></span>'
-			+ '<a href="https://b.hatena.ne.jp/entry/' + url + '" target="_blank"><img src="https://b.hatena.ne.jp/entry/image/' + url + '" style="border: none; vertical-align: text-bottom" /></a>'
-			+ '</span>';
-
-	$(target).html(tag);
-}
-
-function socialbutton_google_plusone(target, options, defaults, index, max_index)
-{
-	if (!$.support.tbody) {
-		return;
-	}
-
-	var size = options.size || options.button || defaults.button;
-	var href = options.href || options.url || defaults.url;
-
-	var lang = options.lang || defaults.lang;
-	var parsetags = options.parsetags || defaults.parsetags;
-
-	var callback = options.callback || defaults.callback;
-	var count = options.count != undefined ? options.count : defaults.count;
-
-	switch (size) {
-		case 'small':
-		case 'standard':
-		case 'medium':
-			break;
-
-		case 'tall':
-			count = true;
-			break;
-
-		default:
-			size = 'standard';
-			count = true;
-	}
-
-	var tag = $('<div>')
-	.attr({
-		'data-callback': callback,
-		'data-count': count ? 'true' : 'false',
-		'data-href': href,
-		'data-size': size
-	}).addClass('g-plusone');
-	$(target).append(tag);
-
-	if (index == max_index) {
-
-		var script_params = '';
-
-		if (lang != '') {
-			script_params += 'lang: "' + htmlspecialchars(lang) + '"';
-		}
-		if (parsetags != '') {
-			script_params += script_params != '' ? ',' : '';
-			script_params += 'parsetags: "' + htmlspecialchars(parsetags) + "'";
-		}
-		if (script_params != '') {
-			script_params = '{' + script_params + '}';
-		}
-
-		if (typeof gapi === 'undefined' || typeof gapi.plusone === 'undefined') {
-			$('body').append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js">' + script_params + '</script>');
-		} else {
-			gapi.plusone.go();
-		}
-	}
 }
 
 function socialbutton_pinterest(target, options, defaults, index, max_index)
