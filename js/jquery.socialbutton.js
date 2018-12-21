@@ -1,11 +1,11 @@
 /**
  * jquery.socialbutton - jQuery plugin for social networking websites
- * http://itra.jp/jquery_socialbutton_plugin/
+ * https://itra.jp/jquery_socialbutton_plugin/
  *
  * Copyright 2010, Itrans, Inc. http://itra.jp/
  *
  * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
+ * https://jquery.org/license
  *
  * Version: 1.9.1
  */
@@ -15,7 +15,7 @@
  *
  *
  * mixi_check
- * http://developer.mixi.co.jp/connect/mixi_plugin/mixi_check/spec_mixi_check
+ * https://developer.mixi.co.jp/connect/mixi_plugin/mixi_check/spec_mixi_check
  *
  * $('#mixi_check').socialbutton('mixi_check', {
  *     key: 'mixi-check-key'
@@ -24,12 +24,12 @@
  * $('#mixi_check').socialbutton('mixi_check', {
  *     key: 'mixi-check-key',
  *     button: 'button-1',
- *     url: 'http://itra.jp/'
+ *     url: 'https://itra.jp/'
  * });
  *
  *
  * mixi_like
- * http://developer.mixi.co.jp/connect/mixi_plugin/favorite_button/spec
+ * https://developer.mixi.co.jp/connect/mixi_plugin/favorite_button/spec
  *
  * $('#mixi_like').socialbutton('mixi_like', {
  *     key: 'mixi-check-key',
@@ -37,7 +37,7 @@
  *
  * $('#mixi_like').socialbutton('mixi_like', {
  *     key: 'mixi-check-key',
- *     url: 'http://itra.jp/',
+ *     url: 'https://itra.jp/',
  *     width: 450,
  *     height: 80,
  *     show_faces: true,
@@ -46,13 +46,13 @@
  *
  *
  * facebook_like
- * http://developers.facebook.com/docs/reference/plugins/like
+ * https://developers.facebook.com/docs/reference/plugins/like
  *
  * $('#facebook_like').socialbutton('facebook_like');
  *
  * $('#facebook_like').socialbutton('facebook_like', {
  *     button: 'standard', // synonym 'layout'
- *     url: 'http://itra.jp',
+ *     url: 'https://itra.jp',
  *     show_faces: true,
  *     width: 450,
  *     height: 80,
@@ -64,25 +64,25 @@
  *
  *
  * facebook_share
- * http://developers.facebook.com/docs/share
+ * https://developers.facebook.com/docs/share
  *
  * $('#facebook_share').socialbutton('facebook_share');
  *
  * $('#facebook_share').socialbutton('facebook_share', {
  *     button: 'button_count', // synonym 'type'
- *     url: 'http://itra.jp',
+ *     url: 'https://itra.jp',
  *     text: 'Share'
  * });
  *
  *
  * Twitter
- * http://twitter.com/goodies/tweetbutton
+ * https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/overview.html
  *
  * $('#twitter').socialbutton('twitter');
  *
  * $('#twitter').socialbutton('twitter', {
  *     button: 'vertical', // synonym 'count'
- *     url: 'http://itra.jp/',
+ *     url: 'https://itra.jp/',
  *     text: 'tweet text',
  *     lang: 'ja',
  *     via: 'ishiiyoshinori',
@@ -91,7 +91,7 @@
  *
  *
  * GREE Social Feedback
- * http://developer.gree.co.jp/connect/plugins/sf
+ * https://developer.gree.co.jp/connect/plugins/sf
  *
  * $('#gree_sf').socialbutton('gree_sf');
  *
@@ -122,13 +122,13 @@
  *
  *
  * Hatena Bookmark
- * http://b.hatena.ne.jp/
+ * http://b.hatena.ne.jp/guide/bbutton
  *
  * $('#hatena').socialbutton('hatena');
  *
  * $('#hatena').socialbutton('hatena', {
  *     button: 'standard',
- *     url: 'http://itra.jp/',
+ *     url: 'https://itra.jp/',
  *     title: 'page-title'
  * });
  *
@@ -162,12 +162,12 @@
  *
  *
  * Pintarest Button
- * http://pinterest.com/about/goodies/
+ * https://developers.pinterest.com/docs/widgets/save/?
  *
  * $('#pinterest').socialbutton('pintarest', {
  *     button: 'horizontal', // or 'vertical', 'none'
- *     url: 'http://itra.jp',
- *     media: 'http://itra.jp/image.jpg',
+ *     url: 'https://itra.jp',
+ *     media: 'https://itra.jp/image.jpg',
  *     description: 'This is an image.'
  * });
  */
@@ -366,12 +366,12 @@ function socialbutton_mixi_check(target, options, defaults, index, max_index)
 		'data-button': button
 	});
 
-	var tag = '<a href="http://mixi.jp/share.pl" class="mixi-check-button"' + attr + '>Check</a>';
+	var tag = '<a href="https://mixi.jp/share.pl" class="mixi-check-button"' + attr + '>Check</a>';
 
 	$(target).html(tag);
 
 	if (index == max_index) {
-		$('body').append('<script type="text/javascript" src="http://static.mixi.jp/js/share.js"></script>');
+		$('body').append('<script type="text/javascript" src="https://static.mixi.jp/js/share.js"></script>');
 	}
 }
 
@@ -415,7 +415,7 @@ function socialbutton_mixi_like(target, options, defaults, index, max_index)
 	});
 
 	var attr = merge_attributes({
-		src: 'http://plugins.mixi.jp/favorite.pl?' + params,
+		src: 'https://plugins.mixi.jp/favorite.pl?' + params,
 		scrolling: 'no',
 		frameborder: '0',
 		allowTransparency: 'true',
@@ -515,7 +515,7 @@ function socialbutton_facebook_share(target, options, defaults, index, max_index
 	var tag = '<a name="fb_share"' + attr + '>' + text + '</a>';
 
 	if(index == 0) {
-		tag += '<script type="text/javascript" src="http://static.ak.fbcdn.net/connect.php/js/FB.Share"></script>';
+		tag += '<script type="text/javascript" src="https://static.ak.fbcdn.net/connect.php/js/FB.Share"></script>';
 	}
 
 	$(target).html(tag);
@@ -540,7 +540,7 @@ function socialbutton_twitter(target, options, defaults, index, max_index)
 		'data-related': related
 	});
 
-	var tag = '<a href="http://twitter.com/share" class="twitter-share-button"' + attr + '>Tweet</a>';
+	var tag = '<a href="https://twitter.com/share" class="twitter-share-button"' + attr + '>Tweet</a>';
 
 	$(target).html(tag);
 
@@ -778,7 +778,7 @@ function socialbutton_pinterest(target, options, defaults, index, max_index)
 		'description': description
 	});
 
-	var tag = '<a href="http://pinterest.com/pin/create/button/?' + params + '" class="pin-it-button" count-layout="' + button +'"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>'
+	var tag = '<a href="https://pinterest.com/pin/create/button/?' + params + '" class="pin-it-button" count-layout="' + button +'"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a>'
 
 	$(target).html(tag);
 
