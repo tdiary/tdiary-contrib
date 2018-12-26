@@ -58,7 +58,7 @@ add_conf_proc('Twitter Summary Card', 'Twitter Summary Card') do
   <p>
   Please refer to the following documentation at first.
   <ul>
-    <li><a href="https://dev.twitter.com/docs/cards/types/summary-card" target="_blank">Summary Card | Twitter Developers</a></li>
+    <li><a href="https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards" target="_blank">About Twitter Cards — Twitter Developers</a></li>
   </ul>
   </p>
 
