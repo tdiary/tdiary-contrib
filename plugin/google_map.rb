@@ -85,6 +85,18 @@ add_body_leave_proc do |date|
 	gmap_scripts
 end
 
+add_conf_proc('google_map', 'Google Maps', 'etc') do
+	if @mode == 'saveconf' then
+		@conf['google_map.key'], = @cgi.params['google_map.key']
+	end
+
+	<<-HTML
+	<h3 class="subtitle">Google Maps API Key</h3>
+	<p>API Key (see <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">developers.google.com/maps</a>)</p>
+	<p><input name="google_map.key" value="#{h @conf['google_map.key']}" size="50"></p>
+	HTML
+end
+
 def google_map_script(hash)
 	str = ''
 	str << %Q|google.maps.event.addDomListener(window, 'load', function() {\n|
