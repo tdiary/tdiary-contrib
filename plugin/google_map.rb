@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # google_map.rb - embeded Google Map for tDiary, use Google Maps JavaScript API V3.
-#                 http://code.google.com/intl/ja/apis/maps/documentation/v3/services.html
+#                 https://developers.google.com/maps/documentation/javascript/tutorial
 #
 # Copyright (C) 2010, tamoot <tamoot+tdiary@gmail.com>
 # You can redistribute it and/or modify it under GPL2.
@@ -36,11 +36,11 @@ def google_map_common(params)
       url = nil
       if params[:lat].nonzero? && params[:lon].nonzero?
          query = "#{params[:lat]},#{params[:lon]}"
-         url = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
+         url = %Q|https://maps.google.com/maps?q=#{CGI::escape(query)}|
 
       elsif params[:address] != nil
          query = params[:address]
-         url = %Q|http://maps.google.com/maps?q=#{CGI::escape(query)}|
+         url = %Q|https://maps.google.com/maps?q=#{CGI::escape(query)}|
 
       end
 
