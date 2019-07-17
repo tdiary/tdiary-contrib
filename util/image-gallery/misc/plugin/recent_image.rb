@@ -259,10 +259,10 @@ end
 #  Callback Functions
 
 # this is for view_exif().
-add_body_enter_proc(Proc.new do |date|
+add_body_enter_proc do |date|
   @image_date_exif = date.strftime("%Y%m%d")
   ""
-end)
+end
 
 #  Update Proc of the plugin
 add_update_proc do
