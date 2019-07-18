@@ -86,11 +86,11 @@
 
 enable_js("image_ex.js")
 
-add_body_enter_proc(Proc.new do |date|
+add_body_enter_proc do |date|
 	@image_date = date.strftime("%Y%m%d")
 	@image_year = date.strftime("%Y")
 	""
-end)
+end
 
 
 def image( id, alt = "image", id2 = nil, width = nil, place="none" )
