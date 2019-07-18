@@ -1,3 +1,4 @@
+# coding: utf-8
 # image_plugin_ex.rb
 # version 0.3
 # -pv-
@@ -199,7 +200,7 @@ add_form_proc do |date|
 					imageex_convertedsize = %Q[#{imageex_convertedheight}x#{imageex_convertedwidth}]
 					imageex_convertedsize
 				end
-				system(imageex_convertpath , "-geometry", imageex_convertedsize , orig, new)
+				system(imageex_convertpath , "-auto-orient", "-geometry", imageex_convertedsize , orig, new)
 				if FileTest::size?( new ) == 0
 					File::delete( new )
 				end
