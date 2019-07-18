@@ -9,7 +9,7 @@
 
 require 'nkf'
 
-add_body_leave_proc(Proc.new do |date|
+add_body_leave_proc do |date|
 
   oldest_date = Time.local(2005, 1, 11)
   if date > oldest_date
@@ -38,7 +38,7 @@ add_body_leave_proc(Proc.new do |date|
 		''
 	 end
   end
-end)
+end
 
 require "rss/rss"
 

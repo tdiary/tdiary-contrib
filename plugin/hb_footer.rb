@@ -8,7 +8,7 @@
 # Author: ishinao <ishinao@ishinao.net>
 #
 
-add_body_leave_proc(Proc.new do |date|
+add_body_leave_proc do |date|
   if @mode == 'day' or @mode == 'latest'
     diary = @diaries[date.strftime('%Y%m%d')]
     pnum = 1
@@ -33,7 +33,7 @@ add_body_leave_proc(Proc.new do |date|
   else
     ''
   end
-end)
+end
 
 # rss-recent.rb: RSS recent plugin
 #

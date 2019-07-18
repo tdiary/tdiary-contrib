@@ -52,9 +52,9 @@ end
 if @mode =~ /^(latest|day|month|nyear)$/
 	socialbutton_footer = Proc.new { %Q|<div class="socialbuttons"></div>| }
 	if respond_to?(:blogkit?) && blogkit?
-		add_body_leave_proc(socialbutton_footer)
+		add_body_leave_proc(&socialbutton_footer)
 	else
-		add_section_leave_proc(socialbutton_footer)
+		add_section_leave_proc(&socialbutton_footer)
 	end
 
 	# load javascript

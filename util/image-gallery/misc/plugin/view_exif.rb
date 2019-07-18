@@ -49,7 +49,7 @@ end
 
 #  Callback Functions
 
-add_body_enter_proc(Proc.new do |date| 
+add_body_enter_proc do |date| 
   @image_date_exif = date.strftime("%Y%m%d")
   ""
-end)
+end
