@@ -53,7 +53,7 @@ def notify_miniblog
 
 	# strip category
 	sectitle.gsub!(/\[[^\]]+\] */, '')
-	url = URI.encode(@conf.base_url + anchor("#{date}p%02d" % index), /[^-.!~*'()\w]/n)
+	url = CGI.escape(@conf.base_url + anchor("#{date}p%02d" % index), /[^-.!~*'()\w]/n)
 	prefix = @conf['miniblog.notify.prefix']
 	format = @conf['miniblog.notify.format']
 	source = 'tdiary/notify_miniblog.rb'

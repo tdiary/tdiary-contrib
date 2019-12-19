@@ -26,7 +26,7 @@ Net::HTTP.version_1_2
 def kousei_api( sentence )
 	appid = @conf['yahoo_kousei.appid']
 
-	query = "appid=#{appid}&sentence=#{URI.encode( sentence.gsub( /\n/, '' ) )}"
+	query = "appid=#{appid}&sentence=#{CGI.escape( sentence.gsub( /\n/, '' ) )}"
 	query << "&filter_group=" + @conf['yahoo_kousei.filter_group'] if @conf['yahoo_kousei.filter_group']
 	query << "&no_filter=" + @conf['yahoo_kousei.no_filter'] if @conf['yahoo_kousei.no_filter']
 

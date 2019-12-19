@@ -100,7 +100,7 @@ def yo_update_subscribers_count
 		raise YoUpdateError, "Yo API Key is not set"
 	end
 	req = Net::HTTP::Get.new(
-		URI("http://api.justyo.co/subscribers_count/?api_token=#{URI.escape(api_key)}")
+		URI("http://api.justyo.co/subscribers_count/?api_token=#{CGI.escape(api_key)}")
 	)
 	res = yo_update_access_api(req)
 	data = res.body

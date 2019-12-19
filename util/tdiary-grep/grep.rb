@@ -439,7 +439,7 @@ def escape(str)
 end
 
 def escape_url(u)
-  escape(URI.encode(u))
+	escape(CGI.escape(u))
 end
 
 main
