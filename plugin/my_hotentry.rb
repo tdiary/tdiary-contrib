@@ -39,7 +39,7 @@ class MyHotEntry
     # RSSを取得
     rss = nil
     rss_url = 'http://b.hatena.ne.jp/entrylist?mode=rss&url='
-    rss_url << URI.escape(base_url, /[^-.!~*'()\w]/n)
+    rss_url << CGI.escape(base_url)
     rss_url << "&sort=#{options[:sort]}&threshold=#{options[:threshold]}"
     begin
       Timeout.timeout(5) do

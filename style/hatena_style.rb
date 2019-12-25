@@ -844,7 +844,7 @@ class Hatena::Google
   end
 
   def convert(mode)
-    uri = 'http://www.google.com/search?q=%s&amp;ie=euc-jp&amp;oe=euc-jp' % URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)
+    uri = 'http://www.google.com/search?q=%s&amp;ie=euc-jp&amp;oe=euc-jp' % CGI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
@@ -889,7 +889,7 @@ class Hatena::Keyword
   end
 
   def convert(mode)
-    uri = '%skeyword/%s' % [@group, URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
+    uri = '%skeyword/%s' % [@group, CGI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
@@ -958,7 +958,7 @@ class Hatena::AmazonSearch
   end
 
   def convert(mode)
-    uri = 'http://www.amazon.co.jp/exec/obidos/external-search?mode=blended&amp;tag=%s&amp;encoding-string-jp=%%c6%%fc%%cb%%dc%%b8%%ec&amp;keyword=%s' % [Hatena.conf['amazon.aid'] || '', URI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
+    uri = 'http://www.amazon.co.jp/exec/obidos/external-search?mode=blended&amp;tag=%s&amp;encoding-string-jp=%%c6%%fc%%cb%%dc%%b8%%ec&amp;keyword=%s' % [Hatena.conf['amazon.aid'] || '', CGI.escape(@str, /[^-_.!~*'()a-zA-Z0-9]/)]
     return uri unless @tag_p
     template=nil
     if mode == :CHTML
