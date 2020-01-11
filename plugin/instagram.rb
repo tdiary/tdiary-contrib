@@ -18,7 +18,7 @@ end
 
 def instagram_iframe(code, width=612, height=700)
   return <<-BODY
-   <div class="embed-instagram">
+   <div class="embed embed-instagram">
    <iframe src="//instagram.com/p/#{code}/embed/" width="#{width}" height="#{height}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
    </div>
   BODY
