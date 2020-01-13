@@ -10,7 +10,6 @@ require 'uri'
 require 'net/http'
 require 'open-uri'
 
-
 def instagram(*args)
    uri = URI::parse(args[0])
    return instagram_iframe(*args) if uri.scheme.nil?
@@ -19,7 +18,9 @@ end
 
 def instagram_iframe(code, width=612, height=700)
   return <<-BODY
-<iframe src="//instagram.com/p/#{code}/embed/" width="#{width}" height="#{height}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+   <div class="embed embed-instagram">
+   <iframe src="//instagram.com/p/#{code}/embed/" width="#{width}" height="#{height}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+   </div>
   BODY
 end
 
