@@ -29,7 +29,6 @@ end
 
 def twitter_statuses_show_api( tweet_id )
 	url = "https://api.twitter.com/1.1/statuses/show.json"
-	unsafe = /[^a-zA-Z0-9\-\.\_\~]/
 	parameters = {
 		:id => tweet_id
 	}
@@ -41,8 +40,8 @@ def twitter_statuses_show_api( tweet_id )
 		:oauth_token => @conf["twitter_quote.oauth_token"],
 		:oauth_version => "1.0"
 	}
-	data = "GET&#{CGI.escape( url, unsafe )}&"
-	data << CGI.escape( oauth_parameters.merge( parameters ).sort.map{|k, v| "#{k}=#{v}" }.join( "&" ), unsafe )
+	data = "GET&#{CGI.escape( url )}&"
+	data << CGI.escape( oauth_parameters.merge( parameters ).sort.map{|k, v| "#{k}=#{v}" }.join( "&" ) )
 	oauth_parameters[:oauth_signature] = [OpenSSL::HMAC.digest(
 		OpenSSL::Digest::SHA1.new,
 		CGI.escape( "#{@conf["twitter_quote.oauth_consumer_secret"]}&#{@conf["twitter_quote.oauth_token_secret"]}" ),
@@ -53,7 +52,7 @@ def twitter_statuses_show_api( tweet_id )
 	proxy = 'http://' + proxy if proxy
 
 	headers = {
-		"Authorization" => %Q[OAuth #{oauth_parameters.map{|k ,v| "#{CGI.escape( k.to_s, unsafe )}=\"#{CGI.escape( v, unsafe )}\""}.join( "," )}],
+		"Authorization" => %Q[OAuth #{oauth_parameters.map{|k ,v| "#{CGI.escape( k.to_s )}=\"#{CGI.escape( v )}\""}.join( "," )}],
 		:proxy => proxy
 	}
 	Timeout.timeout( 20 ) do

@@ -20,7 +20,7 @@ add_subtitle_proc do |date, index, subtitle|
 	section_url = @conf.base_url + anchor(date.strftime('%Y%m%d')) + '#p' + ('%02d' % index)
 
 	if @conf['add.bookmark.delicious'] == 't' then
-		escaped_url = CGI.escape(section_url, /[^-.!~*'()\w]/n)
+		escaped_url = CGI.escape(section_url)
 		caption += %Q|<a href="http://delicious.com/save?url=#{escaped_url}" onclick="window.open('http://delicious.com/save?v=5;noui;jump=close;url=#{escaped_url};title='+encodeURIComponent(document.title), 'delicious', 'toolbar=no,width=550,height=550'); return false">|
 		caption += %Q|<img src="http://static.delicious.com/img/delicious.small.gif" width="10" height="10" style="border: 0 none;vertical-align: middle;" alt="#{@caption_delicious}">|
 		caption += %Q|</a> |
