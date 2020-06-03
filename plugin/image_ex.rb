@@ -374,7 +374,7 @@ add_form_proc do |date|
 		posttable << %Q[</TR></TABLE>]
 	end
 
-	if @conf.respond_to?(:style) and @conf.style =~ /Wiki$/i
+	if @conf.respond_to?(:style) and @conf.style =~ /(Wiki|GFM)$/i
 		image_plugin_tag1 = "{{"
 		image_plugin_tag2 = "}}"
 	elsif @conf.respond_to?(:style) and @conf.style =~ /RD$/i
