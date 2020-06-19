@@ -1,0 +1,57 @@
+# 概要
+[openBD](https://openbd.jp/)のAPIを使用して書影などの書籍情報を表示します。
+
+本プラグインは[amazon.rb](https://github.com/tdiary/tdiary-docs-ja/wiki/amazon.rb)と同等の機能を提供しますが、情報を取得できる商品の数は大幅に少なくなります。また、amazon.rbとの併用はできません。
+
+# 使い方
+amazon.rbと同じです。
+
+表示される書影等には[版元ドットコム](https://www.hanmoto.com/)の書籍ページへのリンクが付与されます。
+
+指定ISBNの書籍情報がopenBDから取得できない場合は、ダミーの書影と[amazon.co.jp](https://www.amazon.co.jp/)へのリンクが生成されます。
+
+----
+`<%=isbn_image_left "isbn", "comment"%>`
+
+指定したISBNの書影をclass="left"で表示します。
+* isbn:    書籍のISBN
+* comment: img要素のalt属性に出力する内容。省略するとタイトルと著者が出力されます。
+----
+`<%=isbn_image_right "isbn", "comment"%>`
+
+指定したISBNの書影をclass="right"で表示します。
+* isbn:    書籍のISBN
+* comment: img要素のalt属性に出力する内容。省略するとタイトルと著者が出力されます。
+----
+`<%=isbn_image "isbn", "comment"%>`
+
+指定したISBNの書影をclass="amazon"で表示します。
+* isbn:    書籍のISBN
+* comment: 日記本文またはimg要素のalt属性に出力する内容。省略するとタイトルと著者が出力されます。
+----
+`<%=isbn_detail "isbn"%>`
+
+指定したISBNの書籍情報を、書影付きで詳しく表示します。表示されるのは、タイトル、著者、出版社、価格です。
+* isbn:    書籍のISBN
+----
+`<%=isbn "isbn", "comment"%>`
+
+書籍情報へのリンクを表示します。
+* isbn:    書籍のISBN
+* comment: 日記本文に出力する内容。省略するとタイトルと著者が出力されます。
+
+# 設定
+設定画面にて次を設定できます。
+
+* `isbn_image` で書籍名を日記本文に表示するかどうか。(この設定はamazon.rbのオプション `@options['amazon.hidename']` を参照/更新しています。)
+* 書影情報がない場合に表示するダミーの書影。CSSの書き方によっては本プラグイン組み込みのダミー書影は意図通りに表示されないことがあるので、そのような場合には本設定で明示的にダミー書影イメージを指定してください。
+* 書影の表示サイズ。
+* 書籍情報のキャッシュの全削除。
+
+# 動作
+openBDから取得した書籍情報はtDiaryのキャッシュファイルディレクトリに保存されます。なので、各ISBNに対しopenBDへのアクセスは1度しか行われません。
+
+ただし、tDiaryのプレビュー画面表示時には必ずopenBDへアクセスしてキャッシュを更新するようにしています。openBDの書籍情報が更新された場合はプレビュー画面を表示することで更新後の書籍情報が表示されるようになります。
+
+# 注意事項
+本プラグイン使用の際には[openBDの利用規約](https://openbd.jp/terms/)の内容を確認してください。
