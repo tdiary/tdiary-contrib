@@ -14,7 +14,7 @@ if /^(latest|day)$/ =~ @mode then
 		xml = nil
 		Timeout.timeout( 5 ) do
 			begin
-				xml = open( "http://twitter.com/statuses/user_timeline/#{@conf['twitter.user']}.xml" ){|f| f.read}
+				xml = open( "https://twitter.com/statuses/user_timeline/#{@conf['twitter.user']}.xml" ){|f| f.read}
 			rescue Exception
 			end
 		end
