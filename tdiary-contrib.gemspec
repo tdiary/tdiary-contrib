@@ -40,5 +40,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "webmock"
-  spec.add_development_dependency "pry"
+  spec.add_development_dependency "ruby-debug-ide"
+  spec.add_development_dependency "debase"
 end

@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug tDiary-contrib",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "/usr/src/app",
+            "program": "/usr/src/app/bin/tdiary",
+            "env": {
+                "HTPASSWD": "${workspaceRoot}/data/.htpasswd"
+            },
+            "args": [
+                "server", "-p", "9292"
+            ],
+            "useBundler": true
+        }
+    ]
+}
