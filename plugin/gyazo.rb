@@ -75,8 +75,8 @@ add_conf_proc('gyazo', 'Gyazo') do
 		@conf['gyazo_max_images'] = @cgi.params['gyazo_max_images'][0].to_i
 		@conf['gyazo_max_size'] = @cgi.params['gyazo_max_size'][0].to_i
 	end
-	@conf['gyazo_max_images'] = 5 if @conf['gyazo_max_images'] < 1
-	@conf['gyazo_max_size'] = 512 if @conf['gyazo_max_size'] < 1
+	@conf['gyazo_max_images'] = 5 if @conf['gyazo_max_images'].to_i < 1
+	@conf['gyazo_max_size'] = 512 if @conf['gyazo_max_size'].to_i < 1
 
 	r = ''
 	r << %Q|<h3 class="subtitle">Gyazo API Access Token</h3>|
