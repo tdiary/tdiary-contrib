@@ -12,8 +12,12 @@ end
 
 def gyazo(permalink_url, alt = '[description]', style = 'photo')
 	size = @conf['gyazo_max_size'] || 512
-	oembed = JSON.parse(Net::HTTP.get(URI("https://api.gyazo.com/api/oembed?url=#{permalink_url}")), symbolize_names: true)
-	p oembed
+	begin
+		oembed = JSON.parse(Net::HTTP.get(URI("https://api.gyazo.com/api/oembed?url=#{permalink_url}")), symbolize_names: true)
+	rescue => e
+		@logger.error(e)
+		return ''
+	end
 	url = oembed[:url].gsub(%r|/thumb/\d+/|, "/thumb/#{size}/")
 	width = oembed[:width].to_i
 	height = oembed[:height].to_i
@@ -45,11 +49,16 @@ def gyazo_list
 	return [] if access_token == nil || access_token.empty?
 	per_page = @conf['gyazo_max_images'] || 5
 	uri = "#{endpoint}?access_token=#{access_token};per_page=#{per_page}"
-	JSON.parse(Net::HTTP.get(URI(uri)), symbolize_names: true).map{|i|
-		[i[:permalink_url], i[:thumb_url]]
-	}.delete_if{|is|
-		is[1].empty?
-	}
+	begin
+		JSON.parse(Net::HTTP.get(URI(uri)), symbolize_names: true).map{|i|
+			[i[:permalink_url], i[:thumb_url]]
+		}.delete_if{|is|
+			is[1].empty?
+		}
+	rescue => e
+		@logger.error(e)
+		return []
+	end
 end
 
 add_form_proc() do |date|
@@ -66,8 +75,8 @@ add_conf_proc('gyazo', 'Gyazo') do
 		@conf['gyazo_max_images'] = @cgi.params['gyazo_max_images'][0].to_i
 		@conf['gyazo_max_size'] = @cgi.params['gyazo_max_size'][0].to_i
 	end
-	@conf['gyazo_max_images'] = 5 if @conf['gyazo_max_images'] < 1
-	@conf['gyazo_max_size'] = 512 if @conf['gyazo_max_size'] < 1
+	@conf['gyazo_max_images'] = 5 if @conf['gyazo_max_images'].to_i < 1
+	@conf['gyazo_max_size'] = 512 if @conf['gyazo_max_size'].to_i < 1
 
 	r = ''
 	r << %Q|<h3 class="subtitle">Gyazo API Access Token</h3>|
