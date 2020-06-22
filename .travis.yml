@@ -1,4 +1,3 @@
-rbe versions
 language: ruby
 cache: bundler
 
