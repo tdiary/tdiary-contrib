@@ -13,7 +13,6 @@ end
 def gyazo(permalink_url, alt = '[description]', style = 'photo')
 	size = @conf['gyazo_max_size'] || 512
 	oembed = JSON.parse(Net::HTTP.get(URI("https://api.gyazo.com/api/oembed?url=#{permalink_url}")), symbolize_names: true)
-	p oembed
 	url = oembed[:url].gsub(%r|/thumb/\d+/|, "/thumb/#{size}/")
 	width = oembed[:width].to_i
 	height = oembed[:height].to_i
