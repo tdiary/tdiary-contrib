@@ -200,7 +200,7 @@ def fake_plugin( name_sym, cgi=nil, base=nil, &block )
 	plugin.instance_variable_set(:@cache_path, @cache_path)
 
 	plugin.instance_eval do
-		eval( File.read( file_path ), binding,
+		eval( File.open(file_path, 'r:utf-8').read, binding,
 			"(#{File.basename(file_path)})", 1 )
 	end
 	plugin_sym = plugin_name.to_sym
