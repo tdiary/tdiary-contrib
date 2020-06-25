@@ -189,10 +189,16 @@ end
 def isbn_detail(isbn)
 	openbd_process(isbn) do |item|
 		image = OpenBD.image_info(item, @conf)
+		width = @conf["openbd.detail_image_width"]
+		height = @conf["openbd.detail_image_height"]
+		width = 57 if !width && !height
+		img_width = width && %Q|width="#{h width}"|
+		img_height = height && %Q|height="#{h height}"|
 		url = OpenBD.reference_url(item)
 		<<-EOS
 			<a class="amazon-detail" href="#{h url}"><span class="amazon-detail">
-				<img class="amazon-detail left" src="#{h image[:url]}" alt="" height="75">
+				<img class="amazon-detail left"
+					src="#{h image[:url]}" #{img_width} #{img_height} alt="">
 				<span class="amazon-detail-desc">
 					<span class="amazon-title">#{h item.title}</span><br>
 					<span class="amazon-author">#{h item.author || "-"}</span><br>
@@ -223,6 +229,10 @@ add_conf_proc("openbd", "openBD") do
 			to_px[@cgi.params["openbd.image_width"][0]]
 		@conf["openbd.image_height"] =
 			to_px[@cgi.params["openbd.image_height"][0]]
+		@conf["openbd.detail_image_width"] =
+			to_px[@cgi.params["openbd.detail_image_width"][0]]
+		@conf["openbd.detail_image_height"] =
+			to_px[@cgi.params["openbd.detail_image_height"][0]]
 
 		if @cgi.params["openbd.clearcache"][0] == "true"
 			OpenBD::Cache.new(@cache_path).clear
@@ -263,6 +273,20 @@ add_conf_proc("openbd", "openBD") do
 		<p>
 			<input type="text" name="openbd.image_height" value="#{h @conf["openbd.image_height"]}" size="5">
 			<label for="openbd.image_height">px</label>
+		</p>
+
+		<h3>#{h @openbd_label_detail_image_width}</h3>
+		<p>#{h @openbd_label_detail_image_width_desc}</p>
+		<p>
+			<input type="text" name="openbd.detail_image_width" value="#{h @conf["openbd.detail_image_width"]}" size="5">
+			<label for="openbd.detail_image_width">px</label>
+		</p>
+
+		<h3>#{h @openbd_label_detail_image_height}</h3>
+		<p>#{h @openbd_label_detail_image_height_desc}</p>
+		<p>
+			<input type="text" name="openbd.detail_image_height" value="#{h @conf["openbd.detail_image_height"]}" size="5">
+			<label for="openbd.detail_image_height">px</label>
 		</p>
 	EOS
 end

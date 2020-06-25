@@ -24,6 +24,14 @@
 @openbd_label_image_height_desc =
 	'数値を指定すると書影を表すimg要素のheight属性に値が出力されます。'
 
+@openbd_label_detail_image_width = 'isbn_detail使用時の書影の表示幅'
+@openbd_label_detail_image_width_desc =
+	'数値を指定すると書影を表すimg要素のwidth属性に値が出力されます。'
+
+@openbd_label_detail_image_height = 'isbn_detail使用時の書影の表示高'
+@openbd_label_detail_image_height_desc =
+	'数値を指定すると書影を表すimg要素のheight属性に値が出力されます。'
+
 # Local Variables:
 # mode: ruby
 # indent-tabs-mode: t
