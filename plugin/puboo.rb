@@ -3,7 +3,7 @@
 # Original code from tatsu_zine.rb by KADO Masanori <kdmsnr@gmail.com>
 # You can redistribute it and/or modify it under GPL.
 #
-# display book info in http://p.booklog.jp/ like amazon.rb
+# display book info in https://puboo.jp/ like amazon.rb
 # USAGE: {{puboo 9999}}
 
 require 'open-uri'
@@ -33,12 +33,12 @@ def puboo( id, doc = nil )
 		return result
 	end
 
-	link = "http://p.booklog.jp/book/#{id}"
-	doc ||= open( link ).read.force_encoding('UTF-8')
-	title = doc.match(%r|<meta property="og:title"\s*content="(.*)"|).to_a[1]
+	link = "https://puboo.jp/book/#{id}"
+	doc ||= URI.open( link ).read.force_encoding('UTF-8')
+	title = doc.match(%r|<meta property="og:title"\s*content="(.*)"|).to_a[1].split(/｜/)[0]
 	image = doc.match(%r|<meta property="og:image"\s*content="(.*)"|).to_a[1]
-	price = doc.match(%r|<th class="th_2">価格</th>.*?<span>(.*?)</span>.*?<br />|m).to_a[1]
-	author = doc.match(%r|<th>作者</th>(.*?)</td>|m).to_a[1].gsub(/<.*?>/, '').strip
+	price = doc.match(%r|<span\s*class="h2">(.*?)</span>|m).to_a[1]
+	author = doc.match(%r|著: <a.*?>(.*?)</a>|m).to_a[1]
 
 	result = <<-EOS
 	<a class="amazon-detail" href="#{h link}"><span class="amazon-detail">
@@ -61,7 +61,7 @@ end
 
 if __FILE__ == $0
 	require 'test/unit'
-	class TestTatsuZine < Test::Unit::TestCase
+	class TestPuboo < Test::Unit::TestCase
 		def setup
 			@conf = Struct.new("Conf", :secure).new(true)
 			def h(str); str; end
@@ -69,14 +69,14 @@ if __FILE__ == $0
 
 		def test_puboo
 			expect = <<-EOS
-	<a class="amazon-detail" href="http://p.booklog.jp/book/70667"><span class="amazon-detail">
-		<img class="amazon-detail left" src="http://img.booklog.jp/667BDD9E-B13E-11E2-82F3-6425FFDA975F_l.jpg"
+	<a class="amazon-detail" href="https://puboo.jp/book/70667"><span class="amazon-detail">
+		<img class="amazon-detail left" src="https://img.puboo.jp/667BDD9E-B13E-11E2-82F3-6425FFDA975F_l.jpg"
 		height="150" width="100"
 		alt="入門Puppet - Automate Your Infrastructure">
 		<span class="amazon-detail-desc">
 			<span class="amazon-title">入門Puppet - Automate Your Infrastructure</span><br>
 			<span class="amazon-author">栗林健太郎</span><br>
-			<span class="amazon-price">890円（税込）</span>
+			<span class="amazon-price">890円</span>
 		</span><br style="clear: left">
 	</span></a>
 EOS
