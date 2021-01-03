@@ -41,6 +41,7 @@ def ogp_tag
 			section_index = @cgi.params['p'][0] || sections.size
             begin
 				section = sections[section_index.to_i - 1].body_to_html
+				@image_date = @date.strftime("%Y%m%d") # hack for image plugin
 				section_html = apply_plugin(section)
 
 				headers['og:description'] = ogp_description(section_html)
