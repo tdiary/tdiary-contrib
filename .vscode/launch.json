@@ -5,11 +5,8 @@
             "name": "Debug tDiary-contrib",
             "type": "Ruby",
             "request": "launch",
-            "cwd": "/usr/src/app",
-            "program": "/usr/src/app/bin/tdiary",
-            "env": {
-                "HTPASSWD": "${workspaceRoot}/data/.htpasswd"
-            },
+            "cwd": "/workspaces/core",
+            "program": "/workspaces/core/bin/tdiary",
             "args": [
                 "server", "-p", "9292"
             ],
