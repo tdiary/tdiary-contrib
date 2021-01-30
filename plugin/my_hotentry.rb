@@ -44,7 +44,7 @@ class MyHotEntry
     begin
       Timeout.timeout(5) do
         # convert Tempfile to String because REXML can't accept Tempfile
-        open(rss_url) do |f|
+        URI.open(rss_url) do |f|
           rss = REXML::Document.new(f.readlines.join("\n"))
         end
       end
