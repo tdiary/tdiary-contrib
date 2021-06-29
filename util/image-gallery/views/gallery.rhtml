@@ -26,9 +26,9 @@
 						<td>
 						<% if @images[i] != nil %>
 							<% if @images[i].width.to_i > @images[i].height.to_i %>
-								<p><a href="<%= format_link_viewer_image(@image_hash.index(@images[i])) %>"><img src="<%= @image_url %>/<%= @images[i].url %>" width="<%= @width %>" height="<%= (@width.to_i*@images[i].height.to_i/@images[i].width.to_i).to_s %>" alt="<%= @images[i].file %>" title="<%= @images[i].file %>" class="imagebody"></a></p>
+                       <p><a href="<%= format_link_viewer_image(@image_hash.key(@images[i])) %>"><img src="<%= @image_url %>/<%= @images[i].url %>" width="<%= @width %>" height="<%= (@width.to_i*@images[i].height.to_i/@images[i].width.to_i).to_s %>" alt="<%= @images[i].file %>" title="<%= @images[i].file %>" class="imagebody"></a></p>
 							<% else %>
-								<p><a href="<%= format_link_viewer_image(@image_hash.index(@images[i])) %>"><img src="<%= @image_url %>/<%= @images[i].url %>" width="<%= (@width.to_i*@images[i].width.to_i/@images[i].height.to_i).to_s %>" height="<%= @width %>" alt="<%= @images[i].file %>" title="<%= @images[i].file %>" class="imagebody"></a></p>
+                       <p><a href="<%= format_link_viewer_image(@image_hash.key(@images[i])) %>"><img src="<%= @image_url %>/<%= @images[i].url %>" width="<%= (@width.to_i*@images[i].width.to_i/@images[i].height.to_i).to_s %>" height="<%= @width %>" alt="<%= @images[i].file %>" title="<%= @images[i].file %>" class="imagebody"></a></p>
 							<% end %>
 							<p class="imagetitle"><%= CGI::escapeHTML(@images[i].title) %></p>
 							<p class="imagedate"><a href="./?date=<%= @images[i].date %>"  title="<%= CGI::escapeHTML(@images[i].subtitle) %>"><%= @images[i].date.sub(/(\d{4})(\d{2})(\d{2})/, '\1-\2-\3') %></a></p>
