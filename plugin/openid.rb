@@ -43,6 +43,7 @@ if /^(?:latest|conf|saveconf)$/ =~ @mode then
 			nil,
 			['https://open.login.yahooapis.com/openid/op/auth', 'https://me.yahoo.com/a/<ID>'],
 			'http://open.login.yahooapis.com/openid20/www.yahoo.com/xrds'),
+		'Launchpad' => @openid_config.new(['https://login.launchpad.net/+openid', 'https://login.launchpad.net/+id/<ID>']),
 	}
 
 	if @conf['openid.service'] and @conf['openid.id'] then
