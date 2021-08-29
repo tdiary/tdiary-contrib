@@ -6,6 +6,7 @@
 # USAGE: {{tatsu_zine 1}}
 
 require 'open-uri'
+require 'openssl'
 
 def tatsu_zine_cache_dir
 	cache = "#{@cache_path}/tatsu-zine"
@@ -33,10 +34,10 @@ def tatsu_zine( id, doc = nil )
 	end
 
 	link = "https://tatsu-zine.com/books/#{id}"
-	doc ||= open(link, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE).read
+	doc ||= URI.open(link, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE).read
 	title = doc.match(%r|<meta property="og:title" content="(.*)">|).to_a[1]
 	image = doc.match(%r|<meta property="og:image" content="(.*)">|).to_a[1]
-	price = doc.match(%r|span itemprop="price">(.*?)</span>|m).to_a[1].to_i
+	price = doc.match(%r|span itemprop="price">(.*?)</span>|m).to_a[1].gsub(/,/,'').to_i
 	author = doc.match(%r|<p itemprop="author" class="author">(.*)</p>|).to_a[1]
 
 	result = <<-EOS
