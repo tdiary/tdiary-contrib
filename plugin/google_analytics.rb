@@ -15,7 +15,7 @@ def google_analytics_insert_code
 	<<-HTML
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-#{@conf['google_analytics.profile']}"></script>
-	<script>
+		<script>
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
@@ -34,7 +34,7 @@ add_conf_proc( 'google_analytics', 'Google Analytics' ) do
 	r = <<-HTML
 		<h3>Google Analytics Profile</h3>
 		<p>set your Profile ID (NNNNN-N)</p>
-		<p><input name="google_analytics.profile" value="#{h @conf['google_analytics.profile']}"></p>
+		<p>UA-<input name="google_analytics.profile" value="#{h @conf['google_analytics.profile']}"></p>
 	HTML
 	if defined? AMP
 		r << <<-HTML
