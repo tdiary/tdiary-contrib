@@ -59,7 +59,7 @@ module ::Profile
 			# get a XML document from endpoint and create REXML::Document instance
 			def fetch(endpoint)
 				Timeout.timeout(5) do
-					open(endpoint) do |f|
+					URI.open(endpoint) do |f|
 						doc = REXML::Document.new(f)
 					end
 				end
@@ -90,7 +90,7 @@ module ::Profile
 			def fetch(endpoint)
 				require 'json'
 				Timeout.timeout(5) do
-					doc = open(endpoint) {|f| JSON.parse(f.read) }
+					doc = URI.open(endpoint) {|f| JSON.parse(f.read) }
 				end
 			end
 
@@ -128,7 +128,7 @@ module ::Profile
 				require 'json'
 				Timeout.timeout(5) do
 					begin
-						doc = open(endpoint) {|f| JSON.parse(f.read) }
+						doc = URI.open(endpoint) {|f| JSON.parse(f.read) }
 					rescue RuntimeError => err
 						if err.message =~ /^redirection forbidden: /
 							 endpoint.sub!(/www/, @options[:lang])
