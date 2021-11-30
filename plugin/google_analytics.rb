@@ -13,15 +13,15 @@ end
 def google_analytics_insert_code
 	return '' unless @conf['google_analytics.profile']
 	<<-HTML
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-#{@conf['google_analytics.profile']}"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
 
-		ga('create', 'UA-#{@conf['google_analytics.profile']}', 'auto');
-		ga('send', 'pageview');
-	// --></script>
+			gtag('config', 'UA-#{@conf['google_analytics.profile']}');
+		</script>
 	HTML
 end
 
@@ -34,7 +34,7 @@ add_conf_proc( 'google_analytics', 'Google Analytics' ) do
 	r = <<-HTML
 		<h3>Google Analytics Profile</h3>
 		<p>set your Profile ID (NNNNN-N)</p>
-		<p><input name="google_analytics.profile" value="#{h @conf['google_analytics.profile']}"></p>
+		<p>UA-<input name="google_analytics.profile" value="#{h @conf['google_analytics.profile']}"></p>
 	HTML
 	if defined? AMP
 		r << <<-HTML
