@@ -106,11 +106,10 @@ def image( id, alt = "image", id2 = nil, width = nil, place="none" )
 		image_dir = %Q[#{@image_dir}/]
 	end
 
-	image_dir.untaint
 	Dir.mkdir(image_dir) unless File.directory?(image_dir)
 
-	list = imageList(@image_date, image_dir).untaint
-	slist = imageList(@image_date, image_dir, "s").untaint
+	list = imageList(@image_date, image_dir)
+	slist = imageList(@image_date, image_dir, "s")
 
 	if width
 		width_tag = %Q[width="#{h width}"]
@@ -150,7 +149,7 @@ def image_link( id, str )
 		image_url = %Q[#{@image_url}/]
 		image_dir = %Q[#{@image_dir}/]
 	end
-	list = imageList(@image_date, image_dir).untaint
+	list = imageList(@image_date, image_dir)
 	%Q[<a href="#{h image_url}#{h list[id.to_i]}">#{str}</a>]
 end
 
@@ -240,7 +239,6 @@ add_form_proc do |date|
 
 		def dayimagelist( image_dir, image_date, prefix="")
 			image_path = []
-			image_dir.untaint
 			Dir.foreach(image_dir){ |file|
 				if file=~ /(.*)\_(.*)\.(.*)/
 					if $1 == "#{prefix}" + image_date.to_s
@@ -252,7 +250,7 @@ add_form_proc do |date|
 		end
 
 		if @cgi.params['plugin_image_add'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
-			image_dir = @cgi.params['plugin_image_dir'][0].read.untaint
+			image_dir = @cgi.params['plugin_image_dir'][0].read
 			image_filename = ''
 			image_extension = ''
 			image_date = date.strftime("%Y%m%d")
@@ -263,7 +261,6 @@ add_form_proc do |date|
 				image_name = dayimagelist(image_dir, image_date)
 				image_file = image_dir+image_date+"_"+image_name.length.to_s+image_extension.downcase
 
-				image_file.untaint
 				File::umask( 022 )
 				File::open( image_file, "wb" ) {|f|
 					f.print @cgi.params['plugin_image_file'][0].read
@@ -300,17 +297,16 @@ add_form_proc do |date|
 			end
 
 		elsif @cgi.params['plugin_image_thumbnail'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
-			image_dir = @cgi.params['plugin_image_dir'][0].read.untaint
+			image_dir = @cgi.params['plugin_image_dir'][0].read
 			image_filename = ''
 			image_extension = ''
 			image_date = date.strftime("%Y%m%d")
 			image_filename = @cgi.params['plugin_image_file'][0].original_filename
 			if image_filename =~ /(\.jpg|\.jpeg|\.gif|\.png)\z/i
 				image_extension = $1
-				image_name = @cgi.params['plugin_image_name'][0].read.untaint
+				image_name = @cgi.params['plugin_image_name'][0].read
 				image_file=image_dir+"s"+image_name+image_extension.downcase
 
-				image_file.untaint
 				File::umask( 022 )
 				File::open( image_file, "wb" ) {|f|
 					f.print @cgi.params['plugin_image_file'][0].read
@@ -323,17 +319,15 @@ add_form_proc do |date|
 			image_name = dayimagelist( image_dir, image_date)
 			image_name2= dayimagelist( image_dir, image_date, "s")
 
-			@cgi.params['plugin_image_id'].untaint.each do |id|
+			@cgi.params['plugin_image_id'].each do |id|
 				if image_name[id.to_i]
 					image_file=image_dir+image_name[id.to_i]
-					image_file.untaint
 					if File::exist?(image_file)
 						File::delete(image_file)
 					end
 				end
 				if image_name2[id.to_i]
 					image_file2=image_dir+image_name2[id.to_i]
-					image_file2.untaint
 					if File::exist?(image_file2)
 						File::delete(image_file2)
 					end
