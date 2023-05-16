@@ -38,7 +38,7 @@ def kousei_api( sentence )
 	px_port = 80 if px_host and !px_port
 
 	xml = ''
-	Net::HTTP::Proxy( px_host, px_port ).start( 'jlp.yahooapis.jp',443, use_ssl: true , verify_mode: OpenSSL::SSL::VERIFY_PEER  ) do |http|
+	Net::HTTP::Proxy( px_host, px_port ).start( 'jlp.yahooapis.jp', 443, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER ) do |http|
 		xml = http.post( '/KouseiService/V2/kousei', query.to_json, headers ).body
 	end
 	xml
