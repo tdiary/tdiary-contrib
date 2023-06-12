@@ -20,13 +20,14 @@
 # 以下はAzure OpenAI APIを利用する時に必須
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_INSTANCE_NAME'] : インスタンス名
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_DEPLOYMENT_NAME'] : モデル・デプロイ名
-# @options['chatgpt_elaborate.AZURE_OPENAI_API_VERSION'] : APIバージョン 2023-03-15-preview など
+# @options['chatgpt_elaborate.AZURE_OPENAI_API_VERSION'] : APIバージョン 2023-05-15 など
 #
 
 require 'timeout'
 require 'json'
 require 'net/http'
 require 'net/https'
+require 'cgi'
 #Net::HTTP.version_1_2
 
 def elaborate_api( sentence )
@@ -74,7 +75,7 @@ def elaborate_api( sentence )
   px_port = 80 if px_host and !px_port
 
   json = ''
-  Net::HTTP::Proxy( px_host, px_port ).start( url.host, url.port, use_ssl: true , verify_mode: OpenSSL::SSL::VERIFY_PEER ) do |http|
+  Net::HTTP::Proxy( px_host, px_port ).start( url.host, url.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER ) do |http|
     #@logger.debug( "POST #{url} #{params.to_json}" )
     json = http.post(url.request_uri, params.to_json, headers ).body
     #@logger.debug( "\nRESPONSE #{json}" )
@@ -93,7 +94,7 @@ def elaborate_result( json )
 		html << "<p>見つかりませんでした。</p>"
 	else
 		html << '<p>'
-		html <<  result.gsub( /\n/, '<br />' )
+		html <<  CGI::escapeHTML(result).gsub( /\n/, '<br />' )
 		html << '</p>'
 	end
 	html
