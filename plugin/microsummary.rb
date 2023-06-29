@@ -52,7 +52,7 @@ end
 
 def microsummary_init
 	@conf['generator.xml'] ||= ""
-	create_xml( @conf['generator.xml'] ) unless File::exists? @conf['generator.xml']
+	create_xml( @conf['generator.xml'] ) unless File::exist? @conf['generator.xml']
 end
 
 if @mode == 'saveconf'
