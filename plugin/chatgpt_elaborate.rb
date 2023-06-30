@@ -4,7 +4,7 @@
 #  tDiary用のプラグインです。OpenAI APIでChatGPTを利用して、
 #  日本語文の遂行作業を支援します。文字の入力ミスや言葉の誤用がないか、
 #  わかりにくい表記や不適切な表現が使われていないかなどをチェックします。
-#  Arure OpenAI ServiceのOpenAI APIでテストています。
+#  本家OpenAI APIとArure OpenAI ServiceのOpenAI APIでテストています。
 #  https://azure.microsoft.com/products/cognitive-services/openai-service
 #
 # Copyright (c) 2010, hb <http://www.smallstyle.com/>
@@ -14,8 +14,11 @@
 # 設定:
 #
 # 本家OpenAIか、Azure OpenAIかによってどちらかが必須
-# @options['chatgpt_elaborate.OPENAI_API_KEY'] : API_KEY(未テスト:どちらか必須)
+# @options['chatgpt_elaborate.OPENAI_API_KEY'] : API_KEY(どちらか必須)
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_KEY'] : API_KEY(どちらか必須)
+#
+# 本家OpenAIのオプション
+# @options['chatgpt_elaborate.OPENAI_API_MODEL'] : モデル名 "gpt-3.5-turbo"
 #
 # 以下はAzure OpenAI APIを利用する時に必須
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_INSTANCE_NAME'] : インスタンス名
@@ -31,11 +34,13 @@ require 'cgi'
 #Net::HTTP.version_1_2
 
 def elaborate_api( sentence )
+  #@logger.debug( "ChatGPT elaborate")
   apiKey = @conf['chatgpt_elaborate.OPENAI_API_KEY']
+  model = @conf['chatgpt_elaborate.OPENAI_API_MODEL']||'gpt-3.5-turbo'
   azureKey = @conf['chatgpt_elaborate.AZURE_OPENAI_API_KEY']
   instanceName = @conf['chatgpt_elaborate.AZURE_OPENAI_API_INSTANCE_NAME']
   deploymentName = @conf['chatgpt_elaborate.AZURE_OPENAI_API_DEPLOYMENT_NAME']
-  version = @conf['chatgpt_elaborate.AZURE_OPENAI_API_VERSION']
+  version = @conf['chatgpt_elaborate.AZURE_OPENAI_API_VERSION']||'2023-05-15'
 
   messages = [
     {"role" => "system",
@@ -44,6 +49,7 @@ def elaborate_api( sentence )
       "content" =>  "#{sentence}" }]
 
   if ( azureKey )
+    #@logger.debug( "ChatGPT elaborate by Azure OpenAI API")
     url = URI.parse("https://"\
                     + instanceName + ".openai.azure.com"\
                     + "/openai/deployments/" + deploymentName\
@@ -59,9 +65,10 @@ def elaborate_api( sentence )
     headers = {'Content-Type' => 'application/json',
                'api-key' => azureKey }
   else
-    url = URI.parse("https://api.openai.com/v1/completions")
+    #@logger.debug( "ChatGPT elaborate by Original OpenAI API")
+    url = URI.parse("https://api.openai.com/v1/chat/completions")
     params = {
-      "model" => "gpt-3.5-turbo",
+      "model" => model,
       'messages' => messages,
       "temperature" => 0.7,
       "max_tokens" => 2000,
@@ -89,25 +96,33 @@ def elaborate_result( json )
 	HTML
 
 	doc = JSON.parse( json )
-	result = doc["choices"][0]["message"]["content"]
-	if result.empty?
-		html << "<p>見つかりませんでした。</p>"
-	else
-		html << '<p>'
-		html <<  CGI::escapeHTML(result).gsub( /\n/, '<br />' )
-		html << '</p>'
-	end
+        if doc["error"]
+          html << "<p>Error: #{doc["error"]["message"]}<br/>"
+          html << "Type: #{doc["error"]["type"]}<br/>"
+          html << "Code: #{doc["error"]["code"]}</p>"
+        else
+	  result = doc["choices"][0]["message"]["content"]
+	  if result.empty?
+	    html << "<p>見つかりませんでした。</p>"
+	  else
+	    html << '<p>'
+	    html <<  CGI::escapeHTML(result).gsub( /\n/, '<br />' )
+	    html << '</p>'
+	  end
+        end
 	html
 end
 
 add_edit_proc do
-	if @mode == 'preview' && @conf['chatgpt_elaborate.AZURE_OPENAI_API_KEY'] then
-		json = elaborate_api( @cgi.params['body'][0] )
-		<<-HTML
+  if @mode == 'preview' &&
+     ( @conf['chatgpt_elaborate.AZURE_OPENAI_API_KEY'] ||
+       @conf['chatgpt_elaborate.OPENAI_API_KEY'] )then
+    json = elaborate_api( @cgi.params['body'][0] )
+    <<-HTML
 <div id="plugin_chatgpt_elaborate" class="section">
 #{elaborate_result( json )}
 </div>
-		HTML
-	end
+HTML
+  end
 end
 
