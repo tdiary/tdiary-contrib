@@ -1,5 +1,5 @@
 module TDiary
   class Contrib
-	  VERSION = "5.2.4"
+	  VERSION = "5.3.0"
   end
 end
