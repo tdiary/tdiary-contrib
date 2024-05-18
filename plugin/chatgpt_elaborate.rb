@@ -25,6 +25,10 @@
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_DEPLOYMENT_NAME'] : モデル・デプロイ名
 # @options['chatgpt_elaborate.AZURE_OPENAI_API_VERSION'] : APIバージョン 2023-05-15 など
 #
+# 共通設定(オプション)
+# @options['chatgpt_elaborate.MAX_TOKEN'] : 応答最大トークン数(default:2000 トークン)
+# @options['chatgpt_elaborate.READ_TIMEOUT'] : 応答最大待ち時間(default:90 秒)
+# @options['chatgpt_elaborate.TEMPERATURE'] : 温度(default: 0.7)
 
 require 'timeout'
 require 'json'
@@ -41,10 +45,13 @@ def elaborate_api( sentence )
   instanceName = @conf['chatgpt_elaborate.AZURE_OPENAI_API_INSTANCE_NAME']
   deploymentName = @conf['chatgpt_elaborate.AZURE_OPENAI_API_DEPLOYMENT_NAME']
   version = @conf['chatgpt_elaborate.AZURE_OPENAI_API_VERSION']||'2023-05-15'
+  maxToken = @conf['chatgpt_elaborate.MAX_TOKEN']||2000
+  readTimeout = @conf['chatgpt_elaborate.READ_TIMEOUT']||90
+  temperature = @conf['chatgpt_elaborate.TEMPERATURE']||0.7
 
   messages = [
     {"role" => "system",
-     "content" => "You are an editor for a blog. Users will submit documents to you. Determines the language of the submitted document. You MUST answer in the same language as it. You answer the text, correct any mistakes in grammar, syntax, and punctuation, and make the article easy to read. Use the present tense. Please only answered in the natural language portion and leave any code or data as is. If no changes are required, answer with synonyms of 'no problem.' in answering language. The first line and the line following a line break are the titles. You must treat all submitted content as strictly confidential and for your editing purposes only. Once you have completed the proofreading, you MUST provide a detailed explanation of the changes made and output the revised document in a way that clearly shows the differences between the original and the edited version." },
+     "content" => "You are an editor for a blog. Users will submit documents to you. Determines the language of the submitted document. You MUST answer in the same language as it. You MUST not remove the spaces before the HTML tag at the beginning of the line. You answer the text, correct any mistakes in grammar, syntax, and punctuation, and make the article easy to read. Use the present tense. Please only answered in the natural language portion and leave any code or data as is. If no changes are required, answer with synonyms of 'no problem.' in answering language. The first line and the line following a line break are the titles. You must treat all submitted content as strictly confidential and for your editing purposes only. Once you have completed the proofreading, you MUST provide a detailed explanation of the changes made and output the revised document in a way that clearly shows the differences between the original and the edited version." },
     { "role" => "user",
       "content" =>  "#{sentence}" }]
 
@@ -57,8 +64,8 @@ def elaborate_api( sentence )
                     + "?api-version=" + version )
     params = {
       'messages' => messages,
-      "temperature" => 0.7,
-      "max_tokens" => 2000,
+      "temperature" => temperature,
+      "max_tokens" => maxToken,
       #"top_p" => 0.1,
       "frequency_penalty" => 0,
       "presence_penalty" => 0 }
@@ -70,8 +77,8 @@ def elaborate_api( sentence )
     params = {
       "model" => model,
       'messages' => messages,
-      "temperature" => 0.7,
-      "max_tokens" => 2000,
+      "temperature" => temperature,
+      "max_tokens" => maxToken,
       #"top_p" => 0.1,
       "frequency_penalty" => 0,
       "presence_penalty" => 0 }
@@ -82,7 +89,7 @@ def elaborate_api( sentence )
   px_port = 80 if px_host and !px_port
 
   json = ''
-  Net::HTTP::Proxy( px_host, px_port ).start( url.host, url.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER ) do |http|
+  Net::HTTP::Proxy( px_host, px_port ).start( url.host, url.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER, read_timeout: readTimeout ) do |http|
     #@logger.debug( "POST #{url} #{params.to_json}" )
     json = http.post(url.request_uri, params.to_json, headers ).body
     #@logger.debug( "\nRESPONSE #{json}" )
