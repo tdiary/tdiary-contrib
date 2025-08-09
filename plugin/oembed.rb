@@ -158,7 +158,7 @@ def build_html(json, url)
 end
 
 def oembed(url, width = nil, height = nil)
-  cache_file = "#{@cache_path}/oembed_cache.pstore"
+  cache_file = "#{@cache_path}/oembed/cache.pstore"
   
   begin
     db = PStore.new(cache_file)
