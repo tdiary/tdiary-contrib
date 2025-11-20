@@ -6,6 +6,7 @@
 
 # @conf['ogp.facebook.app_id'] - your facebook application ID.
 # @conf['ogp.facebook.admins'] - your facebook ID.
+# @conf['ogp.fediverse.creator'] - your fediverse ID.
 
 def ogp_description(html)
 	@conf.shorten(remove_tag(html), 200)
@@ -28,7 +29,8 @@ def ogp_tag
 	ogp = ogp_tag_org || ''
 	headers = {
 		'fb:app_id' => @conf['ogp.facebook.app_id'],
-		'fb:admins' => @conf['ogp.facebook.admins']
+		'fb:admins' => @conf['ogp.facebook.admins'],
+		'fediverse:creator' => @conf['ogp.fediverse.creator']
 	}
 
 	if @mode == 'day'
@@ -60,8 +62,13 @@ end
 
 add_conf_proc('Open Graph Protocol', 'Open Graph Protocol') do
 	if @mode == 'saveconf'
-		@conf['ogp.facebook.app_id'] = @cgi.params['ogp.facebook.app_id'][0]
-		@conf['ogp.facebook.admins'] = @cgi.params['ogp.facebook.admins'][0]
+		%w(
+			ogp.facebook.app_id
+			ogp.facebook.admins
+			ogp.fediverse.creator
+		).each do |name|
+			@conf[name] = @cgi.params[name][0]
+		end
 	end
 
 	<<-HTML
@@ -70,5 +77,8 @@ add_conf_proc('Open Graph Protocol', 'Open Graph Protocol') do
 
 	<h3>Facebook User ID</h3>
 	<p><input name="ogp.facebook.admins" value="#{h(@conf['ogp.facebook.admins'])}"></p>
+
+	<h3>Fediverse ID</h3>
+	<p><input name="ogp.fediverse.creator" value="#{h(@conf['ogp.fediverse.creator'])}"></p>
 	HTML
 end
