@@ -1,0 +1,69 @@
+* What's this?
+  Emacs から tDiary を更新するための Major mode です.
+* How to Use
+  load-path の通った所に [[file:tdiary-mode.el][tdiary-mode.el]] を置いて,
+  以下を =.emacs= に記載して下さい.
+  #+BEGIN_SRC emacs-lisp
+;; 更新する日記のリスト
+(setq tdiary-diary-list '(("my 1st diary" "http://example.com/tdiary/")
+                          ("my 2nd diary" "http://example.com/tdiary2/")))
+;; 更新後に日記原稿を保存するディレクトリ
+(setq tdiary-text-directory (expand-file-name "~/path-to-saved-diary"))
+;; preview に使う関数
+(setq tdiary-browser-function 'browse-url)
+;; CSRF key ;; tdiary.conf から csrf.protection.key をコピーする
+(setq tdiary-csrf-key "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+;; スタイルに応じて: org スタイル
+(setq  tdiary-style-mode 'org-mode
+       tdiary-text-suffix ".org")
+;; スタイルに応じて: tDiary as html スタイル
+;; (setq  tdiary-style-mode 'html-mode
+;;        tdiary-text-suffix ".td")
+;; スタイルに応じて: gfm スタイル
+;; (setq  tdiary-style-mode 'markdown-mode
+;;        tdiary-text-suffix ".md")
+;; スタイルに応じて: RD スタイル
+;; (setq  tdiary-style-mode 'rd-mode
+;;        tdiary-text-suffix ".rd")
+;; 以下, お好みで: テンプレートとして登録する plugin の定義
+;;  (setq tdiary-plugin-definition
+;;    '(
+;;      ("STRONG" ("<%=STRONG %Q|" (p "str: ") "| %>"))
+;;      ("PRE" ("<%=PRE %Q|" (p "str: ") "| %>"))
+;;      ("CITE" ("<%=CITE %Q|" (p "str: ") "| %>"))
+;;      ))
+;;  (add-hook 'tdiary-mode-hook
+;;        '(lambda ()
+;;       (local-set-key "\C-i" 'tdiary-complete-plugin)))
+  #+END_SRC
+
+  パスワードを保存したい場合には
+  #+BEGIN_SRC emacs-lisp
+(setq tdiary-passwd-file (locate-user-emacs-file "tdiary-passwd" ".tdiary-passwd"))
+  #+END_SRC
+  とでもしておいて
+  #+BEGIN_EXAMPLE
+M-x tdiary-password-save
+  #+END_EXAMPLE
+  として下さい(そのうち =auth-source= に対応する予定です).
+* Notice
+  上手く書き込みできない場合にはご自身のtDiaryで
+  CSRFの設定がどうなっているかを確認してください.
+  tDiaryが動いているマシンにsshできるのであればCSRF KEYは
+  =tdiary.conf= に書いてあります.
+
+  sshができない場合は何かしらの方法でCSRF KEYを知る必要がありますが,
+  良いアイデアがありません.
+* ToDO [1/4]
+
+  - [ ] 認証情報を =auth-source= で扱う
+  - [X] Customize 対応
+  - [ ] テストの作成
+  - [ ] melpa への登録申請?
+* LICENSE
+  #+BEGIN_EXAMPLE
+  Copyright (C) 2002 Junichiro Kita
+                2017-2026 Youhei SASAKI
+  License: GPL-2.0+
+  #+END_EXAMPLE
+  @see [[file:LICENSE][LICENSE]] for detail.
