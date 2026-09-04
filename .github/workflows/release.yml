@@ -14,9 +14,6 @@ jobs:
     permissions:
       contents: write
       id-token: write
-    env:
-      # Building and pushing the gem needs no development gems.
-      BUNDLE_WITHOUT: development
     steps:
     - uses: actions/checkout@v7
       with:
