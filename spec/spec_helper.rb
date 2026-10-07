@@ -115,7 +115,9 @@ class PluginFake
 
 	class Config
 
-		attr_accessor :index, :html_title, :cgi
+		attr_accessor :index, :update, :author_name, :author_mail, :index_page,
+			:html_title, :theme, :css, :date_format, :referer_table, :options, :cgi,
+			:plugin_path, :lang, :io_class
 
 		def initialize
 			@cgi = CGIFake.new
@@ -123,6 +125,7 @@ class PluginFake
 			@options2 = {}
 			@index = './'
 			@html_title = ''
+			@io_class = DummyIO
 
 			bot = ["bot", "spider", "antenna", "crawler", "moget", "slurp"]
 			bot += @options['bot'] || []
@@ -188,6 +191,12 @@ class CGIFake
 	def iphone?
 		false
 	end
+end
+
+class DummyIO
+	def self.plugin_open(conf); nil; end
+	def self.plugin_close(storage); end
+	def self.plugin_transaction(storage, plugin); end
 end
 
 def fake_plugin( name_sym, cgi=nil, base=nil, &block )
