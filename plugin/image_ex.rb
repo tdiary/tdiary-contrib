@@ -249,7 +249,7 @@ add_form_proc do |date|
 			return image_path
 		end
 
-		if @cgi.params['plugin_image_add'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
+		if @cgi.params['plugin_image_add'][0] && @cgi.params['plugin_image_file'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
 			image_dir = @cgi.params['plugin_image_dir'][0].read
 			image_filename = ''
 			image_extension = ''
@@ -296,7 +296,7 @@ add_form_proc do |date|
 				end
 			end
 
-		elsif @cgi.params['plugin_image_thumbnail'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
+		elsif @cgi.params['plugin_image_thumbnail'][0] && @cgi.params['plugin_image_file'][0] && @cgi.params['plugin_image_file'][0].original_filename != ''
 			image_dir = @cgi.params['plugin_image_dir'][0].read
 			image_filename = ''
 			image_extension = ''
