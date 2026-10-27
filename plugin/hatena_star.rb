@@ -31,8 +31,8 @@ add_header_proc do
 				return;
 			}
 
-			var NodeInsert = function(evt) {
-				Hatena.Star.EntryLoader.loadNewEntries(evt.target);
+			var NodeInsert = function() {
+				document.dispatchEvent(new Event('hatena:star:requestrendering'));
 			};
 			window.addEventListener('AutoPagerize_DOMNodeInserted', NodeInsert, false);
 			window.addEventListener('AutoPatchWork.DOMNodeInserted', NodeInsert, false);
