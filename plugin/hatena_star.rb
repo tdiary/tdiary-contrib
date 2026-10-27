@@ -18,6 +18,11 @@ add_header_proc do
 					uri: 'h3 a',
 					title: 'h3',
 					container: 'h3'
+				},
+				'div.day:not(:has(div.section h3 a))': {
+					uri: 'h2 span.date a',
+					title: 'h2',
+					container: 'h2'
 				}
 			}
 		};
