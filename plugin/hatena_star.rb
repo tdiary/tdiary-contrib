@@ -18,6 +18,11 @@ add_header_proc do
 					uri: 'h3 a',
 					title: 'h3',
 					container: 'h3'
+				},
+				'div.day:not(:has(div.section h3 a))': {
+					uri: 'h2 span.date a',
+					title: 'h2',
+					container: 'h2'
 				}
 			}
 		};
@@ -26,8 +31,8 @@ add_header_proc do
 				return;
 			}
 
-			var NodeInsert = function(evt) {
-				Hatena.Star.EntryLoader.loadNewEntries(evt.target);
+			var NodeInsert = function() {
+				document.dispatchEvent(new Event('hatena:star:requestrendering'));
 			};
 			window.addEventListener('AutoPagerize_DOMNodeInserted', NodeInsert, false);
 			window.addEventListener('AutoPatchWork.DOMNodeInserted', NodeInsert, false);
